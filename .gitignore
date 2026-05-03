@@ -1,0 +1,12 @@
+# env variables 
+.env 
+
+# Venv
+Include
+Lib 
+Scripts 
+share 
+pyvenv.cfg
+
+# snapshots of all github repos in the dataset 
+snapshots 
