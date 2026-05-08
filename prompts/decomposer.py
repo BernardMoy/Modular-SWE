@@ -1,12 +1,11 @@
 from .json_helper import get_json_string
 
-def get_decomposer_prompt(issue_title, issue_body, working_dir, related_modules): 
+def get_decomposer_prompt(issue_body, working_dir, related_modules): 
     return f"""
 You are a senior software engineer that specialises in modular software design.
 
 You are working on the following issue:
-Issue title: {issue_title}
-Issue body: {issue_body}
+Issue: {issue_body}
 Working directory: {working_dir}
 
 You are also given a list of related modules below, prioritise reusing them instead of creating a new module where possible: 
