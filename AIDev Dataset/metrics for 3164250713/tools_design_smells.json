@@ -1,0 +1,352 @@
+[
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Smell": "Insufficient modularization",
+        "Class": "AnalyzeTool",
+        "Line no": "157",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\analyze.py",
+        "Description": "Class 'AnalyzeTool' is insufficiently modularized with NOPM: 32, WMC: 54, NOM: 34."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Smell": "Insufficient modularization",
+        "Class": "BaseTool",
+        "Line no": "102",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\base.py",
+        "Description": "Class 'BaseTool' is insufficiently modularized with NOPM: 25, WMC: 189, NOM: 40."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Smell": "Insufficient modularization",
+        "Class": "base",
+        "Line no": "1",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\base.py",
+        "Description": "Module 'base' is insufficiently modularized with NOPM: 0, WMC: 189, NOM: 0."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Smell": "Broken hierarchy",
+        "Class": "ChatRequest",
+        "Line no": "34",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\chat.py",
+        "Description": "Class 'ChatRequest' and its superclass 'ToolRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Smell": "Rebellious hierarchy",
+        "Class": "ChatTool",
+        "Line no": "42",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\chat.py",
+        "Description": "Class 'ChatTool' potentially exhibits a rebellious hierarchy; following method(s) rejects the superclass methods: get_name, get_description, get_system_prompt, get_request_model."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Smell": "Broken hierarchy",
+        "Class": "CodeReviewRequest",
+        "Line no": "112",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\codereview.py",
+        "Description": "Class 'CodeReviewRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Smell": "Insufficient modularization",
+        "Class": "CodeReviewTool",
+        "Line no": "168",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\codereview.py",
+        "Description": "Class 'CodeReviewTool' is insufficiently modularized with NOPM: 32, WMC: 57, NOM: 34."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Smell": "Broken hierarchy",
+        "Class": "ConsensusRequest",
+        "Line no": "69",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\consensus.py",
+        "Description": "Class 'ConsensusRequest' and its superclass 'ToolRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Smell": "Rebellious hierarchy",
+        "Class": "ConsensusTool",
+        "Line no": "95",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\consensus.py",
+        "Description": "Class 'ConsensusTool' potentially exhibits a rebellious hierarchy; following method(s) rejects the superclass methods: get_name, get_description, get_system_prompt, get_request_model."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Smell": "Broken hierarchy",
+        "Class": "DebugInvestigationRequest",
+        "Line no": "110",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\debug.py",
+        "Description": "Class 'DebugInvestigationRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Smell": "Insufficient modularization",
+        "Class": "DebugIssueTool",
+        "Line no": "158",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\debug.py",
+        "Description": "Class 'DebugIssueTool' is insufficiently modularized with NOPM: 28, WMC: 58, NOM: 31."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Smell": "Deficient encapsulation",
+        "Class": "ListModelsTool",
+        "Line no": "250",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\listmodels.py",
+        "Description": "Class 'ListModelsTool' accesses non-public code elements _get_available_models from execute"
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Smell": "Multifaceted abstraction",
+        "Class": "ListModelsTool",
+        "Line no": "18",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\listmodels.py",
+        "Description": "Class 'ListModelsTool' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Smell": "Rebellious hierarchy",
+        "Class": "ListModelsTool",
+        "Line no": "18",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\listmodels.py",
+        "Description": "Class 'ListModelsTool' potentially exhibits a rebellious hierarchy; following method(s) rejects the superclass methods: get_name, get_description."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Smell": "Broken hierarchy",
+        "Class": "PlannerRequest",
+        "Line no": "60",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\planner.py",
+        "Description": "Class 'PlannerRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Smell": "Insufficient modularization",
+        "Class": "PlannerTool",
+        "Line no": "113",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\planner.py",
+        "Description": "Class 'PlannerTool' is insufficiently modularized with NOPM: 26, WMC: 46, NOM: 27."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Smell": "Broken hierarchy",
+        "Class": "PrecommitRequest",
+        "Line no": "116",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\precommit.py",
+        "Description": "Class 'PrecommitRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Smell": "Insufficient modularization",
+        "Class": "PrecommitTool",
+        "Line no": "174",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\precommit.py",
+        "Description": "Class 'PrecommitTool' is insufficiently modularized with NOPM: 32, WMC: 55, NOM: 34."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Smell": "Broken hierarchy",
+        "Class": "RefactorRequest",
+        "Line no": "118",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\refactor.py",
+        "Description": "Class 'RefactorRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Smell": "Insufficient modularization",
+        "Class": "RefactorTool",
+        "Line no": "169",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\refactor.py",
+        "Description": "Class 'RefactorTool' is insufficiently modularized with NOPM: 32, WMC: 58, NOM: 34."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Smell": "Broken hierarchy",
+        "Class": "TestGenRequest",
+        "Line no": "97",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\testgen.py",
+        "Description": "Class 'TestGenRequest' and its superclass 'WorkflowRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Smell": "Insufficient modularization",
+        "Class": "TestGenTool",
+        "Line no": "140",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\testgen.py",
+        "Description": "Class 'TestGenTool' is insufficiently modularized with NOPM: 32, WMC: 51, NOM: 34."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Smell": "Insufficient modularization",
+        "Class": "ThinkDeepTool",
+        "Line no": "132",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\thinkdeep.py",
+        "Description": "Class 'ThinkDeepTool' is insufficiently modularized with NOPM: 29, WMC: 60, NOM: 30."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Smell": "Broken hierarchy",
+        "Class": "TracerRequest",
+        "Line no": "37",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\tracer.py",
+        "Description": "Class 'TracerRequest' and its superclass 'ToolRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Smell": "Rebellious hierarchy",
+        "Class": "TracerTool",
+        "Line no": "49",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\tracer.py",
+        "Description": "Class 'TracerTool' potentially exhibits a rebellious hierarchy; following method(s) rejects the superclass methods: get_name, get_description, get_input_schema, get_request_model."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_models",
+        "Smell": "Broken hierarchy",
+        "Class": "BaseWorkflowRequest",
+        "Line no": "105",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\shared\\base_models.py",
+        "Description": "Class 'BaseWorkflowRequest' and its superclass 'ToolRequest' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_models",
+        "Smell": "Wide hierarchy",
+        "Class": "WorkflowRequest",
+        "Line no": "0",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\shared\\base_models.py",
+        "Description": "Class 'WorkflowRequest' has a wide hierarchy with 8 direct subclasses."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Smell": "Insufficient modularization",
+        "Class": "BaseTool",
+        "Line no": "44",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\shared\\base_tool.py",
+        "Description": "Class 'BaseTool' is insufficiently modularized with NOPM: 23, WMC: 115, NOM: 33."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Smell": "Insufficient modularization",
+        "Class": "base_tool",
+        "Line no": "1",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\shared\\base_tool.py",
+        "Description": "Module 'base_tool' is insufficiently modularized with NOPM: 0, WMC: 115, NOM: 0."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Smell": "Deficient encapsulation",
+        "Class": "WorkflowTool",
+        "Line no": "69",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\base.py",
+        "Description": "Class 'WorkflowTool' accesses non-public code elements __init__ from __init__"
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Smell": "Deficient encapsulation",
+        "Class": "WorkflowTool",
+        "Line no": "70",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\base.py",
+        "Description": "Class 'WorkflowTool' accesses non-public code elements __init__ from __init__"
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Smell": "Insufficient modularization",
+        "Class": "WorkflowTool",
+        "Line no": "25",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\base.py",
+        "Description": "Class 'WorkflowTool' is insufficiently modularized with NOPM: 21, WMC: 31, NOM: 22."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Smell": "Wide hierarchy",
+        "Class": "WorkflowTool",
+        "Line no": "0",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\base.py",
+        "Description": "Class 'WorkflowTool' has a wide hierarchy with 8 direct subclasses."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Smell": "Insufficient modularization",
+        "Class": "BaseWorkflowMixin",
+        "Line no": "38",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\workflow_mixin.py",
+        "Description": "Class 'BaseWorkflowMixin' is insufficiently modularized with NOPM: 61, WMC: 160, NOM: 78."
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Smell": "Insufficient modularization",
+        "Class": "workflow_mixin",
+        "Line no": "1",
+        "File": "C:\\Users\\User\\Desktop\\Modular-SWE\\snapshots\\3164250713\\after\\pal-mcp-server\\tools\\workflow\\workflow_mixin.py",
+        "Description": "Module 'workflow_mixin' is insufficiently modularized with NOPM: 0, WMC: 160, NOM: 0."
+    }
+]

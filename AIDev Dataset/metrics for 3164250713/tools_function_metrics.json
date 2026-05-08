@@ -1,0 +1,5032 @@
+[
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeWorkflowRequest",
+        "Method": "validate_step_one_requirements",
+        "LOC": 5,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_description",
+        "LOC": 20,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_input_schema",
+        "LOC": 76,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_required_actions",
+        "LOC": 31,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 6,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 25,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "_build_analysis_summary",
+        "LOC": 13,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "should_embed_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_completion_message",
+        "LOC": 8,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 12,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_analyze_step_guidance",
+        "LOC": 32,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "customize_workflow_response",
+        "LOC": 36,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "analyze",
+        "Class": "AnalyzeTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_get_openrouter_registry",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_name",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_description",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_input_schema",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_system_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "requires_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_get_openrouter_registry",
+        "LOC": 10,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "is_effective_auto_mode",
+        "LOC": 12,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_should_require_model_selection",
+        "LOC": 12,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_get_available_models",
+        "LOC": 38,
+        "CC": 14,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_model_field_schema",
+        "LOC": 140,
+        "CC": 25,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_default_temperature",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "wants_line_numbers_by_default",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_default_thinking_mode",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_model_category",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_conversation_embedded_files",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "filter_new_files",
+        "LOC": 47,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "format_conversation_turn",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_extract_clean_content_for_history",
+        "LOC": 47,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_prepare_file_content_for_prompt",
+        "LOC": 123,
+        "CC": 15,
+        "PC": 7
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_websearch_instruction",
+        "LOC": 37,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_request_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "validate_file_paths",
+        "LOC": 35,
+        "CC": 12,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "check_prompt_size",
+        "LOC": 22,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_validate_image_limits",
+        "LOC": 111,
+        "CC": 17,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "estimate_tokens_smart",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "check_total_file_size",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "handle_prompt_file",
+        "LOC": 44,
+        "CC": 11,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "execute",
+        "LOC": 209,
+        "CC": 12,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_parse_response",
+        "LOC": 111,
+        "CC": 18,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_check_continuation_opportunity",
+        "LOC": 33,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_create_continuation_offer_response",
+        "LOC": 94,
+        "CC": 10,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "prepare_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "format_response",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_validate_token_limit",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_validate_and_correct_temperature",
+        "LOC": 33,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_resolve_model_context",
+        "LOC": 51,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "get_model_provider",
+        "LOC": 26,
+        "CC": 7,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "base",
+        "Class": "BaseTool",
+        "Method": "_enhance_mandatory_instructions",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_description",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_input_schema",
+        "LOC": 56,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "prepare_prompt",
+        "LOC": 37,
+        "CC": 5,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "chat",
+        "Class": "ChatTool",
+        "Method": "format_response",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewRequest",
+        "Method": "validate_step_one_requirements",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_description",
+        "LOC": 20,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_input_schema",
+        "LOC": 83,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_required_actions",
+        "LOC": 40,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 10,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 32,
+        "CC": 7,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "_build_code_review_summary",
+        "LOC": 14,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "should_embed_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_completion_message",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_code_review_step_guidance",
+        "LOC": 42,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "customize_workflow_response",
+        "LOC": 38,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "codereview",
+        "Class": "CodeReviewTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusRequest",
+        "Method": "validate_models_not_empty",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "__init__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_description",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_input_schema",
+        "LOC": 85,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "format_conversation_turn",
+        "LOC": 45,
+        "CC": 8,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_normalize_stance",
+        "LOC": 18,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_validate_model_combinations",
+        "LOC": 33,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_get_stance_enhanced_prompt",
+        "LOC": 83,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_get_single_response",
+        "LOC": 26,
+        "CC": 3,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_get_consensus_responses",
+        "LOC": 25,
+        "CC": 3,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_format_consensus_output",
+        "LOC": 41,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "_get_synthesis_guidance",
+        "LOC": 29,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "prepare_prompt",
+        "LOC": 26,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "execute",
+        "LOC": 90,
+        "CC": 10,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "consensus",
+        "Class": "ConsensusTool",
+        "Method": "store_conversation_turn",
+        "LOC": 22,
+        "CC": 3,
+        "PC": 6
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugInvestigationRequest",
+        "Method": "map_relevant_methods_to_context",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_description",
+        "LOC": 20,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_input_schema",
+        "LOC": 66,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_required_actions",
+        "LOC": 33,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 10,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 34,
+        "CC": 8,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "_build_investigation_summary",
+        "LOC": 13,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "_extract_error_context",
+        "LOC": 7,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_step_guidance",
+        "LOC": 45,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_completion_message",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_request_relevant_context",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "customize_workflow_response",
+        "LOC": 34,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "debug",
+        "Class": "DebugIssueTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_description",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_input_schema",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "format_response",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "execute",
+        "LOC": 179,
+        "CC": 32,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "listmodels",
+        "Class": "ListModelsTool",
+        "Method": "get_model_category",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerRequest",
+        "Method": "validate_step_number",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerRequest",
+        "Method": "validate_total_steps",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_description",
+        "LOC": 24,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "requires_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_tool_fields",
+        "LOC": 30,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_input_schema",
+        "LOC": 28,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_required_actions",
+        "LOC": 33,
+        "CC": 2,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "requires_expert_analysis",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "prepare_step_data",
+        "LOC": 23,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "build_base_response",
+        "LOC": 33,
+        "CC": 5,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "handle_work_continuation",
+        "LOC": 53,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "customize_workflow_response",
+        "LOC": 45,
+        "CC": 7,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_completion_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_initial_request",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "planner",
+        "Class": "PlannerTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitRequest",
+        "Method": "validate_step_one_requirements",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_description",
+        "LOC": 20,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_input_schema",
+        "LOC": 91,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_required_actions",
+        "LOC": 36,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 10,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 32,
+        "CC": 7,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "_build_precommit_summary",
+        "LOC": 14,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "should_embed_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_completion_message",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_precommit_step_guidance",
+        "LOC": 41,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "customize_workflow_response",
+        "LOC": 33,
+        "CC": 7,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "precommit",
+        "Class": "PrecommitTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorRequest",
+        "Method": "validate_step_one_requirements",
+        "LOC": 6,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_description",
+        "LOC": 20,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_input_schema",
+        "LOC": 81,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_required_actions",
+        "LOC": 42,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 12,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 34,
+        "CC": 7,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "_build_refactoring_summary",
+        "LOC": 14,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "should_embed_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_completion_message",
+        "LOC": 8,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_refactor_step_guidance",
+        "LOC": 43,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "customize_workflow_response",
+        "LOC": 38,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "refactor",
+        "Class": "RefactorTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenRequest",
+        "Method": "validate_step_one_requirements",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_description",
+        "LOC": 15,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_input_schema",
+        "LOC": 57,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_required_actions",
+        "LOC": 40,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 6,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 15,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "_build_test_generation_summary",
+        "LOC": 13,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "should_embed_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "prepare_step_data",
+        "LOC": 14,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_completion_message",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_test_generation_step_guidance",
+        "LOC": 42,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "customize_workflow_response",
+        "LOC": 26,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "testgen",
+        "Class": "TestGenTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_description",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_input_schema",
+        "LOC": 19,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_default_thinking_mode",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "customize_workflow_response",
+        "LOC": 42,
+        "CC": 5,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_completion_message",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "customize_expert_analysis_prompt",
+        "LOC": 35,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_expert_analysis_instructions",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_request_temperature",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_request_thinking_mode",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_request_use_websearch",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_required_actions",
+        "LOC": 39,
+        "CC": 5,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 14,
+        "CC": 5,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 24,
+        "CC": 8,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_step_guidance_message",
+        "LOC": 42,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "format_final_response",
+        "LOC": 18,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "format_step_response",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "thinkdeep",
+        "Class": "ThinkDeepTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_description",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_input_schema",
+        "LOC": 21,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_model_category",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "prepare_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "execute",
+        "LOC": 34,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "_create_enhanced_prompt",
+        "LOC": 36,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "_get_rendering_instructions",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "_get_precision_rendering_instructions",
+        "LOC": 104,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools",
+        "Module": "tracer",
+        "Class": "TracerTool",
+        "Method": "_get_dependencies_rendering_instructions",
+        "LOC": 76,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_models",
+        "Class": "WorkflowRequest",
+        "Method": "convert_string_to_list",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_get_openrouter_registry",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_name",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_description",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_input_schema",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_system_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "requires_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "is_effective_auto_mode",
+        "LOC": 12,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_should_require_model_selection",
+        "LOC": 12,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_get_available_models",
+        "LOC": 38,
+        "CC": 14,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_model_field_schema",
+        "LOC": 140,
+        "CC": 25,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_default_temperature",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "wants_line_numbers_by_default",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_default_thinking_mode",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_model_category",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_request_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "validate_file_paths",
+        "LOC": 27,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_validate_token_limit",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_model_provider",
+        "LOC": 14,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_conversation_embedded_files",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "filter_new_files",
+        "LOC": 47,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "format_conversation_turn",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "handle_prompt_file",
+        "LOC": 44,
+        "CC": 11,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "check_prompt_size",
+        "LOC": 22,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_prepare_file_content_for_prompt",
+        "LOC": 122,
+        "CC": 15,
+        "PC": 7
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "get_websearch_instruction",
+        "LOC": 37,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "prepare_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "format_response",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "execute",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_should_require_model_selection",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_get_available_models",
+        "LOC": 14,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_resolve_model_context",
+        "LOC": 50,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "base_tool",
+        "Class": "BaseTool",
+        "Method": "_parse_response",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "schema_builders",
+        "Class": "SchemaBuilder",
+        "Method": "build_schema",
+        "LOC": 22,
+        "CC": 7,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "schema_builders",
+        "Class": "SchemaBuilder",
+        "Method": "get_common_fields",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.shared",
+        "Module": "schema_builders",
+        "Class": "SchemaBuilder",
+        "Method": "create_field_schema",
+        "LOC": 18,
+        "CC": 7,
+        "PC": 7
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "get_tool_fields",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "get_required_fields",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "get_input_schema",
+        "LOC": 9,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "get_request_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "build_standard_prompt",
+        "LOC": 22,
+        "CC": 6,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "get_websearch_guidance",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.simple",
+        "Module": "base",
+        "Class": "SimpleTool",
+        "Method": "handle_prompt_file_with_fallback",
+        "LOC": 18,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_tool_fields",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_required_fields",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_input_schema",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_workflow_request_model",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_work_steps",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_standard_required_actions",
+        "LOC": 34,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "should_call_expert_analysis_default",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "prepare_standard_expert_context",
+        "LOC": 28,
+        "CC": 7,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "handle_completion_without_expert_analysis",
+        "LOC": 23,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "prepare_work_summary",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_completion_data_key",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_confidence_level",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_completion_message",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "get_required_actions",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "should_call_expert_analysis",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "base",
+        "Class": "WorkflowTool",
+        "Method": "execute",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "schema_builders",
+        "Class": "WorkflowSchemaBuilder",
+        "Method": "build_schema",
+        "LOC": 34,
+        "CC": 12,
+        "PC": 7
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "schema_builders",
+        "Class": "WorkflowSchemaBuilder",
+        "Method": "get_workflow_fields",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "schema_builders",
+        "Class": "WorkflowSchemaBuilder",
+        "Method": "get_workflow_only_fields",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "__init__",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_name",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_workflow_request_model",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_system_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_default_temperature",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_model_provider",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_resolve_model_context",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_prepare_file_content_for_prompt",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 5
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_work_steps",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_required_actions",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "should_call_expert_analysis",
+        "LOC": 12,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "prepare_expert_analysis_context",
+        "LOC": 16,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "requires_expert_analysis",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "should_include_files_in_expert_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "should_embed_system_prompt",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_expert_thinking_mode",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_temperature",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_thinking_mode",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_use_websearch",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_expert_analysis_instruction",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_use_assistant_model",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_step_guidance_message",
+        "LOC": 15,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_prepare_files_for_expert_analysis",
+        "LOC": 40,
+        "CC": 6,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_force_embed_files_for_expert_analysis",
+        "LOC": 30,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "wants_line_numbers_by_default",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_add_files_to_expert_context",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_handle_workflow_file_context",
+        "LOC": 20,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_should_embed_files_in_workflow_step",
+        "LOC": 8,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_embed_workflow_files",
+        "LOC": 47,
+        "CC": 5,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_reference_workflow_files",
+        "LOC": 21,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "execute_workflow",
+        "LOC": 87,
+        "CC": 8,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "prepare_step_data",
+        "LOC": 16,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "build_base_response",
+        "LOC": 42,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "should_skip_expert_analysis",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "handle_completion_without_expert_analysis",
+        "LOC": 23,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_confidence",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_relevant_context",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_issues_found",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_hypothesis",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_images",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_embedded_file_content",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_file_reference_note",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_actually_processed_files",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_current_model_context",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_model_name",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_continuation_id",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_next_step_required",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_step_number",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_relevant_files",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_request_files_checked",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_current_arguments",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_backtrack_step",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "store_initial_issue",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_initial_request",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "prepare_work_summary",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_completion_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_final_analysis_from_request",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_confidence_level",
+        "LOC": 2,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_completion_message",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_skip_reason",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_skip_expert_analysis_status",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_completion_next_steps_message",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "get_expert_analysis_guidance",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "customize_workflow_response",
+        "LOC": 22,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "store_conversation_turn",
+        "LOC": 12,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_extract_clean_workflow_content_for_history",
+        "LOC": 34,
+        "CC": 13,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "handle_work_completion",
+        "LOC": 77,
+        "CC": 11,
+        "PC": 3
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "handle_work_continuation",
+        "LOC": 11,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_handle_backtracking",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_update_consolidated_findings",
+        "LOC": 19,
+        "CC": 5,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_reprocess_consolidated_findings",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_prepare_work_summary",
+        "LOC": 34,
+        "CC": 6,
+        "PC": 0
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_call_expert_analysis",
+        "LOC": 74,
+        "CC": 7,
+        "PC": 2
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "_process_work_step",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "execute",
+        "LOC": 21,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "prepare_prompt",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "customize_prompt_preparation",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 4
+    },
+    {
+        "Project": "tools",
+        "Package": "tools.workflow",
+        "Module": "workflow_mixin",
+        "Class": "BaseWorkflowMixin",
+        "Method": "format_response",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 3
+    }
+]

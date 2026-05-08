@@ -2,11 +2,9 @@
 .env 
 
 # Venv
-Include
-Lib 
-Scripts 
-share 
-pyvenv.cfg
-
+.venv
 # snapshots of all github repos in the dataset 
 snapshots 
+
+# Designite Python exe 
+DPy.exe
