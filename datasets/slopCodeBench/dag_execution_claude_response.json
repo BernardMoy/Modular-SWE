@@ -1,0 +1,511 @@
+[
+  {
+    "module_name": "PipelineParser",
+    "module_path": "dag_execution/pipeline_parser.py",
+    "responsibility": "Parse the .pipe file DSL into a list of validated TaskDefinition objects covering params, run, success, requires, output, and timeout blocks.",
+    "non_responsibilities": [
+      "Does not validate cross-task references or detect circular dependencies",
+      "Does not resolve parameter default values from environment variables at parse time",
+      "Does not execute tasks or shell commands",
+      "Does not load or parse the TOML config file"
+    ],
+    "inputs": [
+      {
+        "name": "PipelineSource",
+        "type": "object",
+        "fields": [{ "name": "file_path", "type": "str", "optional": false }]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "TaskDefinition",
+        "type": "dataclass",
+        "fields": [
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "params", "type": "list[ParamSpec]", "optional": false },
+          { "name": "run_block", "type": "str", "optional": true },
+          {
+            "name": "success_block",
+            "type": "dict[str, str]",
+            "optional": true
+          },
+          { "name": "requires_block", "type": "str", "optional": true },
+          { "name": "output_dir", "type": "str", "optional": true },
+          { "name": "timeout", "type": "float", "optional": true }
+        ]
+      },
+      {
+        "name": "ParamSpec",
+        "type": "dataclass",
+        "fields": [
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "param_type", "type": "str", "optional": false },
+          { "name": "default_raw", "type": "str", "optional": true },
+          { "name": "has_default", "type": "bool", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "parse",
+        "description": "Parse a .pipe file and return all task definitions it contains.",
+        "parameters": [
+          { "name": "file_path", "type": "str", "optional": false }
+        ],
+        "returns": "list[TaskDefinition]",
+        "preconditions": ["file_path points to a readable file"],
+        "postconditions": [
+          "Each task block in the file is represented as exactly one TaskDefinition",
+          "Each task has at least one of run_block or requires_block set",
+          "Raises PipelineSyntaxError (exit 2) on any grammar violation",
+          "Raises PipelineSyntaxError if a param without a default follows one that has a default"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": ["re", "pathlib", "dataclasses", "enum"],
+      "forbidden": ["subprocess", "tomllib", "toml"]
+    }
+  },
+  {
+    "module_name": "ConfigLoader",
+    "module_path": "dag_execution/config_loader.py",
+    "responsibility": "Load and validate the optional TOML config file into a typed PipelineConfig with defaults applied for any omitted keys.",
+    "non_responsibilities": [
+      "Does not parse .pipe pipeline files",
+      "Does not validate task names referenced in the config against the pipeline",
+      "Does not execute tasks or resolve environment variable values dynamically"
+    ],
+    "inputs": [
+      {
+        "name": "ConfigSource",
+        "type": "object",
+        "fields": [{ "name": "file_path", "type": "str", "optional": true }]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "PipelineConfig",
+        "type": "dataclass",
+        "fields": [
+          { "name": "entry", "type": "str", "optional": false },
+          { "name": "clean_cwd", "type": "bool", "optional": false },
+          { "name": "env", "type": "dict[str, str]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "load",
+        "description": "Load a TOML config file and return a PipelineConfig, or return defaults if no path is provided.",
+        "parameters": [
+          { "name": "file_path", "type": "str", "optional": true }
+        ],
+        "returns": "PipelineConfig",
+        "preconditions": [
+          "file_path is None or points to a readable TOML file"
+        ],
+        "postconditions": [
+          "Returns PipelineConfig with entry defaulting to 'main' and clean_cwd defaulting to False",
+          "Raises PipelineSyntaxError (exit 2) on malformed TOML"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": ["tomllib", "tomli", "pathlib", "dataclasses"],
+      "forbidden": ["subprocess"]
+    }
+  },
+  {
+    "module_name": "ExpressionEvaluator",
+    "module_path": "dag_execution/expression_evaluator.py",
+    "responsibility": "Parse and evaluate the expression language used in success criteria and requires block control flow, yielding boolean results or structured task invocation descriptors to the caller.",
+    "non_responsibilities": [
+      "Does not execute shell commands or invoke tasks directly",
+      "Does not schedule or orchestrate task execution order",
+      "Does not parse the .pipe or TOML file formats",
+      "Does not write any output files or emit log lines"
+    ],
+    "inputs": [
+      {
+        "name": "EvalContext",
+        "type": "dataclass",
+        "fields": [
+          { "name": "params", "type": "dict[str, Any]", "optional": false },
+          { "name": "env", "type": "dict[str, str]", "optional": false },
+          { "name": "workspace", "type": "str", "optional": false },
+          { "name": "stdout", "type": "str", "optional": true },
+          { "name": "stderr", "type": "str", "optional": true },
+          { "name": "exit_code", "type": "int", "optional": true },
+          { "name": "output_dir", "type": "str", "optional": true }
+        ]
+      },
+      {
+        "name": "ExpressionSource",
+        "type": "object",
+        "fields": [{ "name": "source", "type": "str", "optional": false }]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "TaskInvocation",
+        "type": "dataclass",
+        "fields": [
+          { "name": "task_name", "type": "str", "optional": false },
+          { "name": "positional_args", "type": "list[Any]", "optional": false },
+          {
+            "name": "keyword_args",
+            "type": "dict[str, Any]",
+            "optional": false
+          },
+          { "name": "expect_failure", "type": "bool", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "evaluate_success",
+        "description": "Evaluate a single success criterion expression and return its boolean result.",
+        "parameters": [
+          { "name": "expr", "type": "str", "optional": false },
+          { "name": "context", "type": "EvalContext", "optional": false }
+        ],
+        "returns": "bool",
+        "preconditions": [
+          "expr is a syntactically valid expression string",
+          "context contains stdout, stderr, and exit_code when the expression references them"
+        ],
+        "postconditions": [
+          "Returns True or False according to the expression semantics",
+          "Raises PipelineSyntaxError (exit 2) if the expression is malformed",
+          "Raises PipelineSyntaxError if a multiline expression lacks a return statement"
+        ]
+      },
+      {
+        "name": "execute_requires",
+        "description": "Interpret the requires block sequentially, invoking the provided task callback for each task call encountered and returning whether all requirements were satisfied.",
+        "parameters": [
+          { "name": "block", "type": "str", "optional": false },
+          { "name": "context", "type": "EvalContext", "optional": false },
+          {
+            "name": "task_callback",
+            "type": "Callable[[TaskInvocation], JobResult]",
+            "optional": false
+          }
+        ],
+        "returns": "bool",
+        "preconditions": [
+          "block is the raw requires block string",
+          "task_callback executes a TaskInvocation synchronously and returns its JobResult"
+        ],
+        "postconditions": [
+          "Returns True if all required tasks satisfied their expected outcome",
+          "Returns False and stops early if an unconditional task call fails",
+          "Raises PipelineSyntaxError (exit 2) on malformed block syntax"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": ["re", "dataclasses", "typing", "os", "pathlib"],
+      "forbidden": ["subprocess", "tomllib", "toml"]
+    }
+  },
+  {
+    "module_name": "TaskRunner",
+    "module_path": "dag_execution/task_runner.py",
+    "responsibility": "Execute the shell commands in a task's run block within a subprocess, capturing stdout, stderr, exit code, timeout status, and elapsed duration.",
+    "non_responsibilities": [
+      "Does not evaluate success criteria expressions",
+      "Does not resolve requires dependencies",
+      "Does not emit event log lines",
+      "Does not write the jobs JSONL output file",
+      "Does not parse the .pipe or TOML file formats"
+    ],
+    "inputs": [
+      {
+        "name": "RunSpec",
+        "type": "dataclass",
+        "fields": [
+          { "name": "commands", "type": "str", "optional": false },
+          { "name": "params", "type": "dict[str, Any]", "optional": false },
+          { "name": "env", "type": "dict[str, str]", "optional": false },
+          { "name": "workspace", "type": "str", "optional": false },
+          { "name": "output_dir", "type": "str", "optional": true },
+          { "name": "timeout", "type": "float", "optional": true }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "RunResult",
+        "type": "dataclass",
+        "fields": [
+          { "name": "stdout", "type": "str", "optional": false },
+          { "name": "stderr", "type": "str", "optional": false },
+          { "name": "exit_code", "type": "int", "optional": false },
+          { "name": "timed_out", "type": "bool", "optional": false },
+          { "name": "duration", "type": "float", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "run",
+        "description": "Execute the run block commands in a subprocess and return the captured result.",
+        "parameters": [
+          { "name": "spec", "type": "RunSpec", "optional": false }
+        ],
+        "returns": "RunResult",
+        "preconditions": [
+          "spec.workspace directory exists",
+          "spec.output_dir, if set, resolves to a path within spec.workspace"
+        ],
+        "postconditions": [
+          "RunResult.stdout and RunResult.stderr contain only output from the run block commands",
+          "RunResult.exit_code is 124 and RunResult.timed_out is True when the timeout is exceeded",
+          "Unicode smart-quote characters (e.g. \\u2018) are normalised to ASCII equivalents"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": [
+        "subprocess",
+        "time",
+        "os",
+        "pathlib",
+        "signal",
+        "threading",
+        "shlex"
+      ],
+      "forbidden": ["tomllib", "toml"]
+    }
+  },
+  {
+    "module_name": "DagExecutor",
+    "module_path": "dag_execution/dag_executor.py",
+    "responsibility": "Orchestrate sequential DAG execution by resolving the entry task's requires chain, invoking each task in dependency order, evaluating success criteria, and collecting JobResult records.",
+    "non_responsibilities": [
+      "Does not parse .pipe or TOML files",
+      "Does not execute shell commands directly (delegates to TaskRunner)",
+      "Does not evaluate expression language directly (delegates to ExpressionEvaluator)",
+      "Does not write output files or emit log lines (delegates to JobReporter)"
+    ],
+    "inputs": [
+      {
+        "name": "ExecutionRequest",
+        "type": "object",
+        "fields": [
+          {
+            "name": "tasks",
+            "type": "list[TaskDefinition]",
+            "optional": false
+          },
+          { "name": "entry", "type": "str", "optional": false },
+          { "name": "config", "type": "PipelineConfig", "optional": false },
+          { "name": "workspace", "type": "str", "optional": false },
+          { "name": "output_dir", "type": "str", "optional": false }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "JobResult",
+        "type": "dataclass",
+        "fields": [
+          { "name": "job_id", "type": "int", "optional": false },
+          { "name": "task", "type": "str", "optional": false },
+          { "name": "params", "type": "dict[str, Any]", "optional": false },
+          { "name": "stdout", "type": "str", "optional": false },
+          { "name": "stderr", "type": "str", "optional": false },
+          { "name": "timed_out", "type": "bool", "optional": false },
+          { "name": "success", "type": "dict[str, bool]", "optional": false },
+          { "name": "output", "type": "str", "optional": true },
+          { "name": "exit_code", "type": "int", "optional": false },
+          { "name": "parent", "type": "int", "optional": true },
+          { "name": "duration", "type": "float", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "execute",
+        "description": "Run the pipeline from the entry task, executing all requires and run blocks in sequential dependency order and returning the full list of completed job results.",
+        "parameters": [
+          {
+            "name": "tasks",
+            "type": "list[TaskDefinition]",
+            "optional": false
+          },
+          { "name": "entry", "type": "str", "optional": false },
+          { "name": "config", "type": "PipelineConfig", "optional": false },
+          { "name": "workspace", "type": "str", "optional": false },
+          { "name": "output_dir", "type": "str", "optional": false }
+        ],
+        "returns": "list[JobResult]",
+        "preconditions": [
+          "entry task name exists in tasks",
+          "workspace directory exists",
+          "output_dir directory exists and is writable"
+        ],
+        "postconditions": [
+          "Returns one JobResult per job executed, ordered by job_id ascending",
+          "Entry task result is always the last record in the returned list",
+          "Raises InvalidPipeError (exit 3) on circular requires, undefined task references, type mismatches, missing required arguments, or output paths escaping the workspace",
+          "Recursive task calls raise InvalidPipeError (exit 3)"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": [
+        "dag_execution.pipeline_parser",
+        "dag_execution.expression_evaluator",
+        "dag_execution.task_runner",
+        "dag_execution.job_reporter",
+        "dataclasses",
+        "typing"
+      ],
+      "forbidden": ["subprocess", "tomllib", "toml"]
+    }
+  },
+  {
+    "module_name": "JobReporter",
+    "module_path": "dag_execution/job_reporter.py",
+    "responsibility": "Emit structured JSON event lines to stdout during execution and write the completed jobs.jsonl file to the output directory once execution finishes.",
+    "non_responsibilities": [
+      "Does not execute tasks or evaluate expressions",
+      "Does not determine whether a task succeeded or failed",
+      "Does not parse .pipe or TOML files",
+      "Does not manage or influence execution order"
+    ],
+    "inputs": [
+      {
+        "name": "JobEvent",
+        "type": "dataclass",
+        "fields": [
+          { "name": "event", "type": "str", "optional": false },
+          { "name": "job_id", "type": "int", "optional": false },
+          { "name": "extra", "type": "dict[str, Any]", "optional": false }
+        ]
+      },
+      {
+        "name": "JobResult",
+        "type": "dataclass",
+        "fields": [
+          { "name": "job_id", "type": "int", "optional": false },
+          { "name": "task", "type": "str", "optional": false },
+          { "name": "params", "type": "dict[str, Any]", "optional": false },
+          { "name": "stdout", "type": "str", "optional": false },
+          { "name": "stderr", "type": "str", "optional": false },
+          { "name": "timed_out", "type": "bool", "optional": false },
+          { "name": "success", "type": "dict[str, bool]", "optional": false },
+          { "name": "output", "type": "str", "optional": true },
+          { "name": "exit_code", "type": "int", "optional": false },
+          { "name": "parent", "type": "int", "optional": true },
+          { "name": "duration", "type": "float", "optional": false }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "JobsFile",
+        "type": "object",
+        "fields": [{ "name": "file_path", "type": "str", "optional": false }]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "emit_event",
+        "description": "Write a single JSON event line to stdout immediately.",
+        "parameters": [
+          { "name": "event", "type": "JobEvent", "optional": false }
+        ],
+        "returns": "None",
+        "preconditions": [
+          "event.event is one of TASK_STARTED, TASK_RUNNING, TASK_COMPLETED, TASK_FAILED"
+        ],
+        "postconditions": [
+          "A valid JSON line is flushed to stdout immediately",
+          "The line contains at least the 'event' and 'job_id' keys"
+        ]
+      },
+      {
+        "name": "write_jobs_file",
+        "description": "Write all job results to a jobs.jsonl file in the specified output directory.",
+        "parameters": [
+          { "name": "results", "type": "list[JobResult]", "optional": false },
+          { "name": "output_dir", "type": "str", "optional": false }
+        ],
+        "returns": "None",
+        "preconditions": ["output_dir exists and is writable"],
+        "postconditions": [
+          "jobs.jsonl is written with one JSON object per line per JobResult",
+          "Unicode smart-quote characters (e.g. \\u2018) are replaced with ASCII equivalents in all string fields"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": ["json", "sys", "pathlib", "dataclasses"],
+      "forbidden": ["subprocess", "tomllib", "toml"]
+    }
+  },
+  {
+    "module_name": "CLI",
+    "module_path": "dag_execution/cli.py",
+    "responsibility": "Parse command-line arguments and wire PipelineParser, ConfigLoader, DagExecutor, and JobReporter together to execute a pipeline, exiting with the appropriate status code.",
+    "non_responsibilities": [
+      "Does not implement any pipeline parsing or execution logic",
+      "Does not evaluate expressions or run shell commands",
+      "Does not write job output files directly"
+    ],
+    "inputs": [
+      {
+        "name": "CLIArgs",
+        "type": "object",
+        "fields": [
+          { "name": "pipeline", "type": "str", "optional": false },
+          { "name": "workspace", "type": "str", "optional": false },
+          { "name": "output", "type": "str", "optional": false },
+          { "name": "config", "type": "str", "optional": true }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "ExitCode",
+        "type": "object",
+        "fields": [{ "name": "code", "type": "int", "optional": false }]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "main",
+        "description": "Entry point: parse argv, orchestrate the full pipeline run, and return the appropriate exit code.",
+        "parameters": [
+          { "name": "argv", "type": "list[str]", "optional": true }
+        ],
+        "returns": "int",
+        "preconditions": [
+          "argv contains the pipeline path, --workspace, and --output arguments"
+        ],
+        "postconditions": [
+          "Returns 0 if the entry task completed successfully",
+          "Returns 1 if the entry task failed",
+          "Returns 2 and writes SYNTAX_ERROR:<msg> to stderr on .pipe or TOML parse errors",
+          "Returns 3 and writes INVALID_PIPE:<msg> to stderr on semantic validation errors"
+        ]
+      }
+    ],
+    "dependencies": {
+      "allowed": [
+        "argparse",
+        "sys",
+        "pathlib",
+        "dag_execution.pipeline_parser",
+        "dag_execution.config_loader",
+        "dag_execution.dag_executor",
+        "dag_execution.job_reporter"
+      ],
+      "forbidden": ["subprocess"]
+    }
+  }
+]

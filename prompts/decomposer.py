@@ -1,12 +1,14 @@
 from .json_helper import get_json_string
 
-def get_decomposer_prompt(issue_body, working_dir, related_modules): 
+# The implementation path is not needed. 
+# Reading the existing code is not the responsibility of this agent. 
+def get_decomposer_prompt(issue_path, related_modules): 
     return f"""
 You are a senior software engineer that specialises in modular software design.
 
 You are working on the following issue:
-Issue: {issue_body}
-Working directory: {working_dir}
+Project root: Modular-SWE
+Issue path: {issue_path}
 
 You are also given a list of related modules below, prioritise reusing them instead of creating a new module where possible: 
 {related_modules}

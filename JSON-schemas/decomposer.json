@@ -86,7 +86,7 @@
         }
       },
       "dependencies": {
-        "description": "The dependencies this module is allowed and forbidden to use.",
+        "description": "The dependencies, including libraries and other modules, that this module is allowed and forbidden to use.",
         "type": "object",
         "properties": {
           "allowed": {
