@@ -27,3 +27,11 @@ pydeps [path]
 Edges point from the imported module unless the `--reverse` tag is set:
 an edge from module A -> B means B imports A.
 A module with many outgoing edges is likely a god module.
+
+## Run SCB tests
+
+```
+uv run pytest scb-problems-sols-tests/dag_execution/tests/test_checkpoint_1.py --entrypoint "python scb-problems-sols-tests/dag_execution/solutions/checkpoint_1/launch.py" --checkpoint checkpoint_1
+```
+
+When doing this make sure the launch file is actually named launch.py.
