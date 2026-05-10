@@ -1,13 +1,13 @@
 # Activate venv
 
 ```
-.\.venv\Scripts\activate
+source .venv/bin/activate
 ```
 
 ## Run DPy
 
 ```
-.\DPy.exe [path]
+NOT YET INSTALLED ON WSL
 ```
 
 ## Run pylint

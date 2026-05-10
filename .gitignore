@@ -1,5 +1,5 @@
 # env variables 
-.env 
+.env
 
 # Venv
 .venv
@@ -8,5 +8,6 @@ snapshots
 scb-problems
 scb-problems-implementations
 
-# Designite Python exe 
-DPy.exe
+# Designite Python (Windows, Linux)
+DPy.exe  
+DPy
