@@ -74,8 +74,14 @@ mkdir -p agent_workspace
 - checkpoint\_(N-1)/ (previous implementation, if available)
 
 ```
-cp "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/checkpoint_1.md" agent_workspace/
 cp "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/config.yaml" agent_workspace/
+cp "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/checkpoint_1.md" agent_workspace/
+```
+
+Only when checkpoint_N N>1
+
+```
+cp -r "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/implementations/checkpoint_1" agent_workspace/
 ```
 
 3. Create volume mounts and run docker container as a non root user, copying only the `agent_workspace` directory

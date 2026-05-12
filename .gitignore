@@ -11,3 +11,6 @@ scb-problems-sols-tests
 # Designite Python (Windows, Linux)
 DPy.exe  
 DPy
+
+# agent implementation
+agent_workspace
