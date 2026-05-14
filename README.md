@@ -7,7 +7,9 @@ source .venv/bin/activate
 ## Run DPy
 
 ```
-NOT YET INSTALLED ON WSL
+./DPy analyze \
+  -i datasets/slopCodeBench/scb-problems/cfgpipe/implementations/checkpoint_1 \
+  -o datasets/slopCodeBench/scb-problems/cfgpipe/dpy_results/checkpoint_1
 ```
 
 ## Run pylint
@@ -15,7 +17,8 @@ NOT YET INSTALLED ON WSL
 Experimental. Checks for duplicate code and protected access respectively.
 
 ```
-pylint --disable=all --enable=R0801,W0212
+pylint datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/ \
+  --ignore=.venv --recursive=y --disable=all --enable=R0801,W0212
 ```
 
 ## Run pydeps
