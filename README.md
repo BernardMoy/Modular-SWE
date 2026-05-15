@@ -21,10 +21,37 @@ pylint datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpo
   --ignore=.venv --recursive=y --disable=all --enable=R0801,W0212
 ```
 
-## Run pydeps
+For checking dup lines only:
 
 ```
-pydeps [path]
+pylint datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/ \
+  --ignore=.venv --recursive=y --disable=all --enable=R0801 --min-similarity-lines=4 \
+  >datasets/slopCodeBench/scb-problems/cfgpipe/pylint_results/checkpoint_1
+```
+
+## Run pydeps
+
+Can specify output = png | svg or .dot
+Use --reverse to show edges A --> B mean A imports B
+
+```
+mkdir -p datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs
+
+pydeps datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/launch.py \
+  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.svg \
+  --noshow --max-bacon=0
+
+pydeps datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/launch.py \
+  -T dot --noshow --max-bacon=0 \
+  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.dot
+```
+
+Run the following python script to convert the dot to a JSON format
+
+```
+python process_deps_graph.py \
+  datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.dot \
+  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.json
 ```
 
 Edges point from the imported module unless the `--reverse` tag is set:

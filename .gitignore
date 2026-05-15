@@ -6,7 +6,7 @@
 # snapshots of all github repos in the dataset 
 snapshots 
 scb-problems
-scb-problems-sols-tests 
+scb-problems-sols-tests
 
 # Designite Python (Windows, Linux)
 DPy.exe  
