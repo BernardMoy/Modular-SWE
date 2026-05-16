@@ -1,6 +1,6 @@
 # Return the original prompt, single agent, used in the SCB paper (modified). 
 # This assumes agent_workspace already contain the respective files of the respective problem. 
-def get_original_scb_prompt(checkpoint_number): 
+def get_original_scb_prompt(checkpoint_number, entrypoint): 
     """
     The agent can read: 
     - checkpoint_N.md (instruction) 
@@ -22,8 +22,5 @@ You are working on the following issue:
 Issue path: agent_workspace/checkpoint_{checkpoint_number}.md
 Issue implementation path: agent_workspace/checkpoint_{checkpoint_number}/
 {f"Extend your solution based on: agent_workspace/checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
-Rules:
-- You can only refer to files under the agent_workspace/ directory. 
-- The entrypoint file must be named [entry_file].py where [entry_file] refers to the field of the same name under the config.yaml file.
-
+The entrypoint file must be named "{entrypoint}.py".
 """

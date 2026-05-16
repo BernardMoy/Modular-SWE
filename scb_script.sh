@@ -14,6 +14,9 @@ fi
 PROBLEM="$1"
 N="$2"  # checkpoint number 
 
+# Obtain the entrypoint file name from entry_files.json 
+ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' datasets/slopCodeBench/entry_files.json)
+
 # Paths constant 
 ROOT="$PWD"
 
@@ -29,7 +32,7 @@ mkdir -p "$AGENT_WORKSPACE"
 
 # 2. Copy the required files to the agent workspace folder 
 echo "[2/6] Copying files to agent workspace..."
-cp "$PROBLEM_DIR/config.yaml" "$AGENT_WORKSPACE"
+# cp "$PROBLEM_DIR/config.yaml" "$AGENT_WORKSPACE"
 cp "$PROBLEM_DIR/checkpoint_${N}.md" "$AGENT_WORKSPACE"
 
 # if N > 1, also copy the previous implementation 
@@ -54,7 +57,7 @@ docker run --rm -it \
   -v "$AGENT_WORKSPACE:/agent_workspace" \
   scb bash
 
-# ==== Implement solution ====
+# ==== Implement solution (print the command)====
 # 4. Move solution back to the implementation folder 
 echo "[4/6] Moving solution back..."
 
@@ -71,7 +74,7 @@ fi
 echo "[5/6] Running tests..."
 
 uv run pytest "$SOLS_TESTS_DIR/tests/test_checkpoint_${N}.py"  \
-  --entrypoint "python $PROBLEM_DIR/implementations/checkpoint_${N}/cfgpipe.py" \
+  --entrypoint "python $PROBLEM_DIR/implementations/checkpoint_${N}/$ENTRY_FILE.py" \
   --checkpoint "checkpoint_${N}"
 
 # 6. Remove the agent_workspace folder 
