@@ -43,7 +43,7 @@ def main():
     output = args.o
     with open(output, 'w') as f: 
         json.dump(graph, f, indent=2, sort_keys=True)
-        print(f"Written to {output}.")
+        # print(f"Written to {output}.")
 
 if __name__ == "__main__":
     main()

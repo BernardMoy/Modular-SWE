@@ -14,16 +14,16 @@ fi
 PROBLEM="$1"
 N="$2"  # checkpoint number 
 
-# Obtain the entrypoint file name from entry_files.json 
-ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' datasets/slopCodeBench/entry_files.json)
-
-# Paths constant 
-ROOT="$PWD"
+# Paths constant
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # problem dir to copy from 
 PROBLEM_DIR="$ROOT/datasets/slopCodeBench/scb-problems/$PROBLEM"
 SOLS_TESTS_DIR="$ROOT/datasets/slopCodeBench/scb-problems-sols-tests/$PROBLEM"
 AGENT_WORKSPACE="$ROOT/agent_workspace"
+
+# Obtain the entrypoint file name from entry_files.json 
+ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' $ROOT/datasets/slopCodeBench/entry_files.json)
 
 # 1. Make agent workspace dir, and copy to there 
 echo "[1/6] Creating agent workspace..."
