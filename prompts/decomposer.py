@@ -2,14 +2,14 @@ from .json_helper import get_json_string
 
 # The implementation path is not needed. 
 # Reading the existing code is not the responsibility of this agent. 
-def get_decomposer_prompt(checkpoint_number, existing_modules, deps_graph, analyzer_improvements): 
+def get_decomposer_prompt(checkpoint_number, existing_modules, analyzer_improvements): 
     return f"""
 You are a senior software engineer that specialises in modular software design.
 
 You are working on the following issue:
 Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
-The issue is built on top of checkpoint_{checkpoint_number}/. 
+The issue is built on top of checkpoint_{checkpoint_number-1}/. 
 
 You are also given a list of existing modules below, prioritise reusing them instead of creating a new module where possible: 
 {existing_modules}

@@ -116,24 +116,6 @@
                   ],
                   "additionalProperties": false
                 }
-              },
-              "dependencies": {
-                "description": "The dependencies, including libraries and other modules, that this module is allowed and forbidden to use.",
-                "type": "object",
-                "properties": {
-                  "allowed": {
-                    "description": "The dependencies that this module can use.",
-                    "type": "array",
-                    "items": { "type": "string" }
-                  },
-                  "forbidden": {
-                    "description": "The dependencies that this module CANNOT use.",
-                    "type": "array",
-                    "items": { "type": "string" }
-                  }
-                },
-                "required": ["allowed", "forbidden"],
-                "additionalProperties": false
               }
             },
             "required": [
@@ -144,8 +126,7 @@
               "non_responsibilities",
               "inputs",
               "outputs",
-              "public_interface",
-              "dependencies"
+              "public_interface"
             ],
             "additionalProperties": false
           }
@@ -153,7 +134,7 @@
       }
     },
     "dependency_graph": {
-      "description": "An adjacency list describing the dependency graph using the new modules.",
+      "description": "A JSON adjacency list describing the dependency graph using the new modules.",
       "type": "object"
     },
     "rejected_improvement_suggestions": {
