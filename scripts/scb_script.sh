@@ -32,8 +32,12 @@ mkdir -p "$AGENT_WORKSPACE"
 
 # 2. Copy the required files to the agent workspace folder 
 echo "[2/6] Copying files to agent workspace..."
-# cp "$PROBLEM_DIR/config.yaml" "$AGENT_WORKSPACE"
 cp "$PROBLEM_DIR/checkpoint_${N}.md" "$AGENT_WORKSPACE"
+
+# Add an extra instruction specifying the entrypoint file 
+echo "" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
+echo "## Entrypoint file" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
+echo "The entrypoint file must be named \`${ENTRY_FILE}.py\`" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 
 # if N > 1, also copy the previous implementation, deps graph and DPy metrics 
 if [[ "$N" -gt 1 ]]; then
