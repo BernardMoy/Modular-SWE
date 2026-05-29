@@ -1,122 +1,183 @@
 {
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "module_name": {
-        "description": "The name of the module.",
-        "type": "string"
-      },
-      "module_path": {
-        "description": "The directory path of the module.",
-        "type": "string"
-      },
-      "responsibility": {
-        "description": "A sentence describing the single responsibility of this module.",
-        "type": "string"
-      },
-      "non_responsibilities": {
-        "description": "A list of things that this module explicitly does not do, to ensure single responsibility principle.",
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "inputs": {
-        "description": "A list of data structures for the inputs of this module.",
-        "type": "array",
-        "items": { "$ref": "#/$defs/dataObject" }
-      },
-      "outputs": {
-        "description": "A list of data structures for the outputs of this module.",
-        "type": "array",
-        "items": { "$ref": "#/$defs/dataObject" }
-      },
-      "public_interface": {
-        "description": "The public interface that is exposed to other modules, represented by a list of public methods.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "description": "Method name.",
-              "type": "string"
+  "type": "object",
+  "properties": {
+    "modules": {
+      "description": "A list of modules to be implemented to solve the problem.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "description": "An existing module that remains unchanged.",
+            "properties": {
+              "type": { "type": "string", "const": "keep" },
+              "module_name": {
+                "description": "The name of the module.",
+                "type": "string"
+              },
+              "module_path": {
+                "description": "The directory path of the module.",
+                "type": "string"
+              },
+              "responsibility": {
+                "description": "A sentence describing the single responsibility of this module.",
+                "type": "string"
+              }
             },
-            "description": {
-              "description": "A description of what this method does.",
-              "type": "string"
-            },
-            "parameters": {
-              "type": "array",
-              "items": {
+            "required": [
+              "type",
+              "module_name",
+              "module_path",
+              "responsibility"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "description": "A new module, or an existing module that is changed.",
+            "properties": {
+              "type": { "type": "string", "enum": ["changed", "new"] },
+              "module_name": {
+                "description": "The name of the module.",
+                "type": "string"
+              },
+              "module_path": {
+                "description": "The directory path of the module.",
+                "type": "string"
+              },
+              "responsibility": {
+                "description": "A sentence describing the single responsibility of this module.",
+                "type": "string"
+              },
+              "non_responsibilities": {
+                "description": "A list of things that this module explicitly does not do, to ensure single responsibility principle.",
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "inputs": {
+                "description": "A list of data structures for the inputs of this module.",
+                "type": "array",
+                "items": { "$ref": "#/$defs/dataObject" }
+              },
+              "outputs": {
+                "description": "A list of data structures for the outputs of this module.",
+                "type": "array",
+                "items": { "$ref": "#/$defs/dataObject" }
+              },
+              "public_interface": {
+                "description": "The public interface that is exposed to other modules, represented by a list of public methods.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "description": "Method name.",
+                      "type": "string"
+                    },
+                    "description": {
+                      "description": "A description of what this method does.",
+                      "type": "string"
+                    },
+                    "parameters": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "type": { "type": "string" },
+                          "optional": { "type": "boolean" }
+                        },
+                        "required": ["name", "type", "optional"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "returns": {
+                      "description": "The return type of the method.",
+                      "type": "string"
+                    },
+                    "preconditions": {
+                      "description": "Conditions that should hold true before execution of the method.",
+                      "type": "array",
+                      "items": { "type": "string" }
+                    },
+                    "postconditions": {
+                      "description": "Conditions that should hold true after the method returns.",
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "parameters",
+                    "returns",
+                    "preconditions",
+                    "postconditions"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "dependencies": {
+                "description": "The dependencies, including libraries and other modules, that this module is allowed and forbidden to use.",
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "type": { "type": "string" },
-                  "optional": { "type": "boolean" }
+                  "allowed": {
+                    "description": "The dependencies that this module can use.",
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "forbidden": {
+                    "description": "The dependencies that this module CANNOT use.",
+                    "type": "array",
+                    "items": { "type": "string" }
+                  }
                 },
-                "required": ["name", "type", "optional"],
+                "required": ["allowed", "forbidden"],
                 "additionalProperties": false
               }
             },
-            "returns": {
-              "description": "The return type of the method.",
-              "type": "string"
-            },
-            "preconditions": {
-              "description": "Conditions that should hold true before execution of the method.",
-              "type": "array",
-              "items": { "type": "string" }
-            },
-            "postconditions": {
-              "description": "Conditions that should hold true after the method returns.",
-              "type": "array",
-              "items": { "type": "string" }
-            }
-          },
-          "required": [
-            "name",
-            "description",
-            "parameters",
-            "returns",
-            "preconditions",
-            "postconditions"
-          ],
-          "additionalProperties": false
-        }
-      },
-      "dependencies": {
-        "description": "The dependencies, including libraries and other modules, that this module is allowed and forbidden to use.",
-        "type": "object",
-        "properties": {
-          "allowed": {
-            "description": "The dependencies that this module can use.",
-            "type": "array",
-            "items": { "type": "string" }
-          },
-          "forbidden": {
-            "description": "The dependencies that this module CANNOT use.",
-            "type": "array",
-            "items": { "type": "string" }
+            "required": [
+              "type",
+              "module_name",
+              "module_path",
+              "responsibility",
+              "non_responsibilities",
+              "inputs",
+              "outputs",
+              "public_interface",
+              "dependencies"
+            ],
+            "additionalProperties": false
           }
-        },
-        "required": ["allowed", "forbidden"],
-        "additionalProperties": false
+        ]
       }
     },
-    "required": [
-      "name",
-      "path",
-      "responsibility",
-      "non_responsibilities",
-      "inputs",
-      "outputs",
-      "public_interface",
-      "dependencies"
-    ],
-    "additionalProperties": false
+    "dependency_graph": {
+      "description": "An adjacency list describing the dependency graph using the new modules.",
+      "type": "object"
+    },
+    "rejected_improvement_suggestions": {
+      "description": "A list of rejected improvement suggestions.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "improvement_instruction": {
+            "description": "The improvement instruction on mitigating the code smell.",
+            "type": "string"
+          },
+          "rejection_reason": {
+            "description": "Reason why that improvement was not implemented.",
+            "type": "string"
+          }
+        },
+        "required": ["improvement_instruction", "rejection_reason"],
+        "additionalProperties": false
+      }
+    }
   },
-
+  "required": ["modules", "dependency_graph"],
+  "additionalProperties": false,
   "$defs": {
     "dataObject": {
       "type": "object",

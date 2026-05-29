@@ -1,0 +1,22 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "module_name": {
+        "description": "The name of the module.",
+        "type": "string"
+      },
+      "smell": {
+        "description": "A short sentence describing the code smell identified.",
+        "type": "string"
+      },
+      "improvement_instruction": {
+        "description": "Improvement instructions on mitigating the code smell.",
+        "type": "string"
+      }
+    },
+    "required": ["module_name", "smell", "improvement_instruction"],
+    "additionalProperties": false
+  }
+}
