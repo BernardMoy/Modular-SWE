@@ -19,8 +19,8 @@ That is all you need to do.
 {venv_text}
 
 You are working on the following issue:
-Issue path: agent_workspace/checkpoint_{checkpoint_number}.md
-Issue implementation path: agent_workspace/checkpoint_{checkpoint_number}/
-{f"Extend your solution based on: agent_workspace/checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
+Issue path: checkpoint_{checkpoint_number}.md
+Issue implementation path: checkpoint_{checkpoint_number}/
+{f"Extend your solution based on: checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
 The entrypoint file must be named "{entrypoint}.py".
 """

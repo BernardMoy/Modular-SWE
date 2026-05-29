@@ -1,17 +1,18 @@
 from .json_helper import get_json_string
 
-def get_reader_prompt(issue_path, implementation_path): 
+# Give the CURRENT checkpoint number (the one you are working on)! 
+def get_reader_prompt(checkpoint_number): 
     return f"""
 You are a senior software engineer that analyses modules in a software project.
 
-You are working on the following issue:
-Project root: Modular-SWE
-Issue path: {issue_path}
-Issue implementation path: {implementation_path}
+Your job is to understand the following directory: 
+Project root: agent_workspace
+Directory: checkpoint_{checkpoint_number-1}/
+Dependency graph: checkpoint_{checkpoint_number-1}_graph.json
 
-Identify the existing modules in the codebase. For each module, decide if it can be reused or adapted to help achieve the goal specified in the issue. Do not propose new modules.
+Identify the existing modules in the codebase, using the dependency graph as reference. For each module, identify its responsibility. Do not propose new modules.
 
-Output a JSON object including only the relevant modules, using the following schema. If there are no relevant modules, return an empty JSON array.
+Output a JSON object that describes each module, using the following schema. If there are no modules, return an empty JSON array.
 
 {get_json_string("reader")}
 

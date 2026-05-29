@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "result": {
-      "description": "A flag indicating whether the design achieves a code quality suitable for implementation.",
+      "description": "A flag indicating whether the design achieves a code quality suitable for implementation, ensuring long term maintainability of the code as it evolves.",
       "type": "string",
       "enum": ["pass", "fail"]
     },
