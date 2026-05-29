@@ -53,12 +53,14 @@ if [[ "$N" -gt 1 ]]; then
   # Copy only the JSON file 
   echo "[2.2/6] Dependency Graph"  
   $ROOT/scripts/deps_graph.sh $PROBLEM $((N - 1))
-  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"
+  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"  # original 
+  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/current_deps_graph.json"  # iteratively modified
 
   # Generate the DPy metrics of checkpoint N-1
   echo "[2.3/6] DPy metrics"  
   $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
+  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/current_metrics"
 fi
 
 # 3. Docker volume mount 

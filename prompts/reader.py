@@ -12,9 +12,7 @@ Dependency graph: checkpoint_{checkpoint_number-1}_graph.json
 
 Identify the existing modules in the codebase, using the dependency graph as reference. For each module, identify its responsibility. Do not propose new modules.
 
-Output a JSON object that describes each module, using the following schema. If there are no modules, return an empty JSON array.
-
+Write a JSON object to `current_design.json`, that describes each module using the following schema. If there are no modules, write an empty JSON array.
 {get_json_string("reader")}
 
-Return only the JSON object, do not include any additional natural language text in your response.
 """

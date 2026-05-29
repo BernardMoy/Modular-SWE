@@ -1,6 +1,6 @@
 # Return the original prompt, single agent, used in the SCB paper (modified). 
 # This assumes agent_workspace already contain the respective files of the respective problem. 
-def get_original_scb_prompt(checkpoint_number, entrypoint): 
+def get_original_scb_prompt(checkpoint_number): 
     """
     The agent can read: 
     - checkpoint_N.md (instruction) 
@@ -22,5 +22,4 @@ You are working on the following issue:
 Issue path: checkpoint_{checkpoint_number}.md
 Issue implementation path: checkpoint_{checkpoint_number}/
 {f"Extend your solution based on: checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
-The entrypoint file must be named "{entrypoint}.py".
 """

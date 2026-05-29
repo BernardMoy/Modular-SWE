@@ -1,8 +1,9 @@
+import json
 from .json_helper import get_json_string
 
 # The implementation path is not needed. 
 # Reading the existing code is not the responsibility of this agent. 
-def get_decomposer_prompt(checkpoint_number, existing_modules, analyzer_improvements): 
+def get_decomposer_prompt(checkpoint_number, analyzer_improvements): 
     return f"""
 You are a senior software engineer that specialises in modular software design.
 
@@ -11,20 +12,16 @@ Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
 The issue is built on top of checkpoint_{checkpoint_number-1}/. 
 
-You are also given a list of existing modules below, prioritise reusing them instead of creating a new module where possible: 
-{existing_modules}
-
-The existing modules are visualised by the following dependency graph. 
-Dependency graph: checkpoint_{checkpoint_number-1}_graph.json
-
-In addition, you are given a list of improvement suggestions on existing modules, please factor them in your design together with the new modules. 
-{analyzer_improvements}
+You are also given the current modules design in the file `current_designs.json`, prioritise reusing existing modules instead of creating a new module where possible.
+The current modular design is visualised by the following dependency graph in `current_deps_graph.json`.
+{"In addition, you are given a list of improvement suggestions on existing modules, please factor them in your design together with the new modules if the improvement would improve code quality in the long run, or reject it if the improvement is not applicable." if analyzer_improvements else ""}
+{json.dumps(analyzer_improvements, indent=2) if analyzer_improvements else ""}
 
 Propose a modular design, each with a single responsibility, that when integrated together, achieve the goal specified in the issue.
 
-Output a JSON object including all modules, that can either be kept, changed or new, and describes what each module depends on using a new dependency graph, using the following schema. 
+Overwrite the JSON object in `current_design.json` by including all modules in your design, that can either be kept, changed or new, using the following schema.
 {get_json_string("decomposer")}
 
-Return only the JSON object, do not include any additional natural language text in your response.
+Also, update the dependency graph in `current_deps_graph.json`. 
 
 """

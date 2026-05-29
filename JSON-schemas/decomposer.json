@@ -133,10 +133,6 @@
         ]
       }
     },
-    "dependency_graph": {
-      "description": "A JSON adjacency list describing the dependency graph using the new modules.",
-      "type": "object"
-    },
     "rejected_improvement_suggestions": {
       "description": "A list of rejected improvement suggestions.",
       "type": "array",
@@ -157,7 +153,7 @@
       }
     }
   },
-  "required": ["modules", "dependency_graph"],
+  "required": ["modules"],
   "additionalProperties": false,
   "$defs": {
     "dataObject": {
