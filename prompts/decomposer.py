@@ -2,7 +2,7 @@ from .json_helper import get_json_string
 
 # The implementation path is not needed. 
 # Reading the existing code is not the responsibility of this agent. 
-def get_decomposer_prompt(issue_path, existing_modules, analyzer_improvements): 
+def get_decomposer_prompt(issue_path, existing_modules, deps_graph, analyzer_improvements): 
     return f"""
 You are a senior software engineer that specialises in modular software design.
 
@@ -12,6 +12,9 @@ Issue path: {issue_path}
 
 You are also given a list of existing modules below, prioritise reusing them instead of creating a new module where possible: 
 {existing_modules}
+
+The existing modules are visualised by the following dependency graph. 
+{deps_graph}
 
 In addition, you are given a list of improvement suggestions on existing modules, please factor them in your design together with the new modules. 
 {analyzer_improvements}

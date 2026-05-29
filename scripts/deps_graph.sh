@@ -1,7 +1,8 @@
 #!/usr/bin/env bash 
 # Usage: 
 # ./deps_graph.sh <problem> <checkpoint_number> 
-# This assumes the implementation already exists for the checkpoint number for the problem. 
+# This assumes the implementation already exists for the checkpoint number for the problem.
+# the generated deps graph overwrite any existing ones.  
 
 set -euo pipefail
 
@@ -33,19 +34,19 @@ mkdir -p $DEPS_GRAPHS_DIR
 
 # generate the svg 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
-  -o $DEPS_GRAPHS_DIR/checkpoint_$N.svg \
+  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.svg \
   --noshow --max-bacon=0
 
 # generate the dot 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
   -T dot --noshow --max-bacon=0 \
-  -o $DEPS_GRAPHS_DIR/checkpoint_$N.dot
+  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot
 
 # 2. Process the graph to generate the json format for the agent to read 
 echo "[2/2] Converting the dependency graphs to JSON..."
 
-python process_deps_graph.py \
-  $DEPS_GRAPHS_DIR/checkpoint_$N.dot \
-  -o $DEPS_GRAPHS_DIR/checkpoint_$N.json
+python $ROOT/scripts/process_deps_graph.py \
+  $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot \
+  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.json
 
 echo "Done."

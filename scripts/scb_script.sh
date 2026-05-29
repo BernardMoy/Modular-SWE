@@ -35,14 +35,26 @@ echo "[2/6] Copying files to agent workspace..."
 # cp "$PROBLEM_DIR/config.yaml" "$AGENT_WORKSPACE"
 cp "$PROBLEM_DIR/checkpoint_${N}.md" "$AGENT_WORKSPACE"
 
-# if N > 1, also copy the previous implementation 
+# if N > 1, also copy the previous implementation, deps graph and DPy metrics 
 if [[ "$N" -gt 1 ]]; then
   PREV_IMPLEMENTATION="$PROBLEM_DIR/implementations/checkpoint_$((N - 1))"
   if [[ -d "$PREV_IMPLEMENTATION" ]]; then
+    echo "[2.1/6] Previous Implementation"  
     cp -r "$PREV_IMPLEMENTATION" "$AGENT_WORKSPACE/"
   else
     echo "Missing previous implementation when working on checkpoint ${N}" >&2
   fi
+
+  # Generate the dependency graph of checkpoint N-1
+  # Copy only the JSON file 
+  echo "[2.2/6] Dependency Graph"  
+  $ROOT/scripts/deps_graph.sh $PROBLEM $((N - 1))
+  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"
+
+  # Generate the DPy metrics of checkpoint N-1
+  echo "[2.3/6] DPy metrics"  
+  $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
+  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
 fi
 
 # 3. Docker volume mount 
