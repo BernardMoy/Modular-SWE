@@ -8,7 +8,10 @@ from .json_helper import get_json_string
 # If second iteration is true, then current design contains old + new modules
 # as well as rejected designs 
 
-# Writes: current_analyzer_result.json
+"""
+Input: current_design, current_deps_graph, current_rejected_improvements
+Output: current_analyzer_result, pass / fail string (Returned) 
+"""
 def get_analyzer_prompt(second_iteration = False): 
     
     return f"""
