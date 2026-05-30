@@ -1,7 +1,10 @@
 from .json_helper import get_json_string
 
 # Give the CURRENT checkpoint number (the one you are working on)! 
+# Writes: current_design.json
 def get_reader_prompt(checkpoint_number): 
+    if checkpoint_number <= 1: 
+        return "ERROR - This agent is not needed for the first checkpoint, please return nothing."
     return f"""
 You are a senior software engineer that analyses modules in a software project.
 
