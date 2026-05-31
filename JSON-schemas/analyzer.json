@@ -1,35 +1,22 @@
 {
-  "type": "object",
-  "properties": {
-    "result": {
-      "description": "A flag indicating whether the design achieves a code quality suitable for implementation, ensuring long term maintainability of the code as it evolves.",
-      "type": "string",
-      "enum": ["pass", "fail"]
-    },
-    "improvements": {
-      "description": "A list of improvement suggestions.",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "module_name": {
-            "description": "The name of the module.",
-            "type": "string"
-          },
-          "smell": {
-            "description": "A short sentence describing the code smell identified.",
-            "type": "string"
-          },
-          "improvement_instruction": {
-            "description": "Improvement instructions on mitigating the code smell.",
-            "type": "string"
-          }
-        },
-        "required": ["module_name", "smell", "improvement_instruction"],
-        "additionalProperties": false
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "module_name": {
+        "description": "The name of the module.",
+        "type": "string"
+      },
+      "smell": {
+        "description": "A short sentence describing the code smell identified.",
+        "type": "string"
+      },
+      "improvement_instruction": {
+        "description": "Improvement instructions on mitigating the code smell.",
+        "type": "string"
       }
-    }
-  },
-  "required": ["result", "improvements"],
-  "additionalProperties": false
+    },
+    "required": ["module_name", "smell", "improvement_instruction"],
+    "additionalProperties": false
+  }
 }
