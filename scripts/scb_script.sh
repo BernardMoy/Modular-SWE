@@ -83,7 +83,7 @@ echo "[4/6] Moving solution back..."
 CUR_IMPLEMENTATION="$AGENT_WORKSPACE/checkpoint_${N}"
 if [[ -d "$CUR_IMPLEMENTATION" ]]; then
   mkdir -p "$PROBLEM_DIR/implementations"
-  mv "$CUR_IMPLEMENTATION" "$PROBLEM_DIR/implementations"
+  cp -r "$CUR_IMPLEMENTATION" "$PROBLEM_DIR/implementations"
 else
   echo "Missing implementation for checkpoint_${N} folder" >&2
 fi

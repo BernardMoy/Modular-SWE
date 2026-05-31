@@ -30,6 +30,6 @@ Overwrite the JSON object in `current_design.json` by including all modules in y
 
 Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`. 
 
-{"Finally, create or overwrite the JSON object in `current_rejected_improvements.json` for each improvement suggestion that was considered but was rejected, using the following schema." if hasPrevDesign else ""}
+{"Finally, create or modify the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was considered but was rejected, using the following schema." if hasPrevDesign else ""}
 {get_json_string("rejected_improvements") if hasPrevDesign else ""}
 """

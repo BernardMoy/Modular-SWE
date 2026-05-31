@@ -27,5 +27,5 @@ In addition, you are given the dependency graph in `current_deps_graph.json`, an
 Write a JSON object to `current_analyzer_result.json`, decsribing improvement suggestions to the modules, using the following schema. If a module does not require refactoring, do not include it in the output. If no modules need refactoring, return an empty array. 
 {get_json_string("analyzer")}
 
-Also, output a single string that is either "pass" or "fail", on whether the current design is suitable for implementation that ensures good code quality and long term code maintainability. 
+Also, print a single string in your output that is either "pass" or "fail", on whether the current design is suitable for implementation that ensures good code quality and long term code maintainability. Return ONLY this string without any other natural language descriptions.
 """
