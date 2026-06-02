@@ -73,6 +73,7 @@ docker run --rm -it \
   -v "$HOME/.claude:/home/bernardmoy/.claude" \
   -v "$HOME/.claude.json:/home/bernardmoy/.claude.json" \
   -v "$AGENT_WORKSPACE:/agent_workspace" \
+  --workdir /agent_workspace \
   scb bash
 
 # ==== Implement solution (print the command)====
