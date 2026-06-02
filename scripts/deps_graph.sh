@@ -28,6 +28,8 @@ DEPS_GRAPHS_DIR=$PROBLEM_DIR/deps_graphs
 ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' $ROOT/datasets/slopCodeBench/entry_files.json)
 
 # 1. Generate the dependency graph (dot, svg) using pydeps
+# Reversed, meaning A -> B indicates A import B
+# include missing, meaning module imports are still visualised in the graph even when they cannot be resolved
 echo "[1/2] Generating dependency graph..."
 
 mkdir -p $DEPS_GRAPHS_DIR
@@ -35,12 +37,12 @@ mkdir -p $DEPS_GRAPHS_DIR
 # generate the svg 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
   -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.svg \
-  --noshow --max-bacon=0
+  --noshow --max-bacon=0 --reverse --include-missing
 
 # generate the dot 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
   -T dot --noshow --max-bacon=0 \
-  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot
+  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot --reverse --include-missing
 
 # 2. Process the graph to generate the json format for the agent to read 
 echo "[2/2] Converting the dependency graphs to JSON..."

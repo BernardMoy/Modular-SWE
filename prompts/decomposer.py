@@ -28,7 +28,7 @@ Propose a modular design, each with a single responsibility, that when integrate
 Overwrite the JSON object in `current_design.json` by including all modules in your design, that can either be kept, changed or new, using the following schema.
 {get_json_string("decomposer")}
 
-Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`. 
+Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`, using the following schema.  + SPECIFY DIRECTION  
 
 {"Finally, create or modify the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was considered but was rejected, using the following schema." if hasPrevDesign else ""}
 {get_json_string("rejected_improvements") if hasPrevDesign else ""}

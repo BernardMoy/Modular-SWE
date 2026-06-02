@@ -1,0 +1,10 @@
+{
+  "type": "object",
+  "description": "The dependency graph of the system, with module A -> module B indicating that module A imports, or depends on, module B.",
+  "additionalProperties": {
+    "type": "array",
+    "items": {
+      "type": "string"
+    }
+  }
+}
