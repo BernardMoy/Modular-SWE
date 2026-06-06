@@ -2,15 +2,17 @@
 # Output the fan in and fan out for each node 
 def get_fan_in_fan_out(json_object): 
     """
-    Return fan in fan out dict in the format: 
+    Return dict with fanin, fanout, instability in the format: 
     {
         node1: {
             "fan-in": 5, 
-            "fan-out": 5
+            "fan-out": 5, 
+            "instability": 0.5
         }, 
         node2: {
             "fan-in": 5, 
-            "fan-out": 5
+            "fan-out": 5, 
+            "instability": 0.5
         }
     }
     """
@@ -21,7 +23,8 @@ def get_fan_in_fan_out(json_object):
         if key not in d: 
             d[key] = {
                 "fan-in": 0, 
-                "fan-out": 0
+                "fan-out": 0,
+                "instability": 0
             }
         
         for v in value: 
@@ -40,5 +43,11 @@ def get_fan_in_fan_out(json_object):
         for v in value: 
             d[v]["fan-in"] += 1   # The 1 fan in is from the key
     
+    # For each of the items in the dict, calculate the instability 
+    # Defaults to 0 if both fan in and fan out is 0 
+    for key, value in d.items(): 
+        if value["fan-in"]+value["fan-out"]>0: 
+            d[key]["instability"] = value["fan-out"]/(value["fan-in"]+value["fan-out"])
+
     return d 
     
