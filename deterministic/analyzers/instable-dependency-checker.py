@@ -1,6 +1,6 @@
 import argparse 
 import json
-from helpers.fan_in_fan_out import get_fan_in_fan_out
+from ..helpers.fan_in_fan_out import get_fan_in_fan_out
 
 # Given a dependency graph in JSON
 # Return all dependencies from A to B where B is less stable than A in terms of instability metrics 

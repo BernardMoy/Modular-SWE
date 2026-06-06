@@ -1,19 +1,16 @@
-# Not used, as pydeps output noise 
-# Such as test.support or tkinter.Tk
+# # Not used, as pydeps output noise 
+# # Such as test.support or tkinter.Tk
 
 # import argparse 
 # import json
 # from collections import deque 
+# from helpers.get_all_modules import get_all_modules
 
 # # Given a dependency graph in JSON
 # # Return whether all nodes can be reached from the entry point file 
 # def check_all_reachable(json_object, entrypoint): 
 #     # Calculate the total number of nodes in the json object 
-#     total = set() 
-#     for key, value in json_object.items(): 
-#         total.add(key) 
-#         for v in value: 
-#             total.add(v) 
+#     total = get_all_modules(json_object) 
 
 #     # BFS from the entrypoint node 
 #     if entrypoint not in json_object: 

@@ -61,9 +61,10 @@ A module with many outgoing edges is likely a god module.
 ## Run deterministic
 
 Run inside the agent workspace docker container.
+Call the python scripts as modules.
 
 ```
-python deterministic/circular_dependency_checker.py current_deps_graph.json
+python -m deterministic.validators.module_name_validator current_design.json current_deps_graph.json
 ```
 
 ## Run SCB tests

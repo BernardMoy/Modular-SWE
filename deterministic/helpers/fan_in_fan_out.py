@@ -1,3 +1,5 @@
+from get_all_modules import get_all_modules
+
 # Given a dependency graph in JSON
 # Output the fan in and fan out for each node 
 def get_fan_in_fan_out(json_object): 
@@ -18,21 +20,14 @@ def get_fan_in_fan_out(json_object):
     """
     d = {} 
 
-    # Initialise the dict with fanin, fanout = 0, 0 
-    for key, value in json_object.items(): 
-        if key not in d: 
-            d[key] = {
+    # Initialise the dict with fanin, fanout = 0, 0 for all modules 
+    all_modules = get_all_modules(json_object)
+    for module in all_modules: 
+        d[module] = {
                 "fan-in": 0, 
                 "fan-out": 0,
                 "instability": 0
             }
-        
-        for v in value: 
-            if v not in d: 
-                d[v] = {
-                    "fan-in": 0, 
-                    "fan-out": 0
-                }
 
     # Add the fan in (in-degree) and the fan out (out-degree) 
     for key, value in json_object.items(): 
