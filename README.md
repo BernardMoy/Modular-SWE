@@ -58,6 +58,14 @@ Edges point from the imported module unless the `--reverse` tag is set:
 an edge from module A -> B means B imports A.
 A module with many outgoing edges is likely a god module.
 
+## Run deterministic
+
+Run inside the agent workspace docker container.
+
+```
+python deterministic/circular_dependency_checker.py current_deps_graph.json
+```
+
 ## Run SCB tests
 
 Specify the implementation path in the `--entrypoint` flag.
