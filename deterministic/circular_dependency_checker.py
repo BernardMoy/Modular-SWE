@@ -48,7 +48,7 @@ def check_circular_dependency(json_object):
 
 # usage: check.py [abs-path]
 def main(): 
-    parser = argparse.ArgumentParser(description="Process a file")
+    parser = argparse.ArgumentParser()
     parser.add_argument("path", help="Abs path to the dependency graph JSON file")
     args = parser.parse_args()
 
