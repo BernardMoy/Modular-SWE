@@ -6,6 +6,18 @@ import json
 # May change this to "whether it is reachable from the ENTRYPOINT NODE" 
 # If we can confirm that the SCB dataset will be used and is the only dataset used. 
 def check_isolated_node(json_object): 
+    """
+    Return in the format, for all isolated modules.
+    [
+        {
+            "Module": "...", 
+            "Smell": "Isolated Module"
+        }, 
+        ...
+    ]
+    """
+    isolated = [] 
+
     # Set of nodes reachable by others 
     reached = set() 
     for value in json_object.values():
@@ -15,9 +27,12 @@ def check_isolated_node(json_object):
     # For any key, if not reachable and have no reaching nodes, then it is isolated 
     for key, value in json_object.items(): 
         if key not in reached and len(value) == 0: 
-            return True 
+            isolated.append({
+            "Module": key, 
+            "Smell": "Isolated Module"
+        }, )
 
-    return False 
+    return isolated 
     
 
 

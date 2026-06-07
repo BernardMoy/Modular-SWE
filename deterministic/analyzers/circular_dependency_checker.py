@@ -4,30 +4,52 @@ import json
 # Given a dependency graph in JSON
 # Return whether or not it contains a cycle (= circular dependency) 
 def check_circular_dependency(json_object): 
-    def dfs(graph, node, visited, recStack): 
+    """
+    Return in the format 
+    [
+        {
+            "Smell": "Circular dependency",
+            "Description": "Module A -> Module B -> ... ."
+        }, 
+    ]
+        
+    """
+    def dfs(graph, node, visited, recStack, path): 
         # Base case: node already visited 
         if node in recStack: 
-            return True 
+            if node not in path: 
+                return None 
+            
+            # find the pos of the node in the path 
+            start = path.index(node) 
+            return path[start:] + [node]
         
         # If the node has been previously processed return False 
         if node in visited: 
-            return False 
+            return None 
         
         visited.add(node) 
 
         # Add to the stack before rec 
         recStack.add(node) 
+
+        # Add to the path 
+        path.append(node) 
         
         if node not in graph: 
             return False 
         
         for neighbour in graph[node]:
-            if dfs(graph, neighbour, visited, recStack): 
-                return True 
+            res = dfs(graph, neighbour, visited, recStack, path)
+            if res: 
+                return res 
             
         # Remove after rec 
         recStack.remove(node) 
-        return False 
+
+        # Remove from the path 
+        path.pop() 
+        return None
     
     visited = set() 
     recStack = set() 
@@ -39,11 +61,18 @@ def check_circular_dependency(json_object):
         for v in value: 
             nodes.add(v) 
     
+    circulars = [] 
     for n in nodes: 
-        if (dfs(json_object, n, visited, recStack)): 
-            return True 
+        res = (dfs(json_object, n, visited, recStack, []))
+        if res: 
+            circulars.append(
+                {
+                    "Smell": "Circular dependency",
+                    "Description": ' -> '.join(res)
+                }
+            )
     
-    return False 
+    return circulars
 
 
 # usage: check.py [abs-path]
