@@ -1,4 +1,4 @@
-from ..helpers.get_all_modules import get_all_modules
+from ..reusables.get_all_modules import get_all_modules
 import argparse
 import json 
 

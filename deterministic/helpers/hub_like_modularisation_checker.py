@@ -1,6 +1,6 @@
 import argparse 
 import json
-from ..helpers.fan_in_fan_out import get_fan_in_fan_out
+from ..reusables.fan_in_fan_out import get_fan_in_fan_out
 
 # Given a dependency graph in JSON
 # Return all hub-like nodes with fan in, fan out > threshold 

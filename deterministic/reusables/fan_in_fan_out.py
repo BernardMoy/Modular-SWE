@@ -1,4 +1,4 @@
-from get_all_modules import get_all_modules
+from deterministic.reusables.get_all_modules import get_all_modules
 
 # Given a dependency graph in JSON
 # Output the fan in and fan out for each node 
