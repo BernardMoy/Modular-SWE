@@ -39,7 +39,7 @@ echo "" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 echo "## Entrypoint file" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 echo "The entrypoint file must be named \`${ENTRY_FILE}.py\`" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 
-# if N > 1, also copy the previous implementation, deps graph and DPy metrics 
+# if N > 1, also copy the previous implementation, deps graph, DPy metrics and pylint metrics
 if [[ "$N" -gt 1 ]]; then
   PREV_IMPLEMENTATION="$PROBLEM_DIR/implementations/checkpoint_$((N - 1))"
   if [[ -d "$PREV_IMPLEMENTATION" ]]; then
@@ -61,6 +61,15 @@ if [[ "$N" -gt 1 ]]; then
   $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/current_metrics"
+
+  # Generate the pylint metrics of checkpoint N-1 
+  # https://docs.pylint.org/features.html
+  # Consider using symilar, which is a cli by pylint specifically for duplicated lines 
+  echo "[2.4/6] Pylint metrics"
+  pylint $PREV_IMPLEMENTATION --min-similarity-lines=2 --ignore=venv,.venv --recursive=y --disable=all --enable=R0801 --ignore-comments=yes --ignore-docstrings=yes --ignore-imports=yes --output-format=json \
+  >$PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_pylint_metrics.json || true
+  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
+
 fi
 
 # 3. Docker volume mount 
