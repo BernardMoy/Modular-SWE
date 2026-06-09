@@ -1,9 +1,9 @@
 import json 
 import argparse 
-from ..helpers.circular_dependency_checker import check_circular_dependency
-from ..helpers.isolated_node_checker import check_isolated_node
-from ..helpers.hub_like_modularisation_checker import check_hub_like_modularisation
-from ..helpers.instable_dependency_checker import check_instable_dependency
+from ..helpers.deps_graph.circular_dependency_checker import check_circular_dependency
+from ..helpers.deps_graph.isolated_node_checker import check_isolated_node
+from ..helpers.deps_graph.hub_like_modularisation_checker import check_hub_like_modularisation
+from ..helpers.deps_graph.instable_dependency_checker import check_instable_dependency
 
 def get_metrics_from_deps_graph(deps_graph_json): 
     """
