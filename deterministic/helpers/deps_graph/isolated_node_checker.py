@@ -10,8 +10,9 @@ def check_isolated_node(json_object):
     Return in the format, for all isolated modules.
     [
         {
+            "Category": "Design level",  
             "Module": "...", 
-            "Smell": "Isolated Module"
+            "Smell": "This module is isolated."
         }, 
         ...
     ]
@@ -28,9 +29,11 @@ def check_isolated_node(json_object):
     for key, value in json_object.items(): 
         if key not in reached and len(value) == 0: 
             isolated.append({
-            "Module": key, 
-            "Smell": "Isolated Module"
-        }, )
+                "Category": "Design level",  
+                "Module": key, 
+                "Smell": "This module is isolated."
+            }, 
+        )
 
     return isolated 
     

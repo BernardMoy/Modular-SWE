@@ -9,6 +9,7 @@ def check_instable_dependency(json_object):
     Return in the format 
     [
         {
+            "Category": "Design level",  
             "Module": "...", 
             "Smell": "Dependency on less stable modules",
             "Description": "Module _ is depending on module _, which is less stable. "
@@ -29,9 +30,10 @@ def check_instable_dependency(json_object):
 
             if dest_stability > source_stability: 
                 instables.append({
+                    "Category": "Design level",  
                     "Module": key, 
                     "Smell": "Dependency on less stable modules",
-                    "Description": f"Module {key} (instability: {source_stability}) is depending on module {v} (instability: {dest_stability}), which is less stable."
+                    "Description": f"Module '{key}' (instability: {source_stability}) is depending on module '{v}' (instability: {dest_stability}), which is less stable."
                 })
 
     return instables

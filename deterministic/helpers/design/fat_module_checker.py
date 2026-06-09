@@ -10,20 +10,22 @@ def check_fat_module(json_object):
     """
     Return in the format [
         {
+            "Category": "Module level",  
             "Module": ..., 
             "Smell": "Fat module", 
-            "Description": The module {entry['Module']} has a high number of public methods ({entry['NOPM']}), indicating insufficient modularisation.
+            "Description": The module x has a high number of public methods ({entry['NOPM']}), indicating insufficient modularisation.
         }
     ]
     """
     smells = [] 
     for entry in json_object: 
-        if len(entry["public_interface"]) >= NOPM_THRESHOLD: 
+        if "public_interface" in entry and len(entry["public_interface"]) >= NOPM_THRESHOLD: 
             smells.append(
                 {
+                    "Category": "Module level",  
                     "Module": entry["module_name"], 
                     "Smell": "Fat module", 
-                    "Description": f"The module {entry['module_name']} has a high number of public methods ({entry['NOPM']}), indicating insufficient modularisation."
+                    "Description": f"The module '{entry['module_name']}' has a high number of public methods ({entry['NOPM']}), indicating insufficient modularisation."
                 }
             )
     return smells

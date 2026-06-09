@@ -7,6 +7,7 @@ def get_metrics_from_dpy_implementation(dpy_implementation_smells):
     for entry in dpy_implementation_smells: 
         if entry["Smell"] == "Magic number": 
             smells.append({
+                "Category": "Function level", 
                 "Package": entry["Package"],
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 

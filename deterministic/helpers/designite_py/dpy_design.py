@@ -4,6 +4,7 @@ def get_metrics_from_dpy_design(dpy_design_smells):
     2. Intrusive coupling / Protected access
     Return in the format [
         {
+            "Category": "Design level",  
             "Package": ..., 
             "Module": ..., 
             "Class": ..., 
@@ -18,6 +19,7 @@ def get_metrics_from_dpy_design(dpy_design_smells):
     for entry in dpy_design_smells: 
         if entry["Smell"] == "Feature envy": 
             smells.append({
+                "Category": "Design level",  
                 "Package": entry["Package"],
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
@@ -28,6 +30,7 @@ def get_metrics_from_dpy_design(dpy_design_smells):
 
         if entry["Smell"] == "Deficient encapsulation":
             smells.append({
+                "Category": "Design level",  
                 "Package": entry["Package"],
                 "Module": entry["Module"],
                 "Class": entry["Class"],

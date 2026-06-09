@@ -7,8 +7,8 @@ from ..helpers.designite_py.dpy_function import get_metrics_from_dpy_function
 from ..helpers.designite_py.dpy_implementation import get_metrics_from_dpy_implementation
 from ..helpers.deps_graph.circular_dependency_checker import check_circular_dependency
 from ..helpers.deps_graph.isolated_node_checker import check_isolated_node
-from ..helpers.deps_graph.hub_like_modularisation_checker import check_hub_like_modularisation
 from ..helpers.deps_graph.instable_dependency_checker import check_instable_dependency
+from ..reusables.sort_smells import sort_smells
 
 def get_metrics_from_deps_graph(deps_graph_json): 
     """
@@ -77,6 +77,9 @@ def main():
     # Obtain the remaining metrics from deps graph 
     # Which cannot be obtained from dpy metrics
     smells.extend(get_metrics_from_deps_graph(deps_graph_json))
+
+    # Sort smells 
+    smells = sort_smells(smells) 
 
     # Write the smells to current_design.json 
     result_json = json.dumps(smells, indent=2)

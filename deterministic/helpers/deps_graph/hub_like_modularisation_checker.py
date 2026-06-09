@@ -11,6 +11,7 @@ def check_hub_like_modularisation(json_object):
     Return in the format 
     [
         {
+            "Category": "Design level",  
             "Module": "...", 
             "Smell": "Hub-like Modularization",
             "Description": "Module _ may have hub-like modularization with fan-in=A, fan-out=B. "
@@ -27,9 +28,10 @@ def check_hub_like_modularisation(json_object):
         # Report hub like if fan in and fan out both >= threshold
         if d["fan-in"] >= THRESHOLD and d["fan-out"] >= THRESHOLD: 
             hub_likes.append({
+                "Category": "Design level",  
                 "Module": module, 
                 "Smell": "Hub-like Modularization", 
-                "Description": f"Module {module} may have hub-like modularization with fan-in={d['fan-in']}, fan-out={d['fan-out']}. "
+                "Description": f"Module '{module}' may have hub-like modularization with fan-in={d['fan-in']}, fan-out={d['fan-out']}. "
             })
     
     return hub_likes

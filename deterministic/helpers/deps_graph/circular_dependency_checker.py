@@ -8,6 +8,7 @@ def check_circular_dependency(json_object):
     Return in the format 
     [
         {
+            "Category": "Design level",  
             "Smell": "Circular dependency",
             "Description": "Module A -> Module B -> ... ."
         }, 
@@ -67,6 +68,7 @@ def check_circular_dependency(json_object):
         if res: 
             circulars.append(
                 {
+                    "Category": "Design level",  
                     "Smell": "Circular dependency",
                     "Description": ' -> '.join(res)
                 }
