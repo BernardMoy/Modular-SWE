@@ -9,25 +9,34 @@ def get_metrics_from_deps_graph(deps_graph_json):
     """
     Get metrics from dependency graph using deterministic helper methods. 
     Write to the current_designs.json file. 
+
+    Metrics: 
+    1. Instable dependencies 
+    2. Circular import 
+    3. Isolated module 
+    4. Hub like modularisation
+    5. Fat module (large public interface)
     """
 
-    all_metrics = [] 
+    deps_graph_metrics = [] 
 
     # Check circular dependency (Must fail) 
-    all_metrics.extend(check_circular_dependency(deps_graph_json))
+    deps_graph_metrics.extend(check_circular_dependency(deps_graph_json))
     
     # Check isolated node (Must fail)  
-    all_metrics.extend(check_isolated_node(deps_graph_json))
+    deps_graph_metrics.extend(check_isolated_node(deps_graph_json))
 
     # Check hub like 
-    all_metrics.extend(check_hub_like_modularisation(deps_graph_json))
+    deps_graph_metrics.extend(check_hub_like_modularisation(deps_graph_json))
 
     # Check instable dependency
-    all_metrics.extend(check_instable_dependency(deps_graph_json))
+    deps_graph_metrics.extend(check_instable_dependency(deps_graph_json))
 
-    return all_metrics
+    # Check fat module 
+
+    return deps_graph_metrics
     
-# usage: write.py [deps-graph-path] [current-metrics-path]
+# usage: write.py [current_design_path] [current_deps_graph_path] [current_metrics_output_path]
 def main(): 
     parser = argparse.ArgumentParser()
     parser.add_argument("deps_graph_path", help="Abs path to the dependency graph JSON file")

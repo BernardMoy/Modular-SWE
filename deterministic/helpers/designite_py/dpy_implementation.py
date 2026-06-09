@@ -12,6 +12,6 @@ def get_metrics_from_dpy_implementation(dpy_implementation_smells):
                 "Class": entry["Class"], 
                 "Method": entry["Method"], 
                 "Smell": "Magic number", 
-                "Description": entry["Description"]  # copy the desc is fine 
+                "Description": entry["Description"]
             })
     return smells 

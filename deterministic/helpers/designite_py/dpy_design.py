@@ -21,17 +21,17 @@ def get_metrics_from_dpy_design(dpy_design_smells):
                 "Package": entry["Package"],
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
-                "Smell": "Feature envy", 
+                "Smell": "Feature envy",
                 "Description": entry["Description"]
             })
 
 
-        if entry["Smell"] == "Deficient encapsulation": 
+        if entry["Smell"] == "Deficient encapsulation":
             smells.append({
                 "Package": entry["Package"],
-                "Module": entry["Module"], 
-                "Class": entry["Class"], 
-                "Smell": "Access to protected members", 
+                "Module": entry["Module"],
+                "Class": entry["Class"],
+                "Smell": "Access to protected members",
                 "Description": entry["Description"]
             })
 

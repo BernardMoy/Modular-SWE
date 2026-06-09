@@ -37,7 +37,7 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
                 "Smell": "Complex class", 
-                "Description": f"The module {entry['Module']} has a high WMC value of {entry['WMC']}, making it difficult to maintain and test"
+                "Description": f"The module {entry['Module']} has a high WMC value of {entry['WMC']}, making it difficult to maintain and test."
             })
         
         if entry["NOPM"] >= NOPM_THRESHOLD: 

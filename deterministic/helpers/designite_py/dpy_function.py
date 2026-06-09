@@ -23,7 +23,7 @@ def get_metrics_from_dpy_function(dpy_function_metrics):
                 "Class": entry["Class"], 
                 "Method": entry["Method"], 
                 "Smell": "Complex method", 
-                "Description": f"The method has high cyclomatic complexity of {entry['CC']}"
+                "Description": f"The method has high cyclomatic complexity of {entry['CC']}."
             })
         
     return smells 
