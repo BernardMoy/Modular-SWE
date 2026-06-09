@@ -66,7 +66,7 @@ if [[ "$N" -gt 1 ]]; then
   # https://docs.pylint.org/features.html
   # Consider using symilar, which is a cli by pylint specifically for duplicated lines 
   echo "[2.4/6] Pylint metrics"
-  pylint $PREV_IMPLEMENTATION --min-similarity-lines=2 --ignore=venv,.venv --recursive=y --disable=all --enable=R0801 --ignore-comments=yes --ignore-docstrings=yes --ignore-imports=yes --output-format=json \
+  pylint $PREV_IMPLEMENTATION --min-similarity-lines=20 --ignore=venv,.venv --recursive=y --disable=all --enable=R0801 --ignore-comments=yes --ignore-docstrings=yes --ignore-imports=yes --output-format=json \
   >$PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_pylint_metrics.json || true
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
 

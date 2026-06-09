@@ -3,7 +3,7 @@ import argparse
 from ..helpers.deps_graph.circular_dependency_checker import check_circular_dependency
 from ..helpers.deps_graph.isolated_node_checker import check_isolated_node
 from ..helpers.deps_graph.hub_like_modularisation_checker import check_hub_like_modularisation
-from ..helpers.deps_graph.instable_dependency_checker import check_instable_dependency
+from ..helpers.deps_graph.unstable_dependency_checker import check_unstable_dependency
 from ..helpers.design.fat_module_checker import check_fat_module
 from ..reusables.sort_smells import sort_smells
 
@@ -13,7 +13,7 @@ def get_metrics_from_deps_graph(deps_graph_json):
     Write to the current_designs.json file. 
 
     Metrics: 
-    1. Instable dependencies 
+    1. Unstable dependencies 
     2. Circular import 
     3. Isolated module 
     4. Hub like modularisation
@@ -30,8 +30,8 @@ def get_metrics_from_deps_graph(deps_graph_json):
     # Check hub like 
     deps_graph_metrics.extend(check_hub_like_modularisation(deps_graph_json))
 
-    # Check instable dependency
-    deps_graph_metrics.extend(check_instable_dependency(deps_graph_json))
+    # Check unstable dependency
+    deps_graph_metrics.extend(check_unstable_dependency(deps_graph_json))
 
     return deps_graph_metrics
 
