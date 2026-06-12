@@ -60,7 +60,6 @@ if [[ "$N" -gt 1 ]]; then
   echo "[2.3/6] DPy metrics"  
   $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
-  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/current_metrics"
 
   # Generate the pylint metrics of checkpoint N-1 
   # https://docs.pylint.org/features.html
@@ -70,6 +69,9 @@ if [[ "$N" -gt 1 ]]; then
   >$PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_pylint_metrics.json || true
   cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
 
+  # Generate the current metrics 
+  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph "$AGENT_WORKSPACE/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/checkpoint_$((N - 1))_pylint_metrics.json" \
+  "$AGENT_WORKSPACE/current_deps_graph.json" "$AGENT_WORKSPACE/current_metrics.json"
 fi
 
 # 3. Docker volume mount 

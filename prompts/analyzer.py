@@ -21,11 +21,12 @@ Your job is to analyse the following {"modular design including kept, changed or
 Project root: agent_workspace
 File: `current_design.json`
 
-In addition, you are given the dependency graph in `current_deps_graph.json`, and a list of flagged code smells in `current_metrics/`. While they do not necessarily mean refactoring is needed, they may guide you in providing improvement suggestions. 
+In addition, you are given the dependency graph in `current_deps_graph.json`, and a list of flagged code smells in `current_metrics`. While they do not necessarily mean refactoring is needed, they may guide you in providing improvement suggestions. 
 {"You are also given a list of previously suggested improvements that are rejected in `current_rejected_improvements.json`." if second_iteration else ""}
 
 Write a JSON object to `current_analyzer_result.json`, decsribing improvement suggestions to the modules, using the following schema. If a module does not require refactoring, do not include it in the output. If no modules need refactoring, return an empty array. 
 {get_json_string("analyzer")}
 
-Also, print a single string in your output that is either "pass" or "fail", on whether the current design is suitable for implementation that ensures good code quality and long term code maintainability. Return ONLY this string without any other natural language descriptions.
+Also, evaluate the result that is either "pass" or "fail", on whether the current design is suitable for implementation by having good code quality and long term maintainability. Return ONLY the result and reason if it fails, following the schema below, do not include other natural language descriptions in your response. 
+{get_json_string("analyzer_pass_fail")}
 """

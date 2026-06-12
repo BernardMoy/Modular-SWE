@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "result": {
+      "description": "A single string, either pass or fail, based on whether the current design is suitable for implementation that ensures good code quality and long term code maintainability.",
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "reason": {
+      "description": "When the current code quality fails, explain in natural language the reason and what should be changed to improve it.",
+      "type": "string"
+    }
+  },
+  "required": ["result"],
+  "additionalProperties": false,
+  "if": {
+    "properties": { "result": { "const": "fail" } }
+  },
+  "then": {
+    "required": ["reason"]
+  },
+  "else": {
+    "not": { "required": ["reason"] }
+  }
+}
