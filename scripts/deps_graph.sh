@@ -37,12 +37,12 @@ mkdir -p $DEPS_GRAPHS_DIR
 # generate the svg 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
   -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.svg \
-  --noshow --max-bacon=0 --reverse --include-missing
+  --noshow --max-bacon=0 --reverse 
 
 # generate the dot 
 pydeps $IMPL_DIR/$ENTRY_FILE.py \
   -T dot --noshow --max-bacon=0 \
-  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot --reverse --include-missing
+  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot --reverse 
 
 # 2. Process the graph to generate the json format for the agent to read 
 echo "[2/2] Converting the dependency graphs to JSON..."
