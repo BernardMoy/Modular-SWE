@@ -24,6 +24,7 @@ Issue path: checkpoint_{checkpoint_number}.md
 {"In addition, you are given a list of improvement suggestions on the current design in `current_analyzer_result.json`, please factor them in your design together with the new modules if the improvement would improve code quality in the long run, or reject it if the improvement is not applicable." if hasPrevDesign else ""}
 
 Propose a modular design, each with a single responsibility, that when integrated together, achieve the goal specified in the issue.
+Your design should avoid too much unrelated methods in a class or methods that frequently access the members of another class.
 
 Overwrite the JSON object in `current_design.json` by including all modules in your design, that can either be kept, changed or new, using the following schema.
 {get_json_string("decomposer")}
