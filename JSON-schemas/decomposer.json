@@ -4,7 +4,7 @@
     "oneOf": [
       {
         "type": "object",
-        "description": "An existing, already implemented module that remains unchanged.",
+        "description": "An existing module already present in a previous concrete implementation that remains unchanged.",
         "properties": {
           "type": { "type": "string", "const": "keep" },
           "module_name": {
@@ -25,7 +25,7 @@
       },
       {
         "type": "object",
-        "description": "A new module, or an existing module that is changed.",
+        "description": "A new module, or an existing module that is changed. Any modules without a concrete implementation should fall into this type.",
         "properties": {
           "type": { "type": "string", "enum": ["changed", "new"] },
           "module_name": {

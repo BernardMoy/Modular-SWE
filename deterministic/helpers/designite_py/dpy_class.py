@@ -16,7 +16,7 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
     ]
     """
     LCOM_THRESHOLD = 0.8
-    WMC_THRESHOLD = 30 
+    WMC_THRESHOLD = 50 
     NOPM_THRESHOLD = 20 
     FAN_IN_THRESHOLD = 7 
     FAN_OUT_THRESHOLD = 7

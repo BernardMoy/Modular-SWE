@@ -14,6 +14,7 @@ DPy
 
 # agent implementation
 agent_workspace
+agent_workspace copy
 
 # pycache 
 __pycache__
