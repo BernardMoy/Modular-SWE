@@ -23,9 +23,9 @@ Design: `current_design.json`
 Dependency graph: `current_deps_graph.json`
 
 Your evaluation is based on the following criteria to achieve best code quality and maintainability: 
-- Modules should be able to independently evolve, with low coupling and high cohesion 
-- The system should be easy to test by not having overly complex functions with lots of control paths that could be simplified
-- The maintenance effort when introducing new features should be as low as possible by avoiding duplication and ensuring single responsibility
+- Modules should be able to independently evolve, each having only a single responsibility with clear boundaries between them. 
+- The system should be easy to test by not having overly complex functions with lots of control paths that could be simplified.
+- The maintenance effort when introducing new features should be as low as possible by avoiding duplication and avoiding failed encapsulation by directly accessing private elements. 
 
 For each module, reason about the following: 
 - Is the module likely to change when new features are added with later checkpoints? 
