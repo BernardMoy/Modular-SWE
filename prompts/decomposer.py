@@ -31,7 +31,10 @@ Issue path: checkpoint_{checkpoint_number}.md
 Propose a modular design that achieves the goal specified in the issue when integrated together. 
 {code_quality_text} 
 
-Overwrite the JSON object in `current_design.json` by including all modules in your design, that can either be kept, changed or new, using the following schema.
+Overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. 
+Follow strictly the decision tree below to decide the 'type' field of the module: 
+(1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
+(2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
 {get_json_string("decomposer")}
 
 Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`, using the following schema of an adjacency list. Module A -> Module B means Module A imports module B. Include all lazy imports, and include unresolved import paths as well if they are present in the code implementation. Do not include standard python libraries. 

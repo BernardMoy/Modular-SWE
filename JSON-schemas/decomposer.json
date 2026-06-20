@@ -4,9 +4,13 @@
     "oneOf": [
       {
         "type": "object",
-        "description": "An existing module already present in a previous concrete implementation that remains unchanged.",
+        "description": "A keep module with a previous concrete implementation, only record the name, path and its responsibility.",
         "properties": {
-          "type": { "type": "string", "const": "keep" },
+          "type": {
+            "type": "string",
+            "const": "keep",
+            "description": "'keep' type should be used only when there is a concrete implementation from the previous code, NOT TO BE USED when new modules are not updated from later designs."
+          },
           "module_name": {
             "description": "The name of the module.",
             "type": "string"
@@ -25,9 +29,13 @@
       },
       {
         "type": "object",
-        "description": "A new module, or an existing module that is changed. Any modules without a concrete implementation should fall into this type.",
+        "description": "A new or changed module with more detailed designs.",
         "properties": {
-          "type": { "type": "string", "enum": ["changed", "new"] },
+          "type": {
+            "type": "string",
+            "enum": ["changed", "new"],
+            "description": "'changed' means that the module MUST HAVE a prior implementation and its design has changed from that implementation. 'new' means the module DOES NOT have a previous implementation or when a new module has been updated."
+          },
           "module_name": {
             "description": "The name of the module.",
             "type": "string"
