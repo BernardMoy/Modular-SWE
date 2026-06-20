@@ -53,13 +53,14 @@ if [[ "$N" -gt 1 ]]; then
   # Copy only the JSON file 
   echo "[2.2/6] Dependency Graph"  
   $ROOT/scripts/deps_graph.sh $PROBLEM $((N - 1))
-  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"  # original 
+  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.svg" "$AGENT_WORKSPACE/"  # original svg for developer to read 
+  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"  # original json
   cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/current_deps_graph.json"  # iteratively modified
 
   # Generate the DPy metrics of checkpoint N-1
   echo "[2.3/6] DPy metrics"  
   $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
-  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
+  # cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
 
   # Generate the pylint metrics of checkpoint N-1 
   # https://docs.pylint.org/features.html
@@ -67,10 +68,10 @@ if [[ "$N" -gt 1 ]]; then
   echo "[2.4/6] Pylint metrics"
   pylint $PREV_IMPLEMENTATION --min-similarity-lines=20 --ignore=venv,.venv --recursive=y --disable=all --enable=R0801 --ignore-comments=yes --ignore-docstrings=yes --ignore-imports=yes --output-format=json \
   >$PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_pylint_metrics.json || true
-  cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
+  # cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
 
   # Generate the current metrics 
-  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph "$AGENT_WORKSPACE/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/checkpoint_$((N - 1))_pylint_metrics.json" \
+  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" \
   "$AGENT_WORKSPACE/current_deps_graph.json" "$AGENT_WORKSPACE/current_metrics.json"
 fi
 

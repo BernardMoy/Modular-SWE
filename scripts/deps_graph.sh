@@ -1,54 +1,50 @@
 #!/usr/bin/env bash 
 # Usage: 
-# ./deps_graph.sh <problem> <checkpoint_number> 
-# This assumes the implementation already exists for the checkpoint number for the problem.
-# the generated deps graph overwrite any existing ones.  
+# ./deps_graph.sh <problem> <implementation_path> <output_dir>
+# Writes the .dot, .svg and .json to that output directory. 
 
 set -euo pipefail
 
 # Incorrect number of params 
-if [[ $# -ne 2 ]]; then
-  echo "Usage: ./deps_graph.sh <problem> <checkpoint_number> " >&2
+if [[ $# -ne 3 ]]; then
+  echo "Usage: ./deps_graph.sh <problem> <implementation_path> <output_dir>" >&2
   exit 1
 fi
 
-# Obtain the problem and checkpoint number 
+# Obtain the impl path and the output dir 
 PROBLEM="$1"
-N="$2"  # checkpoint number 
+IMPL_DIR="$2"
+OUTPUT_DIR="$3"
 
 # Paths constant
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# implementation dir to copy from 
-PROBLEM_DIR=$ROOT/datasets/slopCodeBench/scb-problems/$PROBLEM
-IMPL_DIR="$PROBLEM_DIR/implementations/checkpoint_$N"
-DEPS_GRAPHS_DIR=$PROBLEM_DIR/deps_graphs
+# Obtain the entrypoint file name from entry_files.json
+ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' "$ROOT/datasets/slopCodeBench/entry_files.json")
 
-# Obtain the entrypoint file name from entry_files.json 
-ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' $ROOT/datasets/slopCodeBench/entry_files.json)
+# Create the output directory 
+mkdir -p "$OUTPUT_DIR"
 
 # 1. Generate the dependency graph (dot, svg) using pydeps
 # Reversed, meaning A -> B indicates A import B
 # include missing, meaning module imports are still visualised in the graph even when they cannot be resolved
 echo "[1/2] Generating dependency graph..."
 
-mkdir -p $DEPS_GRAPHS_DIR
+# generate the svg
+pydeps "$IMPL_DIR/$ENTRY_FILE.py" \
+  -o "$OUTPUT_DIR/deps_graph.svg" \
+  --noshow --max-bacon=0 --reverse
 
-# generate the svg 
-pydeps $IMPL_DIR/$ENTRY_FILE.py \
-  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.svg \
-  --noshow --max-bacon=0 --reverse 
-
-# generate the dot 
-pydeps $IMPL_DIR/$ENTRY_FILE.py \
+# generate the dot
+pydeps "$IMPL_DIR/$ENTRY_FILE.py" \
   -T dot --noshow --max-bacon=0 \
-  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot --reverse 
+  -o "$OUTPUT_DIR/deps_graph.dot" --reverse
 
-# 2. Process the graph to generate the json format for the agent to read 
+# 2. Process the graph to generate the json format for the agent to read
 echo "[2/2] Converting the dependency graphs to JSON..."
 
-python $ROOT/scripts/process_deps_graph.py \
-  $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.dot \
-  -o $DEPS_GRAPHS_DIR/checkpoint_${N}_graph.json
+python "$ROOT/scripts/process_deps_graph.py" \
+  "$OUTPUT_DIR/deps_graph.dot" \
+  -o "$OUTPUT_DIR/deps_graph.json"
 
 echo "Done."
