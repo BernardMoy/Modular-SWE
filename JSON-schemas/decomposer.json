@@ -12,11 +12,7 @@
             "description": "'keep' type should be used only when there is a concrete implementation from the previous code, NOT TO BE USED when new modules are not updated from later designs."
           },
           "module_name": {
-            "description": "The name of the module.",
-            "type": "string"
-          },
-          "module_path": {
-            "description": "The directory path of the module.",
+            "description": "The name of the module that follows pydeps convention.",
             "type": "string"
           },
           "responsibility": {
@@ -24,7 +20,7 @@
             "type": "string"
           }
         },
-        "required": ["type", "module_name", "module_path", "responsibility"],
+        "required": ["type", "module_name", "responsibility"],
         "additionalProperties": false
       },
       {
@@ -37,11 +33,7 @@
             "description": "'changed' means that the module MUST HAVE a prior implementation and its design has changed from that implementation. 'new' means the module DOES NOT have a previous implementation or when a new module has been updated."
           },
           "module_name": {
-            "description": "The name of the module.",
-            "type": "string"
-          },
-          "module_path": {
-            "description": "The directory path of the module.",
+            "description": "The name of the module that follows pydeps convention.",
             "type": "string"
           },
           "responsibility": {
@@ -120,7 +112,6 @@
         "required": [
           "type",
           "module_name",
-          "module_path",
           "responsibility",
           "non_responsibilities",
           "inputs",

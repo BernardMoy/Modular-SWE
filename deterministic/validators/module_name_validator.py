@@ -4,7 +4,9 @@ import json
 
 # Given a design modules with the field "module_name", 
 # Validate that the module name appear in the dependenccy graph
-# The opposite do not need to necessarily be true. 
+
+# the design file must come from an agent, so we can instruct it to follow the format in dependency graph 
+# the dependency graph come from pydeps (1st iteration, N>1 checkpoint) or from agent (>1 iteration) 
 def module_name_validator(design_json, deps_graph_json): 
     """
     Return an array of module names in the design file in the format 
@@ -23,10 +25,7 @@ def module_name_validator(design_json, deps_graph_json):
 
     # For each item in the design json extract the module name 
     for item in design_json: 
-
-        # At this stage, TOLERATE module and module.py and treat them as the same
-        all_modules_no_suffix = [x.removesuffix(".py") for x in all_modules]
-        if item["module_name"].removesuffix(".py") not in all_modules_no_suffix: 
+        if item["module_name"] not in all_modules: 
             result.append({
                 "Module": item['module_name'], 
                 "Description": f"Module {item['module_name']}, while exist in the current design file, does not exist in the dependency graph."

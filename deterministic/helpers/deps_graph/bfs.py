@@ -42,7 +42,7 @@ def bfs(deps_graph_json, design_json):
     # do this at the end to ensure all bfs paths are covered first 
     types = {} 
     for module in design_json: 
-        types[module["module_path"]] = module["type"]
+        types[module["module_name"]] = module["type"]
     
     for i, module_list in enumerate(modules): 
         modules[i] = [x for x in module_list if types[x] in ["changed", "new"]]

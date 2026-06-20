@@ -35,9 +35,13 @@ Overwrite the JSON object in `current_design.json` by including all modules in y
 Follow strictly the decision tree below to decide the 'type' field of the module: 
 (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
 (2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
+
+The module_name field should follow pydeps conventions, stripping the .py extension for modules and specify the file path separated by dots (.) 
 {get_json_string("decomposer")}
 
-Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`, using the following schema of an adjacency list. Module A -> Module B means Module A imports module B. Include all lazy imports, and include unresolved import paths as well if they are present in the code implementation. Do not include standard python libraries. 
+Then, {"update" if hasPrevDesign else "create"} the dependency graph in `current_deps_graph.json`, using the following schema of an adjacency list. 
+Arrows point to the modules that they import. Include all lazy imports. Do not include standard python libraries. 
+The names used in the dependency graph must match exactly the `module_name` field in `current_design.json`. 
 {get_json_string("dependency_graph")}
 
 {"Finally, create or modify the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was considered but was rejected, using the following schema." if hasPrevDesign else ""}
