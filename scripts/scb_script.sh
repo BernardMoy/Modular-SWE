@@ -39,7 +39,7 @@ echo "" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 echo "## Entrypoint file" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 echo "The entrypoint file must be named \`${ENTRY_FILE}.py\`" >> "$AGENT_WORKSPACE/checkpoint_${N}.md"
 
-# if N > 1, also copy the previous implementation, deps graph, DPy metrics and pylint metrics
+# if N > 1, also copy the previous implementation
 if [[ "$N" -gt 1 ]]; then
   PREV_IMPLEMENTATION="$PROBLEM_DIR/implementations/checkpoint_$((N - 1))"
   if [[ -d "$PREV_IMPLEMENTATION" ]]; then
@@ -50,29 +50,28 @@ if [[ "$N" -gt 1 ]]; then
   fi
 
   # Generate the dependency graph of checkpoint N-1
-  # Copy only the JSON file 
   echo "[2.2/6] Dependency Graph"  
-  $ROOT/scripts/deps_graph.sh $PROBLEM $((N - 1))
-  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.svg" "$AGENT_WORKSPACE/"  # original svg for developer to read 
-  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/"  # original json
-  cp -r "$PROBLEM_DIR/deps_graphs/checkpoint_$((N - 1))_graph.json" "$AGENT_WORKSPACE/current_deps_graph.json"  # iteratively modified
+  $ROOT/scripts/deps_graph.sh $PROBLEM $PREV_IMPLEMENTATION "$AGENT_WORKSPACE/deps_graphs"
 
-  # Generate the DPy metrics of checkpoint N-1
-  echo "[2.3/6] DPy metrics"  
-  $ROOT/scripts/DPy analyze -i $PREV_IMPLEMENTATION -o $PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_dpy_metrics
-  # cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$AGENT_WORKSPACE/"
+  # Generate the DPy and Pylint metrics from the previous impl 
+  echo "[2.3/6] DPy and Pylint metrics"
+  $ROOT/scripts/metrics.sh $PROBLEM $PREV_IMPLEMENTATION "$AGENT_WORKSPACE/metrics"
 
-  # Generate the pylint metrics of checkpoint N-1 
-  # https://docs.pylint.org/features.html
-  # Consider using symilar, which is a cli by pylint specifically for duplicated lines 
-  echo "[2.4/6] Pylint metrics"
-  pylint $PREV_IMPLEMENTATION --min-similarity-lines=20 --ignore=venv,.venv --recursive=y --disable=all --enable=R0801 --ignore-comments=yes --ignore-docstrings=yes --ignore-imports=yes --output-format=json \
-  >$PROBLEM_DIR/dpy_metrics/checkpoint_$(((N-1)))_pylint_metrics.json || true
-  # cp -r "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" "$AGENT_WORKSPACE/"
+  # Update the current deps graph json, and copy the svg also 
+  echo "[2.4/6] Updating current_deps_graph.json"
+  cp -r "$AGENT_WORKSPACE/deps_graphs/deps_graph.json" "$AGENT_WORKSPACE/current_deps_graph.json"
+  cp -r "$AGENT_WORKSPACE/deps_graphs/deps_graph.svg" "$AGENT_WORKSPACE/original_deps_graph.svg"  # this wont get updated by the agent 
 
-  # Generate the current metrics 
-  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_dpy_metrics" "$PROBLEM_DIR/dpy_metrics/checkpoint_$((N - 1))_pylint_metrics.json" \
-  "$AGENT_WORKSPACE/current_deps_graph.json" "$AGENT_WORKSPACE/current_metrics.json"
+  # Update the current metrics json 
+  echo "[2.5/6] Updating current_metrics.json"
+  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph \
+  "$AGENT_WORKSPACE/metrics/dpy_metrics" "$AGENT_WORKSPACE/metrics/pylint_metrics.json" "$AGENT_WORKSPACE/current_deps_graph.json" \
+  "$AGENT_WORKSPACE/current_metrics.json"
+
+  # Delete the copied directories above, to limit what the agent can see 
+  echo "[2.6/6] Deleting unnecessary directories"
+  rm -rf "$AGENT_WORKSPACE/deps_graphs"
+  rm -rf "$AGENT_WORKSPACE/metrics"
 fi
 
 # 3. Docker volume mount 
@@ -95,6 +94,7 @@ echo "[4/6] Moving solution back..."
 # check if solution is implemented in checkpoint_N/ 
 CUR_IMPLEMENTATION="$AGENT_WORKSPACE/checkpoint_${N}"
 if [[ -d "$CUR_IMPLEMENTATION" ]]; then
+  # Copy the implementation back to the datasets folder 
   mkdir -p "$PROBLEM_DIR/implementations"
   cp -r "$CUR_IMPLEMENTATION" "$PROBLEM_DIR/implementations"
 else
