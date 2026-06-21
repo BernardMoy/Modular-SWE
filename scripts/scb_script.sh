@@ -44,7 +44,7 @@ if [[ "$N" -gt 1 ]]; then
   PREV_IMPLEMENTATION="$PROBLEM_DIR/implementations/checkpoint_$((N - 1))"
   if [[ -d "$PREV_IMPLEMENTATION" ]]; then
     echo "[2.1/6] Previous Implementation"  
-    cp -r "$PREV_IMPLEMENTATION" "$AGENT_WORKSPACE/"
+    cp -r "$PREV_IMPLEMENTATION" "$AGENT_WORKSPACE/previous_implementation"
   else
     echo "Missing previous implementation when working on checkpoint ${N}" >&2
   fi
@@ -92,13 +92,14 @@ docker run --rm -it \
 echo "[4/6] Moving solution back..."
 
 # check if solution is implemented in checkpoint_N/ 
-CUR_IMPLEMENTATION="$AGENT_WORKSPACE/checkpoint_${N}"
+# the solution must be renamed from previous_implementation/ to implementation/ 
+CUR_IMPLEMENTATION="$AGENT_WORKSPACE/implementation"
 if [[ -d "$CUR_IMPLEMENTATION" ]]; then
-  # Copy the implementation back to the datasets folder 
-  mkdir -p "$PROBLEM_DIR/implementations"
-  cp -r "$CUR_IMPLEMENTATION" "$PROBLEM_DIR/implementations"
+  # Copy the implementation back to the datasets folder
+  mkdir -p "$PROBLEM_DIR/implementations/checkpoint_${N}"
+  cp -r "$CUR_IMPLEMENTATION/." "$PROBLEM_DIR/implementations/checkpoint_${N}"
 else
-  echo "Missing implementation for checkpoint_${N} folder" >&2
+  echo "Missing implementation." >&2
 fi
 
 # 5. Run tests against the implementation for the current checkpoint only 
@@ -106,8 +107,8 @@ echo "[5/6] Running tests..."
 
 uv run pytest "$SOLS_TESTS_DIR/tests/test_checkpoint_${N}.py"  \
   --entrypoint "python $PROBLEM_DIR/implementations/checkpoint_${N}/$ENTRY_FILE.py" \
-  --checkpoint "checkpoint_${N}"
+  --checkpoint "checkpoint_${N}" # || true
 
 # 6. Remove the agent_workspace folder 
-echo "[6/6] Removing the agent workspace..."
-rm -rf "$AGENT_WORKSPACE"
+# echo "[6/6] Removing the agent workspace..."
+# rm -rf "$AGENT_WORKSPACE"

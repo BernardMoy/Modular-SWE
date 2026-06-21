@@ -17,10 +17,9 @@ update 'requirements.txt' with any new dependencies you need."""
 """
 
     return f"""
-You are working on the following issue:
-Issue path: checkpoint_{checkpoint_number}.md
-Implement your solution in: checkpoint_{checkpoint_number}/
-{f"Extend your solution based on: checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
+You are working on the following issue: checkpoint_{checkpoint_number}.md
+Implement your solution in implementation/ folder.
+{'Extend your solution based on previous_implementation/.' if checkpoint_number > 1 else ""}
 
 {venv_text}
 

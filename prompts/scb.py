@@ -18,8 +18,7 @@ That is all you need to do.
 
 {venv_text}
 
-You are working on the following issue:
-Issue path: checkpoint_{checkpoint_number}.md
-Issue implementation path: checkpoint_{checkpoint_number}/
-{f"Extend your solution based on: checkpoint_{checkpoint_number-1}/\n" if checkpoint_number>1 else ""}
+You are working on the following issue: checkpoint_{checkpoint_number}.md
+Implement your solution in implementation/ folder.
+{'Extend your solution based on previous_implementation/.' if checkpoint_number > 1 else ""}
 """
