@@ -30,7 +30,7 @@ You should follow best code practices, including:
 - A module should only expose the minimum amount of knowledge in its public interface.
 - Each module should only have a single responsibility, and should not have unrelated methods, or methods that should belong to another class. 
 
-First, overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
+First, create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 
 (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
 (2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
@@ -44,6 +44,6 @@ Second, create or update the dependency graph in `current_deps_graph.json`, usin
 - The names used in the dependency graph must match exactly the `module_name` field in `current_design.json`. 
 {get_json_string("dependency_graph")}
 
-Third, create or modify the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was rejected, using the following schema.
+Third, create or add to the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was rejected, using the following schema.
 {get_json_string("rejected_improvements")}
 """

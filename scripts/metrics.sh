@@ -1,26 +1,22 @@
 #!/usr/bin/env bash 
 # Usage: 
-# ./metrics.sh <problem> <implementation_path> <output_dir>
+# ./metrics.sh <implementation_path> <output_dir>
 # Writes the dpy metrics, pylint metrics separately to the directory. 
 
 set -euo pipefail
 
 # Incorrect number of params 
-if [[ $# -ne 3 ]]; then
-  echo "Usage: ./metrics.sh <problem> <implementation_path> <output_dir>" >&2
+if [[ $# -ne 2 ]]; then
+  echo "Usage: ./metrics.sh <implementation_path> <output_dir>" >&2
   exit 1
 fi
 
 # Obtain the impl path and the output dir 
-PROBLEM="$1"
-IMPL_DIR="$2"
-OUTPUT_DIR="$3"
+IMPL_DIR="$1"
+OUTPUT_DIR="$2"
 
 # Paths constant
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
-# Obtain the entrypoint file name from entry_files.json
-ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' "$ROOT/datasets/slopCodeBench/entry_files.json")
 
 # Create the output directory 
 mkdir -p "$OUTPUT_DIR"
