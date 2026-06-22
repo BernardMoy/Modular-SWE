@@ -30,7 +30,7 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
                 "Smell": "High LCOM", 
-                "Description": f"The module '{entry['Module']}' has a high LCOM value of {entry['LCOM']}, indicating it might be violating single responsibility."
+                "Description": f"The module '{entry['Module']}' has a high LCOM value of {entry['LCOM']}, check if it is violating single responsibility."
             })
         
         if entry["WMC"] >= WMC_THRESHOLD: 
@@ -40,7 +40,7 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
                 "Smell": "Complex class", 
-                "Description": f"The module '{entry['Module']}' has a high WMC value of {entry['WMC']}, making it difficult to maintain and test."
+                "Description": f"The module '{entry['Module']}' has a high WMC value of {entry['WMC']}, check if it can be simplified."
             })
         
         if entry["NOPM"] >= NOPM_THRESHOLD: 

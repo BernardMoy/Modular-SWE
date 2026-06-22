@@ -18,22 +18,22 @@ def get_analyzer_prompt(has_implementation):
     return f"""
 You are a senior software code quality analyst.
 
-Your job is to evaluate the following modular design including kept, changed or new modules.
+Your job is to evaluate the following {'modular design' if not has_implementation else "implementation"} including kept, changed or new modules.
 Project root: agent_workspace
-Design: `current_design.json`
+{'Design: `current_design.json`' if not has_implementation else 'Implementation: `implementation/'}
 Dependency graph: `current_deps_graph.json`
 
 Your evaluation is based on the following master criteria to achieve long term code quality and maintainability: 
-- Modules should be able to independently evolve, each having only a single responsibility with clear boundaries between them. 
+- Modules should be able to independently evolve, each having only a single responsibility separated by clear boundaries. 
 - The system should be easy to test by avoiding overly complex functions with lots of control paths that could be simplified if possible.
-- The maintenance effort when introducing new features should be as low as possible, by avoiding tight coupling by minimising duplication and directly accessing private elements. 
+- The maintenance effort when introducing new features should be as low as possible, particularly for modules that are likely to change. Avoid tight coupling by minimising duplication and directly accessing private elements. 
 
-For each module, reason about the following: 
-- Is the module likely to change when new features are added with later checkpoints? 
-- If a new feature is added, how much effort would it take to ensure consistent behaviour, such as having to modify multiple unrelated files or extend complex logic? 
-- Does the nature and complexity of the problem justifies some of the complexity in design decisions? 
+Give analyzer improvement suggestions based on the following: 
+- If the module has output of different abstractions, or a method has too many postconditions, is it doing multiple things at once? 
+- Is the module doing something that depends more on the data or methods of another module? 
+- Is the complex design justified by the problem's nature and how frequently the modules are expected to evolve?  
 
-If code smells have been given in `current_metrics`, you should use them as a reference to support the maintainability issue described above, and your goal is not to eliminate these metrics completely. 
+If code smells have been given in `current_metrics`, you should use them as a reference to support the maintainability issue described above, not to eliminate these metrics completely. 
 Interpret some metrics using the following guidelines: 
 - LCOM: Only flag if the methods have different responsibilities. It is acceptable if the methods are just sequential stages of the same functionality. 
 - Cyclomatic complexity, WMC: Only flag if the complexity is caused by unrelated concerns, lead to low testability, or high maintenance effort when adding new features. It is acceptable if the complex problem logic justifies it. 

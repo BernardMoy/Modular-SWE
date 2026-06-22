@@ -17,7 +17,7 @@ You are a senior software engineer that specialises in modular software design.
 You are working on the following issue:
 Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
-{f"The issue is built on top of checkpoint_{checkpoint_number-1}/." if checkpoint_number > 1 else ""}
+{f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
 If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, prioritise reusing existing modules instead of creating a new module where possible.
 If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, please consider accepting or rejecting them based on: 
