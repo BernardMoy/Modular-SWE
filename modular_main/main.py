@@ -7,11 +7,13 @@ import os
 import shutil 
 import argparse
 from openai_codex import AsyncCodex, Codex, Sandbox, ApprovalMode
-from .codex_login import codex_login_gpt_subscription
+from .auth.codex_login import codex_login_gpt_subscription
 from pathlib import Path
 from .entry_files import ENTRY_FILES
 import subprocess
 from .BwrapExecutor import BwrapExecutor
+from prompts.get_prompt import get_prompt
+from .settings import AGENT, MODEL
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -30,7 +32,7 @@ from .BwrapExecutor import BwrapExecutor
 AGENT_WORKSPACE = Path("agent_workspace")
 PROBLEMS_DIR = Path("datasets/slopCodeBench/scb-problems")
 SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
-
+WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -57,8 +59,12 @@ def modular_workflow():
     shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
+    # Step 2: Copy the workspace_helpers folder to the agent workspace 
+    print("[MAIN 2/6] Copying helper functions to agent workspace") 
+    shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
+
     # Step 2: Copy the required files to the agent workspace 
-    print("[MAIN 2/6] Copying files to agent workspace") 
+    print("[MAIN 3/6] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
     # Write an extra instruction specifying the entrypoint file 
@@ -95,12 +101,22 @@ def modular_workflow():
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
-    # Step 3: Volume mount 
+    # Step 3: Sign in to the agent 
+    # subprocess.run([
+    #     "python", "-m", "modular_main.login"
+    # ], check=True)
+
+    # Step 4: Volume mount 
     agent_workspace_abs = str(AGENT_WORKSPACE.resolve())
     executor = BwrapExecutor(agent_workspace_abs)
+
+    # Step 5: Initial decomposer agent 
+    prompt = get_prompt("decomposer", N)
     executor.run([
-        "ls"
+        "python3", "-m", "workspace_helpers.run_agent", 
+        AGENT, MODEL, prompt
     ])
+    
 
 if __name__ == "__main__": 
     # Sign in the agent service

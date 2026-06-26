@@ -1,4 +1,4 @@
-from .json_helper import get_json_string
+from ..json_helper import get_json_string
 
 # custom smells are smells identified from the dependency graph, when real code is not available yet 
 # designite python smells are smells identified by dpy on real code. 

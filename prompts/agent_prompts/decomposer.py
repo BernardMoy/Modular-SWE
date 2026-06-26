@@ -1,4 +1,4 @@
-from .json_helper import get_json_string
+from ..json_helper import get_json_string
 
 # The implementation path is not needed. 
 # Reading the existing code is not the responsibility of this agent. 
