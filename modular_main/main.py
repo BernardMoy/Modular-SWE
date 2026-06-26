@@ -11,6 +11,7 @@ from .codex_login import codex_login_gpt_subscription
 from pathlib import Path
 from .entry_files import ENTRY_FILES
 import subprocess
+from .BwrapExecutor import BwrapExecutor
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -95,6 +96,11 @@ def modular_workflow():
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
     # Step 3: Volume mount 
+    agent_workspace_abs = str(AGENT_WORKSPACE.resolve())
+    executor = BwrapExecutor(agent_workspace_abs)
+    executor.run([
+        "ls"
+    ])
 
 if __name__ == "__main__": 
     # Sign in the agent service
