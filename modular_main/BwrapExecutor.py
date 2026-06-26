@@ -39,6 +39,13 @@ class BwrapExecutor:
         ]
 
         try:
+            # There needs to be a way to allow the LLM agent to produce output, capture it, and use it somewhere else. 
+            # The LLM agent needs to be called from the command line (python -m ...) 
+            # So realistic ways to do this would be 
+            # 1. Capture the stdout output where the LLM output is printed to the terminal 
+            # 2. Let the LLM write to a shared file, and read from there after it returns 
+            # The first option is currently used for its simplicity. 
+            # Capture the output of the LLM through stdout 
             result = subprocess.run(cmd, check=True, capture_output=True, text=True)
             return result.stdout
         

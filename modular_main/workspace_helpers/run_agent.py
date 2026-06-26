@@ -1,5 +1,6 @@
 from openai_codex import AsyncCodex, Sandbox, ApprovalMode
-import argparse 
+import argparse
+import asyncio
 
     
 async def run_agent(agent, model, prompt): 
@@ -34,7 +35,7 @@ def main():
     parser.add_argument("prompt", help="Prompt to the agent")
     args = parser.parse_args()
 
-    run_agent(args.agent, args.model, args.prompt)
+    asyncio.run(run_agent(args.agent, args.model, args.prompt))
 
 # usage: run_agent.py [agent] [model] [prompt]
 if __name__ == "__main__": 

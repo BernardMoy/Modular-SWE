@@ -111,11 +111,14 @@ def modular_workflow():
     executor = BwrapExecutor(agent_workspace_abs)
 
     # Step 5: Initial decomposer agent 
+    # Run these inside the bind mounted space 
     prompt = get_prompt("decomposer", N)
-    executor.run([
+    output = executor.run([
         "python3", "-m", "workspace_helpers.run_agent", 
         AGENT, MODEL, prompt
     ])
+
+    print(output)
     
 
 if __name__ == "__main__": 
