@@ -10,6 +10,7 @@ from openai_codex import AsyncCodex, Codex, Sandbox, ApprovalMode
 from .codex_login import codex_login_gpt_subscription
 from pathlib import Path
 from .entry_files import ENTRY_FILES
+import subprocess
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -45,9 +46,10 @@ def modular_workflow():
     # Get the entrypoint name 
     if PROBLEM not in ENTRY_FILES: 
         raise Exception(f"Invalid problem name: {PROBLEM}")
-    ENTRY_FILE = ENTRY_FILES[PROBLEM]
-
+    ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM]
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
+    PREV_IMPL = PROBLEM_DIR / "implementations" / f"checkpoint_{N-1}"
+    PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
     # Step 1: Create the agent workspace 
     print("[MAIN 1/6] Creating agent workspace")
@@ -56,30 +58,43 @@ def modular_workflow():
 
     # Step 2: Copy the required files to the agent workspace 
     print("[MAIN 2/6] Copying files to agent workspace") 
-    problem_instructions = PROBLEM_DIR / f"checkpoint_{N}.md"
-    shutil.copy(problem_instructions, AGENT_WORKSPACE)
+    shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
     # Write an extra instruction specifying the entrypoint file 
-    workspace_instruction_file = AGENT_WORKSPACE / f"checkpoint_{N}.md"
-    with open(workspace_instruction_file, 'a') as f: 
+    with open(AGENT_WORKSPACE / f"checkpoint_{N}.md", 'a') as f: 
         f.write("\n## Entrypoint file")
-        f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE}.py`")
+        f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE_NAME}.py`")
 
-    # if N>1, also copy the previous implementation and the metrics 
+    # if N>1, also copy the previous implementation, metrics (?) and deps graph 
     if N>1: 
-        prev_impl = PROBLEM_DIR / "implementations" / f"checkpoint_{N-1}"
-        impl_dest = AGENT_WORKSPACE / "previous_implementation"
-
-        if prev_impl.is_dir(): 
-            shutil.copytree(prev_impl, impl_dest, symlinks=True)
+        if PREV_IMPL.is_dir(): 
+            shutil.copytree(PREV_IMPL, AGENT_WORKSPACE / "previous_implementation", symlinks=True)
         else: 
             raise Exception(f"Previous implementation for checkpoint {N-1} does not exist.")
         
         # copy the metrics (is it necessary?) 
 
         # Generate the deps graph 
-    
-    # Step 3: 
+        subprocess.run(
+            [
+                "scripts/deps_graph.sh",
+                AGENT_WORKSPACE / "previous_implementation" / f"{ENTRY_FILE_NAME}.py",
+                AGENT_WORKSPACE / "deps_graphs"
+            ],
+            check=True,
+        )
+
+        # Extract only the json and svg
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                    AGENT_WORKSPACE / "current_deps_graph.json")
+
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+                    AGENT_WORKSPACE / "original_deps_graph.svg")
+        
+        # Remove the temp deps_graph/ directory 
+        shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+
+    # Step 3: Volume mount 
 
 if __name__ == "__main__": 
     # Sign in the agent service
