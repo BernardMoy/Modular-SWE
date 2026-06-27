@@ -102,9 +102,9 @@ def modular_workflow():
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
     # Step 3: Sign in to the agent 
-    # subprocess.run([
-    #     "python", "-m", "modular_main.login"
-    # ], check=True)
+    subprocess.run([
+        "python", "-m", "modular_main.login"
+    ], check=True)
 
     # Step 4: Volume mount 
     agent_workspace_abs = str(AGENT_WORKSPACE.resolve())

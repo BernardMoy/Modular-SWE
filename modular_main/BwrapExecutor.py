@@ -1,7 +1,8 @@
-from pathlib import Path 
-import subprocess 
+from pathlib import Path
+import subprocess
 
 venv = Path(".venv")
+codex_auth = Path.home() / ".codex" / "auth.json"
 
 class BwrapExecutor: 
     # Initialise with an absolute path object of the agent workspace
@@ -21,6 +22,16 @@ class BwrapExecutor:
             "--ro-bind", "/bin", "/bin",
             "--ro-bind", "/lib", "/lib",
             "--ro-bind", "/lib64", "/lib64",
+
+            # Make network requests work
+            "--ro-bind", "/etc/ssl", "/etc/ssl",
+            "--ro-bind", "/etc/resolv.conf", "/etc/resolv.conf",
+
+            # Codex auth so it wont 401 unauthorised
+            "--ro-bind", str(codex_auth), str(codex_auth),
+            "--proc", "/proc",
+            "--dev", "/dev",
+            "--tmpfs", "/tmp",
 
             # Keep the system isolated 
             "--unshare-all", 
