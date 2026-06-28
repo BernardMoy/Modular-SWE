@@ -7,7 +7,7 @@ import json
 
 # the design file must come from an agent, so we can instruct it to follow the format in dependency graph 
 # the dependency graph come from pydeps (1st iteration, N>1 checkpoint) or from agent (>1 iteration) 
-def module_name_validator(design_json, deps_graph_json): 
+def module_name_validator(design_path, deps_graph_path): 
     """
     Return an array of module names in the design file in the format 
     (In the future, hard code the file names as well - change by including `current_design.json` below once thats confirmed)
@@ -19,6 +19,12 @@ def module_name_validator(design_json, deps_graph_json):
     ]
     that isnt present in the deps graph file 
     """
+    # Read the JSON graph from the path 
+    with open(design_path, 'r') as f:
+        design_json = json.load(f)
+    with open(deps_graph_path, 'r') as f:
+        deps_graph_json = json.load(f)
+
     # Obtain all modules in the deps graph 
     all_modules = get_all_modules(deps_graph_json) 
     result = [] 
@@ -40,13 +46,7 @@ def main():
     parser.add_argument("deps_graph", help="Abs path to the dependency graph JSON file")
     args = parser.parse_args()
 
-    # Read the JSON graph from the path 
-    with open(args.design, 'r') as f:
-        design_json = json.load(f)
-    with open(args.deps_graph, 'r') as f:
-        graph_json = json.load(f)
-
-    result = module_name_validator(design_json=design_json, deps_graph_json=graph_json) 
+    result = module_name_validator(args.design, args.deps_graph) 
     print(result) 
 
 

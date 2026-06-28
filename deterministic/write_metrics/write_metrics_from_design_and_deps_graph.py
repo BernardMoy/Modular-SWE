@@ -44,21 +44,13 @@ def get_metrics_from_design(design_json):
     design_metrics.extend(check_fat_module(design_json))
     return design_metrics
 
-
-# usage: write.py [current_design_path] [current_deps_graph_path] [current_metrics_output_path]
-def main(): 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("design_path", help="Current design file, should be in the second iter only to ensure the public_interface field exists")
-    parser.add_argument("deps_graph_path", help="Abs path to the dependency graph JSON file")
-    parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
-    args = parser.parse_args()
-
+def write_metrics_from_design_and_deps_graph(design_path, deps_graph_path, current_metrics_path): 
     # Read the JSON design from the path 
-    with open(args.design_path, 'r') as f: 
+    with open(design_path, 'r') as f: 
         design_json = json.load(f)
 
     # Read the JSON graph from the path 
-    with open(args.deps_graph_path, 'r') as f: 
+    with open(deps_graph_path, 'r') as f: 
         graph_json = json.load(f)
 
     # Concat the deps graph and the design metrics 
@@ -70,8 +62,18 @@ def main():
     smells_json = json.dumps(smells, indent=2)
     
     # Write the smells to current metrics 
-    with open(args.current_metrics_path, 'w') as f: 
+    with open(current_metrics_path, 'w') as f: 
         f.write(smells_json)
+
+# usage: write.py [current_design_path] [current_deps_graph_path] [current_metrics_output_path]
+def main(): 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("design_path", help="Current design file, should be in the second iter only to ensure the public_interface field exists")
+    parser.add_argument("deps_graph_path", help="Abs path to the dependency graph JSON file")
+    parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
+    args = parser.parse_args()
+
+    write_metrics_from_design_and_deps_graph(args.design_path, args.deps_graph_path, args.current_metrics_path)
 
 if __name__ == "__main__": 
     main() 

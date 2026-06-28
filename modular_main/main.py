@@ -4,6 +4,7 @@ Main entrypoint file for the entire workflow.
 
 import asyncio
 import os 
+import json 
 import shutil 
 import argparse
 from openai_codex import AsyncCodex, Codex, Sandbox, ApprovalMode
@@ -14,7 +15,8 @@ import subprocess
 from .BwrapExecutor import BwrapExecutor
 from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
-
+from deterministic.validators.module_name_validator import module_name_validator
+from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 # async def agent_test(model = "gpt-5.5"): 
 
 #     task = """Create a file named fibonacci.py. 
@@ -28,11 +30,15 @@ from .settings import AGENT, MODEL
 # asyncio.run(agent_test())
 
 
-# Constants 
+# Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
 PROBLEMS_DIR = Path("datasets/slopCodeBench/scb-problems")
 SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
+
+# Constants for the modular workflow 
+DA_LOOP_THRESHOLD = 3  # how many times can the D <> A Loop happen 
+
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -55,16 +61,16 @@ def modular_workflow():
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
     # Step 1: Create the agent workspace 
-    print("[MAIN 1/6] Creating agent workspace")
+    print("[MAIN 1/5] Creating agent workspace")
     shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
     # Step 2: Copy the workspace_helpers folder to the agent workspace 
-    print("[MAIN 2/6] Copying helper functions to agent workspace") 
+    print("[MAIN 2/5] Copying helper functions to agent workspace") 
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
 
-    # Step 2: Copy the required files to the agent workspace 
-    print("[MAIN 3/6] Copying files to agent workspace") 
+    # Step 3: Copy the required files to the agent workspace 
+    print("[MAIN 3/5] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
     # Write an extra instruction specifying the entrypoint file 
@@ -101,24 +107,66 @@ def modular_workflow():
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
-    # Step 3: Sign in to the agent 
+    # Step 4: Sign in to the agent 
+    print("[MAIN 4/5] Coding agent sign in")
     subprocess.run([
         "python", "-m", "modular_main.login"
     ], check=True)
 
-    # Step 4: Volume mount 
+    # Step 5: Volume mount 
+    print("[MAIN 5/5] Agent workspace volume mount")
     agent_workspace_abs = str(AGENT_WORKSPACE.resolve())
     executor = BwrapExecutor(agent_workspace_abs)
 
-    # Step 5: Initial decomposer agent 
-    # Run these inside the bind mounted space 
-    prompt = get_prompt("decomposer", N)
-    output = executor.run([
-        "python3", "-m", "workspace_helpers.run_agent", 
-        AGENT, MODEL, prompt
-    ])
+    # ================ MAIN WORKFLOW BEGINS ================
+    da_loop_iteration = 0  # The iteration number of the DA loop 
+    passed_before_impl = False 
 
-    print(output)
+    # Initial decomposer agent 
+    # Run these inside the bind mounted space 
+    while (not passed_before_impl and da_loop_iteration < DA_LOOP_THRESHOLD): 
+        print(f"========== [Iteration {da_loop_iteration+1}] DECOMPOSER AGENT ==========")
+        prompt = get_prompt("decomposer", N)
+        d_output = executor.run([
+            "python3", "-m", "workspace_helpers.run_agent", 
+            AGENT, MODEL, prompt
+        ])
+        print(d_output)
+
+        # Validator for the module names 
+        print(f"========== [Iteration {da_loop_iteration+1}] VALIDATOR FOR MODULE NAMES ==========")
+        v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
+        
+        # Currently, if this array is non empty, throw an error 
+        v_output_list = list(v_output) 
+        print(v_output_list)
+        if v_output_list: 
+            raise Exception("Validator failed.")
+
+        # Generate metrics from design and deps graph 
+        print(f"========== [Iteration {da_loop_iteration+1}] GENERATE METRICS ==========")
+        write_metrics_from_design_and_deps_graph(
+            AGENT_WORKSPACE / "current_design.json", 
+            AGENT_WORKSPACE / "current_deps_graph.json", 
+            AGENT_WORKSPACE / "current_metrics.json"
+        )
+
+        # Analyzer agent 
+        print(f"========== [Iteration {da_loop_iteration+1}] ANALYZER AGENT ==========")
+        prompt = get_prompt("analyzer", False)  # False for has implementation
+        a_output = executor.run([
+            "python3", "-m", "workspace_helpers.run_agent", 
+            AGENT, MODEL, prompt
+        ])
+
+        # If the analyzer return pass, set the passed flag to true 
+        a_output_json = json.loads(a_output) 
+        print(json.dumps(a_output_json, indent=2))
+        if a_output_json["result"] == "pass": 
+            passed_before_impl = True 
+
+        # Increment the iteration number 
+        da_loop_iteration += 1 
     
 
 if __name__ == "__main__": 
