@@ -2,7 +2,7 @@ import json
 import argparse 
 from ...reusables.get_all_modules import get_all_modules
 
-def bfs(deps_graph_json, design_json): 
+def bfs(deps_graph_path, design_path): 
     """
     This assumes the dependency graph has no cycles. 
     This also assumes the design json strictly follow the rules below for keep, changed or new modules: 
@@ -14,6 +14,14 @@ def bfs(deps_graph_json, design_json):
     that can be implemented in parallel. 
     The implementation starts from the layer with no dependencies (out degree = 0)  
     """
+
+    # Read the JSON graph from the path 
+    with open(deps_graph_path, 'r') as f: 
+        deps_graph_json = json.load(f)
+    
+    with open(design_path, 'r') as f: 
+        design_json = json.load(f)
+
     all_modules = get_all_modules(deps_graph_json)
     
     visited = set()
@@ -59,14 +67,7 @@ def main():
     parser.add_argument("design_path", help="Abs path to the design JSON file")
     args = parser.parse_args()
 
-    # Read the JSON graph from the path 
-    with open(args.deps_graph_path, 'r') as f: 
-        graph_json = json.load(f)
-    
-    with open(args.design_path, 'r') as f: 
-        design_json = json.load(f)
-
-    result = bfs(graph_json, design_json) 
+    result = bfs(args.deps_graph_path, args.design_path) 
     print(result) 
 
 

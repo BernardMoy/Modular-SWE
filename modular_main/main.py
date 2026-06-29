@@ -17,6 +17,9 @@ from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
 from deterministic.validators.module_name_validator import module_name_validator
 from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
+from deterministic.helpers.deps_graph.bfs import bfs
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 # async def agent_test(model = "gpt-5.5"): 
 
 #     task = """Create a file named fibonacci.py. 
@@ -30,6 +33,15 @@ from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import
 # asyncio.run(agent_test())
 
 
+# Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
+def get_prompt_and_run_agent(executor, agent_name, *args): 
+    prompt = get_prompt(agent_name, *args)
+    output = executor.run([
+        "python3", "-m", "workspace_helpers.run_agent", 
+        AGENT, MODEL, prompt
+    ])
+    return output 
+
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
 PROBLEMS_DIR = Path("datasets/slopCodeBench/scb-problems")
@@ -37,8 +49,8 @@ SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
-DA_LOOP_THRESHOLD = 3  # how many times can the D <> A Loop happen 
-
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -119,22 +131,18 @@ def modular_workflow():
     executor = BwrapExecutor(agent_workspace_abs)
 
     # ================ MAIN WORKFLOW BEGINS ================
-    da_loop_iteration = 0  # The iteration number of the DA loop 
+    da_loop_iteration_before_impl = 0  # The iteration number of the DA loop 
     passed_before_impl = False 
 
     # Initial decomposer agent 
     # Run these inside the bind mounted space 
-    while (not passed_before_impl and da_loop_iteration < DA_LOOP_THRESHOLD): 
-        print(f"========== [Iteration {da_loop_iteration+1}] DECOMPOSER AGENT ==========")
-        prompt = get_prompt("decomposer", N)
-        d_output = executor.run([
-            "python3", "-m", "workspace_helpers.run_agent", 
-            AGENT, MODEL, prompt
-        ])
+    while (not passed_before_impl and da_loop_iteration_before_impl < DA_LOOP_THRESHOLD_BEFORE_IMPL): 
+        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] DECOMPOSER AGENT ==========")
+        d_output = get_prompt_and_run_agent(executor, "decomposer", N)
         print(d_output)
 
         # Validator for the module names 
-        print(f"========== [Iteration {da_loop_iteration+1}] VALIDATOR FOR MODULE NAMES ==========")
+        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] VALIDATOR FOR MODULE NAMES ==========")
         v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
         
         # Currently, if this array is non empty, throw an error 
@@ -144,7 +152,7 @@ def modular_workflow():
             raise Exception("Validator failed.")
 
         # Generate metrics from design and deps graph 
-        print(f"========== [Iteration {da_loop_iteration+1}] GENERATE METRICS ==========")
+        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] GENERATE METRICS ==========")
         write_metrics_from_design_and_deps_graph(
             AGENT_WORKSPACE / "current_design.json", 
             AGENT_WORKSPACE / "current_deps_graph.json", 
@@ -152,12 +160,8 @@ def modular_workflow():
         )
 
         # Analyzer agent 
-        print(f"========== [Iteration {da_loop_iteration+1}] ANALYZER AGENT ==========")
-        prompt = get_prompt("analyzer", False)  # False for has implementation
-        a_output = executor.run([
-            "python3", "-m", "workspace_helpers.run_agent", 
-            AGENT, MODEL, prompt
-        ])
+        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] ANALYZER AGENT ==========")
+        a_output = get_prompt_and_run_agent(executor, "analyzer", False) 
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
@@ -166,8 +170,45 @@ def modular_workflow():
             passed_before_impl = True 
 
         # Increment the iteration number 
-        da_loop_iteration += 1 
+        da_loop_iteration_before_impl += 1 
     
+    # Run the BFS 
+    print(f"========== MODULES TO CODE ==========")
+    modules_array = bfs(
+        AGENT_WORKSPACE / "current_deps_graph.json", 
+        AGENT_WORKSPACE / "current_design.json"
+    )
+
+    # For each layer of the bfs tree, implement the modules in parallel 
+    for layer in modules_array: 
+        print(f"========== CODING: {layer} ==========")
+        with ThreadPoolExecutor() as exec: 
+            # Submit the task of coding each module to the thread pool
+            futures = [
+                exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, module)  # Pass the args after the function call name 
+                for module in layer
+            ]
+
+            for future in as_completed(futures): 
+                print(future.result())
+    
+    # Generate new dependency graph
+    
+
+    # Generate metrics 
+
+
+    # D A loop after implementation
+    da_loop_iteration_after_impl = 0 
+    passed_after_impl = False
+
+    
+
+    # Run the tests and exit 
+
+
+    # Rank the code quality using some metrics (?) 
+    # Probably most accurately using a human controlled method. 
 
 if __name__ == "__main__": 
     # Sign in the agent service
