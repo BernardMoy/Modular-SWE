@@ -7,7 +7,6 @@ import os
 import json 
 import shutil 
 import argparse
-from openai_codex import AsyncCodex, Codex, Sandbox, ApprovalMode
 from .auth.codex_login import codex_login_gpt_subscription
 from pathlib import Path
 from .entry_files import ENTRY_FILES
@@ -19,6 +18,7 @@ from deterministic.validators.module_name_validator import module_name_validator
 from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from deterministic.helpers.deps_graph.bfs import bfs
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -32,6 +32,16 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # asyncio.run(agent_test())
 
+# Constants for directory and file paths 
+AGENT_WORKSPACE = Path("agent_workspace")
+PROBLEMS_DIR = Path("datasets/slopCodeBench/scb-problems")
+SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
+WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
+
+# Constants for the modular workflow 
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
+
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
 def get_prompt_and_run_agent(executor, agent_name, *args): 
@@ -42,15 +52,50 @@ def get_prompt_and_run_agent(executor, agent_name, *args):
     ])
     return output 
 
-# Constants for directory and file paths 
-AGENT_WORKSPACE = Path("agent_workspace")
-PROBLEMS_DIR = Path("datasets/slopCodeBench/scb-problems")
-SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
-WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
-# Constants for the modular workflow 
-DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
+# Decomposer analyzer loop. 
+def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, threshold): 
+    iteration = 0 
+    passed = False 
+
+    # Initial decomposer agent 
+    # Run these inside the bind mounted space 
+    while (not passed and iteration < threshold): 
+        print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
+        d_output = get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
+        print(d_output)
+
+        # Validator for the module names 
+        print(f"========== [Iteration {iteration+1}] VALIDATOR FOR MODULE NAMES ==========")
+        v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
+        
+        # Currently, if this array is non empty, throw an error 
+        v_output_list = list(v_output) 
+        print(v_output_list)
+        if v_output_list: 
+            raise Exception("Validator failed.")
+
+        # Generate metrics from design and deps graph 
+        print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
+        write_metrics_from_design_and_deps_graph(
+            AGENT_WORKSPACE / "current_design.json", 
+            AGENT_WORKSPACE / "current_deps_graph.json", 
+            AGENT_WORKSPACE / "current_metrics.json"
+        )
+
+        # Analyzer agent 
+        print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
+        a_output = get_prompt_and_run_agent(executor, "analyzer", has_implementation) 
+
+        # If the analyzer return pass, set the passed flag to true 
+        a_output_json = json.loads(a_output) 
+        print(json.dumps(a_output_json, indent=2))
+        if a_output_json["result"] == "pass": 
+            passed = True
+
+        # Increment the iteration number 
+        iteration += 1 
+
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -131,46 +176,14 @@ def modular_workflow():
     executor = BwrapExecutor(agent_workspace_abs)
 
     # ================ MAIN WORKFLOW BEGINS ================
-    da_loop_iteration_before_impl = 0  # The iteration number of the DA loop 
-    passed_before_impl = False 
-
     # Initial decomposer agent 
     # Run these inside the bind mounted space 
-    while (not passed_before_impl and da_loop_iteration_before_impl < DA_LOOP_THRESHOLD_BEFORE_IMPL): 
-        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] DECOMPOSER AGENT ==========")
-        d_output = get_prompt_and_run_agent(executor, "decomposer", N)
-        print(d_output)
-
-        # Validator for the module names 
-        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] VALIDATOR FOR MODULE NAMES ==========")
-        v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
-        
-        # Currently, if this array is non empty, throw an error 
-        v_output_list = list(v_output) 
-        print(v_output_list)
-        if v_output_list: 
-            raise Exception("Validator failed.")
-
-        # Generate metrics from design and deps graph 
-        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] GENERATE METRICS ==========")
-        write_metrics_from_design_and_deps_graph(
-            AGENT_WORKSPACE / "current_design.json", 
-            AGENT_WORKSPACE / "current_deps_graph.json", 
-            AGENT_WORKSPACE / "current_metrics.json"
-        )
-
-        # Analyzer agent 
-        print(f"========== [Iteration {da_loop_iteration_before_impl+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", False) 
-
-        # If the analyzer return pass, set the passed flag to true 
-        a_output_json = json.loads(a_output) 
-        print(json.dumps(a_output_json, indent=2))
-        if a_output_json["result"] == "pass": 
-            passed_before_impl = True 
-
-        # Increment the iteration number 
-        da_loop_iteration_before_impl += 1 
+    decomposer_analyzer_loop(
+        executor=executor, 
+        checkpoint_number=N, 
+        has_implementation=False, 
+        threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL
+    )
     
     # Run the BFS 
     print(f"========== MODULES TO CODE ==========")
@@ -193,19 +206,76 @@ def modular_workflow():
                 print(future.result())
     
     # Generate new dependency graph
-    
+    print(f"========== UPDATE DEPENDENCY GRAPH ==========")
+    subprocess.run(
+        [
+            "scripts/deps_graph.sh",
+            AGENT_WORKSPACE / "implementation" / f"{ENTRY_FILE_NAME}.py",
+            AGENT_WORKSPACE / "deps_graphs"
+        ],
+        check=True,
+    )
+
+    # Extract only the json and svg
+    shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
+
+    shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+                AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
+        
+    # Remove the temp deps_graph/ directory 
+    shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+
 
     # Generate metrics 
+    print(f"========== GENERATE METRICS ==========")
+    subprocess.run(
+        [
+            "scripts/metrics.sh",
+            AGENT_WORKSPACE / "implementation",
+            AGENT_WORKSPACE / "metrics"
+        ],
+        check=True,
+    )
 
+    # Write metrics from dpy pylint and deps graph 
+    write_metrics_from_dpy_pylint_and_deps_graph(
+        AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
+        AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
+        AGENT_WORKSPACE / "current_deps_graph.json", 
+        AGENT_WORKSPACE / "current_metrics.json"
+    )
 
-    # D A loop after implementation
-    da_loop_iteration_after_impl = 0 
-    passed_after_impl = False
+    # Run an initial analyzer
+    print(f"========== ANALYZER AGENT AFTER IMPL ==========")
+    a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+
+    # If the analyzer returns fail, run the decomposer analyzer loop with has implementation = True 
+    a_output_json = json.loads(a_output) 
+    print(json.dumps(a_output_json, indent=2))
+    if a_output_json["result"] == "fail": 
+        decomposer_analyzer_loop(
+            executor=executor, 
+            checkpoint_number=N, 
+            has_implementation=True, 
+            threshold=DA_LOOP_THRESHOLD_AFTER_IMPL
+        )
+
+    # Move the solution back from the agent workspace to the problem directory 
+    # under problem_name / implementations / checkpoint_N (folder) 
 
     
-
-    # Run the tests and exit 
-
+    # # Run the tests and exit 
+    # print(f"========== RUNNING TESTS ==========")
+    # subprocess.run(
+    #     [
+    #         "uv", "run", "pytest", 
+    #         SOLS_TESTS_DIR / "tests" / f"test_checkpoint_${N}.py", 
+    #         "--entrypoint", 
+    #         f"python {PROBLEM_DIR}"
+    #     ], 
+    #     check=True
+    # )
 
     # Rank the code quality using some metrics (?) 
     # Probably most accurately using a human controlled method. 

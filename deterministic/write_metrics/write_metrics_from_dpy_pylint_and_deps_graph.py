@@ -35,25 +35,17 @@ def get_metrics_from_deps_graph(deps_graph_json):
 
     return deps_graph_metrics
 
-# usage: write.py [dpy_folder_path] [pylint_metrics_json_path] [current_deps_graph_path] [current_metrics_output_path]
-def main(): 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("dpy_path", help="Abs path to the dpy folder")
-    parser.add_argument("pylint_path", help="Abs path to the pylint folder")
-    parser.add_argument("deps_graph_path", help="Abs path to the deps graph json file")
-    parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
-    args = parser.parse_args()
-
+def write_metrics_from_dpy_pylint_and_deps_graph(dpy_path, pylint_path, deps_graph_path, current_metrics_path): 
     smells = []
 
-    dpy_folder_path = args.dpy_path
+    dpy_folder_path = dpy_path
 
     # Read the JSON graph from the path 
-    with open(args.deps_graph_path, 'r') as f: 
+    with open(deps_graph_path, 'r') as f: 
         deps_graph_json = json.load(f) 
     
     # Read the pylint json path 
-    with open(args.pylint_path, 'r') as f: 
+    with open(pylint_path, 'r') as f: 
         pylint_json = json.load(f) 
 
     # Try to read each of the JSON file of the designite python metrics 
@@ -93,9 +85,24 @@ def main():
 
     # Write the smells to current_design.json 
     result_json = json.dumps(smells, indent=2)
-    with open(args.current_metrics_path, 'w') as f: 
+    with open(current_metrics_path, 'w') as f: 
         f.write(result_json)
 
+
+# usage: write.py [dpy_folder_path] [pylint_metrics_json_path] [current_deps_graph_path] [current_metrics_output_path]
+def main(): 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dpy_path", help="Abs path to the dpy folder")
+    parser.add_argument("pylint_path", help="Abs path to the pylint folder")
+    parser.add_argument("deps_graph_path", help="Abs path to the deps graph json file")
+    parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
+    args = parser.parse_args()
+
+    write_metrics_from_dpy_pylint_and_deps_graph(
+        args.dpy_path, args.pylint_path, args.deps_graph_path, args.current_metrics_path
+    )
+
+   
 
 if __name__ == "__main__": 
     main() 
