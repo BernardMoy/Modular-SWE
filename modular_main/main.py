@@ -19,6 +19,7 @@ from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import
 from deterministic.helpers.deps_graph.bfs import bfs
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from typing import Literal 
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -41,6 +42,12 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
+
+# Coding mode: 
+# Big bang (all at once) 
+# By layer (One prompt per layer) 
+# Modular (Parallel prompts per module for each layer) 
+CODING_MODE: Literal["bigbang", "bylayer", "modular"] = "modular"
 
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
@@ -197,15 +204,23 @@ def modular_workflow():
     # For each layer of the bfs tree, implement the modules in parallel 
     for layer in modules_array: 
         print(f"========== CODING: {layer} ==========")
-        with ThreadPoolExecutor() as exec: 
-            # Submit the task of coding each module to the thread pool
-            futures = [
-                exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, module)  # Pass the args after the function call name 
-                for module in layer
-            ]
+        if CODING_MODE == "bigbang": 
+            pass 
 
-            for future in as_completed(futures): 
-                print(future.result())
+        elif CODING_MODE == "bylayer": 
+            # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
+            get_prompt_and_run_agent(executor, "modular_coder", N, layer)
+
+        elif CODING_MODE == "modular": 
+            with ThreadPoolExecutor() as exec: 
+                # Submit the task of coding each module to the thread pool
+                futures = [
+                    exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
+                    for module in layer
+                ]
+
+                for future in as_completed(futures): 
+                    print(future.result())
     
     # Generate new dependency graph
     print(f"========== UPDATE DEPENDENCY GRAPH ==========")
@@ -272,7 +287,12 @@ def modular_workflow():
     
     # Check if the implementation exists 
     implementation = AGENT_WORKSPACE / "implementation"
+    implementation_dest = PROBLEM_DIR / "implementations" / f"checkpoint_{N}"
     if implementation.is_dir(): 
+        # Remove the existing implementation if it exists, otherwise the new one will be merged 
+        if implementation_dest.exists(): 
+            shutil.rmtree(implementation_dest) 
+            
         # Copy back to the problem implementations folder 
         shutil.copytree(
             implementation, 
