@@ -118,16 +118,16 @@ def modular_workflow():
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
     # Step 1: Create the agent workspace 
-    print("[MAIN 1/5] Creating agent workspace")
+    print("[MAIN 1/8] Creating agent workspace")
     shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
     # Step 2: Copy the workspace_helpers folder to the agent workspace 
-    print("[MAIN 2/5] Copying helper functions to agent workspace") 
+    print("[MAIN 2/8] Copying helper functions to agent workspace") 
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
 
     # Step 3: Copy the required files to the agent workspace 
-    print("[MAIN 3/5] Copying files to agent workspace") 
+    print("[MAIN 3/8] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
     # Write an extra instruction specifying the entrypoint file 
@@ -165,17 +165,18 @@ def modular_workflow():
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
     # Step 4: Sign in to the agent 
-    print("[MAIN 4/5] Coding agent sign in")
+    print("[MAIN 4/8] Coding agent sign in")
     subprocess.run([
         "python", "-m", "modular_main.login"
     ], check=True)
 
     # Step 5: Volume mount 
-    print("[MAIN 5/5] Agent workspace volume mount")
+    print("[MAIN 5/8] Agent workspace volume mount")
     agent_workspace_abs = str(AGENT_WORKSPACE.resolve())
     executor = BwrapExecutor(agent_workspace_abs)
 
     # ================ MAIN WORKFLOW BEGINS ================
+    print("[MAIN 6/8] Main workflow")
     # Initial decomposer agent 
     # Run these inside the bind mounted space 
     decomposer_analyzer_loop(
@@ -191,6 +192,7 @@ def modular_workflow():
         AGENT_WORKSPACE / "current_deps_graph.json", 
         AGENT_WORKSPACE / "current_design.json"
     )
+    print(modules_array)
 
     # For each layer of the bfs tree, implement the modules in parallel 
     for layer in modules_array: 
@@ -249,33 +251,57 @@ def modular_workflow():
     # Run an initial analyzer
     print(f"========== ANALYZER AGENT AFTER IMPL ==========")
     a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
-
-    # If the analyzer returns fail, run the decomposer analyzer loop with has implementation = True 
     a_output_json = json.loads(a_output) 
     print(json.dumps(a_output_json, indent=2))
-    if a_output_json["result"] == "fail": 
-        decomposer_analyzer_loop(
-            executor=executor, 
-            checkpoint_number=N, 
-            has_implementation=True, 
-            threshold=DA_LOOP_THRESHOLD_AFTER_IMPL
-        )
+
+    # If the analyzer returns fail, run the decomposer analyzer loop with has implementation = True 
+    # if a_output_json["result"] == "fail": 
+    #     decomposer_analyzer_loop(
+    #         executor=executor, 
+    #         checkpoint_number=N, 
+    #         has_implementation=True, 
+    #         threshold=DA_LOOP_THRESHOLD_AFTER_IMPL
+    #     )
+
+    # Re-run the modular coder 
+    # (Inspect what is returned in the current design json first) 
 
     # Move the solution back from the agent workspace to the problem directory 
     # under problem_name / implementations / checkpoint_N (folder) 
-
+    print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
-    # # Run the tests and exit 
-    # print(f"========== RUNNING TESTS ==========")
-    # subprocess.run(
-    #     [
-    #         "uv", "run", "pytest", 
-    #         SOLS_TESTS_DIR / "tests" / f"test_checkpoint_${N}.py", 
-    #         "--entrypoint", 
-    #         f"python {PROBLEM_DIR}"
-    #     ], 
-    #     check=True
-    # )
+    # Check if the implementation exists 
+    implementation = AGENT_WORKSPACE / "implementation"
+    if implementation.is_dir(): 
+        # Copy back to the problem implementations folder 
+        shutil.copytree(
+            implementation, 
+            PROBLEM_DIR / "implementations" / f"checkpoint_{N}", 
+            dirs_exist_ok=True, 
+            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc")
+        )
+    else: 
+        raise Exception(f"Missing implementation for checkpoint {N}.")
+
+
+    # Run the tests and exit 
+    print(f"========== [MAIN 8/8] RUNNING TESTS ==========")
+    entrypoint = PROBLEM_DIR / "implementations" / f"checkpoint_{N}" / f"{ENTRY_FILE_NAME}.py"
+
+    # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
+    for test_no in range(N, 0, -1): 
+        print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
+        subprocess.run(
+            [
+                "uv", "run", "pytest", 
+                SOLS_TESTS_DIR / PROBLEM / "tests" / f"test_checkpoint_{test_no}.py", 
+                "--entrypoint", 
+                f"python {entrypoint}", 
+                "--checkpoint", 
+                f"checkpoint_{N}"
+            ], 
+            check=True
+        )
 
     # Rank the code quality using some metrics (?) 
     # Probably most accurately using a human controlled method. 

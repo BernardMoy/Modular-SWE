@@ -33,8 +33,9 @@ pydeps "$ENTRY_FILE" \
 
 # generate the dot
 pydeps "$ENTRY_FILE" \
-  -T dot --noshow --max-bacon=0 \
-  -o "$OUTPUT_DIR/deps_graph.dot" --reverse
+  -T dot \
+  -o "$OUTPUT_DIR/deps_graph.dot" \
+  --noshow --max-bacon=0 --reverse
 
 # 2. Process the graph to generate the json format for the agent to read
 echo "[GRAPH 2/2] Converting the dependency graphs to JSON..."
