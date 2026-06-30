@@ -2,12 +2,9 @@
 Main entrypoint file for the entire workflow. 
 """
 
-import asyncio
-import os 
 import json 
 import shutil 
 import argparse
-from .auth.codex_login import codex_login_gpt_subscription
 from pathlib import Path
 from .entry_files import ENTRY_FILES
 import subprocess
@@ -19,7 +16,7 @@ from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import
 from deterministic.helpers.deps_graph.bfs import bfs
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
-from typing import Literal 
+from .settings import WORKFLOW_MODE 
 
 # async def agent_test(model = "gpt-5.5"): 
 
@@ -42,12 +39,6 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
-
-# Coding mode: 
-# Big bang (all at once) 
-# By layer (One prompt per layer) 
-# Modular (Parallel prompts per module for each layer) 
-CODING_MODE: Literal["bigbang", "bylayer", "modular"] = "modular"
 
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
@@ -78,9 +69,9 @@ def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, th
         
         # Currently, if this array is non empty, throw an error 
         v_output_list = list(v_output) 
-        print(v_output_list)
         if v_output_list: 
             raise Exception("Validator failed.")
+        print("Passed") 
 
         # Generate metrics from design and deps graph 
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
@@ -184,45 +175,57 @@ def modular_workflow():
 
     # ================ MAIN WORKFLOW BEGINS ================
     print("[MAIN 6/8] Main workflow")
-    # Initial decomposer agent 
-    # Run these inside the bind mounted space 
-    decomposer_analyzer_loop(
-        executor=executor, 
-        checkpoint_number=N, 
-        has_implementation=False, 
-        threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL
-    )
+
+    # if the mode is no design, jump straight to implementation
+    if WORKFLOW_MODE == "noDesign": 
+        print(f"========== CODING ALL MODULES ==========")
+        result = get_prompt_and_run_agent(executor, "no_design_coder", N) 
+        print(result)
     
-    # Run the BFS 
-    print(f"========== MODULES TO CODE ==========")
-    modules_array = bfs(
-        AGENT_WORKSPACE / "current_deps_graph.json", 
-        AGENT_WORKSPACE / "current_design.json"
-    )
-    print(modules_array)
+    else: 
+        # Initial decomposer agent 
+        # Run these inside the bind mounted space 
+        decomposer_analyzer_loop(
+            executor=executor, 
+            checkpoint_number=N, 
+            has_implementation=False, 
+            threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL
+        )
+        
+        # Run the BFS 
+        print(f"========== MODULES TO CODE ==========")
+        modules_array = bfs(
+            AGENT_WORKSPACE / "current_deps_graph.json", 
+            AGENT_WORKSPACE / "current_design.json"
+        )
+        print(modules_array)
 
-    # For each layer of the bfs tree, implement the modules in parallel 
-    for layer in modules_array: 
-        print(f"========== CODING: {layer} ==========")
-        if CODING_MODE == "bigbang": 
-            pass 
+        # for the all at once mode, implement all modules 
+        if WORKFLOW_MODE == "allAtOnce": 
+            result = get_prompt_and_run_agent(executor, "all_at_once_coder", N)
+            print(result)
+        
+        else: 
+            # For each layer of the bfs tree, implement the modules in parallel 
+            for layer in modules_array: 
+                print(f"========== CODING: {layer} ==========")
+                if WORKFLOW_MODE == "byLayer": 
+                    # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
+                    result = get_prompt_and_run_agent(executor, "modular_coder", N, layer)
+                    print(result) 
 
-        elif CODING_MODE == "bylayer": 
-            # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
-            get_prompt_and_run_agent(executor, "modular_coder", N, layer)
+                elif WORKFLOW_MODE == "byModule": 
+                    with ThreadPoolExecutor() as exec: 
+                        # Submit the task of coding each module to the thread pool
+                        futures = [
+                            exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
+                            for module in layer
+                        ]
 
-        elif CODING_MODE == "modular": 
-            with ThreadPoolExecutor() as exec: 
-                # Submit the task of coding each module to the thread pool
-                futures = [
-                    exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
-                    for module in layer
-                ]
-
-                for future in as_completed(futures): 
-                    print(future.result())
+                        for future in as_completed(futures): 
+                            print(future.result())
     
-    # Generate new dependency graph
+    # After implementation: Generate new dependency graph
     print(f"========== UPDATE DEPENDENCY GRAPH ==========")
     subprocess.run(
         [
@@ -263,7 +266,7 @@ def modular_workflow():
         AGENT_WORKSPACE / "current_metrics.json"
     )
 
-    # Run an initial analyzer
+    # Run an analyzer instance after implementation to discover metrics from the real code 
     print(f"========== ANALYZER AGENT AFTER IMPL ==========")
     a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
     a_output_json = json.loads(a_output) 
@@ -292,7 +295,7 @@ def modular_workflow():
         # Remove the existing implementation if it exists, otherwise the new one will be merged 
         if implementation_dest.exists(): 
             shutil.rmtree(implementation_dest) 
-            
+
         # Copy back to the problem implementations folder 
         shutil.copytree(
             implementation, 
@@ -313,12 +316,10 @@ def modular_workflow():
         print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
         subprocess.run(
             [
-                "uv", "run", "pytest", 
-                SOLS_TESTS_DIR / PROBLEM / "tests" / f"test_checkpoint_{test_no}.py", 
-                "--entrypoint", 
-                f"python {entrypoint}", 
-                "--checkpoint", 
-                f"checkpoint_{N}"
+                "scripts/pytest.sh",
+                PROBLEM,
+                entrypoint,
+                str(test_no)
             ], 
             check=True
         )
@@ -327,9 +328,6 @@ def modular_workflow():
     # Probably most accurately using a human controlled method. 
 
 if __name__ == "__main__": 
-    # Sign in the agent service
-    # codex_login_gpt_subscription() 
-
     # run the modular workflow 
     modular_workflow() 
 
