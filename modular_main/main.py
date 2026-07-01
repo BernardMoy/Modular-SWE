@@ -16,6 +16,7 @@ from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import
 from deterministic.helpers.deps_graph.bfs import bfs
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from deterministic.write_metrics.write_overall_metrics import write_overall_metrics
 from .settings import WORKFLOW_MODE 
 
 # async def agent_test(model = "gpt-5.5"): 
@@ -117,7 +118,8 @@ def modular_workflow():
 
     # Step 1: Create the agent workspace 
     print("[MAIN 1/8] Creating agent workspace")
-    shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
+    if AGENT_WORKSPACE.exists(): 
+        shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
     # Step 2: Copy the workspace_helpers folder to the agent workspace 
@@ -265,6 +267,15 @@ def modular_workflow():
         AGENT_WORKSPACE / "current_deps_graph.json", 
         AGENT_WORKSPACE / "current_metrics.json"
     )
+
+    # print the overall metrics here 
+    print(f"========== OVERALL ==========")
+    write_overall_metrics(
+        AGENT_WORKSPACE / "metrics" / "dpy_metrics"
+    )
+
+    # Remove the temporary metrics directory 
+    shutil.rmtree(AGENT_WORKSPACE / "metrics")
 
     # Run an analyzer instance after implementation to discover metrics from the real code 
     print(f"========== ANALYZER AGENT AFTER IMPL ==========")
