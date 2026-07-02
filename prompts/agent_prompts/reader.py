@@ -1,4 +1,4 @@
-from .json_helper import get_json_string
+from ..json_helper import get_json_string
 
 # Give the CURRENT checkpoint number (the one you are working on)! 
 """

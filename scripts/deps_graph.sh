@@ -6,21 +6,17 @@
 set -euo pipefail
 
 # Incorrect number of params 
-if [[ $# -ne 3 ]]; then
-  echo "Usage: ./deps_graph.sh <problem> <implementation_path> <output_dir>" >&2
+if [[ $# -ne 2 ]]; then
+  echo "Usage: ./deps_graph.sh <entrypoint_file> <output_dir>" >&2
   exit 1
 fi
 
 # Obtain the impl path and the output dir 
-PROBLEM="$1"
-IMPL_DIR="$2"
-OUTPUT_DIR="$3"
+ENTRY_FILE="$1"
+OUTPUT_DIR="$2"
 
 # Paths constant
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-
-# Obtain the entrypoint file name from entry_files.json
-ENTRY_FILE=$(jq -r --arg p "$PROBLEM" '.[$p]' "$ROOT/datasets/slopCodeBench/entry_files.json")
 
 # Create the output directory 
 mkdir -p "$OUTPUT_DIR"
@@ -28,23 +24,22 @@ mkdir -p "$OUTPUT_DIR"
 # 1. Generate the dependency graph (dot, svg) using pydeps
 # Reversed, meaning A -> B indicates A import B
 # include missing, meaning module imports are still visualised in the graph even when they cannot be resolved
-echo "[1/2] Generating dependency graph..."
+echo "[GRAPH 1/2] Generating dependency graph..."
 
 # generate the svg
-pydeps "$IMPL_DIR/$ENTRY_FILE.py" \
+pydeps "$ENTRY_FILE" \
   -o "$OUTPUT_DIR/deps_graph.svg" \
   --noshow --max-bacon=0 --reverse
 
 # generate the dot
-pydeps "$IMPL_DIR/$ENTRY_FILE.py" \
-  -T dot --noshow --max-bacon=0 \
-  -o "$OUTPUT_DIR/deps_graph.dot" --reverse
+pydeps "$ENTRY_FILE" \
+  -T dot \
+  -o "$OUTPUT_DIR/deps_graph.dot" \
+  --noshow --max-bacon=0 --reverse
 
 # 2. Process the graph to generate the json format for the agent to read
-echo "[2/2] Converting the dependency graphs to JSON..."
+echo "[GRAPH 2/2] Converting the dependency graphs to JSON..."
 
 python "$ROOT/scripts/process_deps_graph.py" \
   "$OUTPUT_DIR/deps_graph.dot" \
   -o "$OUTPUT_DIR/deps_graph.json"
-
-echo "Done."

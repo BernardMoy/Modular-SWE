@@ -64,3 +64,18 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
             })
         
     return smells
+
+# Temporary use only to measure the overall complexity of the program, 
+# measured by the sum of total LOC + total WMC. 
+def get_overall_metrics(dpy_class_module_metrics): 
+    total_loc = 0 
+    total_wmc = 0 
+
+    for entry in dpy_class_module_metrics: 
+        total_loc += entry["LOC"]
+        total_wmc += entry["WMC"]
+    
+    return {
+        "Total LOC": total_loc, 
+        "Total WMC": total_wmc
+    }
