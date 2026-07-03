@@ -1,8 +1,11 @@
 from typing import Literal 
 
 # For the coding agent: Codex / Claude Code 
-AGENT = "codex"
-MODEL = "gpt-5.5"
+AGENT: Literal["codex", "opencode"] = "opencode"
+MODEL: Literal[
+                "gpt-5.5", 
+                "Nemotron 3 Ultra Free", "Big Pickle", "DeepSeek V4 Flash Free"
+               ] = "DeepSeek V4 Flash Free"
 
 # For the modular workflow. 
 # noDesign: Directly implement all modules at once (reference) 
@@ -14,4 +17,4 @@ WORKFLOW_MODE: Literal[
     "allAtOnce", 
     "byLayer", 
     "byModule"
-    ] = "byLayer"
+    ] = "noDesign"
