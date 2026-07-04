@@ -113,7 +113,8 @@ def modular_workflow():
         raise Exception(f"Invalid problem name: {PROBLEM}")
     ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM]
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
-    PREV_IMPL = PROBLEM_DIR / "implementations" / f"checkpoint_{N-1}"
+    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"
+    PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
     # Step 1: Create the agent workspace 
@@ -301,16 +302,16 @@ def modular_workflow():
     
     # Check if the implementation exists 
     implementation = AGENT_WORKSPACE / "implementation"
-    implementation_dest = PROBLEM_DIR / "implementations" / f"checkpoint_{N}"
+    IMPLEMENTATION_DEST = PROBLEM_IMPL_DIR / f"checkpoint_{N}"
     if implementation.is_dir(): 
         # Remove the existing implementation if it exists, otherwise the new one will be merged 
-        if implementation_dest.exists(): 
-            shutil.rmtree(implementation_dest) 
+        if IMPLEMENTATION_DEST.exists(): 
+            shutil.rmtree(IMPLEMENTATION_DEST) 
 
         # Copy back to the problem implementations folder 
         shutil.copytree(
             implementation, 
-            PROBLEM_DIR / "implementations" / f"checkpoint_{N}", 
+            IMPLEMENTATION_DEST, 
             dirs_exist_ok=True, 
             ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc")
         )
@@ -320,7 +321,7 @@ def modular_workflow():
 
     # Run the tests and exit 
     print(f"========== [MAIN 8/8] RUNNING TESTS ==========")
-    entrypoint = PROBLEM_DIR / "implementations" / f"checkpoint_{N}" / f"{ENTRY_FILE_NAME}.py"
+    entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
 
     # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
     for test_no in range(N, 0, -1): 
@@ -332,7 +333,7 @@ def modular_workflow():
                 entrypoint,
                 str(test_no)
             ], 
-            check=True
+            check=False  # Allow previous checkpoints to still run even when tests fail 
         )
 
     # Rank the code quality using some metrics (?) 
