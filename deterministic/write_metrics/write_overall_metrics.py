@@ -1,26 +1,62 @@
 import argparse 
 import json
 import os 
-from ..helpers.designite_py.dpy_class import get_overall_metrics 
+from radon.metrics import mi_visit 
+from radon.raw import analyze 
 
+def get_overall_metrics(implementation_path): 
+    """
+    {
+        "lloc": 0, 
+        "weighted_maintainability_index": 0, 
+        "function_cyclomatic_complexity_count": 0, 
+        "function_cognitive_complexity_count": 0, 
+        "duplicated_line_of_code_percent": 0, 
+    }
+    """
 
-def write_overall_metrics(dpy_path): 
-    dpy_folder_path = dpy_path
+    weighted_mi = 0 
+    total_sloc = 0 
+    total_lloc = 0 
 
-    for json_file in os.listdir(dpy_folder_path): 
-        # arch smells (skipped) 
-        # class module metrics 
-        if (json_file.endswith("class_module_metrics.json")): 
-            with open(os.path.join(dpy_folder_path, json_file), 'r') as f: 
-                print(get_overall_metrics(json.load(f))) 
+    # Iterate over all python files, read them and pass them to radon 
+    for (root, dirs, files) in os.walk(implementation_path): 
+        for f in files: 
+            if f.endswith(".py"): 
+                py_file_path = os.path.join(root, f) 
 
-# usage: write.py [dpy_folder_path]
+                # open the file 
+                try: 
+                    code = open(py_file_path, 'r').read() 
+                    mi = mi_visit(code, multi=True) 
+                    analyzed = analyze(code)
+                    sloc = analyzed.sloc 
+                    lloc = analyzed.lloc
+
+                    total_sloc += sloc 
+                    total_lloc += lloc
+                    weighted_mi += mi*sloc
+
+                except Exception as e: 
+                    print(e)
+    
+    return {
+        "lloc": total_lloc, 
+        "weighted_maintainability_index": weighted_mi / total_sloc if total_sloc > 0 else -1, 
+        "function_cyclomatic_complexity_count": 0, 
+        "function_cognitive_complexity_count": 0, 
+        "duplicated_line_of_code_percent": 0, 
+    }
+
+# usage: write.py [implementation folder path]
+# results are printed 
 def main(): 
     parser = argparse.ArgumentParser()
-    parser.add_argument("dpy_path", help="Abs path to the dpy folder")
+    parser.add_argument("implementation_path", help="Path to the impl folder")
     args = parser.parse_args()
 
-    write_overall_metrics(args.dpy_path) 
+    overall_metrics = get_overall_metrics(args.implementation_path)
+    print(overall_metrics) 
    
 
 if __name__ == "__main__": 
