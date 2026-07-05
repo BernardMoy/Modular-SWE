@@ -1,21 +1,13 @@
-import argparse 
-import json
 import os 
 from radon.metrics import mi_visit 
 from radon.raw import analyze 
-import subprocess 
-import shutil 
+import argparse
 
-# Given a single implementation path return its overall metrics for evaluation
-def get_overall_metrics(implementation_path): 
+def get_radon_metrics(implementation_path): 
     """
     {
         "lloc": 0,
-        "duplicated_line_of_code_percent": 0, 
         "weighted_maintainability_index": 0, 
-        "function_cyclomatic_complexity_count": 0, 
-        "function_cognitive_complexity_count": 0, 
-        "high_fan_out_classes_count": 0, 
     }
     """
 
@@ -44,33 +36,18 @@ def get_overall_metrics(implementation_path):
                 except Exception as e: 
                     print(e)
     
-    subprocess.run([
-        "scripts/metrics.sh", 
-        implementation_path, 
-        "temp_metrics"
-    ])
-
     return {
         "lloc": total_lloc, 
-        "duplicated_line_of_code_percent": 0, 
         "weighted_maintainability_index": weighted_mi / total_sloc if total_sloc > 0 else -1, 
-        "function_cyclomatic_complexity_count": 0, 
-        "function_cognitive_complexity_count": 0, 
-        "high_fan_out_classes_count": 0, 
     }
 
-def get_maintenance_effort(mode_path): 
-    return [0] 
-
-# usage: write.py [implementation folder path]
-# results are printed 
 def main(): 
     parser = argparse.ArgumentParser()
     parser.add_argument("implementation_path", help="Path to the impl folder")
     args = parser.parse_args()
 
-    overall_metrics = get_overall_metrics(args.implementation_path)
-    print(overall_metrics) 
+    metrics = get_radon_metrics(args.implementation_path)
+    print(metrics) 
    
 
 if __name__ == "__main__": 

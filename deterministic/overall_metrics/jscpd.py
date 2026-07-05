@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse 
 import shutil 
 
-def get_duplicated_lines(implementation_path):
+def get_duplicates(implementation_path):
     """
     Return duplicated lines and tokens percentage 
     {
