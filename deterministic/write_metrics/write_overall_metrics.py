@@ -3,15 +3,19 @@ import json
 import os 
 from radon.metrics import mi_visit 
 from radon.raw import analyze 
+import subprocess 
+import shutil 
 
+# Given a single implementation path return its overall metrics for evaluation
 def get_overall_metrics(implementation_path): 
     """
     {
-        "lloc": 0, 
+        "lloc": 0,
+        "duplicated_line_of_code_percent": 0, 
         "weighted_maintainability_index": 0, 
         "function_cyclomatic_complexity_count": 0, 
         "function_cognitive_complexity_count": 0, 
-        "duplicated_line_of_code_percent": 0, 
+        "high_fan_out_classes_count": 0, 
     }
     """
 
@@ -29,7 +33,7 @@ def get_overall_metrics(implementation_path):
                 try: 
                     code = open(py_file_path, 'r').read() 
                     mi = mi_visit(code, multi=True) 
-                    analyzed = analyze(code)
+                    analyzed = analyze(code) # Module(loc=49, lloc=59, sloc=36, comments=0, multi=0, blank=13, single_comments=0)
                     sloc = analyzed.sloc 
                     lloc = analyzed.lloc
 
@@ -40,13 +44,23 @@ def get_overall_metrics(implementation_path):
                 except Exception as e: 
                     print(e)
     
+    subprocess.run([
+        "scripts/metrics.sh", 
+        implementation_path, 
+        "temp_metrics"
+    ])
+
     return {
         "lloc": total_lloc, 
+        "duplicated_line_of_code_percent": 0, 
         "weighted_maintainability_index": weighted_mi / total_sloc if total_sloc > 0 else -1, 
         "function_cyclomatic_complexity_count": 0, 
         "function_cognitive_complexity_count": 0, 
-        "duplicated_line_of_code_percent": 0, 
+        "high_fan_out_classes_count": 0, 
     }
+
+def get_maintenance_effort(mode_path): 
+    return [0] 
 
 # usage: write.py [implementation folder path]
 # results are printed 
@@ -61,3 +75,4 @@ def main():
 
 if __name__ == "__main__": 
     main() 
+
