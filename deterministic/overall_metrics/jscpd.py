@@ -3,6 +3,28 @@ import subprocess
 from pathlib import Path
 import argparse 
 import shutil 
+import os 
+
+def _subprocess_env():
+    """
+    Set the env PATH to the node in the linux machine
+    as it would try to call the one in the underlying windows machine. 
+
+    If env = _subprocess_env() is not passed, 
+    when run in a notebook or inside the linux environment
+    the temp file would not be generated under the project root modular_swe/. 
+    """
+    env = dict(os.environ)
+
+    nvm_dir = Path.home() / ".nvm" / "versions" / "node"
+    if nvm_dir.is_dir():
+        for node_version_dir in sorted(nvm_dir.iterdir(), reverse=True):
+            bin_dir = node_version_dir / "bin"
+            if (bin_dir / "jscpd").exists():
+                env["PATH"] = f"{bin_dir}{os.pathsep}{env['PATH']}"
+                break
+
+    return env
 
 def get_duplicates(implementation_path):
     """
@@ -33,6 +55,7 @@ def get_duplicates(implementation_path):
         capture_output=True,
         text=True,
         shell=False,
+        env=_subprocess_env()
     )
 
     # Read the temp duplicates folder 
@@ -45,7 +68,7 @@ def get_duplicates(implementation_path):
         duplicates["tokens"] = report_json["statistics"]["total"]["percentageTokens"]
     
     # Now remove the temp duplicates folder 
-    shutil.rmtree(Path("temp_duplicates"))
+    shutil.rmtree("temp_duplicates")
     
     return duplicates
 
@@ -57,7 +80,7 @@ def main():
     parser.add_argument("implementation_path", help="Path to the impl folder")
     args = parser.parse_args()
 
-    density = get_duplicated_lines(args.implementation_path) 
+    density = get_duplicates(args.implementation_path) 
 
     # print the result 
     print(density)
