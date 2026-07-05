@@ -16,7 +16,7 @@ from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import
 from deterministic.helpers.deps_graph.bfs import bfs
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
-from deterministic.write_metrics.write_overall_metrics import write_overall_metrics
+from deterministic.overall_metrics.write_overall_metrics import write_overall_metrics
 from .settings import WORKFLOW_MODE 
 
 # async def agent_test(model = "gpt-5.5"): 
