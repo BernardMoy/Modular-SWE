@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 # Usage: 
-# ./deps_graph.sh <problem> <implementation_path> <output_dir>
+# ./deps_graph.sh <entrypoint_file> <output_dir>
 # Writes the .dot, .svg and .json to that output directory. 
 
 set -euo pipefail

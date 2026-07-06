@@ -15,7 +15,7 @@ def get_dpy_metrics(implementation_path):
 
     TEMP_DIR = Path("temp_metrics")
 
-    CC_THRESHOLD = 5 
+    CC_THRESHOLD = 10
     FAN_OUT_THRESHOLD = 3 
 
     counts = {
