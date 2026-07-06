@@ -1,19 +1,25 @@
 from ...reusables.get_all_modules import get_all_modules 
+import networkx as nx 
 
 def get_density(json_object): 
     """
     Return 
-    Number of edges in deps graph / 
-    (Number of possible edges / 2) 
-    (/2 because dependency is expected to flow in one direction only)
+    Number of edges and transitive dependencies / Number of possible edges
     """
 
+    # Construct networkx graph 
+    G = nx.DiGraph() 
     all_modules = get_all_modules(json_object) 
     N = len(all_modules)
-    all_possible = N*(N-1)/4
-
-    edges = 0 
-    for key, value in json_object.items(): 
-        edges += len(value) 
+    G.add_nodes_from(all_modules) 
+    for src, dests in json_object.items(): 
+        for dest in dests: 
+            G.add_edge(src, dest) 
     
-    return edges / all_possible
+    # Count the number of transitive dependencies
+    transitive_dependencies = {v: nx.descendants(G, v) for v in G}
+    transitive_dependencies_n = sum(len(d) for d in transitive_dependencies.values())
+
+    all_possible = N*(N-1)  # Undirected graph
+
+    return transitive_dependencies_n / all_possible

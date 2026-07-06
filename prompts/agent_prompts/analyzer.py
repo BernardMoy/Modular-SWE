@@ -37,7 +37,6 @@ If code smells have been given in `current_metrics`, you should use them as a re
 Interpret some metrics using the following guidelines: 
 - LCOM: Only flag if the methods have different responsibilities. It is acceptable if the methods are just sequential stages of the same functionality. 
 - Cyclomatic complexity, WMC: Only flag if the complexity is caused by unrelated concerns, lead to low testability, or high maintenance effort when adding new features. It is acceptable if the complex problem logic justifies it. 
-- Magic number: Only flag if the meaning of the number is not immediately obvious to the developer. 
 - Number of public methods: Only flag if the methods share different responsibilities, or they expose too much internal state that lead to feature envy of another module.  
 
 If a list of previously suggested improvements are present in `current_rejected_improvements.json`, consider not suggesting the same improvements.
