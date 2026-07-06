@@ -4,6 +4,7 @@ import subprocess
 import shutil
 import json 
 from pathlib import Path
+from ..helpers.deps_graph.density import get_density
 
 def get_deps_graph_metrics(implementation_path): 
     """
@@ -20,5 +21,12 @@ def get_deps_graph_metrics(implementation_path):
         TEMP_FILE
     ])
 
-    with open(TEMP_FILE, 'r') as f: 
+    with open(TEMP_FILE / "deps_graph.json", 'r') as f: 
         graph = json.load(f) 
+
+    shutil.rmtree(TEMP_FILE)
+    
+    return {
+        "density": get_density(graph)
+    }
+

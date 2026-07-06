@@ -161,6 +161,9 @@ def modular_workflow():
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
                     AGENT_WORKSPACE / "original_deps_graph.svg")
         
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                    AGENT_WORKSPACE / "original_deps_graph.json")
+        
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
