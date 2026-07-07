@@ -37,7 +37,7 @@ SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
-DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 5  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
 
 

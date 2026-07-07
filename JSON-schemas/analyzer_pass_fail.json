@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "result": {
-      "description": "A single string, either pass or fail, based on whether the current design is suitable for implementation that ensures good code quality and long term maintainability.",
+      "description": "Either pass or fail, on whether the current design is suitable for implementation that can preserves code quality and maintainability when new features are added later.",
       "type": "string",
       "enum": ["pass", "fail"]
     },
