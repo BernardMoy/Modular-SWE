@@ -1,5 +1,6 @@
 import os 
 from pathlib import Path 
+from collections import defaultdict 
 
 # Return a list of files that are changed. 
 # This does NOT count files that are added, 
@@ -83,3 +84,15 @@ def get_changed_proportion(implementation_path_old, implementation_path_new):
                     print(e)
     
     return changed_count / original_count if original_count > 0 else 0 
+
+def get_changed_files_from_history(implementation_history): 
+    d = defaultdict(int) 
+    for i in range(1, len(implementation_history)): 
+        prev = implementation_history[i-1]
+        cur = implementation_history[i] 
+        changed_files = get_changed_files(prev, cur) 
+        for f in changed_files: 
+            d[f] += 1 
+    
+    return d 
+
