@@ -1,6 +1,7 @@
 import os 
 from pathlib import Path 
 from collections import defaultdict 
+from .deps_graph import get_weighted_deps_graph_metrics
 
 # Return a list of files that are changed. 
 # This does NOT count files that are added, 
@@ -96,3 +97,17 @@ def get_changed_files_from_history(implementation_history):
     
     return d 
 
+"""
+Return a list of weighted density
+based on the change frequency recorded at each time 
+"""
+def get_weighted_density(implementation_history): 
+    d = get_changed_files_from_history(implementation_history)
+    arr = [] 
+
+    for implementation_path in implementation_history: 
+        arr.append(
+            get_weighted_deps_graph_metrics(d, implementation_path)
+        )
+
+    return arr 
