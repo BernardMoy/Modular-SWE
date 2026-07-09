@@ -13,7 +13,7 @@ from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
 from deterministic.validators.module_name_validator import module_name_validator
 from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
-from deterministic.helpers.deps_graph.bfs import bfs
+from deterministic.helpers.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 from .settings import WORKFLOW_MODE 
@@ -205,9 +205,15 @@ def modular_workflow():
         
         # Run the BFS 
         print(f"========== MODULES TO CODE ==========")
-        modules_array = bfs(
-            AGENT_WORKSPACE / "current_deps_graph.json", 
-            AGENT_WORKSPACE / "current_design.json"
+        with open(AGENT_WORKSPACE / "current_deps_graph.json", 'r') as f: 
+            deps_graph_json = json.load(f)
+        
+        with open(AGENT_WORKSPACE / "current_design.json", 'r') as f: 
+            design_json = json.load(f)
+
+        modules_array = bfs_get_modules_to_implement(
+            deps_graph_json, 
+            design_json
         )
         print(modules_array)
 
