@@ -8,6 +8,10 @@ def get_prompt(agent_name, *args):
     # Given the agent name and a variable number of arguments. 
     # Return the prompt for these agents 
     # (You need to have the correct number of arguments).  
+
+    # For agent_name, the corresponding function to get its prompt is 
+    # get_[agent_name]_prompt. 
+
     if agent_name == "analyzer": 
         return get_analyzer_prompt(*args) 
     elif agent_name == "decomposer": 

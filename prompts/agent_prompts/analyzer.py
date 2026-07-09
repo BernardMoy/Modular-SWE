@@ -28,10 +28,6 @@ Your evaluation is based on the following master criteria to achieve long term c
 - The system should be easy to test by avoiding overly complex functions with lots of control paths that could be simplified if possible.
 - Ensure high cohesion and low coupling by avoiding code that needs to be duplicated and modules that expose too much.
 
-Give improvement suggestions by simulating the scenario: 
-Based on what has been changed in the current dependency graph, simulate a possible new feature to be added to the current design. 
-How many modules need to be changed because of this? Is this due to the complexity of the problem or is it because of tight coupling? 
-
 [CODE SMELLS]
 If code smells have been given in `current_metrics`, you should use them as a reference to support your suggestions, not to eliminate these metrics completely. 
 Interpret some metrics using the following guidelines: 
@@ -51,7 +47,7 @@ First, write a JSON object to `current_analyzer_result.json`, decsribing improve
 Each suggestion should be backed up by a reason in the format of "When <parts of code changes>, because of <code smell>, <effect that downgrades maintainability>."
 {get_json_string("analyzer")}
 
-Second, return in the output ONLY the JSON string below that evaluates the result that is either "pass" or "fail" based on the master criteria, and provide explanation. 
+Second, return in the output ONLY the JSON string below that evaluates the result that is either "pass" or "fail" based on the master criteria and the severity of the identified issues, and provide explanation. 
 Do not include any additional natural language descriptions in your response. 
 {get_json_string("analyzer_pass_fail")}
 """

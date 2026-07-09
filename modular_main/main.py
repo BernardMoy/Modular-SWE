@@ -81,6 +81,12 @@ def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, th
             AGENT_WORKSPACE / "current_metrics.json"
         )
 
+        # If the iteration number == 0, also call the pre-analyzer agent 
+        # if iteration == 0: 
+        #     print(f"========== [Iteration {iteration+1}] PRE-ANALYZER AGENT ==========")
+        #     pre_a_output = get_prompt_and_run_agent(executor, "pre_analyzer") 
+        #     print(pre_a_output) 
+
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         a_output = get_prompt_and_run_agent(executor, "analyzer", has_implementation) 
@@ -275,10 +281,10 @@ def modular_workflow():
     shutil.rmtree(AGENT_WORKSPACE / "metrics")
 
     # Run an analyzer instance after implementation to discover metrics from the real code 
-    print(f"========== ANALYZER AGENT AFTER IMPL ==========")
-    a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
-    a_output_json = json.loads(a_output) 
-    print(json.dumps(a_output_json, indent=2))
+    # print(f"========== ANALYZER AGENT AFTER IMPL ==========")
+    # a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+    # a_output_json = json.loads(a_output) 
+    # print(json.dumps(a_output_json, indent=2))
 
     # If the analyzer returns fail, run the decomposer analyzer loop with has implementation = True 
     # if a_output_json["result"] == "fail": 
