@@ -17,4 +17,4 @@ WORKFLOW_MODE: Literal[
     "allAtOnce", 
     "byLayer", 
     "byModule"
-    ] = "allAtOnce"
+    ] = "noDesign"

@@ -13,6 +13,19 @@ Input: current_design, current_deps_graph, current_rejected_improvements
 has_implementation: Whether the analyzer is working on the current design before impl, or the implementation of checkpoint N/ after impl 
 Output: current_analyzer_result, pass / fail string (Returned) 
 """
+
+CODE_SMELLS_INST_HAS_IMPL = """
+- LCOM: Only flag if this is caused by methods having different responsibilities.
+- Cyclomatic complexity, WMC, long methods: Only flag if the complexity is caused by unrelated concerns, or cause the code to become difficult to understand or test.
+- Feature envy: Only flag if moving the method to another class would not drastically reduce reusability or introduce tight coupling."""
+
+CODE_SMELLS_INST_NO_IMPL = """
+- Number of public methods: Only flag if the methods share different responsibilities, or they expose too much internal state that lead to feature envy of another module.  
+
+Apart from the code smells provided, consider the design semantics to identify issues before implementation: 
+- Module responsibility: Consider if a module has multiple concerns by inspecting if it has multiple responsibilities, or too many pre and postconditions in its design.
+- Duplicated or wrongly located methods: Consider if some methods are duplicated somewhere else, or if they should belong to another class."""
+
 def get_analyzer_prompt(has_implementation): 
     
     return f"""[OVERVIEW]
@@ -29,16 +42,7 @@ Your evaluation is based on the following master criteria to achieve long term c
 - Ensure high cohesion and low coupling by avoiding code that needs to be duplicated and modules that expose too much.
 
 [CODE SMELLS]
-If code smells have been given in `current_metrics`, you should use them as a reference to support your suggestions, not to eliminate these metrics completely. 
-Interpret some metrics using the following guidelines: 
-- LCOM: Only flag if the methods have different responsibilities. It is acceptable if the methods are just sequential stages of the same functionality. 
-- Cyclomatic complexity, WMC: Only flag if the complexity is caused by unrelated concerns, lead to low testability, or high maintenance effort when adding new features. It is acceptable if the complex problem logic justifies it. 
-- Number of public methods: Only flag if the methods share different responsibilities, or they expose too much internal state that lead to feature envy of another module.  
-
-Apart from the code smells provided, consider some semantics of the design specified below that may also indicate additional code issues: 
-- If a module has output of different abstractions or if a method has too many postconditions, is it doing multiple responsibilities at the same time? 
-- Are there any duplicated methods across different modules that need to be changed together when the code evolves? 
-- Are there methods in a module that depends more on another module than its own? 
+Consider the code smells identified in `current_metrics` under the following guidelines. The code smells should only be used to support your suggestions and not to be eliminated completely as there may be false positives. {CODE_SMELLS_INST_HAS_IMPL if has_implementation else CODE_SMELLS_INST_NO_IMPL}
 
 If a list of previously suggested improvements are present in `current_rejected_improvements.json`, consider not suggesting the same improvements if they still apply.
 
@@ -47,7 +51,7 @@ First, write a JSON object to `current_analyzer_result.json`, decsribing improve
 Each suggestion should be backed up by a reason in the format of "When <parts of code changes>, because of <code smell>, <effect that downgrades maintainability>."
 {get_json_string("analyzer")}
 
-Second, return in the output ONLY the JSON string below that evaluates the result that is either "pass" or "fail" based on the master criteria and the severity of the identified issues, and provide explanation. 
+Second, return in the output ONLY the JSON string below that evaluates the result that is either "pass" or "fail" based on the master criteria, and provide explanation. 
 Do not include any additional natural language descriptions in your response. 
 {get_json_string("analyzer_pass_fail")}
 """

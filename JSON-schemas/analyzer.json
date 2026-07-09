@@ -18,20 +18,9 @@
       "reason": {
         "description": "Reason that this improvement is necessary based on a reasonable and practical scenario when the code evolves, showing the maintainability and quality issues.",
         "type": "string"
-      },
-      "severity": {
-        "description": "How important it is to fix this issue.",
-        "type": "string",
-        "enum": ["Must fix", "Should fix", "Could fix"]
       }
     },
-    "required": [
-      "module_name",
-      "smell",
-      "improvement_instruction",
-      "reason",
-      "severity"
-    ],
+    "required": ["module_name", "smell", "improvement_instruction", "reason"],
     "additionalProperties": false
   }
 }
