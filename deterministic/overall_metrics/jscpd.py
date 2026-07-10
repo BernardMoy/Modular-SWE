@@ -40,7 +40,7 @@ def get_duplicates(implementation_path):
         "tokens": 0
     }
 
-    result = subprocess.run(
+    subprocess.run(
         # Run jscpd with the default min tokens 50 and min lines 5 
         # https://www.npmjs.com/package/jscpd
         [
@@ -64,8 +64,8 @@ def get_duplicates(implementation_path):
         report_json = json.load(f)
         
         # Only return the percentage duplicated for lines and tokens 
-        duplicates["lines"] = report_json["statistics"]["total"]["percentage"]
-        duplicates["tokens"] = report_json["statistics"]["total"]["percentageTokens"]
+        duplicates["lines"] = report_json["statistics"]["total"]["percentage"] / 100
+        duplicates["tokens"] = report_json["statistics"]["total"]["percentageTokens"] / 100
     
     # Now remove the temp duplicates folder 
     shutil.rmtree("temp_duplicates")

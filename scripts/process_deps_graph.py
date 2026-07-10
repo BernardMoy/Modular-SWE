@@ -2,6 +2,17 @@ import networkx as nx
 import json
 import argparse
 
+# This function is duplicated from reusables: Move the reusables folder outside of the deterministic module!
+def get_all_modules(json_object): 
+    all_modules = set() 
+    for key, value in json_object.items(): 
+        all_modules.add(key) 
+
+        for v in value: 
+            all_modules.add(v) 
+    
+    return all_modules
+
 # clean the graphviz names containing \\
 def clean(name): 
     return name.strip('"').replace("\\n", "").replace("\\", "")
@@ -39,6 +50,14 @@ def main():
         name = get_name(G, n) 
         graph[name] = [get_name(G, x) for x in list(G.successors(n))]
     
+    # Count the number of modules in the deps graph
+    # Warning if it is empty 
+    module_count = len(get_all_modules(graph))
+    if module_count >0: 
+        print(f"Dependency graph has {module_count} modules.")
+    else: 
+        print("WARNING: DEPENDENCY GRAPH IS EMPTY.")
+
     # Write as JSON 
     output = args.o
     with open(output, 'w') as f: 

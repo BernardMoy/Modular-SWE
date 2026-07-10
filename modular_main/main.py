@@ -13,7 +13,7 @@ from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
 from deterministic.validators.module_name_validator import module_name_validator
 from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
-from deterministic.helpers.deps_graph.bfs import bfs
+from deterministic.helpers.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 from .settings import WORKFLOW_MODE 
@@ -38,7 +38,7 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 5  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 1 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen
 
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
@@ -52,7 +52,9 @@ def get_prompt_and_run_agent(executor, agent_name, *args):
 
 
 # Decomposer analyzer loop. 
-def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, threshold): 
+# D first before A 
+# for has impl = False only.
+def decomposer_analyzer_loop(executor, checkpoint_number, threshold): 
     iteration = 0 
     passed = False 
 
@@ -81,9 +83,15 @@ def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, th
             AGENT_WORKSPACE / "current_metrics.json"
         )
 
+        # If the iteration number == 0, also call the pre-analyzer agent 
+        # if iteration == 0: 
+        #     print(f"========== [Iteration {iteration+1}] PRE-ANALYZER AGENT ==========")
+        #     pre_a_output = get_prompt_and_run_agent(executor, "pre_analyzer") 
+        #     print(pre_a_output) 
+
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", has_implementation) 
+        a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
@@ -94,6 +102,80 @@ def decomposer_analyzer_loop(executor, checkpoint_number, has_implementation, th
         # Increment the iteration number 
         iteration += 1 
 
+# Refactor analyzer loop - happens after implementation. 
+# A first before R
+# For has impl = True only. 
+def analyzer_refactor_loop(executor, checkpoint_number, threshold, entry_file_name): 
+    iteration = 0 
+    passed = False 
+
+    # Initial decomposer agent 
+    # Run these inside the bind mounted space 
+    while (not passed and iteration < threshold): 
+        # Update the dependency graph
+        # THIS PART IS REMOVED DUE TO NOISE WITH PYDEPS GRAPH GENERATION
+        # print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
+        # subprocess.run(
+        #     [
+        #         "scripts/deps_graph.sh",
+        #         AGENT_WORKSPACE / "implementation" / f"{entry_file_name}.py",
+        #         AGENT_WORKSPACE / "deps_graphs"
+        #     ],
+        #     check=True,
+        # )
+
+        # # Extract only the json and svg
+        # shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+        #             AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
+
+        # shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+        #             AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
+            
+        # # Remove the temp deps_graph/ directory 
+        # shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+        
+        # Generate metrics using the actual implementation
+        print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
+        subprocess.run(
+            [
+                "scripts/metrics.sh",
+                AGENT_WORKSPACE / "implementation",
+                AGENT_WORKSPACE / "metrics"
+            ],
+            check=True,
+        )
+
+        # Write metrics from dpy pylint and deps graph 
+        write_metrics_from_dpy_pylint_and_deps_graph(
+            AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
+            AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
+            AGENT_WORKSPACE / "current_deps_graph.json", 
+            AGENT_WORKSPACE / "current_metrics.json"
+        )
+
+        # Remove the temporary metrics directory 
+        shutil.rmtree(AGENT_WORKSPACE / "metrics")
+
+        # Analyzer agent 
+        print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
+        a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+
+        # If the analyzer return pass, set the passed flag to true 
+        a_output_json = json.loads(a_output) 
+        print(json.dumps(a_output_json, indent=2))
+        if a_output_json["result"] == "pass": 
+            passed = True
+        
+        # if passed, return
+        if passed: 
+            return 
+
+        # if not passed, then call the refactor agent 
+        print(f"========== [Iteration {iteration+1}] REFACTOR CODER AGENT ==========")
+        a_output = get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+
+        # Increment the iteration number 
+        iteration += 1 
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -193,15 +275,20 @@ def modular_workflow():
         decomposer_analyzer_loop(
             executor=executor, 
             checkpoint_number=N, 
-            has_implementation=False, 
             threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL
         )
         
         # Run the BFS 
         print(f"========== MODULES TO CODE ==========")
-        modules_array = bfs(
-            AGENT_WORKSPACE / "current_deps_graph.json", 
-            AGENT_WORKSPACE / "current_design.json"
+        with open(AGENT_WORKSPACE / "current_deps_graph.json", 'r') as f: 
+            deps_graph_json = json.load(f)
+        
+        with open(AGENT_WORKSPACE / "current_design.json", 'r') as f: 
+            design_json = json.load(f)
+
+        modules_array = bfs_get_modules_to_implement(
+            deps_graph_json, 
+            design_json
         )
         print(modules_array)
 
@@ -230,70 +317,10 @@ def modular_workflow():
                         for future in as_completed(futures): 
                             print(future.result())
     
-    # After implementation: Generate new dependency graph
-    print(f"========== UPDATE DEPENDENCY GRAPH ==========")
-    subprocess.run(
-        [
-            "scripts/deps_graph.sh",
-            AGENT_WORKSPACE / "implementation" / f"{ENTRY_FILE_NAME}.py",
-            AGENT_WORKSPACE / "deps_graphs"
-        ],
-        check=True,
-    )
+        # After implementation: 
+        # Refactor - Analyzer loop 
+        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
 
-    # Extract only the json and svg
-    shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-                AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
-
-    shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
-                AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
-        
-    # Remove the temp deps_graph/ directory 
-    shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
-
-
-    # Generate metrics 
-    print(f"========== GENERATE METRICS ==========")
-    subprocess.run(
-        [
-            "scripts/metrics.sh",
-            AGENT_WORKSPACE / "implementation",
-            AGENT_WORKSPACE / "metrics"
-        ],
-        check=True,
-    )
-
-    # Write metrics from dpy pylint and deps graph 
-    write_metrics_from_dpy_pylint_and_deps_graph(
-        AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
-        AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
-        AGENT_WORKSPACE / "current_deps_graph.json", 
-        AGENT_WORKSPACE / "current_metrics.json"
-    )
-
-    # Remove the temporary metrics directory 
-    shutil.rmtree(AGENT_WORKSPACE / "metrics")
-
-    # Run an analyzer instance after implementation to discover metrics from the real code 
-    print(f"========== ANALYZER AGENT AFTER IMPL ==========")
-    a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
-    a_output_json = json.loads(a_output) 
-    print(json.dumps(a_output_json, indent=2))
-
-    # If the analyzer returns fail, run the decomposer analyzer loop with has implementation = True 
-    # if a_output_json["result"] == "fail": 
-    #     decomposer_analyzer_loop(
-    #         executor=executor, 
-    #         checkpoint_number=N, 
-    #         has_implementation=True, 
-    #         threshold=DA_LOOP_THRESHOLD_AFTER_IMPL
-    #     )
-
-    # Re-run the modular coder 
-    # (Inspect what is returned in the current design json first) 
-
-    # Move the solution back from the agent workspace to the problem directory 
-    # under problem_name / implementations / checkpoint_N (folder) 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
     # Check if the implementation exists 
