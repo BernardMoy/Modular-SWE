@@ -45,7 +45,7 @@ def get_deps_graph_metrics(implementation_path):
 
     subprocess.run([
         "scripts/deps_graph.sh", 
-        implementation_path / "circopt.py",  # hard code the entry point 
+        implementation_path,
         TEMP_FILE
     ])
 
