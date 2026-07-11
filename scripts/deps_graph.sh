@@ -51,7 +51,7 @@ pydeps "$IMPL_DIR/$ENTRYFILE_NAME.py" \
 # 3. Process the graph to generate the json format for the agent to read
 echo "[GRAPH 3/4] Converting the dependency graphs to JSON"
 
-python "$ROOT/scripts/process_deps_graph.py" \
+PYTHONPATH="$ROOT" python "$ROOT/scripts/process_deps_graph.py" \
   "$OUTPUT_DIR/deps_graph.dot" \
   -o "$OUTPUT_DIR/deps_graph.json"
 

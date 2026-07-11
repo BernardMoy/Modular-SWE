@@ -64,7 +64,7 @@ if [[ "$N" -gt 1 ]]; then
 
   # Update the current metrics json 
   echo "[2.5/6] Updating current_metrics.json"
-  python -m deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph \
+  python -m write_metrics.write_metrics_from_dpy_pylint_and_deps_graph \
   "$AGENT_WORKSPACE/metrics/dpy_metrics" "$AGENT_WORKSPACE/metrics/pylint_metrics.json" "$AGENT_WORKSPACE/current_deps_graph.json" \
   "$AGENT_WORKSPACE/current_metrics.json"
 

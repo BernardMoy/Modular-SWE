@@ -11,11 +11,11 @@ import subprocess
 from .BwrapExecutor import BwrapExecutor
 from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
-from deterministic.validators.module_name_validator import module_name_validator
-from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
-from deterministic.helpers.deps_graph.bfs import bfs_get_modules_to_implement
+from validators.module_name_validator import module_name_validator
+from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
+from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 from .settings import WORKFLOW_MODE 
 
 # Constants for directory and file paths 

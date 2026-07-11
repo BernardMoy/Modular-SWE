@@ -1,17 +1,7 @@
 import networkx as nx
 import json
 import argparse
-
-# This function is duplicated from reusables: Move the reusables folder outside of the deterministic module!
-def get_all_modules(json_object): 
-    all_modules = set() 
-    for key, value in json_object.items(): 
-        all_modules.add(key) 
-
-        for v in value: 
-            all_modules.add(v) 
-    
-    return all_modules
+from reusables.get_all_modules import get_all_modules
 
 # clean the graphviz names containing \\
 def clean(name): 

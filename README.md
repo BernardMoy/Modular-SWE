@@ -64,7 +64,7 @@ Run inside the agent workspace docker container.
 Call the python scripts as modules.
 
 ```
-python -m deterministic.validators.module_name_validator current_design.json current_deps_graph.json
+python -m validators.module_name_validator current_design.json current_deps_graph.json
 ```
 
 ## Run SCB tests
