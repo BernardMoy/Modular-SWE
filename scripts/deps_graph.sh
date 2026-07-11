@@ -23,29 +23,42 @@ mkdir -p "$OUTPUT_DIR"
 
 ENTRYFILE_NAME="temp_entrypoint_123456789"
 
-# 1. Generate a temporary entrypoint file that imports all python modules 
-echo "[GRAPH 1/3] Generating temp entrypoint file..."
+# 1. Generate missing __init__.py files so that pydeps can recognise them 
+echo "[GRAPH 1/5] Generating missing init.py"
+python "$ROOT/scripts/gen_missing_init_files.py" "$IMPL_DIR"
+
+# 1. Generate a temporary entrypoint file that imports all python modules
+echo "[GRAPH 2/5] Generating temp entrypoint file"
 python "$ROOT/scripts/gen_deps_graph_entry.py" "$IMPL_DIR" "$ENTRYFILE_NAME"
+
+# Obtain REAL_MODULES from the entry file (import A; import B) --> REAL_MODULES = (A,B)...
+mapfile -t REAL_MODULES < <(sed -n 's/^import //p' "$IMPL_DIR/$ENTRYFILE_NAME.py")
 
 # 2. Generate the dependency graph (dot, svg) using pydeps
 # Reversed, meaning A -> B indicates A import B
 # include missing, meaning module imports are still visualised in the graph even when they cannot be resolved
-echo "[GRAPH 2/3] Generating dependency graph..."
+echo "[GRAPH 3/5] Generating dependency graph"
 
 # generate the svg
 pydeps "$IMPL_DIR/$ENTRYFILE_NAME.py" \
   -o "$OUTPUT_DIR/deps_graph.svg" \
-  --noshow --max-bacon=0 --reverse 
+  --noshow --max-bacon=0 --reverse \
+  --only "${REAL_MODULES[@]}"
 
 # generate the dot
 pydeps "$IMPL_DIR/$ENTRYFILE_NAME.py" \
   -T dot \
   -o "$OUTPUT_DIR/deps_graph.dot" \
-  --noshow --max-bacon=0 --reverse 
+  --noshow --max-bacon=0 --reverse \
+  --only "${REAL_MODULES[@]}"
 
-# 2. Process the graph to generate the json format for the agent to read
-echo "[GRAPH 3/3] Converting the dependency graphs to JSON..."
+# 3. Process the graph to generate the json format for the agent to read
+echo "[GRAPH 4/5] Converting the dependency graphs to JSON"
 
-python "$ROOT/scripts/process_deps_graph.py" \
+PYTHONPATH="$ROOT" python "$ROOT/scripts/process_deps_graph.py" \
   "$OUTPUT_DIR/deps_graph.dot" \
   -o "$OUTPUT_DIR/deps_graph.json"
+
+# 4. Remove the temp entry file 
+echo "[GRAPH 5/5] Removing temp file"
+rm -r $IMPL_DIR/$ENTRYFILE_NAME.py

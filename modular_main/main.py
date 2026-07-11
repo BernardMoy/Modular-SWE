@@ -11,24 +11,12 @@ import subprocess
 from .BwrapExecutor import BwrapExecutor
 from prompts.get_prompt import get_prompt
 from .settings import AGENT, MODEL
-from deterministic.validators.module_name_validator import module_name_validator
-from deterministic.write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
-from deterministic.helpers.deps_graph.bfs import bfs_get_modules_to_implement
+from validators.module_name_validator import module_name_validator
+from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
+from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from deterministic.write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 from .settings import WORKFLOW_MODE 
-
-# async def agent_test(model = "gpt-5.5"): 
-
-#     task = """Create a file named fibonacci.py. 
-# In the file, include a function named fibonacci(n) that returns the nth fibonacci number.
-# """
-#     async with AsyncCodex() as codex:  
-#         thread = await codex.thread_start(model=model, sandbox=Sandbox.workspace_write, approval_mode=ApprovalMode.deny_all)
-#         result = await thread.run(task)
-#         print(result.final_response)
-
-# asyncio.run(agent_test())
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -38,7 +26,7 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 5  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen
+DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen
 
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
@@ -113,26 +101,25 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold, entry_file_na
     # Run these inside the bind mounted space 
     while (not passed and iteration < threshold): 
         # Update the dependency graph
-        # THIS PART IS REMOVED DUE TO NOISE WITH PYDEPS GRAPH GENERATION
-        # print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
-        # subprocess.run(
-        #     [
-        #         "scripts/deps_graph.sh",
-        #         AGENT_WORKSPACE / "implementation" / f"{entry_file_name}.py",
-        #         AGENT_WORKSPACE / "deps_graphs"
-        #     ],
-        #     check=True,
-        # )
+        print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
+        subprocess.run(
+            [
+                "scripts/deps_graph.sh",
+                AGENT_WORKSPACE / "implementation",
+                AGENT_WORKSPACE / "deps_graphs"
+            ],
+            check=True,
+        )
 
-        # # Extract only the json and svg
-        # shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-        #             AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
+        # Extract only the json and svg
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                    AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
 
-        # shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
-        #             AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+                    AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
             
-        # # Remove the temp deps_graph/ directory 
-        # shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+        # Remove the temp deps_graph/ directory 
+        shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
         
         # Generate metrics using the actual implementation
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
@@ -230,8 +217,8 @@ def modular_workflow():
         subprocess.run(
             [
                 "scripts/deps_graph.sh",
-                AGENT_WORKSPACE / "previous_implementation" / f"{ENTRY_FILE_NAME}.py",
-                AGENT_WORKSPACE / "deps_graphs"
+                AGENT_WORKSPACE / "previous_implementation",
+                AGENT_WORKSPACE / "deps_graphs",
             ],
             check=True,
         )
@@ -319,7 +306,7 @@ def modular_workflow():
     
         # After implementation: 
         # Refactor - Analyzer loop 
-        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
+        # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
