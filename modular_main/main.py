@@ -306,7 +306,7 @@ def modular_workflow():
     
         # After implementation: 
         # Refactor - Analyzer loop 
-        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
+        # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
