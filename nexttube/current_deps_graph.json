@@ -1,16 +1,63 @@
 {
-  "app.main": ["app.api.stations", "app.api.arrivals"],
+  "app.main": [
+    "app.api.stations",
+    "app.api.arrivals",
+    "app.api.line_statuses",
+    "app.api.station_disruptions"
+  ],
   "app.api.stations": ["app.data.station_repository", "app.models.station"],
   "app.api.arrivals": ["app.services.arrival_service", "app.models.arrival"],
+  "app.api.line_statuses": ["app.services.line_status_service", "app.models.line_status"],
+  "app.api.station_disruptions": [
+    "app.services.station_disruption_service",
+    "app.models.station_disruption"
+  ],
   "app.services.arrival_service": [
     "app.clients.tfl_client",
     "app.data.station_repository",
     "app.services.platform_info",
     "app.models.arrival"
   ],
+  "app.services.line_status_service": [
+    "app.clients.tfl_client",
+    "app.data.station_repository",
+    "app.models.line_status"
+  ],
+  "app.services.station_disruption_service": [
+    "app.clients.tfl_client",
+    "app.data.station_repository",
+    "app.models.station_disruption"
+  ],
   "app.data.station_repository": ["app.models.station"],
   "app.clients.tfl_client": [],
   "app.services.platform_info": [],
   "app.models.station": [],
-  "app.models.arrival": []
+  "app.models.arrival": [],
+  "app.models.line_status": [],
+  "app.models.station_disruption": [],
+  "frontend.src.App": [
+    "frontend.src.pages.HomePage",
+    "frontend.src.pages.SelectLinePage",
+    "frontend.src.pages.BoardPage"
+  ],
+  "frontend.src.main": ["frontend.src.App", "frontend.src.index"],
+  "frontend.src.index": [],
+  "frontend.src.vite-env.d": [],
+  "frontend.src.pages.HomePage": [
+    "frontend.src.api.client",
+    "frontend.src.types.index",
+    "frontend.src.components.LineStatusCard"
+  ],
+  "frontend.src.pages.SelectLinePage": ["frontend.src.types.index"],
+  "frontend.src.pages.BoardPage": [
+    "frontend.src.api.client",
+    "frontend.src.types.index",
+    "frontend.src.components.ArrivalBoardCard",
+    "frontend.src.components.StationDisruptionList"
+  ],
+  "frontend.src.components.ArrivalBoardCard": ["frontend.src.types.index"],
+  "frontend.src.components.LineStatusCard": ["frontend.src.types.index"],
+  "frontend.src.components.StationDisruptionList": ["frontend.src.types.index"],
+  "frontend.src.api.client": ["frontend.src.types.index"],
+  "frontend.src.types.index": []
 }

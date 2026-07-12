@@ -24,4 +24,8 @@ agent_workspace_*
 # pycache 
 __pycache__
 
+nexttube/implementation
+nexttube/data
+nexttube/previous_implementation
+
 temp_metrics

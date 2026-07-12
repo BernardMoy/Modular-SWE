@@ -22,3 +22,26 @@ export interface ArrivalBoard {
   direction: string;
   entries: ArrivalBoardEntry[];
 }
+
+export interface RouteSection {
+  start: string;
+  end: string;
+  bidirectional: boolean;
+}
+
+export interface LineSeverityGroup {
+  severity_description: string;
+  route_sections: RouteSection[];
+  reasons: string[];
+}
+
+export interface LineStatusSummary {
+  line_id: string;
+  line_name: string;
+  severities: LineSeverityGroup[];
+}
+
+export interface StationDisruption {
+  type: string;
+  description: string;
+}

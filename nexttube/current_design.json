@@ -1,189 +1,88 @@
 [
   {
-    "type": "new",
+    "type": "keep",
+    "module_name": "app.api.stations",
+    "responsibility": "Expose the HTTP endpoint for searching stations by name or code."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.arrivals",
+    "responsibility": "Expose the HTTP endpoint for retrieving arrival boards for a station/line pair."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.arrival_service",
+    "responsibility": "Fetch raw arrivals for a line and transform them into direction-grouped, merged arrival boards for a station."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.platform_info",
+    "responsibility": "Parse a raw TfL platform name string into a structured direction and platform number."
+  },
+  {
+    "type": "keep",
     "module_name": "app.models.station",
-    "responsibility": "Define the Line and Station data shapes used to represent tube reference data across the backend.",
-    "non_responsibilities": [
-      "Load or index station/line data from the JSON data files",
-      "Implement station search matching logic",
-      "Fetch or represent live arrival data"
-    ],
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "Line",
-        "type": "app.models.station.Line",
-        "fields": [
-          { "name": "id", "type": "str", "optional": false },
-          { "name": "name", "type": "str", "optional": false },
-          { "name": "color", "type": "str", "optional": false }
-        ]
-      },
-      {
-        "name": "Station",
-        "type": "app.models.station.Station",
-        "fields": [
-          { "name": "id", "type": "str", "optional": false },
-          { "name": "name", "type": "str", "optional": false },
-          { "name": "code", "type": "str", "optional": false },
-          { "name": "lines", "type": "list[Line]", "optional": false }
-        ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "derive_code",
-        "description": "Compute a station's 3-letter code from its station id and name, applying the NIE/BPS naming exceptions for Nine Elms and Battersea Power Station.",
-        "parameters": [
-          { "name": "station_id", "type": "str", "optional": false },
-          { "name": "station_name", "type": "str", "optional": false }
-        ],
-        "returns": "str",
-        "preconditions": ["station_id is a valid 940GZZLUXXX-style station id"],
-        "postconditions": [
-          "Returns 'NIE' when station_name is Nine Elms and 'BPS' when station_name is Battersea Power Station",
-          "Returns the last 3 letters of station_id, uppercased, for all other stations"
-        ]
-      }
-    ]
+    "responsibility": "Define the Station and Line data shapes and derive a station's 3-letter code."
   },
   {
-    "type": "new",
+    "type": "keep",
     "module_name": "app.models.arrival",
-    "responsibility": "Define the ArrivalBoard and ArrivalBoardEntry data shapes used to represent a formatted, direction-grouped arrival board.",
+    "responsibility": "Define the ArrivalBoard/ArrivalBoardEntry data shapes and format arrival countdown text."
+  },
+  {
+    "type": "changed",
+    "module_name": "app.main",
+    "responsibility": "Assemble the FastAPI application and wire up all API routers and CORS middleware.",
     "non_responsibilities": [
-      "Fetch raw arrival data from the TfL API",
-      "Filter, merge, sort, or format raw arrivals into these shapes"
+      "Does not implement any request handling logic itself.",
+      "Does not perform any TfL data fetching or transformation."
     ],
     "inputs": [],
     "outputs": [
       {
-        "name": "ArrivalBoardEntry",
-        "type": "app.models.arrival.ArrivalBoardEntry",
-        "fields": [
-          { "name": "index", "type": "int", "optional": false },
-          { "name": "destination_name", "type": "str", "optional": false },
-          { "name": "time_display", "type": "str", "optional": false },
-          { "name": "platform", "type": "str", "optional": false }
-        ]
-      },
-      {
-        "name": "ArrivalBoard",
-        "type": "app.models.arrival.ArrivalBoard",
-        "fields": [
-          { "name": "direction", "type": "str", "optional": false },
-          { "name": "entries", "type": "list[ArrivalBoardEntry]", "optional": false }
-        ]
+        "name": "app",
+        "type": "FastAPI",
+        "fields": []
       }
     ],
     "public_interface": [
       {
-        "name": "format_time_display",
-        "description": "Format a time-to-station value in seconds into the ArrivalBoardEntry.time_display string ('Due' under 30 seconds, otherwise 'X min' rounded to the nearest minute).",
-        "parameters": [
-          { "name": "seconds_to_station", "type": "int", "optional": false }
-        ],
-        "returns": "str",
-        "preconditions": ["seconds_to_station >= 0"],
-        "postconditions": [
-          "Returns 'Due' when seconds_to_station < 30",
-          "Otherwise returns seconds_to_station rounded to the nearest minute, suffixed with ' min'"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "app.data.station_repository",
-    "responsibility": "Load the tube station and line reference data from the bundled JSON files and provide lookup and search operations over it.",
-    "non_responsibilities": [
-      "Fetch live arrival data",
-      "Parse TfL API responses",
-      "Know about HTTP/FastAPI request handling",
-      "Implement the 3-letter station code derivation rule directly (delegates to app.models.station.derive_code)"
-    ],
-    "inputs": [
-      {
-        "name": "StationRecord",
-        "type": "dict",
-        "fields": [
-          { "name": "name", "type": "str", "optional": false },
-          { "name": "lines", "type": "list[str]", "optional": false },
-          { "name": "id", "type": "str", "optional": false }
-        ]
-      },
-      {
-        "name": "LineRecord",
-        "type": "dict",
-        "fields": [
-          { "name": "id", "type": "str", "optional": false },
-          { "name": "name", "type": "str", "optional": false },
-          { "name": "color", "type": "str", "optional": false }
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "name": "Station",
-        "type": "app.models.station.Station",
-        "fields": [
-          { "name": "id", "type": "str", "optional": false },
-          { "name": "name", "type": "str", "optional": false },
-          { "name": "code", "type": "str", "optional": false },
-          { "name": "lines", "type": "list[app.models.station.Line]", "optional": false }
-        ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "search_stations",
-        "description": "Return stations whose name contains the query (case-insensitive) or whose derived 3-letter code exactly matches the query.",
-        "parameters": [
-          { "name": "query", "type": "str", "optional": false }
-        ],
-        "returns": "list[app.models.station.Station]",
-        "preconditions": ["query is a non-empty string"],
-        "postconditions": [
-          "Results are drawn only from the 272 bundled stations",
-          "An empty list is returned when no station matches",
-          "Code matching uses app.models.station.derive_code for each candidate station"
-        ]
-      },
-      {
-        "name": "get_station",
-        "description": "Return the station with the given id, including the full list of lines it is served by, computing its 3-letter code (using the NIE/BPS exceptions for Nine Elms and Battersea Power Station).",
-        "parameters": [
-          { "name": "station_id", "type": "str", "optional": false }
-        ],
-        "returns": "app.models.station.Station | None",
+        "name": "create_app",
+        "description": "Builds and configures the FastAPI application, including CORS and all routers (stations, arrivals, line statuses, station disruptions).",
+        "parameters": [],
+        "returns": "FastAPI",
         "preconditions": [],
         "postconditions": [
-          "Returns None when station_id is not one of the 272 bundled stations",
-          "The returned Station's code field is computed via app.models.station.derive_code"
+          "Returned app has stations, arrivals, line-statuses and station-disruptions routers mounted."
         ]
       }
     ]
   },
   {
-    "type": "new",
+    "type": "changed",
     "module_name": "app.clients.tfl_client",
-    "responsibility": "Fetch arrival predictions for a single tube line from the TfL Unified API.",
+    "responsibility": "Perform raw HTTP calls to the TfL Unified API and parse responses into typed raw data structures.",
     "non_responsibilities": [
-      "Filter arrivals to a specific station",
-      "Merge, sort, or format arrivals for display",
-      "Interpret platform name strings"
+      "Does not decide which lines or stations are relevant to the application (that is provided by callers).",
+      "Does not merge, group, or otherwise reinterpret disruption data for display.",
+      "Does not perform station lookups or validation."
     ],
     "inputs": [
       {
-        "name": "LineIdRequest",
+        "name": "line_id",
         "type": "str",
+        "fields": []
+      },
+      {
+        "name": "line_ids",
+        "type": "list[str]",
         "fields": []
       }
     ],
     "outputs": [
       {
         "name": "RawArrival",
-        "type": "app.clients.tfl_client.RawArrival",
+        "type": "pydantic.BaseModel",
         "fields": [
           { "name": "vehicle_id", "type": "str", "optional": false },
           { "name": "naptan_id", "type": "str", "optional": false },
@@ -191,206 +90,551 @@
           { "name": "destination_name", "type": "str", "optional": false },
           { "name": "time_to_station", "type": "int", "optional": false }
         ]
+      },
+      {
+        "name": "RawRouteSection",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "origin_name", "type": "str", "optional": false },
+          { "name": "destination_name", "type": "str", "optional": false }
+        ]
+      },
+      {
+        "name": "RawLineStatus",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "line_id", "type": "str", "optional": false },
+          { "name": "line_name", "type": "str", "optional": false },
+          { "name": "status_severity", "type": "int", "optional": false },
+          { "name": "status_severity_description", "type": "str", "optional": false },
+          { "name": "reason", "type": "str | None", "optional": true },
+          { "name": "affected_routes", "type": "list[RawRouteSection]", "optional": false }
+        ]
+      },
+      {
+        "name": "RawStopPointDisruption",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "station_atco_code", "type": "str", "optional": false },
+          { "name": "disruption_type", "type": "str", "optional": false },
+          { "name": "description", "type": "str", "optional": false }
+        ]
       }
     ],
     "public_interface": [
       {
         "name": "get_arrivals",
-        "description": "Call GET https://api.tfl.gov.uk/Line/{line_id}/Arrivals/ and return the parsed list of arrival predictions for that line.",
+        "description": "Fetches raw arrival predictions for every train currently running on the given line.",
         "parameters": [
           { "name": "line_id", "type": "str", "optional": false }
         ],
         "returns": "list[RawArrival]",
-        "preconditions": ["line_id is one of the 11 supported tube line ids"],
+        "preconditions": [],
         "postconditions": [
-          "Returns all in-progress predictions reported by TfL for the line, unfiltered by station",
-          "Raises a client error if the TfL API request fails"
+          "Raises TflClientError if the TfL API request fails."
+        ]
+      },
+      {
+        "name": "get_line_statuses",
+        "description": "Fetches the current-day status (including any disruptions and their affected route sections) for the given lines.",
+        "parameters": [
+          { "name": "line_ids", "type": "list[str]", "optional": false }
+        ],
+        "returns": "list[RawLineStatus]",
+        "preconditions": [],
+        "postconditions": [
+          "One RawLineStatus is returned per (line, concurrent disruption) status entry reported by TfL.",
+          "Raises TflClientError if the TfL API request fails."
+        ]
+      },
+      {
+        "name": "get_stop_point_disruptions",
+        "description": "Fetches all current tube station-level disruptions.",
+        "parameters": [],
+        "returns": "list[RawStopPointDisruption]",
+        "preconditions": [],
+        "postconditions": [
+          "Raises TflClientError if the TfL API request fails."
         ]
       }
     ]
   },
   {
-    "type": "new",
-    "module_name": "app.services.platform_info",
-    "responsibility": "Interpret a raw TfL platform name string into a canonical board direction and a platform number.",
+    "type": "changed",
+    "module_name": "app.data.station_repository",
+    "responsibility": "Load and provide read access to the static station/line reference data, including lookup and search by station.",
     "non_responsibilities": [
-      "Fetch arrival data",
-      "Merge or sort arrivals",
-      "Know about stations or lines"
+      "Does not fetch any live/real-time data from TfL.",
+      "Does not know about arrivals, disruptions, or line statuses."
     ],
     "inputs": [
       {
-        "name": "PlatformNameInput",
-        "type": "str",
+        "name": "data_dir",
+        "type": "Path",
         "fields": []
       }
     ],
     "outputs": [
       {
-        "name": "PlatformInfo",
-        "type": "app.services.platform_info.PlatformInfo",
-        "fields": [
-          { "name": "direction", "type": "str | None", "optional": true },
-          { "name": "platform_number", "type": "str | None", "optional": true }
-        ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "parse",
-        "description": "Extract the direction (Northbound/Eastbound/Southbound/Westbound) and platform number from a raw TfL platformName string.",
-        "parameters": [
-          { "name": "platform_name", "type": "str", "optional": false }
-        ],
-        "returns": "PlatformInfo",
-        "preconditions": [],
-        "postconditions": [
-          "direction is None when none of the four canonical directions appear in the string",
-          "platform_number is None when no platform digit can be identified"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "app.services.arrival_service",
-    "responsibility": "Produce the direction-grouped arrival boards for a station on a specific line, merging same-train entries across platforms.",
-    "non_responsibilities": [
-      "Perform HTTP calls to the TfL API directly",
-      "Parse raw platform name strings",
-      "Handle HTTP request/response concerns",
-      "Load or search station reference data",
-      "Implement the time-to-display-string formatting rule directly (delegates to app.models.arrival.format_time_display)"
-    ],
-    "inputs": [
-      { "name": "station_id", "type": "str", "fields": [] },
-      { "name": "line_id", "type": "str", "fields": [] }
-    ],
-    "outputs": [
-      {
-        "name": "ArrivalBoard",
-        "type": "app.models.arrival.ArrivalBoard",
-        "fields": [
-          { "name": "direction", "type": "str", "optional": false },
-          { "name": "entries", "type": "list[app.models.arrival.ArrivalBoardEntry]", "optional": false }
-        ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "get_arrival_boards",
-        "description": "Fetch arrivals for line_id, keep only those at station_id, merge entries sharing a vehicle id within the same direction across platforms, and return one sorted, indexed board per direction present in the data.",
-        "parameters": [
-          { "name": "station_id", "type": "str", "optional": false },
-          { "name": "line_id", "type": "str", "optional": false }
-        ],
-        "returns": "list[app.models.arrival.ArrivalBoard]",
-        "preconditions": [
-          "station_id refers to a known station",
-          "line_id is one of the lines that station is served by"
-        ],
-        "postconditions": [
-          "Arrivals sharing the same vehicle id within the same direction are merged into one entry with a comma-joined, sorted list of platform numbers ('-' when none are identifiable)",
-          "Each board's entries are sorted ascending by arrival time and indexed starting at 1",
-          "Entries whose direction cannot be determined are omitted from any board",
-          "Time display for each entry is produced via app.models.arrival.format_time_display",
-          "Raises a domain error when station_id is unknown or line_id is not served by the station"
-        ]
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "app.api.stations",
-    "responsibility": "Expose the HTTP endpoint for searching tube stations by name or 3-letter code.",
-    "non_responsibilities": [
-      "Implement search matching logic",
-      "Load or index station data"
-    ],
-    "inputs": [
-      { "name": "q", "type": "str", "fields": [] }
-    ],
-    "outputs": [
-      {
-        "name": "StationSearchResponse",
-        "type": "list[app.models.station.Station]",
+        "name": "Station",
+        "type": "app.models.station.Station",
         "fields": []
       }
     ],
     "public_interface": [
       {
         "name": "search_stations",
-        "description": "GET /api/stations/search?q= — delegate to the station repository and return matching stations as JSON.",
+        "description": "Finds stations whose name contains the query or whose 3-letter code matches the query exactly.",
         "parameters": [
-          { "name": "q", "type": "str", "optional": false }
+          { "name": "query", "type": "str", "optional": false }
         ],
-        "returns": "list[app.models.station.Station]",
+        "returns": "list[Station]",
         "preconditions": [],
-        "postconditions": ["Returns an empty JSON array when no station matches"]
+        "postconditions": []
+      },
+      {
+        "name": "get_station",
+        "description": "Looks up a single station by its id.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false }
+        ],
+        "returns": "Station | None",
+        "preconditions": [],
+        "postconditions": []
+      },
+      {
+        "name": "list_line_ids",
+        "description": "Returns the ids of every tube line known to the reference data, for use when querying line-wide status.",
+        "parameters": [],
+        "returns": "list[str]",
+        "preconditions": [],
+        "postconditions": []
       }
     ]
   },
   {
     "type": "new",
-    "module_name": "app.api.arrivals",
-    "responsibility": "Expose the HTTP endpoint for retrieving arrival boards for a station on a specific line.",
+    "module_name": "app.models.line_status",
+    "responsibility": "Define the data shapes used to present a line's disruption statuses grouped by severity, with merged route sections.",
     "non_responsibilities": [
-      "Fetch, filter, merge or format arrival data itself",
-      "Parse platform name strings"
+      "Does not fetch or compute any data itself.",
+      "Does not decide how route sections are merged or which severities are filtered out."
     ],
-    "inputs": [
-      { "name": "station_id", "type": "str", "fields": [] },
-      { "name": "line_id", "type": "str", "fields": [] }
-    ],
+    "inputs": [],
     "outputs": [
       {
-        "name": "ArrivalsResponse",
-        "type": "list[app.models.arrival.ArrivalBoard]",
+        "name": "RouteSection",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "start", "type": "str", "optional": false },
+          { "name": "end", "type": "str", "optional": false },
+          { "name": "bidirectional", "type": "bool", "optional": false }
+        ]
+      },
+      {
+        "name": "LineSeverityGroup",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "severity_description", "type": "str", "optional": false },
+          { "name": "route_sections", "type": "list[RouteSection]", "optional": false },
+          { "name": "reasons", "type": "list[str]", "optional": false }
+        ]
+      },
+      {
+        "name": "LineStatusSummary",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "line_id", "type": "str", "optional": false },
+          { "name": "line_name", "type": "str", "optional": false },
+          { "name": "severities", "type": "list[LineSeverityGroup]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "new",
+    "module_name": "app.models.station_disruption",
+    "responsibility": "Define the data shape used to present a single station-level disruption.",
+    "non_responsibilities": [
+      "Does not fetch or filter disruption data itself."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "StationDisruption",
+        "type": "pydantic.BaseModel",
+        "fields": [
+          { "name": "type", "type": "str", "optional": false },
+          { "name": "description", "type": "str", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "new",
+    "module_name": "app.services.line_status_service",
+    "responsibility": "Fetch line statuses for all known lines and transform them into severity-grouped summaries with deduplicated, merged route sections, excluding lines with only Good Service.",
+    "non_responsibilities": [
+      "Does not fetch station-level disruptions.",
+      "Does not perform any HTTP calls itself (delegates to TflClient).",
+      "Does not know about arrivals or platform parsing.",
+      "Does not decide HTTP status codes or handle web-layer concerns."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "LineStatusSummary",
+        "type": "app.models.line_status.LineStatusSummary",
         "fields": []
       }
     ],
     "public_interface": [
       {
-        "name": "get_arrivals",
-        "description": "GET /api/arrivals?station_id=&line_id= — delegate to the arrival service and return the resulting boards as JSON.",
-        "parameters": [
-          { "name": "station_id", "type": "str", "optional": false },
-          { "name": "line_id", "type": "str", "optional": false }
-        ],
-        "returns": "list[app.models.arrival.ArrivalBoard]",
+        "name": "get_line_status_summaries",
+        "description": "Returns, for every tube line, its non-Good-Service statuses grouped by severity, with route sections merged into bidirectional pairs where both directions are disrupted.",
+        "parameters": [],
+        "returns": "list[LineStatusSummary]",
         "preconditions": [],
         "postconditions": [
-          "Responds 404 when station_id is unknown",
-          "Responds 400 when line_id is not served by station_id",
-          "Responds 200 with the boards otherwise"
+          "Lines whose only status is Good Service are omitted from the result.",
+          "Each route section's start/end station names have any 'Underground Station' suffix stripped.",
+          "A route section appears as bidirectional when both the (A, B) and (B, A) directions are reported as affected."
         ]
       }
     ]
   },
   {
     "type": "new",
-    "module_name": "app.main",
-    "responsibility": "Construct and configure the FastAPI application, wiring routers and cross-origin settings.",
+    "module_name": "app.services.station_disruption_service",
+    "responsibility": "Fetch all tube station disruptions and filter them down to the ones affecting a single requested station.",
     "non_responsibilities": [
-      "Implement any route handler logic",
-      "Implement business logic"
+      "Does not fetch line-wide statuses.",
+      "Does not perform any HTTP calls itself (delegates to TflClient).",
+      "Does not decide HTTP status codes or handle web-layer concerns."
     ],
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "station_id",
+        "type": "str",
+        "fields": []
+      }
+    ],
     "outputs": [
       {
-        "name": "Application",
-        "type": "fastapi.FastAPI",
+        "name": "StationDisruption",
+        "type": "app.models.station_disruption.StationDisruption",
         "fields": []
       }
     ],
     "public_interface": [
       {
-        "name": "create_app",
-        "description": "Build the FastAPI app, register the stations and arrivals routers, and configure CORS for the frontend origin.",
-        "parameters": [],
-        "returns": "FastAPI",
+        "name": "get_station_disruptions",
+        "description": "Returns the disruptions currently affecting the given station.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false }
+        ],
+        "returns": "list[StationDisruption]",
         "preconditions": [],
-        "postconditions": ["The returned app has the stations and arrivals routers mounted under /api"]
+        "postconditions": [
+          "Raises StationNotFoundError if station_id is not a known station."
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.api.line_statuses",
+    "responsibility": "Expose the HTTP endpoint for retrieving disruption status summaries for all tube lines.",
+    "non_responsibilities": [
+      "Does not fetch or transform TfL data itself.",
+      "Does not implement any station-specific logic."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "LineStatusSummary list response",
+        "type": "list[app.models.line_status.LineStatusSummary]",
+        "fields": []
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_line_statuses",
+        "description": "GET handler returning the current disruption status summary for every tube line.",
+        "parameters": [],
+        "returns": "list[LineStatusSummary]",
+        "preconditions": [],
+        "postconditions": []
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.api.station_disruptions",
+    "responsibility": "Expose the HTTP endpoint for retrieving the disruptions affecting a specific station.",
+    "non_responsibilities": [
+      "Does not fetch or transform TfL data itself.",
+      "Does not implement any line-wide logic."
+    ],
+    "inputs": [
+      {
+        "name": "station_id",
+        "type": "str",
+        "fields": []
+      }
+    ],
+    "outputs": [
+      {
+        "name": "StationDisruption list response",
+        "type": "list[app.models.station_disruption.StationDisruption]",
+        "fields": []
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_station_disruptions",
+        "description": "GET handler returning the disruptions currently affecting the given station.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false }
+        ],
+        "returns": "list[StationDisruption]",
+        "preconditions": [],
+        "postconditions": [
+          "Responds 404 when station_id is not a known station."
+        ]
+      }
+    ]
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.App",
+    "responsibility": "Declare the client-side routes and mount the page for each route."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.main",
+    "responsibility": "Bootstrap the React application into the DOM."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.index",
+    "responsibility": "Provide global CSS (Tailwind entry point)."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.vite-env.d",
+    "responsibility": "Provide Vite's ambient TypeScript type declarations."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.SelectLinePage",
+    "responsibility": "Let the user pick which line to view when a searched station is served by more than one line."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.ArrivalBoardCard",
+    "responsibility": "Render a single direction's arrival board as a table of upcoming trains."
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.types.index",
+    "responsibility": "Define the TypeScript types shared between the API client and the pages/components.",
+    "non_responsibilities": [
+      "Does not perform any data fetching or transformation."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "RouteSection",
+        "type": "interface",
+        "fields": [
+          { "name": "start", "type": "string", "optional": false },
+          { "name": "end", "type": "string", "optional": false },
+          { "name": "bidirectional", "type": "boolean", "optional": false }
+        ]
+      },
+      {
+        "name": "LineSeverityGroup",
+        "type": "interface",
+        "fields": [
+          { "name": "severity_description", "type": "string", "optional": false },
+          { "name": "route_sections", "type": "RouteSection[]", "optional": false },
+          { "name": "reasons", "type": "string[]", "optional": false }
+        ]
+      },
+      {
+        "name": "LineStatusSummary",
+        "type": "interface",
+        "fields": [
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "line_name", "type": "string", "optional": false },
+          { "name": "severities", "type": "LineSeverityGroup[]", "optional": false }
+        ]
+      },
+      {
+        "name": "StationDisruption",
+        "type": "interface",
+        "fields": [
+          { "name": "type", "type": "string", "optional": false },
+          { "name": "description", "type": "string", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.api.client",
+    "responsibility": "Provide typed functions for calling the backend HTTP API and translating error responses.",
+    "non_responsibilities": [
+      "Does not render any UI.",
+      "Does not hold component state."
+    ],
+    "inputs": [],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "searchStations",
+        "description": "Calls the station search endpoint.",
+        "parameters": [
+          { "name": "query", "type": "string", "optional": false }
+        ],
+        "returns": "Promise<Station[]>",
+        "preconditions": [],
+        "postconditions": []
+      },
+      {
+        "name": "getArrivalBoards",
+        "description": "Calls the arrivals endpoint for a station/line pair.",
+        "parameters": [
+          { "name": "stationId", "type": "string", "optional": false },
+          { "name": "lineId", "type": "string", "optional": false }
+        ],
+        "returns": "Promise<ArrivalBoard[]>",
+        "preconditions": [],
+        "postconditions": []
+      },
+      {
+        "name": "getLineStatuses",
+        "description": "Calls the line statuses endpoint to retrieve disruption summaries for all lines.",
+        "parameters": [],
+        "returns": "Promise<LineStatusSummary[]>",
+        "preconditions": [],
+        "postconditions": []
+      },
+      {
+        "name": "getStationDisruptions",
+        "description": "Calls the station disruptions endpoint for a given station.",
+        "parameters": [
+          { "name": "stationId", "type": "string", "optional": false }
+        ],
+        "returns": "Promise<StationDisruption[]>",
+        "preconditions": [],
+        "postconditions": []
+      }
+    ]
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.pages.HomePage",
+    "responsibility": "Let the user search for a station and view current line status disruptions.",
+    "non_responsibilities": [
+      "Does not render an individual line status block's internals (delegates to LineStatusCard).",
+      "Does not compute route section merging (that is done by the backend)."
+    ],
+    "inputs": [],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "HomePage",
+        "description": "Page component rendering the station search box and results, plus a line status section listing disrupted lines.",
+        "parameters": [],
+        "returns": "JSX.Element",
+        "preconditions": [],
+        "postconditions": []
+      }
+    ]
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.pages.BoardPage",
+    "responsibility": "Show the live, auto-refreshing arrival boards and current disruptions for a chosen station/line.",
+    "non_responsibilities": [
+      "Does not render an individual disruption's markup (delegates to StationDisruptionList).",
+      "Does not compute disruption filtering (that is done by the backend)."
+    ],
+    "inputs": [],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "BoardPage",
+        "description": "Page component rendering back navigation, station disruptions, and arrival board cards for the selected station/line.",
+        "parameters": [],
+        "returns": "JSX.Element",
+        "preconditions": [],
+        "postconditions": []
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "frontend.src.components.LineStatusCard",
+    "responsibility": "Render one line's disruption statuses grouped by severity with their route sections, and toggle all reason texts together on click.",
+    "non_responsibilities": [
+      "Does not fetch data.",
+      "Does not decide which lines to display (parent page filters via the API response)."
+    ],
+    "inputs": [
+      {
+        "name": "status",
+        "type": "LineStatusSummary",
+        "fields": []
+      }
+    ],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "LineStatusCard",
+        "description": "Component rendering a line's name (click target), followed by each severity's route sections, with reasons shown or hidden together based on click state.",
+        "parameters": [
+          { "name": "status", "type": "LineStatusSummary", "optional": false }
+        ],
+        "returns": "JSX.Element",
+        "preconditions": [],
+        "postconditions": [
+          "Reasons are hidden by default and all shown/hidden together when the line name is clicked."
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "frontend.src.components.StationDisruptionList",
+    "responsibility": "Render a list of station disruptions, colored red for type 'Closure' and blue otherwise.",
+    "non_responsibilities": [
+      "Does not fetch data.",
+      "Does not filter which disruptions belong to the station (parent page passes the already-filtered list)."
+    ],
+    "inputs": [
+      {
+        "name": "disruptions",
+        "type": "StationDisruption[]",
+        "fields": []
+      }
+    ],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "StationDisruptionList",
+        "description": "Component rendering each disruption's description, colored according to its type.",
+        "parameters": [
+          { "name": "disruptions", "type": "StationDisruption[]", "optional": false }
+        ],
+        "returns": "JSX.Element",
+        "preconditions": [],
+        "postconditions": []
       }
     ]
   }

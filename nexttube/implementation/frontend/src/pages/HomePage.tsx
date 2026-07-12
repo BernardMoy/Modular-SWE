@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchStations } from "../api/client";
-import type { Station } from "../types";
+import { getLineStatuses, searchStations } from "../api/client";
+import LineStatusCard from "../components/LineStatusCard";
+import type { LineStatusSummary, Station } from "../types";
 
 export default function HomePage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Station[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lineStatuses, setLineStatuses] = useState<LineStatusSummary[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getLineStatuses()
+      .then(setLineStatuses)
+      .catch(() => setLineStatuses([]));
+  }, []);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -75,6 +83,15 @@ export default function HomePage() {
 
       {!loading && !error && query.trim().length > 0 && results.length === 0 && (
         <p className="text-slate-400">No stations found</p>
+      )}
+
+      {lineStatuses.length > 0 && (
+        <div className="flex w-full flex-col gap-4">
+          <h2 className="text-xl font-bold text-slate-900">Line status</h2>
+          {lineStatuses.map((status) => (
+            <LineStatusCard key={status.line_id} status={status} />
+          ))}
+        </div>
       )}
     </main>
   );

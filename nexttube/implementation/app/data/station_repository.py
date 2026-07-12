@@ -9,8 +9,8 @@ _DEFAULT_DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 
 class StationRepository:
     def __init__(self, data_dir: Path = _DEFAULT_DATA_DIR):
-        lines_by_id = self._load_lines(data_dir / "tube-lines.json")
-        self._stations = self._load_stations(data_dir / "tube-stations.json", lines_by_id)
+        self._lines_by_id = self._load_lines(data_dir / "tube-lines.json")
+        self._stations = self._load_stations(data_dir / "tube-stations.json", self._lines_by_id)
 
     @staticmethod
     def _load_lines(lines_path: Path) -> dict[str, Line]:
@@ -42,6 +42,9 @@ class StationRepository:
 
     def get_station(self, station_id: str) -> Station | None:
         return self._stations.get(station_id)
+
+    def list_line_ids(self) -> list[str]:
+        return list(self._lines_by_id.keys())
 
 
 @lru_cache

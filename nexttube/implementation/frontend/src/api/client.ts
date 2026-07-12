@@ -1,4 +1,4 @@
-import type { ArrivalBoard, Station } from "../types";
+import type { ArrivalBoard, LineStatusSummary, Station, StationDisruption } from "../types";
 
 export class ApiError extends Error {
   constructor(
@@ -29,4 +29,12 @@ export function getArrivalBoards(
 ): Promise<ArrivalBoard[]> {
   const params = new URLSearchParams({ station_id: stationId, line_id: lineId });
   return getJson<ArrivalBoard[]>(`/api/arrivals?${params}`);
+}
+
+export function getLineStatuses(): Promise<LineStatusSummary[]> {
+  return getJson<LineStatusSummary[]>("/api/line-statuses");
+}
+
+export function getStationDisruptions(stationId: string): Promise<StationDisruption[]> {
+  return getJson<StationDisruption[]>(`/api/station-disruptions/${stationId}`);
 }

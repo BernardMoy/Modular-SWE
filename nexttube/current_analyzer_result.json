@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "module_name": "app.services.line_status_service",
+    "smell": "The single get_line_status_summaries method bundles fetching, Good-Service filtering, severity grouping, station-name suffix normalization, and bidirectional route-section merging all in one function/module, unlike the existing platform_info module which was split out from arrival_service specifically to isolate this kind of raw-data parsing.",
+    "improvement_instruction": "Extract the route-section normalization (stripping the 'Underground Station' suffix) and the bidirectional (A,B)/(B,A) merging algorithm into a separate pure-function module (e.g. app.services.route_section_merger), mirroring how app.services.platform_info was split out from app.services.arrival_service. Have line_status_service call this helper and keep its own responsibility limited to fetching, filtering out Good Service, and grouping by severity.",
+    "reason": "When a bug is found in the bidirectional merge algorithm (e.g. a route section is incorrectly merged, or not merged when it should be) or a new route-section display rule is added, because the merging logic is entangled with fetching and severity-grouping inside get_line_status_summaries's single control flow, developers cannot unit-test the merge rules in isolation without mocking TflClient and the station repository, and a fix to the merge rules risks regressing the fetch/grouping logic it shares a function with."
+  },
+  {
+    "module_name": "app.services.station_disruption_service",
+    "smell": "Station-existence validation (look up the station via station_repository.get_station and raise a not-found error if missing) is duplicated between app.services.arrival_service (existing) and this new module, rather than being defined once and reused.",
+    "improvement_instruction": "Move the 'raise if station not found' check into app.data.station_repository (e.g. a get_station_or_raise method, with a single shared StationNotFoundError defined alongside Station) and have both arrival_service and station_disruption_service call this shared helper instead of each independently re-implementing the same None-check-and-raise.",
+    "reason": "When the station-not-found behavior needs to change (e.g. to include the invalid id in the error message, or so the API layer can catch one shared exception type to map to a 404), because the check and its exception class are duplicated independently across arrival_service and station_disruption_service, the update has to be made in two places and can silently drift apart, e.g. a 404 handler that only catches one of the two now-divergent exception classes."
+  }
+]

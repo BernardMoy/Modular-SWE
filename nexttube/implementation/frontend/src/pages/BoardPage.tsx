@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { ApiError, getArrivalBoards } from "../api/client";
+import { ApiError, getArrivalBoards, getStationDisruptions } from "../api/client";
 import ArrivalBoardCard from "../components/ArrivalBoardCard";
-import type { ArrivalBoard, Line, Station } from "../types";
+import StationDisruptionList from "../components/StationDisruptionList";
+import type { ArrivalBoard, Line, Station, StationDisruption } from "../types";
 
 const REFRESH_INTERVAL_MS = 20_000;
 
@@ -20,6 +21,14 @@ export default function BoardPage() {
   const [boards, setBoards] = useState<ArrivalBoard[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [disruptions, setDisruptions] = useState<StationDisruption[]>([]);
+
+  useEffect(() => {
+    if (!station) return;
+    getStationDisruptions(station.id)
+      .then(setDisruptions)
+      .catch(() => setDisruptions([]));
+  }, [station]);
 
   useEffect(() => {
     if (!station || !line) return;
@@ -77,6 +86,8 @@ export default function BoardPage() {
           {station.name} — {line.name}
         </h1>
       </div>
+
+      {disruptions.length > 0 && <StationDisruptionList disruptions={disruptions} />}
 
       {loading && <p className="text-slate-400">Loading arrivals…</p>}
       {error && <p className="text-red-600">{error}</p>}

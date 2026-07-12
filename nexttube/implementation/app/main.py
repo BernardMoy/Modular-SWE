@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import arrivals, stations
+from app.api import arrivals, line_statuses, station_disruptions, stations
 
 _FRONTEND_ORIGINS = [
     "http://localhost:5173",
@@ -21,6 +21,10 @@ def create_app() -> FastAPI:
 
     app.include_router(stations.router, prefix="/api/stations", tags=["stations"])
     app.include_router(arrivals.router, prefix="/api/arrivals", tags=["arrivals"])
+    app.include_router(line_statuses.router, prefix="/api/line-statuses", tags=["line-statuses"])
+    app.include_router(
+        station_disruptions.router, prefix="/api/station-disruptions", tags=["station-disruptions"]
+    )
 
     return app
 
