@@ -1,14 +1,1 @@
-[
-  {
-    "module_name": "app.services.arrival_service",
-    "smell": "The single public method get_arrival_boards bundles station/line validation, cross-platform vehicle merging, sorting/indexing, and time-display formatting into one function with five independent postconditions and multiple branching rules.",
-    "improvement_instruction": "Extract the pure merge/sort/time-formatting logic (grouping arrivals by vehicle id across platforms, sorting by arrival time, indexing, and computing the 'Due'/'X min' display) into a separate, dependency-free function or module (e.g. app.services.board_builder) that takes already-fetched, already-filtered raw arrivals and returns ArrivalBoard objects. Reduce get_arrival_boards to orchestration only: fetch raw arrivals, validate the station/line, filter to the station, and delegate to the builder.",
-    "reason": "When a future checkpoint (e.g. Part 2's bidirectional route-section merging or Part 3's train-position placement on the live map) needs a similar merge-and-format algorithm, because the current board-assembly logic is entangled with fetching and validation inside one large method with many control paths, developers will either duplicate the merge pattern in a new module or awkwardly funnel unrelated features through arrival_service, and unit tests for formatting rules (e.g. the 30-second 'Due' threshold) will require mocking the TfL client and station repository just to exercise what is really pure string/sorting logic."
-  },
-  {
-    "module_name": "app.services.arrival_service",
-    "smell": "Station/line validity checking ('station_id is known' and 'line_id is served by that station') is re-derived ad hoc inside get_arrival_boards instead of being exposed as a reusable capability of the module that actually owns station/line reference data.",
-    "improvement_instruction": "Add an explicit validation method to app.data.station_repository (e.g. a helper that raises/returns whether a given line_id is served by a given station_id, building on the existing get_station lookup), and have arrival_service call that shared helper instead of re-deriving station/line validity itself.",
-    "reason": "When Part 2 adds line-status and station-disruption endpoints that need the same 'is this station/line combination valid' check, because that validation currently lives only inside arrival_service's monolithic method rather than in station_repository which owns the station/line data, each new endpoint will reimplement its own existence/membership check with its own error handling, risking inconsistent 404/400 behavior across endpoints as the API surface grows across checkpoints."
-  }
-]
+[]

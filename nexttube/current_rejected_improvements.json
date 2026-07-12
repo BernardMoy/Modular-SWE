@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "improvement_instruction": "Decompose get_arrival_boards into small, independently testable private functions (e.g. filter_arrivals_for_station, merge_by_vehicle_id, build_board) composed by the public method, so each transformation rule can be unit tested with focused inputs instead of only through the full orchestration path.",
+    "rejection_reason": "This is an internal implementation detail of a single module (private helper decomposition), not a module-boundary or public-interface concern, so it does not belong in the module design document and does not require any change to current_design.json or current_deps_graph.json. Nothing in the current design prevents the eventual implementer from writing get_arrival_boards as small private functions internally; forcing specific private helper names into the design would over-specify implementation and fragment cohesive, single-use logic (filtering/merging/sorting are only ever used together to build a board) into premature abstractions that add ceremony without reducing future effort, since these steps are not reused elsewhere in the system."
+  }
+]

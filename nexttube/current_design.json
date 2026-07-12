@@ -30,7 +30,22 @@
         ]
       }
     ],
-    "public_interface": []
+    "public_interface": [
+      {
+        "name": "derive_code",
+        "description": "Compute a station's 3-letter code from its station id and name, applying the NIE/BPS naming exceptions for Nine Elms and Battersea Power Station.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false },
+          { "name": "station_name", "type": "str", "optional": false }
+        ],
+        "returns": "str",
+        "preconditions": ["station_id is a valid 940GZZLUXXX-style station id"],
+        "postconditions": [
+          "Returns 'NIE' when station_name is Nine Elms and 'BPS' when station_name is Battersea Power Station",
+          "Returns the last 3 letters of station_id, uppercased, for all other stations"
+        ]
+      }
+    ]
   },
   {
     "type": "new",
@@ -61,7 +76,21 @@
         ]
       }
     ],
-    "public_interface": []
+    "public_interface": [
+      {
+        "name": "format_time_display",
+        "description": "Format a time-to-station value in seconds into the ArrivalBoardEntry.time_display string ('Due' under 30 seconds, otherwise 'X min' rounded to the nearest minute).",
+        "parameters": [
+          { "name": "seconds_to_station", "type": "int", "optional": false }
+        ],
+        "returns": "str",
+        "preconditions": ["seconds_to_station >= 0"],
+        "postconditions": [
+          "Returns 'Due' when seconds_to_station < 30",
+          "Otherwise returns seconds_to_station rounded to the nearest minute, suffixed with ' min'"
+        ]
+      }
+    ]
   },
   {
     "type": "new",
@@ -70,7 +99,8 @@
     "non_responsibilities": [
       "Fetch live arrival data",
       "Parse TfL API responses",
-      "Know about HTTP/FastAPI request handling"
+      "Know about HTTP/FastAPI request handling",
+      "Implement the 3-letter station code derivation rule directly (delegates to app.models.station.derive_code)"
     ],
     "inputs": [
       {
@@ -115,7 +145,8 @@
         "preconditions": ["query is a non-empty string"],
         "postconditions": [
           "Results are drawn only from the 272 bundled stations",
-          "An empty list is returned when no station matches"
+          "An empty list is returned when no station matches",
+          "Code matching uses app.models.station.derive_code for each candidate station"
         ]
       },
       {
@@ -127,7 +158,8 @@
         "returns": "app.models.station.Station | None",
         "preconditions": [],
         "postconditions": [
-          "Returns None when station_id is not one of the 272 bundled stations"
+          "Returns None when station_id is not one of the 272 bundled stations",
+          "The returned Station's code field is computed via app.models.station.derive_code"
         ]
       }
     ]
@@ -227,7 +259,8 @@
       "Perform HTTP calls to the TfL API directly",
       "Parse raw platform name strings",
       "Handle HTTP request/response concerns",
-      "Load or search station reference data"
+      "Load or search station reference data",
+      "Implement the time-to-display-string formatting rule directly (delegates to app.models.arrival.format_time_display)"
     ],
     "inputs": [
       { "name": "station_id", "type": "str", "fields": [] },
@@ -260,7 +293,7 @@
           "Arrivals sharing the same vehicle id within the same direction are merged into one entry with a comma-joined, sorted list of platform numbers ('-' when none are identifiable)",
           "Each board's entries are sorted ascending by arrival time and indexed starting at 1",
           "Entries whose direction cannot be determined are omitted from any board",
-          "Time display is 'Due' when the arrival is under 30 seconds away, otherwise 'X min' rounded to the nearest minute",
+          "Time display for each entry is produced via app.models.arrival.format_time_display",
           "Raises a domain error when station_id is unknown or line_id is not served by the station"
         ]
       }
