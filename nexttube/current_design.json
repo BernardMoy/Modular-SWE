@@ -1,0 +1,364 @@
+[
+  {
+    "type": "new",
+    "module_name": "app.models.station",
+    "responsibility": "Define the Line and Station data shapes used to represent tube reference data across the backend.",
+    "non_responsibilities": [
+      "Load or index station/line data from the JSON data files",
+      "Implement station search matching logic",
+      "Fetch or represent live arrival data"
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "Line",
+        "type": "app.models.station.Line",
+        "fields": [
+          { "name": "id", "type": "str", "optional": false },
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "color", "type": "str", "optional": false }
+        ]
+      },
+      {
+        "name": "Station",
+        "type": "app.models.station.Station",
+        "fields": [
+          { "name": "id", "type": "str", "optional": false },
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "code", "type": "str", "optional": false },
+          { "name": "lines", "type": "list[Line]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "new",
+    "module_name": "app.models.arrival",
+    "responsibility": "Define the ArrivalBoard and ArrivalBoardEntry data shapes used to represent a formatted, direction-grouped arrival board.",
+    "non_responsibilities": [
+      "Fetch raw arrival data from the TfL API",
+      "Filter, merge, sort, or format raw arrivals into these shapes"
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "ArrivalBoardEntry",
+        "type": "app.models.arrival.ArrivalBoardEntry",
+        "fields": [
+          { "name": "index", "type": "int", "optional": false },
+          { "name": "destination_name", "type": "str", "optional": false },
+          { "name": "time_display", "type": "str", "optional": false },
+          { "name": "platform", "type": "str", "optional": false }
+        ]
+      },
+      {
+        "name": "ArrivalBoard",
+        "type": "app.models.arrival.ArrivalBoard",
+        "fields": [
+          { "name": "direction", "type": "str", "optional": false },
+          { "name": "entries", "type": "list[ArrivalBoardEntry]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "new",
+    "module_name": "app.data.station_repository",
+    "responsibility": "Load the tube station and line reference data from the bundled JSON files and provide lookup and search operations over it.",
+    "non_responsibilities": [
+      "Fetch live arrival data",
+      "Parse TfL API responses",
+      "Know about HTTP/FastAPI request handling"
+    ],
+    "inputs": [
+      {
+        "name": "StationRecord",
+        "type": "dict",
+        "fields": [
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "lines", "type": "list[str]", "optional": false },
+          { "name": "id", "type": "str", "optional": false }
+        ]
+      },
+      {
+        "name": "LineRecord",
+        "type": "dict",
+        "fields": [
+          { "name": "id", "type": "str", "optional": false },
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "color", "type": "str", "optional": false }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Station",
+        "type": "app.models.station.Station",
+        "fields": [
+          { "name": "id", "type": "str", "optional": false },
+          { "name": "name", "type": "str", "optional": false },
+          { "name": "code", "type": "str", "optional": false },
+          { "name": "lines", "type": "list[app.models.station.Line]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "search_stations",
+        "description": "Return stations whose name contains the query (case-insensitive) or whose derived 3-letter code exactly matches the query.",
+        "parameters": [
+          { "name": "query", "type": "str", "optional": false }
+        ],
+        "returns": "list[app.models.station.Station]",
+        "preconditions": ["query is a non-empty string"],
+        "postconditions": [
+          "Results are drawn only from the 272 bundled stations",
+          "An empty list is returned when no station matches"
+        ]
+      },
+      {
+        "name": "get_station",
+        "description": "Return the station with the given id, including the full list of lines it is served by, computing its 3-letter code (using the NIE/BPS exceptions for Nine Elms and Battersea Power Station).",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false }
+        ],
+        "returns": "app.models.station.Station | None",
+        "preconditions": [],
+        "postconditions": [
+          "Returns None when station_id is not one of the 272 bundled stations"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.clients.tfl_client",
+    "responsibility": "Fetch arrival predictions for a single tube line from the TfL Unified API.",
+    "non_responsibilities": [
+      "Filter arrivals to a specific station",
+      "Merge, sort, or format arrivals for display",
+      "Interpret platform name strings"
+    ],
+    "inputs": [
+      {
+        "name": "LineIdRequest",
+        "type": "str",
+        "fields": []
+      }
+    ],
+    "outputs": [
+      {
+        "name": "RawArrival",
+        "type": "app.clients.tfl_client.RawArrival",
+        "fields": [
+          { "name": "vehicle_id", "type": "str", "optional": false },
+          { "name": "naptan_id", "type": "str", "optional": false },
+          { "name": "platform_name", "type": "str", "optional": false },
+          { "name": "destination_name", "type": "str", "optional": false },
+          { "name": "time_to_station", "type": "int", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_arrivals",
+        "description": "Call GET https://api.tfl.gov.uk/Line/{line_id}/Arrivals/ and return the parsed list of arrival predictions for that line.",
+        "parameters": [
+          { "name": "line_id", "type": "str", "optional": false }
+        ],
+        "returns": "list[RawArrival]",
+        "preconditions": ["line_id is one of the 11 supported tube line ids"],
+        "postconditions": [
+          "Returns all in-progress predictions reported by TfL for the line, unfiltered by station",
+          "Raises a client error if the TfL API request fails"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.services.platform_info",
+    "responsibility": "Interpret a raw TfL platform name string into a canonical board direction and a platform number.",
+    "non_responsibilities": [
+      "Fetch arrival data",
+      "Merge or sort arrivals",
+      "Know about stations or lines"
+    ],
+    "inputs": [
+      {
+        "name": "PlatformNameInput",
+        "type": "str",
+        "fields": []
+      }
+    ],
+    "outputs": [
+      {
+        "name": "PlatformInfo",
+        "type": "app.services.platform_info.PlatformInfo",
+        "fields": [
+          { "name": "direction", "type": "str | None", "optional": true },
+          { "name": "platform_number", "type": "str | None", "optional": true }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "parse",
+        "description": "Extract the direction (Northbound/Eastbound/Southbound/Westbound) and platform number from a raw TfL platformName string.",
+        "parameters": [
+          { "name": "platform_name", "type": "str", "optional": false }
+        ],
+        "returns": "PlatformInfo",
+        "preconditions": [],
+        "postconditions": [
+          "direction is None when none of the four canonical directions appear in the string",
+          "platform_number is None when no platform digit can be identified"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.services.arrival_service",
+    "responsibility": "Produce the direction-grouped arrival boards for a station on a specific line, merging same-train entries across platforms.",
+    "non_responsibilities": [
+      "Perform HTTP calls to the TfL API directly",
+      "Parse raw platform name strings",
+      "Handle HTTP request/response concerns",
+      "Load or search station reference data"
+    ],
+    "inputs": [
+      { "name": "station_id", "type": "str", "fields": [] },
+      { "name": "line_id", "type": "str", "fields": [] }
+    ],
+    "outputs": [
+      {
+        "name": "ArrivalBoard",
+        "type": "app.models.arrival.ArrivalBoard",
+        "fields": [
+          { "name": "direction", "type": "str", "optional": false },
+          { "name": "entries", "type": "list[app.models.arrival.ArrivalBoardEntry]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_arrival_boards",
+        "description": "Fetch arrivals for line_id, keep only those at station_id, merge entries sharing a vehicle id within the same direction across platforms, and return one sorted, indexed board per direction present in the data.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false },
+          { "name": "line_id", "type": "str", "optional": false }
+        ],
+        "returns": "list[app.models.arrival.ArrivalBoard]",
+        "preconditions": [
+          "station_id refers to a known station",
+          "line_id is one of the lines that station is served by"
+        ],
+        "postconditions": [
+          "Arrivals sharing the same vehicle id within the same direction are merged into one entry with a comma-joined, sorted list of platform numbers ('-' when none are identifiable)",
+          "Each board's entries are sorted ascending by arrival time and indexed starting at 1",
+          "Entries whose direction cannot be determined are omitted from any board",
+          "Time display is 'Due' when the arrival is under 30 seconds away, otherwise 'X min' rounded to the nearest minute",
+          "Raises a domain error when station_id is unknown or line_id is not served by the station"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.api.stations",
+    "responsibility": "Expose the HTTP endpoint for searching tube stations by name or 3-letter code.",
+    "non_responsibilities": [
+      "Implement search matching logic",
+      "Load or index station data"
+    ],
+    "inputs": [
+      { "name": "q", "type": "str", "fields": [] }
+    ],
+    "outputs": [
+      {
+        "name": "StationSearchResponse",
+        "type": "list[app.models.station.Station]",
+        "fields": []
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "search_stations",
+        "description": "GET /api/stations/search?q= — delegate to the station repository and return matching stations as JSON.",
+        "parameters": [
+          { "name": "q", "type": "str", "optional": false }
+        ],
+        "returns": "list[app.models.station.Station]",
+        "preconditions": [],
+        "postconditions": ["Returns an empty JSON array when no station matches"]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.api.arrivals",
+    "responsibility": "Expose the HTTP endpoint for retrieving arrival boards for a station on a specific line.",
+    "non_responsibilities": [
+      "Fetch, filter, merge or format arrival data itself",
+      "Parse platform name strings"
+    ],
+    "inputs": [
+      { "name": "station_id", "type": "str", "fields": [] },
+      { "name": "line_id", "type": "str", "fields": [] }
+    ],
+    "outputs": [
+      {
+        "name": "ArrivalsResponse",
+        "type": "list[app.models.arrival.ArrivalBoard]",
+        "fields": []
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_arrivals",
+        "description": "GET /api/arrivals?station_id=&line_id= — delegate to the arrival service and return the resulting boards as JSON.",
+        "parameters": [
+          { "name": "station_id", "type": "str", "optional": false },
+          { "name": "line_id", "type": "str", "optional": false }
+        ],
+        "returns": "list[app.models.arrival.ArrivalBoard]",
+        "preconditions": [],
+        "postconditions": [
+          "Responds 404 when station_id is unknown",
+          "Responds 400 when line_id is not served by station_id",
+          "Responds 200 with the boards otherwise"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.main",
+    "responsibility": "Construct and configure the FastAPI application, wiring routers and cross-origin settings.",
+    "non_responsibilities": [
+      "Implement any route handler logic",
+      "Implement business logic"
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "Application",
+        "type": "fastapi.FastAPI",
+        "fields": []
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "create_app",
+        "description": "Build the FastAPI app, register the stations and arrivals routers, and configure CORS for the frontend origin.",
+        "parameters": [],
+        "returns": "FastAPI",
+        "preconditions": [],
+        "postconditions": ["The returned app has the stations and arrivals routers mounted under /api"]
+      }
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "app.main": ["app.api.stations", "app.api.arrivals"],
+  "app.api.stations": ["app.data.station_repository", "app.models.station"],
+  "app.api.arrivals": ["app.services.arrival_service", "app.models.arrival"],
+  "app.services.arrival_service": [
+    "app.clients.tfl_client",
+    "app.data.station_repository",
+    "app.services.platform_info",
+    "app.models.arrival"
+  ],
+  "app.data.station_repository": ["app.models.station"],
+  "app.clients.tfl_client": [],
+  "app.services.platform_info": [],
+  "app.models.station": [],
+  "app.models.arrival": []
+}
