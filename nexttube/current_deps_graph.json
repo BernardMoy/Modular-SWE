@@ -54,8 +54,19 @@
     "app.models.line_layout",
     "app.services.train_position_resolver",
     "app.services.line_edge_status_resolver",
+    "app.models.line_map",
+    "app.clients.delay_estimates_client",
+    "app.data.trackernet_codes",
+    "app.services.delay_estimate_resolver"
+  ],
+  "app.services.delay_estimate_resolver": [
+    "app.clients.delay_estimates_client",
+    "app.models.line_layout",
+    "app.services.train_position_resolver",
     "app.models.line_map"
   ],
+  "app.clients.delay_estimates_client": [],
+  "app.data.trackernet_codes": [],
   "app.services.train_position_resolver": [
     "app.data.station_repository",
     "app.models.line_layout",

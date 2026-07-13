@@ -1,1275 +1,602 @@
 [
   {
     "type": "keep",
+    "module_name": "app.main",
+    "responsibility": "Wire together and configure the FastAPI application, registering all API routers."
+  },
+  {
+    "type": "keep",
     "module_name": "app.api.stations",
     "responsibility": "Expose the HTTP endpoint for searching stations by name or code."
   },
   {
     "type": "keep",
     "module_name": "app.api.arrivals",
-    "responsibility": "Expose the HTTP endpoint for retrieving arrival boards for a station/line pair."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.services.arrival_service",
-    "responsibility": "Fetch raw arrivals for a line and transform them into direction-grouped, merged arrival boards for a station."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.services.platform_info",
-    "responsibility": "Parse a raw TfL platform name string into a structured direction and platform number."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.models.station",
-    "responsibility": "Define the Station and Line data shapes and derive a station's 3-letter code."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.models.arrival",
-    "responsibility": "Define the ArrivalBoard/ArrivalBoardEntry data shapes and format arrival countdown text."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.models.line_status",
-    "responsibility": "Define the data shapes used to present a line's disruption statuses grouped by severity, with merged route sections."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.models.station_disruption",
-    "responsibility": "Define the data shape used to present a single station-level disruption."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.services.line_status_service",
-    "responsibility": "Fetch line statuses for all known lines and transform them into severity-grouped summaries with deduplicated, merged route sections, excluding lines with only Good Service."
-  },
-  {
-    "type": "keep",
-    "module_name": "app.services.station_disruption_service",
-    "responsibility": "Fetch all tube station disruptions and filter them down to the ones affecting a single requested station."
+    "responsibility": "Expose the HTTP endpoint returning arrival boards for a station/line pair."
   },
   {
     "type": "keep",
     "module_name": "app.api.line_statuses",
-    "responsibility": "Expose the HTTP endpoint for retrieving disruption status summaries for all tube lines."
+    "responsibility": "Expose the HTTP endpoint returning disrupted line status summaries."
   },
   {
     "type": "keep",
     "module_name": "app.api.station_disruptions",
-    "responsibility": "Expose the HTTP endpoint for retrieving the disruptions affecting a specific station."
+    "responsibility": "Expose the HTTP endpoint returning disruptions affecting a station."
   },
   {
     "type": "keep",
-    "module_name": "frontend.src.main",
-    "responsibility": "Bootstrap the React application into the DOM."
+    "module_name": "app.api.lines",
+    "responsibility": "Expose the HTTP endpoint listing all tube lines."
   },
   {
     "type": "keep",
-    "module_name": "frontend.src.index",
-    "responsibility": "Provide global CSS (Tailwind entry point)."
+    "module_name": "app.api.line_map",
+    "responsibility": "Expose the HTTP endpoint returning the live line map view for a line/direction."
   },
   {
     "type": "keep",
-    "module_name": "frontend.src.vite-env.d",
-    "responsibility": "Provide Vite's ambient TypeScript type declarations."
+    "module_name": "app.services.arrival_service",
+    "responsibility": "Build per-direction arrival boards for a station and line from raw TfL arrivals."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.line_status_service",
+    "responsibility": "Build per-line disruption status summaries from raw TfL line statuses."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.station_disruption_service",
+    "responsibility": "Filter raw TfL stop point disruptions down to those affecting a given station."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.train_position_resolver",
+    "responsibility": "Resolve a raw location description (currentLocation text plus a nearby station id) onto a line layout as either a single station or a between-stations position."
   },
   {
     "type": "changed",
-    "module_name": "frontend.src.pages.SelectLinePage",
-    "responsibility": "Let the user pick which line to view when a searched station is served by more than one line.",
+    "module_name": "app.services.line_edge_status_resolver",
+    "responsibility": "Attach the most severe disruption category to each edge of a line layout based on raw line statuses.",
     "non_responsibilities": [
-      "Does not render the line list's markup itself (delegates to LineList).",
-      "Does not fetch any data (the station is passed in via router state)."
+      "Does not compute or attach delay figures.",
+      "Does not fetch line statuses itself.",
+      "Does not derive edge station-pair keys independently (uses LineLayout.edge_pairs())."
     ],
     "inputs": [
-      {
-        "name": "LocationState",
-        "type": "object",
-        "fields": [
-          {
-            "name": "station",
-            "type": "Station | undefined",
-            "optional": true
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "SelectLinePage",
-        "description": "Page component reading the selected station from router state and rendering LineList for that station's lines; selecting a line navigates to /board with station+line state. Redirects to home when no station is present in state.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "changed",
-    "module_name": "frontend.src.pages.BoardPage",
-    "responsibility": "Show the live, auto-refreshing arrival boards and current disruptions for a chosen station/line.",
-    "non_responsibilities": [
-      "Does not render an individual arrival board or disruption entry's markup itself (delegates to ArrivalBoardCard/StationDisruptionList).",
-      "Does not implement its own polling/interval/cancellation logic (delegates to the shared usePolling hook).",
-      "Does not poll for station-level disruptions (fetched once per station, not repeatedly)."
-    ],
-    "inputs": [
-      {
-        "name": "LocationState",
-        "type": "object",
-        "fields": [
-          {
-            "name": "station",
-            "type": "Station | undefined",
-            "optional": true
-          },
-          {
-            "name": "line",
-            "type": "Line | undefined",
-            "optional": true
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "BoardPage",
-        "description": "Page component reading the selected station/line from router state, using usePolling to refetch arrival boards every 20s (ignoring stale responses), fetching station disruptions once per station, and rendering ArrivalBoardCard per direction plus StationDisruptionList when disruptions exist. Redirects to home when no station/line is present in state.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "keep",
-    "module_name": "frontend.src.components.ArrivalBoardCard",
-    "responsibility": "Render a single direction's arrival board as a table of upcoming trains."
-  },
-  {
-    "type": "keep",
-    "module_name": "frontend.src.components.LineStatusCard",
-    "responsibility": "Render one line's disruption statuses grouped by severity with their route sections, and toggle all reason texts together on click."
-  },
-  {
-    "type": "keep",
-    "module_name": "frontend.src.components.StationDisruptionList",
-    "responsibility": "Render a list of station disruptions, colored red for type 'Closure' and blue otherwise."
-  },
-  {
-    "type": "changed",
-    "module_name": "app.main",
-    "responsibility": "Assemble the FastAPI application and wire up all API routers and CORS middleware.",
-    "non_responsibilities": [
-      "Does not implement any request handling logic itself.",
-      "Does not perform any TfL data fetching or transformation."
-    ],
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "app",
-        "type": "FastAPI",
-        "fields": []
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "create_app",
-        "description": "Builds and configures the FastAPI application, including CORS and all routers (stations, arrivals, line statuses, station disruptions, lines, line map).",
-        "parameters": [],
-        "returns": "FastAPI",
-        "preconditions": [],
-        "postconditions": [
-          "Returned app has stations, arrivals, line-statuses, station-disruptions, lines and line-map routers mounted."
-        ]
-      }
-    ]
-  },
-  {
-    "type": "changed",
-    "module_name": "app.clients.tfl_client",
-    "responsibility": "Perform raw HTTP calls to the TfL Unified API and parse responses into typed raw data structures.",
-    "non_responsibilities": [
-      "Does not decide which lines or stations are relevant to the application (that is provided by callers).",
-      "Does not merge, group, or otherwise reinterpret disruption data for display.",
-      "Does not perform station lookups or validation.",
-      "Does not interpret the currentLocation string or map it to a station/edge."
-    ],
-    "inputs": [
-      {
-        "name": "line_id",
-        "type": "str",
-        "fields": []
-      },
-      {
-        "name": "line_ids",
-        "type": "list[str]",
-        "fields": []
-      }
-    ],
-    "outputs": [
-      {
-        "name": "RawArrival",
-        "type": "pydantic.BaseModel",
-        "fields": [
-          {
-            "name": "vehicle_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "naptan_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "platform_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "destination_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "time_to_station",
-            "type": "int",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "current_location",
-            "type": "str",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "RawRouteSection",
-        "type": "pydantic.BaseModel",
-        "fields": [
-          {
-            "name": "origin_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "destination_name",
-            "type": "str",
-            "optional": false
-          }
-        ]
-      },
       {
         "name": "RawLineStatus",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "line_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "status_severity",
-            "type": "int",
-            "optional": false
-          },
-          {
-            "name": "status_severity_description",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "reason",
-            "type": "str | None",
-            "optional": true
-          },
-          {
-            "name": "affected_routes",
-            "type": "list[RawRouteSection]",
-            "optional": false
-          }
+          { "name": "status_severity", "type": "int", "optional": false },
+          { "name": "status_severity_description", "type": "string", "optional": false },
+          { "name": "affected_routes", "type": "RawRouteSection[]", "optional": false }
         ]
       },
       {
-        "name": "RawStopPointDisruption",
-        "type": "pydantic.BaseModel",
+        "name": "LineLayout",
+        "type": "object",
         "fields": [
-          {
-            "name": "station_atco_code",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "disruption_type",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "description",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
         ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "get_arrivals",
-        "description": "Fetches raw arrival predictions for every train currently running on the given line, including each train's direction and current location text.",
-        "parameters": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          }
-        ],
-        "returns": "list[RawArrival]",
-        "preconditions": [],
-        "postconditions": [
-          "direction is TfL's own 'inbound'/'outbound' value for the prediction, not a compass direction.",
-          "current_location holds TfL's raw, unstructured currentLocation text (empty string if absent).",
-          "Raises TflClientError if the TfL API request fails."
-        ]
-      },
-      {
-        "name": "get_line_statuses",
-        "description": "Fetches the current-day status (including any disruptions and their affected route sections) for the given lines.",
-        "parameters": [
-          {
-            "name": "line_ids",
-            "type": "list[str]",
-            "optional": false
-          }
-        ],
-        "returns": "list[RawLineStatus]",
-        "preconditions": [],
-        "postconditions": [
-          "One RawLineStatus is returned per (line, concurrent disruption) status entry reported by TfL.",
-          "Raises TflClientError if the TfL API request fails."
-        ]
-      },
-      {
-        "name": "get_stop_point_disruptions",
-        "description": "Fetches all current tube station-level disruptions.",
-        "parameters": [],
-        "returns": "list[RawStopPointDisruption]",
-        "preconditions": [],
-        "postconditions": [
-          "Raises TflClientError if the TfL API request fails."
-        ]
-      }
-    ]
-  },
-  {
-    "type": "changed",
-    "module_name": "app.data.station_repository",
-    "responsibility": "Load and provide read access to the static station/line reference data, including lookup and search by station, id and name.",
-    "non_responsibilities": [
-      "Does not fetch any live/real-time data from TfL.",
-      "Does not know about arrivals, disruptions, line statuses, or map layouts."
-    ],
-    "inputs": [
-      {
-        "name": "data_dir",
-        "type": "Path",
-        "fields": []
       }
     ],
     "outputs": [
       {
-        "name": "Station",
-        "type": "app.models.station.Station",
-        "fields": []
-      },
-      {
-        "name": "Line",
-        "type": "app.models.station.Line",
-        "fields": []
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true }
+        ]
       }
     ],
     "public_interface": [
       {
-        "name": "search_stations",
-        "description": "Finds stations whose name contains the query or whose 3-letter code matches the query exactly.",
+        "name": "resolve_edges",
+        "description": "Builds one MapEdge per layout edge, attaching the most severe disruption category found for that station pair among the given raw line statuses. Uses LineLayout.edge_pairs() to key disruptions by station pair instead of deriving frozenset keys itself.",
         "parameters": [
-          {
-            "name": "query",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "layout", "type": "LineLayout", "optional": false },
+          { "name": "statuses", "type": "list[RawLineStatus]", "optional": false }
         ],
-        "returns": "list[Station]",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "get_station",
-        "description": "Looks up a single station by its id.",
-        "parameters": [
-          {
-            "name": "station_id",
-            "type": "str",
-            "optional": false
-          }
-        ],
-        "returns": "Station | None",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "find_by_name",
-        "description": "Looks up a single station whose name exactly matches the given text, case-insensitively and after trimming whitespace and any 'Underground Station' suffix.",
-        "parameters": [
-          {
-            "name": "name",
-            "type": "str",
-            "optional": false
-          }
-        ],
-        "returns": "Station | None",
+        "returns": "list[MapEdge]",
         "preconditions": [],
         "postconditions": [
-          "Returns None when no known station name matches after normalization, rather than raising."
+          "Returns exactly one MapEdge per edge in layout.edges, in the same order",
+          "disruption_category is set to the most severe matching status description, or omitted if none match",
+          "Statuses whose severity description is not a known disruption category are ignored",
+          "Statuses whose affected route station names cannot be resolved to station ids are ignored"
         ]
-      },
-      {
-        "name": "list_line_ids",
-        "description": "Returns the ids of every tube line known to the reference data, for use when querying line-wide status.",
-        "parameters": [],
-        "returns": "list[str]",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "list_lines",
-        "description": "Returns every tube line known to the reference data, for use when letting the user pick a line to view.",
-        "parameters": [],
-        "returns": "list[Line]",
-        "preconditions": [],
-        "postconditions": []
       }
     ]
   },
   {
-    "type": "new",
+    "type": "keep",
+    "module_name": "app.data.station_repository",
+    "responsibility": "Load and provide lookup access to tube stations and lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.data.line_layout_repository",
+    "responsibility": "Load the node/edge layout for a line and direction from static map data."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.clients.tfl_client",
+    "responsibility": "Fetch and parse raw arrivals, line statuses, and stop point disruptions from the TfL API."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.platform_info",
+    "responsibility": "Parse a platform name string into a direction and platform number."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.train_location_parser",
+    "responsibility": "Parse a raw currentLocation string into a structured at-station/between-stations description."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.station",
+    "responsibility": "Define Station and Line data schemas and station code derivation."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.arrival",
+    "responsibility": "Define arrival board data schemas and arrival time display formatting."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.line_status",
+    "responsibility": "Define line status summary data schemas."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.station_disruption",
+    "responsibility": "Define the station disruption data schema."
+  },
+  {
+    "type": "changed",
     "module_name": "app.models.line_layout",
-    "responsibility": "Define the LayoutNode/LayoutEdge/LineLayout data shapes for a line's static map layout and provide the next_station_id graph-traversal helper on LineLayout.",
+    "responsibility": "Define line layout node/edge data schemas and provide lookup helpers over a line's node/edge structure.",
     "non_responsibilities": [
-      "Does not load or parse layout files from disk.",
-      "Does not know about live statuses, arrivals, or train positions.",
-      "Does not resolve station ids to human-readable names."
+      "Does not fetch or load layout data from disk (delegates to line_layout_repository).",
+      "Does not know about disruption categories or delay figures."
     ],
     "inputs": [],
     "outputs": [
       {
         "name": "LayoutNode",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "x",
-            "type": "float",
-            "optional": false
-          },
-          {
-            "name": "y",
-            "type": "float",
-            "optional": false
-          }
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false }
         ]
       },
       {
         "name": "LayoutEdge",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "from_station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "to_station_id",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false }
         ]
       },
       {
         "name": "LineLayout",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "nodes",
-            "type": "list[LayoutNode]",
-            "optional": false
-          },
-          {
-            "name": "edges",
-            "type": "list[LayoutEdge]",
-            "optional": false
-          }
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
         ]
       }
     ],
     "public_interface": [
       {
-        "name": "LineLayout.next_station_id",
-        "description": "Graph-traversal helper on LineLayout: finds the station reached next from a given station by following this layout's directed edges. Used to place a train that has just left a station halfway to the next one.",
+        "name": "next_station_id",
+        "description": "Finds the id of the station immediately following from_station_id when traversing edges in their stored direction.",
         "parameters": [
-          {
-            "name": "from_station_id",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "from_station_id", "type": "string", "optional": false }
         ],
-        "returns": "str | None",
+        "returns": "string | None",
         "preconditions": [],
         "postconditions": [
-          "Returns the to_station_id of the first edge whose from_station_id matches, or None if from_station_id has no outgoing edge in this layout (e.g. it is the direction's terminus)."
+          "Returns the to_station_id of the first edge whose from_station_id matches, or None if no such edge exists"
+        ]
+      },
+      {
+        "name": "edge_pairs",
+        "description": "Builds a lookup from the order-independent station-pair of each edge to that edge, so callers can key per-edge data (disruptions, delays) without deriving frozenset pairs themselves.",
+        "parameters": [],
+        "returns": "dict[frozenset[str], LayoutEdge]",
+        "preconditions": [],
+        "postconditions": [
+          "Returns one entry per edge in self.edges, keyed by frozenset((edge.from_station_id, edge.to_station_id))",
+          "If two edges share the same station pair, the later edge in self.edges wins that key's entry"
         ]
       }
     ]
   },
   {
+    "type": "keep",
+    "module_name": "frontend.src.App",
+    "responsibility": "Define the client-side route-to-page mapping."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.main",
+    "responsibility": "Bootstrap and mount the React application."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.index",
+    "responsibility": "Provide the global stylesheet entry point."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.vite-env.d",
+    "responsibility": "Provide ambient TypeScript environment type declarations for Vite."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.HomePage",
+    "responsibility": "Render the station search landing page and the entry point to the live map feature."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.SelectLinePage",
+    "responsibility": "Render line selection when a searched station is served by multiple lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.BoardPage",
+    "responsibility": "Render the arrival board and disruptions for a selected station/line."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.SelectMapLinePage",
+    "responsibility": "Render line selection for the live map feature."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.LiveMapPage",
+    "responsibility": "Render the live map page, polling for and passing line map view data to the map component."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.ArrivalBoardCard",
+    "responsibility": "Render a single direction's arrival board table."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.LineStatusCard",
+    "responsibility": "Render a single line's disruption status summary."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.StationDisruptionList",
+    "responsibility": "Render the list of disruptions for a station."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.LineList",
+    "responsibility": "Render a selectable list of tube lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.api.client",
+    "responsibility": "Wrap backend HTTP endpoints as typed fetch functions."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.hooks.usePolling",
+    "responsibility": "Generic hook for polling an async data source on an interval."
+  },
+  {
     "type": "new",
-    "module_name": "app.data.line_layout_repository",
-    "responsibility": "Load the static live-map layout file for a line and normalize it into a direction-specific LineLayout (from app.models.line_layout) of station nodes and directed edges.",
+    "module_name": "app.clients.delay_estimates_client",
+    "responsibility": "Fetch the raw delay-estimate records for all tube lines from the Upstash Redis REST API and parse them into typed objects.",
     "non_responsibilities": [
-      "Does not fetch any live/real-time data from TfL.",
-      "Does not resolve station ids to human-readable names.",
-      "Does not decide edge colors or train positions.",
-      "Does not define the LayoutNode/LayoutEdge/LineLayout data shapes or their traversal behavior (defined in app.models.line_layout)."
+      "Does not map trackernetCode to lineId.",
+      "Does not filter, group, or average delay records by station or edge.",
+      "Does not decide how delays are displayed."
     ],
     "inputs": [
       {
-        "name": "data_dir",
-        "type": "Path",
-        "fields": []
-      },
-      {
-        "name": "line_id",
-        "type": "str",
-        "fields": []
-      },
-      {
-        "name": "direction",
-        "type": "str",
-        "fields": []
+        "name": "RedisEnvironmentConfig",
+        "type": "object",
+        "fields": [
+          { "name": "rest_url", "type": "string", "optional": false },
+          { "name": "rest_token", "type": "string", "optional": false }
+        ]
       }
     ],
     "outputs": [
       {
-        "name": "LineLayout",
-        "type": "app.models.line_layout.LineLayout",
-        "fields": []
+        "name": "RawDelayEstimate",
+        "type": "object",
+        "fields": [
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "closest_station_id_to_arrival", "type": "string", "optional": false },
+          { "name": "current_location", "type": "string", "optional": false },
+          { "name": "time_to_station", "type": "int", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "timestamp", "type": "int", "optional": false },
+          { "name": "delayed_seconds", "type": "float", "optional": false }
+        ]
       }
     ],
     "public_interface": [
       {
-        "name": "get_layout",
-        "description": "Loads the layout file for the given line and returns the node positions and directed edges that apply for the given direction, transparently handling lines (e.g. Piccadilly) whose layout file stores separate node lists per direction.",
-        "parameters": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "str",
-            "optional": false
-          }
-        ],
-        "returns": "app.models.line_layout.LineLayout",
+        "name": "get_delay_estimates",
+        "description": "Fetches and parses the current contents of the delay-estimates redis key into a list of raw delay estimate records covering all lines.",
+        "parameters": [],
+        "returns": "list[RawDelayEstimate]",
         "preconditions": [
-          "direction is one of 'inbound' or 'outbound'."
+          "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN environment variables are set"
         ],
         "postconditions": [
-          "Edges are directed in the given direction of travel, so an edge's to_station_id is the next station reached from its from_station_id.",
-          "Raises LineLayoutNotFoundError if no layout file exists for line_id."
+          "Returns one RawDelayEstimate per entry currently stored under the delay-estimates key",
+          "Raises DelayEstimatesClientError if the request fails or the payload cannot be parsed"
         ]
       }
     ]
   },
   {
     "type": "new",
-    "module_name": "app.services.train_location_parser",
-    "responsibility": "Parse a raw, free-form TfL currentLocation string into a structured description of the station name(s) it references.",
+    "module_name": "app.data.trackernet_codes",
+    "responsibility": "Provide the static lookup from a tube lineId to the trackernetCode used by the delay-estimates feed.",
     "non_responsibilities": [
-      "Does not resolve station names to station ids.",
-      "Does not know about line layouts, coordinates, or which station follows another.",
-      "Does not perform any HTTP calls or fetch data."
+      "Does not fetch or cache any remote data.",
+      "Does not validate that a lineId has a live-map layout."
     ],
-    "inputs": [
-      {
-        "name": "raw_location",
-        "type": "str",
-        "fields": []
-      }
-    ],
-    "outputs": [
-      {
-        "name": "ParsedLocation",
-        "type": "pydantic.BaseModel",
-        "fields": [
-          {
-            "name": "kind",
-            "type": "Literal['at_station', 'at_platform', 'left_station', 'between_stations', 'unknown']",
-            "optional": false
-          },
-          {
-            "name": "station_name",
-            "type": "str | None",
-            "optional": true
-          },
-          {
-            "name": "second_station_name",
-            "type": "str | None",
-            "optional": true
-          }
-        ]
-      }
-    ],
+    "inputs": [],
+    "outputs": [],
     "public_interface": [
       {
-        "name": "parse",
-        "description": "Classifies the currentLocation text into one of the known formats: 'At STATION' / 'At STATION platform X' / 'Approaching STATION' as at_station; literal 'At Platform' as at_platform; 'Left/Leaving/Departed/Departing STATION' as left_station; 'Between STATION1 and STATION2' as between_stations; anything else as unknown.",
+        "name": "get_trackernet_code",
+        "description": "Looks up the trackernetCode for a given tube lineId.",
         "parameters": [
-          {
-            "name": "raw_location",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "line_id", "type": "string", "optional": false }
         ],
-        "returns": "ParsedLocation",
-        "preconditions": [],
+        "returns": "string",
+        "preconditions": [
+          "line_id is one of the known tube line ids (bakerloo, central, circle, district, hammersmith-city, jubilee, metropolitan, northern, piccadilly, victoria, waterloo-city)"
+        ],
         "postconditions": [
-          "station_name is set for at_station and left_station kinds.",
-          "station_name and second_station_name are both set for between_stations.",
-          "Both name fields are None for at_platform and unknown kinds."
+          "Returns the matching trackernetCode",
+          "circle and hammersmith-city both return \"H\""
         ]
       }
     ]
   },
   {
     "type": "new",
-    "module_name": "app.services.train_position_resolver",
-    "responsibility": "Resolve a single train's raw currentLocation text into a TrainMarker placed on a given line layout, using the arrival's naptan id for the 'At Platform' case and StationRepository to resolve station names for the other cases.",
+    "module_name": "app.services.delay_estimate_resolver",
+    "responsibility": "Annotate already-built line-map nodes and edges with an average delay in whole minutes per station and per edge, computed from raw delay-estimate records for one line.",
     "non_responsibilities": [
-      "Does not fetch any live/real-time data from TfL (receives raw_location and naptan_id from the caller).",
-      "Does not load or normalize layout files (receives an already-built LineLayout).",
-      "Does not decide edge disruption colors.",
-      "Does not orchestrate multiple trains or assemble a LineMapView."
+      "Does not fetch delay data from Redis.",
+      "Does not know the lineId-to-trackernetCode mapping (receives the code as a parameter).",
+      "Does not decide display formatting, labels, or colors.",
+      "Does not parse currentLocation text itself (delegates to train_position_resolver, reusing the same at-station/between-stations resolution used for train markers).",
+      "Does not construct the base MapNode/MapEdge objects (receives them already built and only returns them with delay_minutes attached)."
     ],
     "inputs": [
       {
-        "name": "vehicle_id",
-        "type": "str",
-        "fields": []
+        "name": "RawDelayEstimate",
+        "type": "object",
+        "fields": [
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "closest_station_id_to_arrival", "type": "string", "optional": false },
+          { "name": "current_location", "type": "string", "optional": false },
+          { "name": "delayed_seconds", "type": "float", "optional": false }
+        ]
       },
       {
-        "name": "raw_location",
-        "type": "str",
-        "fields": []
+        "name": "LineLayout",
+        "type": "object",
+        "fields": [
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
+        ]
       },
       {
-        "name": "naptan_id",
-        "type": "str",
-        "fields": []
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
       },
       {
-        "name": "layout",
-        "type": "app.models.line_layout.LineLayout",
-        "fields": []
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
       }
     ],
     "outputs": [
       {
-        "name": "TrainMarker",
-        "type": "app.models.line_map.TrainMarker",
-        "fields": []
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
       }
     ],
     "public_interface": [
       {
         "name": "resolve",
-        "description": "Classifies raw_location via train_location_parser and locates the resulting station(s) as a node (or pair of nodes) in the given layout, falling back to naptan_id-based station lookup for the literal 'At Platform' case.",
+        "description": "Filters records to the given trackernetCode, resolves each onto the layout via train_position_resolver, averages delayed_seconds per station id and per edge station-pair (via layout.edge_pairs()) into whole minutes, and returns copies of the given nodes/edges with delay_minutes set wherever matching data exists.",
         "parameters": [
-          {
-            "name": "vehicle_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "raw_location",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "naptan_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "layout",
-            "type": "app.models.line_layout.LineLayout",
-            "optional": false
-          }
+          { "name": "estimates", "type": "list[RawDelayEstimate]", "optional": false },
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "layout", "type": "LineLayout", "optional": false },
+          { "name": "nodes", "type": "list[MapNode]", "optional": false },
+          { "name": "edges", "type": "list[MapEdge]", "optional": false }
         ],
-        "returns": "TrainMarker | None",
-        "preconditions": [],
+        "returns": "tuple[list[MapNode], list[MapEdge]]",
+        "preconditions": [
+          "layout, nodes, and edges all correspond to the line identified by trackernet_code"
+        ],
         "postconditions": [
-          "Returns None when the location text is unknown, or references a station name/naptan id that cannot be resolved to a node present in the given layout.",
-          "For 'at_station' and literal 'At Platform' locations, returns a marker with at_station_id set and between_station_ids None.",
-          "For a 'left/leaving/departed/departing STATION' location, returns a marker with between_station_ids set to [STATION, layout.next_station_id(STATION)], or None if STATION has no outgoing edge in the layout.",
-          "For a 'Between STATION1 and STATION2' location, returns a marker with between_station_ids set to [STATION1, STATION2]."
+          "Returns the same number of nodes/edges as given, in the same order, with all non-delay fields unchanged",
+          "Records whose trackernet_code does not match are ignored",
+          "Records train_position_resolver cannot resolve onto the layout are ignored",
+          "Average minutes are clamped to a minimum of 0",
+          "delay_minutes is left unset on any node/edge with no matching records"
         ]
       }
     ]
   },
   {
-    "type": "new",
+    "type": "changed",
     "module_name": "app.models.line_map",
-    "responsibility": "Define the data shapes used to present a line's live map: station nodes, disruption-colored edges, and train markers.",
+    "responsibility": "Define the response data schemas for the live line map view: nodes, edges, train markers, and their optional delay figures.",
     "non_responsibilities": [
-      "Does not fetch or compute any data itself.",
-      "Does not decide the actual color for a disruption category (the frontend maps category text to color)."
+      "Does not compute delay_minutes or disruption_category values.",
+      "Does not perform any station or layout lookups."
     ],
     "inputs": [],
     "outputs": [
       {
         "name": "MapNode",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "x",
-            "type": "float",
-            "optional": false
-          },
-          {
-            "name": "y",
-            "type": "float",
-            "optional": false
-          }
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
         ]
       },
       {
         "name": "MapEdge",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "from_station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "to_station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "disruption_category",
-            "type": "str | None",
-            "optional": true
-          }
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
         ]
       },
       {
         "name": "TrainMarker",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "vehicle_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "at_station_id",
-            "type": "str | None",
-            "optional": true
-          },
-          {
-            "name": "between_station_ids",
-            "type": "list[str] | None",
-            "optional": true
-          }
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "at_station_id", "type": "string", "optional": true },
+          { "name": "between_station_ids", "type": "string[]", "optional": true }
         ]
       },
       {
         "name": "LineMapView",
-        "type": "pydantic.BaseModel",
+        "type": "object",
         "fields": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "nodes",
-            "type": "list[MapNode]",
-            "optional": false
-          },
-          {
-            "name": "edges",
-            "type": "list[MapEdge]",
-            "optional": false
-          },
-          {
-            "name": "trains",
-            "type": "list[TrainMarker]",
-            "optional": false
-          }
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false }
         ]
       }
     ],
     "public_interface": []
   },
   {
-    "type": "new",
-    "module_name": "app.services.line_edge_status_resolver",
-    "responsibility": "Match a line's disruption statuses (with their free-text affected route sections) against a line layout's physical edges and resolve each edge to the color category of its most severe overlapping disruption.",
-    "non_responsibilities": [
-      "Does not fetch any live/real-time data from TfL (receives an already-fetched list of RawLineStatus from the caller).",
-      "Does not load or normalize layout files (receives an already-built LineLayout).",
-      "Does not resolve train positions or markers.",
-      "Does not render any pixel coordinates, SVG, or colors (returns domain disruption category strings only)."
-    ],
-    "inputs": [
-      {
-        "name": "layout",
-        "type": "app.models.line_layout.LineLayout",
-        "fields": []
-      },
-      {
-        "name": "statuses",
-        "type": "list[app.clients.tfl_client.RawLineStatus]",
-        "fields": []
-      }
-    ],
-    "outputs": [
-      {
-        "name": "MapEdge",
-        "type": "app.models.line_map.MapEdge",
-        "fields": []
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "resolve_edges",
-        "description": "For every edge in the layout, resolves each status's affected route section station names to station ids via StationRepository, matches them against the layout's edges (treating each physical section as an undirected pair), and sets disruption_category to the status_severity_description of the lowest-statusSeverity (most severe) matching status among Suspended, Severe Delays, Minor Delays, Planned Closure or Part Closure.",
-        "parameters": [
-          {
-            "name": "layout",
-            "type": "app.models.line_layout.LineLayout",
-            "optional": false
-          },
-          {
-            "name": "statuses",
-            "type": "list[app.clients.tfl_client.RawLineStatus]",
-            "optional": false
-          }
-        ],
-        "returns": "list[app.models.line_map.MapEdge]",
-        "preconditions": [],
-        "postconditions": [
-          "A route section matches a layout edge when it names the same pair of stations, in either order.",
-          "An edge's disruption_category reflects the lowest-statusSeverity (most severe) of Suspended, Severe Delays, Minor Delays, Planned Closure or Part Closure among statuses whose affected_routes overlap that edge; it is null if none apply.",
-          "Route sections naming a station that cannot be resolved via StationRepository are ignored rather than raising.",
-          "Returns exactly one MapEdge per edge in the input layout, in the same order."
-        ]
-      }
-    ]
-  },
-  {
-    "type": "new",
+    "type": "changed",
     "module_name": "app.services.line_map_service",
-    "responsibility": "Combine a line's static layout with its live statuses and arrivals to produce a live map view: positioned station nodes, disruption-colored edges, and train markers.",
+    "responsibility": "Orchestrate fetching a line's layout, statuses, arrivals, and delay estimates, and assemble them into one LineMapView with delay figures attached to nodes and edges.",
     "non_responsibilities": [
-      "Does not fetch raw HTTP data itself (delegates to TflClient).",
-      "Does not load or parse layout files itself (delegates to LineLayoutRepository).",
-      "Does not match route sections to physical edges or rank overlapping disruptions by severity itself (delegates to LineEdgeStatusResolver).",
-      "Does not parse currentLocation text or resolve a train's station/edge placement itself (delegates each arrival to TrainPositionResolver).",
-      "Does not parse platform names for compass direction (unrelated to the inbound/outbound map direction).",
-      "Does not render any pixel coordinates, SVG, or colors (returns domain categories/ids only).",
-      "Does not decide HTTP status codes or handle web-layer concerns."
+      "Does not parse currentLocation strings itself (delegates to train_position_resolver/delay_estimate_resolver).",
+      "Does not compute delay averages itself (delegates to delay_estimate_resolver).",
+      "Does not know the lineId-to-trackernetCode mapping table (delegates to trackernet_codes).",
+      "Does not merge delay figures into node/edge objects itself (delay_estimate_resolver returns fully-annotated MapNode/MapEdge lists ready to embed)."
     ],
-    "inputs": [
-      {
-        "name": "line_id",
-        "type": "str",
-        "fields": []
-      },
-      {
-        "name": "direction",
-        "type": "str",
-        "fields": []
-      }
-    ],
+    "inputs": [],
     "outputs": [
       {
         "name": "LineMapView",
-        "type": "app.models.line_map.LineMapView",
-        "fields": []
+        "type": "object",
+        "fields": [
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false }
+        ]
       }
     ],
     "public_interface": [
       {
         "name": "get_line_map",
-        "description": "Builds the live map view for the given line and direction: the layout's nodes (enriched with station names), its edges colored via LineEdgeStatusResolver, and a marker for every train currently running in that direction whose location can be resolved to a station or pair of stations.",
+        "description": "Builds the full live map view for a line and direction, including per-station and per-edge delay minutes derived from the delay-estimates feed.",
         "parameters": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "str",
-            "optional": false
-          }
-        ],
-        "returns": "LineMapView",
-        "preconditions": [
-          "direction is one of 'inbound' or 'outbound'."
-        ],
-        "postconditions": [
-          "Edge disruption categories are obtained by delegating the layout's edges together with the line's fetched statuses to LineEdgeStatusResolver.",
-          "Train markers are only produced for arrivals whose direction field matches the requested direction.",
-          "Each candidate arrival's marker is obtained by delegating to TrainPositionResolver; arrivals it resolves to None are omitted rather than raising.",
-          "Raises LineNotFoundError if line_id is not a known tube line."
-        ]
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "app.api.lines",
-    "responsibility": "Expose the HTTP endpoint for listing every tube line, for use when the user picks a line to view independently of any station.",
-    "non_responsibilities": [
-      "Does not fetch or transform TfL data itself.",
-      "Does not implement any station-specific logic."
-    ],
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "Line list response",
-        "type": "list[app.models.station.Line]",
-        "fields": []
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "list_lines",
-        "description": "GET handler returning every known tube line.",
-        "parameters": [],
-        "returns": "list[Line]",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "app.api.line_map",
-    "responsibility": "Expose the HTTP endpoint for retrieving a line's live map view for a given direction.",
-    "non_responsibilities": [
-      "Does not fetch or transform TfL data itself.",
-      "Does not load layout files itself."
-    ],
-    "inputs": [
-      {
-        "name": "line_id",
-        "type": "str",
-        "fields": []
-      },
-      {
-        "name": "direction",
-        "type": "str",
-        "fields": []
-      }
-    ],
-    "outputs": [
-      {
-        "name": "LineMapView response",
-        "type": "app.models.line_map.LineMapView",
-        "fields": []
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "get_line_map",
-        "description": "GET handler returning the live map view (nodes, disruption-colored edges, train markers) for the given line and direction.",
-        "parameters": [
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "str",
-            "optional": false
-          }
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false }
         ],
         "returns": "LineMapView",
         "preconditions": [],
         "postconditions": [
-          "Responds 404 when line_id is not a known tube line."
+          "Raises LineNotFoundError if line_id is not a known tube line",
+          "Each node/edge includes delay_minutes when matching delay-estimate data exists for that station/edge, otherwise it is omitted"
         ]
-      }
-    ]
-  },
-  {
-    "type": "changed",
-    "module_name": "frontend.src.App",
-    "responsibility": "Declare the client-side routes and mount the page for each route.",
-    "non_responsibilities": [
-      "Does not fetch data or hold any page-level state itself."
-    ],
-    "inputs": [],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "App",
-        "description": "Root component declaring routes for home, select-line, board, select-map-line and live-map pages.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
       }
     ]
   },
   {
     "type": "changed",
     "module_name": "frontend.src.types.index",
-    "responsibility": "Define the TypeScript types shared between the API client and the pages/components.",
+    "responsibility": "Define shared TypeScript interfaces mirroring backend API response shapes used across pages and components.",
     "non_responsibilities": [
-      "Does not perform any data fetching or transformation."
+      "Does not perform any runtime validation or transformation of API responses."
     ],
     "inputs": [],
     "outputs": [
       {
-        "name": "RouteSection",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "start",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "end",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "bidirectional",
-            "type": "boolean",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "LineSeverityGroup",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "severity_description",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "route_sections",
-            "type": "RouteSection[]",
-            "optional": false
-          },
-          {
-            "name": "reasons",
-            "type": "string[]",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "LineStatusSummary",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "line_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "line_name",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "severities",
-            "type": "LineSeverityGroup[]",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "StationDisruption",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "type",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "Direction",
-        "type": "type alias",
-        "fields": [
-          {
-            "name": "value",
-            "type": "'inbound' | 'outbound'",
-            "optional": false
-          }
-        ]
-      },
-      {
         "name": "MapNode",
-        "type": "interface",
+        "type": "object",
         "fields": [
-          {
-            "name": "station_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "name",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "x",
-            "type": "number",
-            "optional": false
-          },
-          {
-            "name": "y",
-            "type": "number",
-            "optional": false
-          }
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "number", "optional": false },
+          { "name": "y", "type": "number", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
         ]
       },
       {
         "name": "MapEdge",
-        "type": "interface",
+        "type": "object",
         "fields": [
-          {
-            "name": "from_station_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "to_station_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "disruption_category",
-            "type": "string | null",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "TrainMarker",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "vehicle_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "at_station_id",
-            "type": "string | null",
-            "optional": false
-          },
-          {
-            "name": "between_station_ids",
-            "type": "string[] | null",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "LineMapView",
-        "type": "interface",
-        "fields": [
-          {
-            "name": "line_id",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "Direction",
-            "optional": false
-          },
-          {
-            "name": "nodes",
-            "type": "MapNode[]",
-            "optional": false
-          },
-          {
-            "name": "edges",
-            "type": "MapEdge[]",
-            "optional": false
-          },
-          {
-            "name": "trains",
-            "type": "TrainMarker[]",
-            "optional": false
-          }
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string | null", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
         ]
       }
     ],
@@ -1277,359 +604,53 @@
   },
   {
     "type": "changed",
-    "module_name": "frontend.src.api.client",
-    "responsibility": "Provide typed functions for calling the backend HTTP API and translating error responses.",
-    "non_responsibilities": [
-      "Does not render any UI.",
-      "Does not hold component state."
-    ],
-    "inputs": [],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "searchStations",
-        "description": "Calls the station search endpoint.",
-        "parameters": [
-          {
-            "name": "query",
-            "type": "string",
-            "optional": false
-          }
-        ],
-        "returns": "Promise<Station[]>",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "getArrivalBoards",
-        "description": "Calls the arrivals endpoint for a station/line pair.",
-        "parameters": [
-          {
-            "name": "stationId",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "lineId",
-            "type": "string",
-            "optional": false
-          }
-        ],
-        "returns": "Promise<ArrivalBoard[]>",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "getLineStatuses",
-        "description": "Calls the line statuses endpoint to retrieve disruption summaries for all lines.",
-        "parameters": [],
-        "returns": "Promise<LineStatusSummary[]>",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "getStationDisruptions",
-        "description": "Calls the station disruptions endpoint for a given station.",
-        "parameters": [
-          {
-            "name": "stationId",
-            "type": "string",
-            "optional": false
-          }
-        ],
-        "returns": "Promise<StationDisruption[]>",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "getLines",
-        "description": "Calls the lines endpoint to retrieve every known tube line.",
-        "parameters": [],
-        "returns": "Promise<Line[]>",
-        "preconditions": [],
-        "postconditions": []
-      },
-      {
-        "name": "getLineMap",
-        "description": "Calls the line map endpoint to retrieve the live map view for a line and direction.",
-        "parameters": [
-          {
-            "name": "lineId",
-            "type": "string",
-            "optional": false
-          },
-          {
-            "name": "direction",
-            "type": "Direction",
-            "optional": false
-          }
-        ],
-        "returns": "Promise<LineMapView>",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "changed",
-    "module_name": "frontend.src.pages.HomePage",
-    "responsibility": "Let the user search for a station, view current line status disruptions, or navigate to the live train map.",
-    "non_responsibilities": [
-      "Does not render an individual line status block's internals (delegates to LineStatusCard).",
-      "Does not compute route section merging (that is done by the backend).",
-      "Does not render the line-selection list or the live map itself (delegates to SelectMapLinePage/LiveMapPage)."
-    ],
-    "inputs": [],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "HomePage",
-        "description": "Page component rendering the station search box and results, a line status section listing disrupted lines, and a button that navigates to the live train map line-selection page.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "frontend.src.pages.SelectMapLinePage",
-    "responsibility": "Let the user pick which line's live map to view.",
-    "non_responsibilities": [
-      "Does not fetch station or arrival data.",
-      "Does not render the live map itself (delegates to LiveMapPage).",
-      "Does not render the line list's markup itself (delegates to LineList)."
-    ],
-    "inputs": [],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "SelectMapLinePage",
-        "description": "Page component fetching and listing every tube line; selecting one navigates to the live map page for that line.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "frontend.src.components.LineList",
-    "responsibility": "Render a list of tube lines as clickable buttons, each showing a colored line swatch and the line name.",
-    "non_responsibilities": [
-      "Does not fetch line data itself.",
-      "Does not decide the navigation target (parent supplies the onSelect callback).",
-      "Does not render any surrounding page chrome (heading, back button, subtitle)."
-    ],
-    "inputs": [
-      {
-        "name": "lines",
-        "type": "Line[]",
-        "fields": []
-      },
-      {
-        "name": "onSelect",
-        "type": "(line: Line) => void",
-        "fields": []
-      }
-    ],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "LineList",
-        "description": "Presentational component rendering one button per line (colored swatch + name) that calls onSelect with that line when clicked.",
-        "parameters": [
-          {
-            "name": "lines",
-            "type": "Line[]",
-            "optional": false
-          },
-          {
-            "name": "onSelect",
-            "type": "(line: Line) => void",
-            "optional": false
-          }
-        ],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
     "module_name": "frontend.src.components.TubeMapView",
-    "responsibility": "Render a line's stations, disruption-colored connections, and train icons as an SVG diagram from already-resolved map data.",
+    "responsibility": "Render the SVG live tube map, drawing station nodes, edges, train markers, and delay-minute badges for stations/edges that have data.",
     "non_responsibilities": [
-      "Does not fetch data or poll for updates.",
-      "Does not decide which line/direction is being viewed (parent page passes already-fetched data).",
-      "Does not compute disruption categories (backend provides them per edge)."
+      "Does not fetch map or delay data.",
+      "Does not compute delay averages.",
+      "Does not manage polling or routing."
     ],
     "inputs": [
       {
-        "name": "nodes",
-        "type": "MapNode[]",
-        "fields": []
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "number", "optional": false },
+          { "name": "y", "type": "number", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
       },
       {
-        "name": "edges",
-        "type": "MapEdge[]",
-        "fields": []
-      },
-      {
-        "name": "trains",
-        "type": "TrainMarker[]",
-        "fields": []
-      },
-      {
-        "name": "lineColor",
-        "type": "string",
-        "fields": []
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string | null", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
       }
     ],
     "outputs": [],
     "public_interface": [
       {
         "name": "TubeMapView",
-        "description": "Component rendering station nodes (with names) positioned from their grid coordinates, edges as lines colored per the table (Suspended=red, Planned/Part closure=gray, Severe Delays=orange, Minor Delays=yellow, otherwise lineColor), and a train icon over each marker's station or at the midpoint between its two stations.",
+        "description": "React component that renders the live tube map SVG given nodes, edges, trains, and the line's color, showing a '+N' delay badge beside any station or edge that has delay data, colored red above 10 minutes.",
         "parameters": [
-          {
-            "name": "nodes",
-            "type": "MapNode[]",
-            "optional": false
-          },
-          {
-            "name": "edges",
-            "type": "MapEdge[]",
-            "optional": false
-          },
-          {
-            "name": "trains",
-            "type": "TrainMarker[]",
-            "optional": false
-          },
-          {
-            "name": "lineColor",
-            "type": "string",
-            "optional": false
-          }
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false },
+          { "name": "lineColor", "type": "string", "optional": false }
         ],
         "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "frontend.src.pages.LiveMapPage",
-    "responsibility": "Show the live, auto-refreshing train map for a chosen line, letting the user switch between inbound and outbound.",
-    "non_responsibilities": [
-      "Does not render the SVG map itself (delegates to TubeMapView).",
-      "Does not compute edge disruption categories or train positions (the backend provides them).",
-      "Does not implement its own polling/interval/cancellation logic (delegates to the shared usePolling hook)."
-    ],
-    "inputs": [],
-    "outputs": [],
-    "public_interface": [
-      {
-        "name": "LiveMapPage",
-        "description": "Page component rendering back navigation, an inbound/outbound toggle, and the TubeMapView for the selected line, using usePolling to refetch the map view periodically and whenever the direction changes.",
-        "parameters": [],
-        "returns": "JSX.Element",
-        "preconditions": [],
-        "postconditions": []
-      }
-    ]
-  },
-  {
-    "type": "new",
-    "module_name": "frontend.src.hooks.usePolling",
-    "responsibility": "Provide a reusable React hook that fetches data on mount/dependency change and repeatedly on an interval, exposing loading/error/data state while ignoring stale responses and cleaning up the timer.",
-    "non_responsibilities": [
-      "Does not know about specific API endpoints, data shapes, or error types (fetch function and error fallback text are supplied by the caller).",
-      "Does not render any UI.",
-      "Does not decide the refresh interval value (caller supplies it)."
-    ],
-    "inputs": [
-      {
-        "name": "fetchFn",
-        "type": "() => Promise<T>",
-        "fields": []
-      },
-      {
-        "name": "intervalMs",
-        "type": "number",
-        "fields": []
-      },
-      {
-        "name": "deps",
-        "type": "React.DependencyList",
-        "fields": []
-      },
-      {
-        "name": "errorFallbackMessage",
-        "type": "string",
-        "fields": []
-      }
-    ],
-    "outputs": [
-      {
-        "name": "PollingState",
-        "type": "interface<T>",
-        "fields": [
-          {
-            "name": "data",
-            "type": "T | null",
-            "optional": false
-          },
-          {
-            "name": "loading",
-            "type": "boolean",
-            "optional": false
-          },
-          {
-            "name": "error",
-            "type": "string | null",
-            "optional": false
-          }
-        ]
-      }
-    ],
-    "public_interface": [
-      {
-        "name": "usePolling",
-        "description": "Calls fetchFn once when deps change and again every intervalMs until deps change again or the component unmounts, tracking the latest result as loading/data/error state.",
-        "parameters": [
-          {
-            "name": "fetchFn",
-            "type": "() => Promise<T>",
-            "optional": false
-          },
-          {
-            "name": "intervalMs",
-            "type": "number",
-            "optional": false
-          },
-          {
-            "name": "deps",
-            "type": "React.DependencyList",
-            "optional": false
-          },
-          {
-            "name": "errorFallbackMessage",
-            "type": "string",
-            "optional": false
-          }
-        ],
-        "returns": "PollingState<T>",
         "preconditions": [],
         "postconditions": [
-          "Ignores the resolution of a fetch call superseded by a subsequent deps change or unmount.",
-          "error is set to the caught error's message when it is an Error instance, otherwise to errorFallbackMessage.",
-          "Clears the interval timer on unmount and before starting a new one when deps change."
+          "No delay badge is rendered for a station/edge whose delay_minutes is null or undefined",
+          "A delay_minutes of 0 renders as \"+0\"",
+          "A delay_minutes greater than 10 renders in red"
         ]
       }
     ]

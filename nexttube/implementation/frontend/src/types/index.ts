@@ -53,12 +53,14 @@ export interface MapNode {
   name: string;
   x: number;
   y: number;
+  delay_minutes: number | null;
 }
 
 export interface MapEdge {
   from_station_id: string;
   to_station_id: string;
   disruption_category: string | null;
+  delay_minutes: number | null;
 }
 
 export interface TrainMarker {

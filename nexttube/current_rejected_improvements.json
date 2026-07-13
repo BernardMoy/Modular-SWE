@@ -1,6 +1,1 @@
-[
-  {
-    "improvement_instruction": "Extract the severity ordering/comparison rules (Suspended > Severe Delays > Minor Delays > Planned/Part Closure > Good Service, keyed off statusSeverity) into a small shared module (e.g. app.services.disruption_severity) that both line_status_service and line_map_service depend on instead of each re-deriving the ranking independently.",
-    "rejection_reason": "The premise doesn't hold against the current implementation: app.services.line_status_service never ranks or compares statusSeverity numbers, it only buckets statuses by their status_severity_description string and merges route sections within each bucket, showing every severity group rather than resolving a winner. Only app.services.line_map_service needs a 'most severe wins' comparison, to pick one color for a physical section that may have multiple overlapping disruptions. With just one real caller of that comparison, extracting a shared module now would be a premature abstraction rather than a fix for actual duplication. Should line_status_service later need equivalent conflict resolution, the ranking helper should be extracted at that point."
-  }
-]
+[]
