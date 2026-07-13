@@ -3,14 +3,33 @@
     "app.api.stations",
     "app.api.arrivals",
     "app.api.line_statuses",
-    "app.api.station_disruptions"
+    "app.api.station_disruptions",
+    "app.api.lines",
+    "app.api.line_map"
   ],
-  "app.api.stations": ["app.data.station_repository", "app.models.station"],
-  "app.api.arrivals": ["app.services.arrival_service", "app.models.arrival"],
-  "app.api.line_statuses": ["app.services.line_status_service", "app.models.line_status"],
+  "app.api.stations": [
+    "app.data.station_repository",
+    "app.models.station"
+  ],
+  "app.api.arrivals": [
+    "app.services.arrival_service",
+    "app.models.arrival"
+  ],
+  "app.api.line_statuses": [
+    "app.services.line_status_service",
+    "app.models.line_status"
+  ],
   "app.api.station_disruptions": [
     "app.services.station_disruption_service",
     "app.models.station_disruption"
+  ],
+  "app.api.lines": [
+    "app.data.station_repository",
+    "app.models.station"
+  ],
+  "app.api.line_map": [
+    "app.services.line_map_service",
+    "app.models.line_map"
   ],
   "app.services.arrival_service": [
     "app.clients.tfl_client",
@@ -28,19 +47,53 @@
     "app.data.station_repository",
     "app.models.station_disruption"
   ],
-  "app.data.station_repository": ["app.models.station"],
+  "app.services.line_map_service": [
+    "app.clients.tfl_client",
+    "app.data.station_repository",
+    "app.data.line_layout_repository",
+    "app.models.line_layout",
+    "app.services.train_position_resolver",
+    "app.services.line_edge_status_resolver",
+    "app.models.line_map"
+  ],
+  "app.services.train_position_resolver": [
+    "app.data.station_repository",
+    "app.models.line_layout",
+    "app.services.train_location_parser",
+    "app.models.line_map"
+  ],
+  "app.services.line_edge_status_resolver": [
+    "app.data.station_repository",
+    "app.models.line_layout",
+    "app.clients.tfl_client",
+    "app.models.line_map"
+  ],
+  "app.data.station_repository": [
+    "app.models.station"
+  ],
+  "app.data.line_layout_repository": [
+    "app.models.line_layout"
+  ],
   "app.clients.tfl_client": [],
   "app.services.platform_info": [],
+  "app.services.train_location_parser": [],
   "app.models.station": [],
   "app.models.arrival": [],
   "app.models.line_status": [],
   "app.models.station_disruption": [],
+  "app.models.line_map": [],
+  "app.models.line_layout": [],
   "frontend.src.App": [
     "frontend.src.pages.HomePage",
     "frontend.src.pages.SelectLinePage",
-    "frontend.src.pages.BoardPage"
+    "frontend.src.pages.BoardPage",
+    "frontend.src.pages.SelectMapLinePage",
+    "frontend.src.pages.LiveMapPage"
   ],
-  "frontend.src.main": ["frontend.src.App", "frontend.src.index"],
+  "frontend.src.main": [
+    "frontend.src.App",
+    "frontend.src.index"
+  ],
   "frontend.src.index": [],
   "frontend.src.vite-env.d": [],
   "frontend.src.pages.HomePage": [
@@ -48,16 +101,46 @@
     "frontend.src.types.index",
     "frontend.src.components.LineStatusCard"
   ],
-  "frontend.src.pages.SelectLinePage": ["frontend.src.types.index"],
+  "frontend.src.pages.SelectLinePage": [
+    "frontend.src.types.index",
+    "frontend.src.components.LineList"
+  ],
   "frontend.src.pages.BoardPage": [
     "frontend.src.api.client",
     "frontend.src.types.index",
     "frontend.src.components.ArrivalBoardCard",
-    "frontend.src.components.StationDisruptionList"
+    "frontend.src.components.StationDisruptionList",
+    "frontend.src.hooks.usePolling"
   ],
-  "frontend.src.components.ArrivalBoardCard": ["frontend.src.types.index"],
-  "frontend.src.components.LineStatusCard": ["frontend.src.types.index"],
-  "frontend.src.components.StationDisruptionList": ["frontend.src.types.index"],
-  "frontend.src.api.client": ["frontend.src.types.index"],
-  "frontend.src.types.index": []
+  "frontend.src.pages.SelectMapLinePage": [
+    "frontend.src.api.client",
+    "frontend.src.types.index",
+    "frontend.src.components.LineList"
+  ],
+  "frontend.src.pages.LiveMapPage": [
+    "frontend.src.api.client",
+    "frontend.src.types.index",
+    "frontend.src.components.TubeMapView",
+    "frontend.src.hooks.usePolling"
+  ],
+  "frontend.src.components.ArrivalBoardCard": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.components.LineStatusCard": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.components.StationDisruptionList": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.components.LineList": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.components.TubeMapView": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.api.client": [
+    "frontend.src.types.index"
+  ],
+  "frontend.src.types.index": [],
+  "frontend.src.hooks.usePolling": []
 }

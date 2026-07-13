@@ -5,12 +5,16 @@ from pathlib import Path
 from app.models.station import Line, Station, derive_code
 
 _DEFAULT_DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+_STATION_SUFFIX = " Underground Station"
 
 
 class StationRepository:
     def __init__(self, data_dir: Path = _DEFAULT_DATA_DIR):
         self._lines_by_id = self._load_lines(data_dir / "tube-lines.json")
         self._stations = self._load_stations(data_dir / "tube-stations.json", self._lines_by_id)
+        self._stations_by_normalized_name = {
+            self._normalize_name(station.name): station for station in self._stations.values()
+        }
 
     @staticmethod
     def _load_lines(lines_path: Path) -> dict[str, Line]:
@@ -43,8 +47,21 @@ class StationRepository:
     def get_station(self, station_id: str) -> Station | None:
         return self._stations.get(station_id)
 
+    def find_by_name(self, name: str) -> Station | None:
+        return self._stations_by_normalized_name.get(self._normalize_name(name))
+
     def list_line_ids(self) -> list[str]:
         return list(self._lines_by_id.keys())
+
+    def list_lines(self) -> list[Line]:
+        return list(self._lines_by_id.values())
+
+    @staticmethod
+    def _normalize_name(name: str) -> str:
+        trimmed = name.strip()
+        if trimmed.endswith(_STATION_SUFFIX):
+            trimmed = trimmed[: -len(_STATION_SUFFIX)]
+        return trimmed.lower()
 
 
 @lru_cache

@@ -45,3 +45,32 @@ export interface StationDisruption {
   type: string;
   description: string;
 }
+
+export type Direction = "inbound" | "outbound";
+
+export interface MapNode {
+  station_id: string;
+  name: string;
+  x: number;
+  y: number;
+}
+
+export interface MapEdge {
+  from_station_id: string;
+  to_station_id: string;
+  disruption_category: string | null;
+}
+
+export interface TrainMarker {
+  vehicle_id: string;
+  at_station_id: string | null;
+  between_station_ids: string[] | null;
+}
+
+export interface LineMapView {
+  line_id: string;
+  direction: Direction;
+  nodes: MapNode[];
+  edges: MapEdge[];
+  trains: TrainMarker[];
+}

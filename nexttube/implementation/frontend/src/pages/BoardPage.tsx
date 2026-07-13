@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { ApiError, getArrivalBoards, getStationDisruptions } from "../api/client";
+import { getArrivalBoards, getStationDisruptions } from "../api/client";
 import ArrivalBoardCard from "../components/ArrivalBoardCard";
 import StationDisruptionList from "../components/StationDisruptionList";
+import { usePolling } from "../hooks/usePolling";
 import type { ArrivalBoard, Line, Station, StationDisruption } from "../types";
 
 const REFRESH_INTERVAL_MS = 20_000;
@@ -18,9 +19,6 @@ export default function BoardPage() {
   const station = state?.station;
   const line = state?.line;
 
-  const [boards, setBoards] = useState<ArrivalBoard[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [disruptions, setDisruptions] = useState<StationDisruption[]>([]);
 
   useEffect(() => {
@@ -30,36 +28,16 @@ export default function BoardPage() {
       .catch(() => setDisruptions([]));
   }, [station]);
 
-  useEffect(() => {
-    if (!station || !line) return;
-
-    let cancelled = false;
-
-    function load() {
-      getArrivalBoards(station!.id, line!.id)
-        .then((result) => {
-          if (!cancelled) {
-            setBoards(result);
-            setError(null);
-          }
-        })
-        .catch((err: unknown) => {
-          if (!cancelled) {
-            setError(err instanceof ApiError ? err.message : "Couldn't load arrivals.");
-          }
-        })
-        .finally(() => {
-          if (!cancelled) setLoading(false);
-        });
-    }
-
-    load();
-    const intervalId = setInterval(load, REFRESH_INTERVAL_MS);
-    return () => {
-      cancelled = true;
-      clearInterval(intervalId);
-    };
-  }, [station, line]);
+  const {
+    data: boards,
+    loading,
+    error,
+  } = usePolling<ArrivalBoard[]>(
+    () => (station && line ? getArrivalBoards(station.id, line.id) : Promise.resolve([])),
+    REFRESH_INTERVAL_MS,
+    [station, line],
+    "Couldn't load arrivals.",
+  );
 
   if (!station || !line) {
     return <Navigate to="/" replace />;
@@ -92,12 +70,12 @@ export default function BoardPage() {
       {loading && <p className="text-slate-400">Loading arrivals…</p>}
       {error && <p className="text-red-600">{error}</p>}
 
-      {!loading && !error && boards.length === 0 && (
+      {!loading && !error && (boards?.length ?? 0) === 0 && (
         <p className="text-slate-400">No arrivals right now.</p>
       )}
 
       <div className="flex flex-col gap-4">
-        {boards.map((board) => (
+        {(boards ?? []).map((board) => (
           <ArrivalBoardCard key={board.direction} board={board} />
         ))}
       </div>

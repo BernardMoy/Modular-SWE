@@ -1,4 +1,5 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import LineList from "../components/LineList";
 import type { Line, Station } from "../types";
 
 interface LocationState {
@@ -32,22 +33,7 @@ export default function SelectLinePage() {
         <p className="text-slate-500">Served by multiple lines — pick one</p>
       </div>
 
-      <ul className="flex flex-col gap-3">
-        {station.lines.map((line) => (
-          <li key={line.id}>
-            <button
-              onClick={() => selectLine(line)}
-              className="flex w-full items-center gap-4 rounded-lg border border-slate-200 px-4 py-4 text-left shadow-sm hover:bg-slate-50"
-            >
-              <span
-                className="h-4 w-4 shrink-0 rounded-full"
-                style={{ backgroundColor: line.color }}
-              />
-              <span className="font-medium text-slate-900">{line.name}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
+      <LineList lines={station.lines} onSelect={selectLine} />
     </main>
   );
 }

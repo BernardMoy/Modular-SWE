@@ -85,6 +85,13 @@ export default function HomePage() {
         <p className="text-slate-400">No stations found</p>
       )}
 
+      <button
+        onClick={() => navigate("/select-map-line")}
+        className="w-full rounded-lg border border-slate-300 px-4 py-3 text-center font-medium text-slate-900 shadow-sm hover:bg-slate-50"
+      >
+        View live train map
+      </button>
+
       {lineStatuses.length > 0 && (
         <div className="flex w-full flex-col gap-4">
           <h2 className="text-xl font-bold text-slate-900">Line status</h2>

@@ -17,6 +17,8 @@ class RawArrival(BaseModel):
     platform_name: str
     destination_name: str
     time_to_station: int
+    direction: str
+    current_location: str
 
 
 class RawRouteSection(BaseModel):
@@ -57,6 +59,8 @@ class TflClient:
                 platform_name=item.get("platformName") or "",
                 destination_name=item.get("destinationName") or item.get("towards") or "",
                 time_to_station=item["timeToStation"],
+                direction=item.get("direction") or "",
+                current_location=item.get("currentLocation") or "",
             )
             for item in response.json()
         ]
