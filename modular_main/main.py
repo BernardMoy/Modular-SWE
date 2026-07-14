@@ -181,7 +181,7 @@ def modular_workflow():
         raise Exception(f"Invalid problem name: {PROBLEM}")
     ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM]
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
-    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"
+    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"  # Previous implementation depend on the workflow mode 
     PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 

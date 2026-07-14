@@ -17,7 +17,15 @@ agent_workspace
 agent_workspace copy
 agent_workspace_*
 
+# temp files
+.claude
+.pytest_cache
+
 # pycache 
 __pycache__
+
+nexttube/implementation
+nexttube/data
+nexttube/previous_implementation
 
 temp_metrics

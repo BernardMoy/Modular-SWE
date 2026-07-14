@@ -1,0 +1,658 @@
+[
+  {
+    "type": "keep",
+    "module_name": "app.main",
+    "responsibility": "Wire together and configure the FastAPI application, registering all API routers."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.stations",
+    "responsibility": "Expose the HTTP endpoint for searching stations by name or code."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.arrivals",
+    "responsibility": "Expose the HTTP endpoint returning arrival boards for a station/line pair."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.line_statuses",
+    "responsibility": "Expose the HTTP endpoint returning disrupted line status summaries."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.station_disruptions",
+    "responsibility": "Expose the HTTP endpoint returning disruptions affecting a station."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.lines",
+    "responsibility": "Expose the HTTP endpoint listing all tube lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.api.line_map",
+    "responsibility": "Expose the HTTP endpoint returning the live line map view for a line/direction."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.arrival_service",
+    "responsibility": "Build per-direction arrival boards for a station and line from raw TfL arrivals."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.line_status_service",
+    "responsibility": "Build per-line disruption status summaries from raw TfL line statuses."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.station_disruption_service",
+    "responsibility": "Filter raw TfL stop point disruptions down to those affecting a given station."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.train_position_resolver",
+    "responsibility": "Resolve a raw location description (currentLocation text plus a nearby station id) onto a line layout as either a single station or a between-stations position."
+  },
+  {
+    "type": "changed",
+    "module_name": "app.services.line_edge_status_resolver",
+    "responsibility": "Attach the most severe disruption category to each edge of a line layout based on raw line statuses.",
+    "non_responsibilities": [
+      "Does not compute or attach delay figures.",
+      "Does not fetch line statuses itself.",
+      "Does not derive edge station-pair keys independently (uses LineLayout.edge_pairs())."
+    ],
+    "inputs": [
+      {
+        "name": "RawLineStatus",
+        "type": "object",
+        "fields": [
+          { "name": "status_severity", "type": "int", "optional": false },
+          { "name": "status_severity_description", "type": "string", "optional": false },
+          { "name": "affected_routes", "type": "RawRouteSection[]", "optional": false }
+        ]
+      },
+      {
+        "name": "LineLayout",
+        "type": "object",
+        "fields": [
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "resolve_edges",
+        "description": "Builds one MapEdge per layout edge, attaching the most severe disruption category found for that station pair among the given raw line statuses. Uses LineLayout.edge_pairs() to key disruptions by station pair instead of deriving frozenset keys itself.",
+        "parameters": [
+          { "name": "layout", "type": "LineLayout", "optional": false },
+          { "name": "statuses", "type": "list[RawLineStatus]", "optional": false }
+        ],
+        "returns": "list[MapEdge]",
+        "preconditions": [],
+        "postconditions": [
+          "Returns exactly one MapEdge per edge in layout.edges, in the same order",
+          "disruption_category is set to the most severe matching status description, or omitted if none match",
+          "Statuses whose severity description is not a known disruption category are ignored",
+          "Statuses whose affected route station names cannot be resolved to station ids are ignored"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "keep",
+    "module_name": "app.data.station_repository",
+    "responsibility": "Load and provide lookup access to tube stations and lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.data.line_layout_repository",
+    "responsibility": "Load the node/edge layout for a line and direction from static map data."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.clients.tfl_client",
+    "responsibility": "Fetch and parse raw arrivals, line statuses, and stop point disruptions from the TfL API."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.platform_info",
+    "responsibility": "Parse a platform name string into a direction and platform number."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.services.train_location_parser",
+    "responsibility": "Parse a raw currentLocation string into a structured at-station/between-stations description."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.station",
+    "responsibility": "Define Station and Line data schemas and station code derivation."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.arrival",
+    "responsibility": "Define arrival board data schemas and arrival time display formatting."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.line_status",
+    "responsibility": "Define line status summary data schemas."
+  },
+  {
+    "type": "keep",
+    "module_name": "app.models.station_disruption",
+    "responsibility": "Define the station disruption data schema."
+  },
+  {
+    "type": "changed",
+    "module_name": "app.models.line_layout",
+    "responsibility": "Define line layout node/edge data schemas and provide lookup helpers over a line's node/edge structure.",
+    "non_responsibilities": [
+      "Does not fetch or load layout data from disk (delegates to line_layout_repository).",
+      "Does not know about disruption categories or delay figures."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "LayoutNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false }
+        ]
+      },
+      {
+        "name": "LayoutEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false }
+        ]
+      },
+      {
+        "name": "LineLayout",
+        "type": "object",
+        "fields": [
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "next_station_id",
+        "description": "Finds the id of the station immediately following from_station_id when traversing edges in their stored direction.",
+        "parameters": [
+          { "name": "from_station_id", "type": "string", "optional": false }
+        ],
+        "returns": "string | None",
+        "preconditions": [],
+        "postconditions": [
+          "Returns the to_station_id of the first edge whose from_station_id matches, or None if no such edge exists"
+        ]
+      },
+      {
+        "name": "edge_pairs",
+        "description": "Builds a lookup from the order-independent station-pair of each edge to that edge, so callers can key per-edge data (disruptions, delays) without deriving frozenset pairs themselves.",
+        "parameters": [],
+        "returns": "dict[frozenset[str], LayoutEdge]",
+        "preconditions": [],
+        "postconditions": [
+          "Returns one entry per edge in self.edges, keyed by frozenset((edge.from_station_id, edge.to_station_id))",
+          "If two edges share the same station pair, the later edge in self.edges wins that key's entry"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.App",
+    "responsibility": "Define the client-side route-to-page mapping."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.main",
+    "responsibility": "Bootstrap and mount the React application."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.index",
+    "responsibility": "Provide the global stylesheet entry point."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.vite-env.d",
+    "responsibility": "Provide ambient TypeScript environment type declarations for Vite."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.HomePage",
+    "responsibility": "Render the station search landing page and the entry point to the live map feature."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.SelectLinePage",
+    "responsibility": "Render line selection when a searched station is served by multiple lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.BoardPage",
+    "responsibility": "Render the arrival board and disruptions for a selected station/line."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.SelectMapLinePage",
+    "responsibility": "Render line selection for the live map feature."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.pages.LiveMapPage",
+    "responsibility": "Render the live map page, polling for and passing line map view data to the map component."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.ArrivalBoardCard",
+    "responsibility": "Render a single direction's arrival board table."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.LineStatusCard",
+    "responsibility": "Render a single line's disruption status summary."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.StationDisruptionList",
+    "responsibility": "Render the list of disruptions for a station."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.components.LineList",
+    "responsibility": "Render a selectable list of tube lines."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.api.client",
+    "responsibility": "Wrap backend HTTP endpoints as typed fetch functions."
+  },
+  {
+    "type": "keep",
+    "module_name": "frontend.src.hooks.usePolling",
+    "responsibility": "Generic hook for polling an async data source on an interval."
+  },
+  {
+    "type": "new",
+    "module_name": "app.clients.delay_estimates_client",
+    "responsibility": "Fetch the raw delay-estimate records for all tube lines from the Upstash Redis REST API and parse them into typed objects.",
+    "non_responsibilities": [
+      "Does not map trackernetCode to lineId.",
+      "Does not filter, group, or average delay records by station or edge.",
+      "Does not decide how delays are displayed."
+    ],
+    "inputs": [
+      {
+        "name": "RedisEnvironmentConfig",
+        "type": "object",
+        "fields": [
+          { "name": "rest_url", "type": "string", "optional": false },
+          { "name": "rest_token", "type": "string", "optional": false }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "RawDelayEstimate",
+        "type": "object",
+        "fields": [
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "closest_station_id_to_arrival", "type": "string", "optional": false },
+          { "name": "current_location", "type": "string", "optional": false },
+          { "name": "time_to_station", "type": "int", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "timestamp", "type": "int", "optional": false },
+          { "name": "delayed_seconds", "type": "float", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_delay_estimates",
+        "description": "Fetches and parses the current contents of the delay-estimates redis key into a list of raw delay estimate records covering all lines.",
+        "parameters": [],
+        "returns": "list[RawDelayEstimate]",
+        "preconditions": [
+          "UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN environment variables are set"
+        ],
+        "postconditions": [
+          "Returns one RawDelayEstimate per entry currently stored under the delay-estimates key",
+          "Raises DelayEstimatesClientError if the request fails or the payload cannot be parsed"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.data.trackernet_codes",
+    "responsibility": "Provide the static lookup from a tube lineId to the trackernetCode used by the delay-estimates feed.",
+    "non_responsibilities": [
+      "Does not fetch or cache any remote data.",
+      "Does not validate that a lineId has a live-map layout."
+    ],
+    "inputs": [],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "get_trackernet_code",
+        "description": "Looks up the trackernetCode for a given tube lineId.",
+        "parameters": [
+          { "name": "line_id", "type": "string", "optional": false }
+        ],
+        "returns": "string",
+        "preconditions": [
+          "line_id is one of the known tube line ids (bakerloo, central, circle, district, hammersmith-city, jubilee, metropolitan, northern, piccadilly, victoria, waterloo-city)"
+        ],
+        "postconditions": [
+          "Returns the matching trackernetCode",
+          "circle and hammersmith-city both return \"H\""
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "app.services.delay_estimate_resolver",
+    "responsibility": "Annotate already-built line-map nodes and edges with an average delay in whole minutes per station and per edge, computed from raw delay-estimate records for one line.",
+    "non_responsibilities": [
+      "Does not fetch delay data from Redis.",
+      "Does not know the lineId-to-trackernetCode mapping (receives the code as a parameter).",
+      "Does not decide display formatting, labels, or colors.",
+      "Does not parse currentLocation text itself (delegates to train_position_resolver, reusing the same at-station/between-stations resolution used for train markers).",
+      "Does not construct the base MapNode/MapEdge objects (receives them already built and only returns them with delay_minutes attached)."
+    ],
+    "inputs": [
+      {
+        "name": "RawDelayEstimate",
+        "type": "object",
+        "fields": [
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "closest_station_id_to_arrival", "type": "string", "optional": false },
+          { "name": "current_location", "type": "string", "optional": false },
+          { "name": "delayed_seconds", "type": "float", "optional": false }
+        ]
+      },
+      {
+        "name": "LineLayout",
+        "type": "object",
+        "fields": [
+          { "name": "nodes", "type": "LayoutNode[]", "optional": false },
+          { "name": "edges", "type": "LayoutEdge[]", "optional": false }
+        ]
+      },
+      {
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "resolve",
+        "description": "Filters records to the given trackernetCode, resolves each onto the layout via train_position_resolver, averages delayed_seconds per station id and per edge station-pair (via layout.edge_pairs()) into whole minutes, and returns copies of the given nodes/edges with delay_minutes set wherever matching data exists.",
+        "parameters": [
+          { "name": "estimates", "type": "list[RawDelayEstimate]", "optional": false },
+          { "name": "trackernet_code", "type": "string", "optional": false },
+          { "name": "layout", "type": "LineLayout", "optional": false },
+          { "name": "nodes", "type": "list[MapNode]", "optional": false },
+          { "name": "edges", "type": "list[MapEdge]", "optional": false }
+        ],
+        "returns": "tuple[list[MapNode], list[MapEdge]]",
+        "preconditions": [
+          "layout, nodes, and edges all correspond to the line identified by trackernet_code"
+        ],
+        "postconditions": [
+          "Returns the same number of nodes/edges as given, in the same order, with all non-delay fields unchanged",
+          "Records whose trackernet_code does not match are ignored",
+          "Records train_position_resolver cannot resolve onto the layout are ignored",
+          "Average minutes are clamped to a minimum of 0",
+          "delay_minutes is left unset on any node/edge with no matching records"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "changed",
+    "module_name": "app.models.line_map",
+    "responsibility": "Define the response data schemas for the live line map view: nodes, edges, train markers, and their optional delay figures.",
+    "non_responsibilities": [
+      "Does not compute delay_minutes or disruption_category values.",
+      "Does not perform any station or layout lookups."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "float", "optional": false },
+          { "name": "y", "type": "float", "optional": false },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string", "optional": true },
+          { "name": "delay_minutes", "type": "int", "optional": true }
+        ]
+      },
+      {
+        "name": "TrainMarker",
+        "type": "object",
+        "fields": [
+          { "name": "vehicle_id", "type": "string", "optional": false },
+          { "name": "at_station_id", "type": "string", "optional": true },
+          { "name": "between_station_ids", "type": "string[]", "optional": true }
+        ]
+      },
+      {
+        "name": "LineMapView",
+        "type": "object",
+        "fields": [
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "changed",
+    "module_name": "app.services.line_map_service",
+    "responsibility": "Orchestrate fetching a line's layout, statuses, arrivals, and delay estimates, and assemble them into one LineMapView with delay figures attached to nodes and edges.",
+    "non_responsibilities": [
+      "Does not parse currentLocation strings itself (delegates to train_position_resolver/delay_estimate_resolver).",
+      "Does not compute delay averages itself (delegates to delay_estimate_resolver).",
+      "Does not know the lineId-to-trackernetCode mapping table (delegates to trackernet_codes).",
+      "Does not merge delay figures into node/edge objects itself (delay_estimate_resolver returns fully-annotated MapNode/MapEdge lists ready to embed)."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "LineMapView",
+        "type": "object",
+        "fields": [
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false },
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "get_line_map",
+        "description": "Builds the full live map view for a line and direction, including per-station and per-edge delay minutes derived from the delay-estimates feed.",
+        "parameters": [
+          { "name": "line_id", "type": "string", "optional": false },
+          { "name": "direction", "type": "string", "optional": false }
+        ],
+        "returns": "LineMapView",
+        "preconditions": [],
+        "postconditions": [
+          "Raises LineNotFoundError if line_id is not a known tube line",
+          "Each node/edge includes delay_minutes when matching delay-estimate data exists for that station/edge, otherwise it is omitted"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.types.index",
+    "responsibility": "Define shared TypeScript interfaces mirroring backend API response shapes used across pages and components.",
+    "non_responsibilities": [
+      "Does not perform any runtime validation or transformation of API responses."
+    ],
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "number", "optional": false },
+          { "name": "y", "type": "number", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string | null", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
+      }
+    ],
+    "public_interface": []
+  },
+  {
+    "type": "changed",
+    "module_name": "frontend.src.components.TubeMapView",
+    "responsibility": "Render the SVG live tube map, drawing station nodes, edges, train markers, and delay-minute badges for stations/edges that have data.",
+    "non_responsibilities": [
+      "Does not fetch map or delay data.",
+      "Does not compute delay averages.",
+      "Does not manage polling or routing."
+    ],
+    "inputs": [
+      {
+        "name": "MapNode",
+        "type": "object",
+        "fields": [
+          { "name": "station_id", "type": "string", "optional": false },
+          { "name": "name", "type": "string", "optional": false },
+          { "name": "x", "type": "number", "optional": false },
+          { "name": "y", "type": "number", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
+      },
+      {
+        "name": "MapEdge",
+        "type": "object",
+        "fields": [
+          { "name": "from_station_id", "type": "string", "optional": false },
+          { "name": "to_station_id", "type": "string", "optional": false },
+          { "name": "disruption_category", "type": "string | null", "optional": false },
+          { "name": "delay_minutes", "type": "number | null", "optional": true }
+        ]
+      }
+    ],
+    "outputs": [],
+    "public_interface": [
+      {
+        "name": "TubeMapView",
+        "description": "React component that renders the live tube map SVG given nodes, edges, trains, and the line's color, showing a '+N' delay badge beside any station or edge that has delay data, colored red above 10 minutes.",
+        "parameters": [
+          { "name": "nodes", "type": "MapNode[]", "optional": false },
+          { "name": "edges", "type": "MapEdge[]", "optional": false },
+          { "name": "trains", "type": "TrainMarker[]", "optional": false },
+          { "name": "lineColor", "type": "string", "optional": false }
+        ],
+        "returns": "JSX.Element",
+        "preconditions": [],
+        "postconditions": [
+          "No delay badge is rendered for a station/edge whose delay_minutes is null or undefined",
+          "A delay_minutes of 0 renders as \"+0\"",
+          "A delay_minutes greater than 10 renders in red"
+        ]
+      }
+    ]
+  }
+]
