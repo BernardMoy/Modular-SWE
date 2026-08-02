@@ -12,15 +12,11 @@
         "type": "string"
       },
       "improvement_instruction": {
-        "description": "Improvement instructions on mitigating the code smell.",
-        "type": "string"
-      },
-      "reason": {
-        "description": "Reason that this improvement is necessary based on a reasonable and practical scenario when the code evolves, showing the maintainability and quality issues.",
+        "description": "Improvement instructions that would help mitigate the code smell.",
         "type": "string"
       }
     },
-    "required": ["module_name", "smell", "improvement_instruction", "reason"],
+    "required": ["module_name", "smell", "improvement_instruction"],
     "additionalProperties": false
   }
 }

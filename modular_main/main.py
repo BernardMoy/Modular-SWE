@@ -17,6 +17,7 @@ from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
 from .settings import WORKFLOW_MODE 
+from prompts.code_quality_pass_fail import code_quality_pass_fail
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -84,7 +85,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
         print(json.dumps(a_output_json, indent=2))
-        if a_output_json["result"] == "pass": 
+        if code_quality_pass_fail(a_output_json):  
             passed = True
 
         # Increment the iteration number 
@@ -238,7 +239,7 @@ def modular_workflow():
 
     # copy the rubrics md file 
     shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
-    
+
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")
     subprocess.run([
@@ -283,7 +284,7 @@ def modular_workflow():
         print(modules_array)
 
         # for the all at once mode, implement all modules 
-        if WORKFLOW_MODE == "allAtOnce": 
+        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects": 
             result = get_prompt_and_run_agent(executor, "all_at_once_coder", N)
             print(result)
         
