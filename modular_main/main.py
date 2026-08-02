@@ -236,6 +236,9 @@ def modular_workflow():
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
+    # copy the rubrics md file 
+    shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
+    
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")
     subprocess.run([
