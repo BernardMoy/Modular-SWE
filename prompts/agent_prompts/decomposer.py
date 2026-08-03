@@ -44,6 +44,5 @@ Second, create or update the dependency graph in `current_deps_graph.json`, usin
 - The names used in the dependency graph must match exactly the `module_name` field in `current_design.json`. 
 {get_json_string("dependency_graph")}
 
-Third, create or add to the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was rejected, using the following schema. Do NOT remove existing rejected suggestions unless necessary.
-{get_json_string("rejected_improvements")}
+Third, update any improvements listed in `current_analyzer_result.json` if present by changing the status field to either "accepted" or "rejected" and provide a reason if rejected. 
 """

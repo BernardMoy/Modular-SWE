@@ -12,15 +12,21 @@
         "type": "string"
       },
       "improvement_instruction": {
-        "description": "Improvement instructions on mitigating the code smell.",
+        "description": "Improvement instructions that would help mitigate the code smell.",
         "type": "string"
       },
-      "reason": {
-        "description": "Reason that this improvement is necessary based on a reasonable and practical scenario when the code evolves, showing the maintainability and quality issues.",
+      "status": {
+        "description": "The resolution status of the suggestion.",
+        "type": "string",
+        "const": "unresolved",
+        "default": "unresolved"
+      },
+      "rejection_reason": {
+        "description": "Reason only present when the improvement suggestion is rejected.",
         "type": "string"
       }
     },
-    "required": ["module_name", "smell", "improvement_instruction", "reason"],
+    "required": ["module_name", "smell", "improvement_instruction", "status"],
     "additionalProperties": false
   }
 }

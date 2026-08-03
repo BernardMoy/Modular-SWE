@@ -1,8 +1,26 @@
 [
   {
-    "module_name": "app.services.delay_estimate_resolver",
-    "smell": "resolve() is keyed only by trackernet_code, but app.data.trackernet_codes' own postcondition states circle and hammersmith-city both map to the same code \"H\", so the resolver has no way to tell which of the two lines a given RawDelayEstimate actually belongs to.",
-    "improvement_instruction": "Either give resolve() a way to disambiguate estimates for lines that share a trackernet_code (e.g. only accept records whose closest_station_id_to_arrival/current_location resolve to a station or edge that is exclusive to the requested line's layout, dropping ones that fall on track shared with the other line), or, if disambiguation truly isn't possible from the feed, make the shared-code limitation an explicit precondition/postcondition of resolve() (e.g. \"When trackernet_code is 'H', returned delay_minutes may include trains actually running on the other H-coded line\") so callers and the frontend are not presented with per-line figures that are silently pooled across two lines.",
-    "reason": "When a user opens the live map for the circle line on a station/edge that circle physically shares with hammersmith-city (most of the route), because delay_estimate_resolver's contract and trackernet_codes' aliasing of both lines to \"H\" are never reconciled anywhere in the design, hammersmith-city train delays get silently folded into the circle line's delay_minutes (and vice versa) even though each module's own postconditions look satisfied in isolation, producing incorrect on-screen delay figures that unit tests written against either module alone would never catch."
+    "module_name": "backend.app.api.contracts",
+    "smell": "The API contract layer is duplicated conceptually in the frontend, creating two manually synchronized sources of truth for the same payload shapes.",
+    "improvement_instruction": "Define the API schema once and generate or derive the frontend contract types from the backend contract source, or move both sides to a shared contract package with clear ownership.",
+    "reason": "When a board or station payload gains a new field or changes an existing one, backend and frontend contract modules will need coordinated edits and can drift silently, turning a routine API evolution into a cross-stack compatibility risk."
+  },
+  {
+    "module_name": "frontend.src.types.api",
+    "smell": "The frontend keeps a second hand-maintained copy of backend response contracts instead of consuming a shared schema.",
+    "improvement_instruction": "Replace hand-authored mirrored types with generated or shared contract definitions so the frontend compiles against the same schema the backend exposes.",
+    "reason": "As endpoints evolve, duplicated contract ownership makes it easy for the UI to compile against stale assumptions, which raises maintenance cost and increases the chance of runtime breakage after otherwise small backend changes."
+  },
+  {
+    "module_name": "frontend.src.features.station_selection.flow",
+    "smell": "The station-selection flow centralizes navigation branching and line-selection fetching, while the select-line page also depends on the same metadata API, creating duplicated flow knowledge.",
+    "improvement_instruction": "Introduce a shared station-selection state or route-loader boundary so the decision data fetched after station selection can be reused by the select-line page instead of being rediscovered in multiple places.",
+    "reason": "If line-selection rules, error handling, or caching behavior change, the current split risks the flow hook and the line-selection page evolving differently, which makes navigation bugs and inconsistent UX more likely during feature expansion."
+  },
+  {
+    "module_name": "frontend.src.pages.select_line_page",
+    "smell": "The page depends directly on line-selection metadata fetching even though selection decisions are already part of the upstream station-selection flow.",
+    "improvement_instruction": "Refactor the page to consume resolved selection data from route state, a loader, or a dedicated shared store, leaving the page focused on rendering and user choice.",
+    "reason": "When the application adds prefetching, retries, or optimistic navigation, a second fetch-oriented ownership point inside the page will force duplicate changes and make it harder to reason about where the line-selection decision really lives."
   }
 ]

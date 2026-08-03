@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "Readability": { "$ref": "#/$defs/axis" },
+    "Simplicity": { "$ref": "#/$defs/axis" },
+    "Maintainability": { "$ref": "#/$defs/axis" },
+    "Modularity": { "$ref": "#/$defs/axis" },
+    "Reusability": { "$ref": "#/$defs/axis" }
+  },
+  "required": [
+    "Readability",
+    "Simplicity",
+    "Maintainability",
+    "Modularity",
+    "Reusability"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "axis": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "description": "A score from 1-5 based on the given criteria, to rate the software quality in this aspect",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "comments": {
+          "description": "Comments that justify the score given based on the design or the implementation.",
+          "type": "string"
+        }
+      },
+      "required": ["score", "comments"],
+      "additionalProperties": false
+    }
+  }
+}
