@@ -1,12 +1,12 @@
 [
   {
     "type": "new",
-    "module_name": "backend.app.domain.models",
-    "responsibility": "Define the shared typed data contracts used by the backend API, catalog, TfL client, and board aggregation logic.",
+    "module_name": "backend.app.domain.entities",
+    "responsibility": "Define the backend domain entities shared by the catalog repository, station services, and TfL arrival ingestion flow.",
     "non_responsibilities": [
-      "Load static JSON files",
-      "Call external HTTP APIs",
-      "Apply routing or page-flow decisions"
+      "Shape HTTP response payloads",
+      "Register API routes",
+      "Decide frontend navigation flow"
     ],
     "inputs": [
       {
@@ -74,53 +74,17 @@
     ],
     "outputs": [
       {
-        "name": "BoardResponse",
+        "name": "DomainEntities",
         "type": "object",
         "fields": [
           {
-            "name": "station_id",
-            "type": "str",
+            "name": "station_record",
+            "type": "type",
             "optional": false
           },
           {
-            "name": "station_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "line_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "direction_boards",
-            "type": "list[DirectionBoard]",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "StationSearchResult",
-        "type": "object",
-        "fields": [
-          {
-            "name": "station_id",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "station_name",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "station_code",
-            "type": "str",
-            "optional": false
-          },
-          {
-            "name": "served_lines",
-            "type": "list[LineSummary]",
+            "name": "arrival_prediction",
+            "type": "type",
             "optional": false
           }
         ]
@@ -160,6 +124,220 @@
         "postconditions": [
           "A validated StationRecord is returned",
           "served_line_ids preserves only supported line identifiers"
+        ]
+      },
+      {
+        "name": "build_arrival_prediction",
+        "description": "Create a validated arrival prediction from one TfL payload row.",
+        "parameters": [
+          {
+            "name": "vehicle_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "line_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "destination_name",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "time_to_station_seconds",
+            "type": "int",
+            "optional": false
+          },
+          {
+            "name": "platform_name",
+            "type": "str",
+            "optional": false
+          }
+        ],
+        "returns": "ArrivalPrediction",
+        "preconditions": [
+          "The payload row comes from a supported line arrivals response"
+        ],
+        "postconditions": [
+          "A validated ArrivalPrediction is returned"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "backend.app.api.contracts",
+    "responsibility": "Define the backend API response contracts and lightweight assembly helpers exposed by the station and board routes.",
+    "non_responsibilities": [
+      "Load static station data",
+      "Fetch live arrivals from TfL",
+      "Apply board grouping rules"
+    ],
+    "inputs": [
+      {
+        "name": "StationSearchResultFields",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_name",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_code",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "served_lines",
+            "type": "list[LineSummary]",
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "BoardResponseFields",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_name",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "line_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "direction_boards",
+            "type": "list[DirectionBoard]",
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "LineSelectionDecisionFields",
+        "type": "object",
+        "fields": [
+          {
+            "name": "requires_selection",
+            "type": "bool",
+            "optional": false
+          },
+          {
+            "name": "available_line_ids",
+            "type": "list[str]",
+            "optional": false
+          },
+          {
+            "name": "default_line_id",
+            "type": "str",
+            "optional": true
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "ApiContracts",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_search_result",
+            "type": "type",
+            "optional": false
+          },
+          {
+            "name": "line_selection_decision",
+            "type": "type",
+            "optional": false
+          },
+          {
+            "name": "board_response",
+            "type": "type",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "build_station_search_result",
+        "description": "Create the API response object for one matched station.",
+        "parameters": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_name",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "station_code",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "served_lines",
+            "type": "list[LineSummary]",
+            "optional": false
+          }
+        ],
+        "returns": "StationSearchResult",
+        "preconditions": [
+          "served_lines contains only supported line summaries"
+        ],
+        "postconditions": [
+          "A validated StationSearchResult is returned"
+        ]
+      },
+      {
+        "name": "build_line_selection_decision",
+        "description": "Create the API response object for the station line-selection outcome.",
+        "parameters": [
+          {
+            "name": "requires_selection",
+            "type": "bool",
+            "optional": false
+          },
+          {
+            "name": "available_line_ids",
+            "type": "list[str]",
+            "optional": false
+          },
+          {
+            "name": "default_line_id",
+            "type": "str",
+            "optional": true
+          }
+        ],
+        "returns": "LineSelectionDecision",
+        "preconditions": [
+          "available_line_ids contains only supported line identifiers"
+        ],
+        "postconditions": [
+          "A validated LineSelectionDecision is returned"
         ]
       },
       {
@@ -304,12 +482,38 @@
     ],
     "outputs": [
       {
-        "name": "StationSearchResults",
+        "name": "StationSearchMatches",
         "type": "object",
         "fields": [
           {
             "name": "matches",
-            "type": "list[StationSearchResult]",
+            "type": "list[StationSearchMatch]",
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "StationSearchMatch",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "name",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "code",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "served_line_ids",
+            "type": "list[str]",
             "optional": false
           }
         ]
@@ -352,13 +556,14 @@
             "optional": false
           }
         ],
-        "returns": "list[StationSearchResult]",
+        "returns": "list[StationSearchMatch]",
         "preconditions": [
           "The service has been initialized with the curated catalog"
         ],
         "postconditions": [
           "Results are limited to supported stations",
-          "Matches can be produced from station name or station code"
+          "Matches can be produced from station name or station code",
+          "Returned matches contain station identity and served line identifiers for downstream application decisions"
         ]
       },
       {
@@ -384,7 +589,7 @@
   {
     "type": "new",
     "module_name": "backend.app.services.line_selection",
-    "responsibility": "Decide whether a station requires line selection and expose the eligible line choices for that station.",
+    "responsibility": "Decide whether a station requires line selection and expose the eligible line choices for that station for application use.",
     "non_responsibilities": [
       "Search stations",
       "Fetch live arrivals",
@@ -410,7 +615,7 @@
     ],
     "outputs": [
       {
-        "name": "LineSelectionDecision",
+        "name": "LineSelectionOutcome",
         "type": "object",
         "fields": [
           {
@@ -442,7 +647,7 @@
             "optional": false
           }
         ],
-        "returns": "LineSelectionDecision",
+        "returns": "LineSelectionOutcome",
         "preconditions": [
           "station contains the served lines for a supported tube station"
         ],
@@ -512,12 +717,248 @@
   },
   {
     "type": "new",
-    "module_name": "backend.app.services.arrival_board",
-    "responsibility": "Build a station-and-line-specific arrival board by filtering live predictions and grouping them by direction and vehicle.",
+    "module_name": "backend.app.services.arrival_filters",
+    "responsibility": "Filter raw line-level arrival predictions down to the arrivals relevant for one requested station and supported board directions.",
     "non_responsibilities": [
-      "Issue HTTP requests directly",
+      "Fetch data from TfL",
+      "Look up station catalog metadata",
+      "Assemble HTTP response payloads"
+    ],
+    "inputs": [
+      {
+        "name": "ArrivalFilterRequest",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "line_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "predictions",
+            "type": "list[ArrivalPrediction]",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "FilteredArrivals",
+        "type": "object",
+        "fields": [
+          {
+            "name": "predictions",
+            "type": "list[ArrivalPrediction]",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "filter_station_line_arrivals",
+        "description": "Keep only arrivals for the requested station and supported direction-labelled platforms.",
+        "parameters": [
+          {
+            "name": "station_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "line_id",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "predictions",
+            "type": "list[ArrivalPrediction]",
+            "optional": false
+          }
+        ],
+        "returns": "list[ArrivalPrediction]",
+        "preconditions": [
+          "predictions were fetched from the requested line endpoint"
+        ],
+        "postconditions": [
+          "Returned predictions all belong to the requested station and line",
+          "Predictions without a supported direction label are excluded"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "backend.app.services.platform_normalizer",
+    "responsibility": "Parse platform labels into stable board directions and merged platform-number display values.",
+    "non_responsibilities": [
+      "Fetch or filter arrival predictions",
+      "Read station metadata",
+      "Register API routes"
+    ],
+    "inputs": [
+      {
+        "name": "PlatformName",
+        "type": "object",
+        "fields": [
+          {
+            "name": "platform_name",
+            "type": "str",
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "PlatformNames",
+        "type": "object",
+        "fields": [
+          {
+            "name": "platform_names",
+            "type": "list[str]",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "ParsedPlatform",
+        "type": "object",
+        "fields": [
+          {
+            "name": "direction",
+            "type": "str",
+            "optional": false
+          },
+          {
+            "name": "platform_number",
+            "type": "str",
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "MergedPlatformDisplay",
+        "type": "object",
+        "fields": [
+          {
+            "name": "platform_display",
+            "type": "str",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "parse_platform_name",
+        "description": "Extract the board direction and optional platform number from one platform label.",
+        "parameters": [
+          {
+            "name": "platform_name",
+            "type": "str",
+            "optional": false
+          }
+        ],
+        "returns": "ParsedPlatform",
+        "preconditions": [
+          "platform_name comes from a TfL arrival prediction"
+        ],
+        "postconditions": [
+          "direction is one of Northbound, Eastbound, Southbound, or Westbound when parsing succeeds"
+        ]
+      },
+      {
+        "name": "merge_platform_numbers",
+        "description": "Combine platform numbers for one grouped arrival row into a sorted display string.",
+        "parameters": [
+          {
+            "name": "platform_names",
+            "type": "list[str]",
+            "optional": false
+          }
+        ],
+        "returns": "str",
+        "preconditions": [
+          "platform_names all correspond to the same grouped arrival row"
+        ],
+        "postconditions": [
+          "Returns comma-separated platform numbers, or '-' when none can be identified"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "backend.app.services.board_transformer",
+    "responsibility": "Group filtered arrivals by direction and vehicle, then sort the resulting board rows for presentation.",
+    "non_responsibilities": [
+      "Issue HTTP requests",
       "Search the station catalog",
-      "Handle HTTP route registration"
+      "Return the final HTTP response envelope"
+    ],
+    "inputs": [
+      {
+        "name": "FilteredArrivals",
+        "type": "object",
+        "fields": [
+          {
+            "name": "predictions",
+            "type": "list[ArrivalPrediction]",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "DirectionBoards",
+        "type": "object",
+        "fields": [
+          {
+            "name": "direction_boards",
+            "type": "list[DirectionBoard]",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "build_direction_boards",
+        "description": "Convert filtered arrivals into direction-grouped rows deduplicated by vehicle id.",
+        "parameters": [
+          {
+            "name": "predictions",
+            "type": "list[ArrivalPrediction]",
+            "optional": false
+          }
+        ],
+        "returns": "list[DirectionBoard]",
+        "preconditions": [
+          "predictions are already limited to one station and one line"
+        ],
+        "postconditions": [
+          "Rows are grouped by vehicle id within each direction",
+          "Platform numbers are merged and sorted for each row",
+          "Each direction board is sorted by earliest arrival time"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "backend.app.services.arrival_board",
+    "responsibility": "Orchestrate station-specific board creation by combining catalog lookup, TfL arrivals retrieval, filtering, and transformation into an application-level board result.",
+    "non_responsibilities": [
+      "Issue HTTP requests directly from route handlers",
+      "Parse raw platform labels inline",
+      "Register FastAPI endpoints"
     ],
     "inputs": [
       {
@@ -560,7 +1001,7 @@
     ],
     "outputs": [
       {
-        "name": "BoardResponse",
+        "name": "StationBoard",
         "type": "object",
         "fields": [
           {
@@ -602,14 +1043,14 @@
             "optional": false
           }
         ],
-        "returns": "BoardResponse",
+        "returns": "StationBoard",
         "preconditions": [
           "station_id identifies a supported station",
           "line_id is served by the station"
         ],
         "postconditions": [
           "Only arrivals for the requested station and line are included",
-          "Rows are grouped by vehicle id within the same direction",
+          "Filtered predictions are transformed through dedicated filtering and board-building collaborators",
           "Platform numbers are merged and sorted, or '-' when none can be identified",
           "Each direction board is sorted by earliest arrival time"
         ]
@@ -905,11 +1346,11 @@
   {
     "type": "new",
     "module_name": "frontend.src.features.station_search.api",
-    "responsibility": "Fetch station search results and station line-selection metadata from the backend.",
+    "responsibility": "Fetch station search results from the backend.",
     "non_responsibilities": [
       "Render search UI",
       "Decide which page component to navigate to",
-      "Format arrival board rows"
+      "Fetch station line-selection metadata"
     ],
     "inputs": [
       {
@@ -918,17 +1359,6 @@
         "fields": [
           {
             "name": "query",
-            "type": "string",
-            "optional": false
-          }
-        ]
-      },
-      {
-        "name": "StationLineSelectionRequest",
-        "type": "object",
-        "fields": [
-          {
-            "name": "station_id",
             "type": "string",
             "optional": false
           }
@@ -946,7 +1376,52 @@
             "optional": false
           }
         ]
-      },
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "searchStations",
+        "description": "Request matching supported stations for a user query.",
+        "parameters": [
+          {
+            "name": "query",
+            "type": "string",
+            "optional": false
+          }
+        ],
+        "returns": "Promise<StationSearchResult[]>",
+        "preconditions": [
+          "The backend base URL is configured"
+        ],
+        "postconditions": [
+          "Resolves with supported station matches from the backend"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
+    "module_name": "frontend.src.features.station_selection.api",
+    "responsibility": "Fetch station line-selection metadata from the backend.",
+    "non_responsibilities": [
+      "Render the station search interface",
+      "Fetch station search matches",
+      "Render the board page"
+    ],
+    "inputs": [
+      {
+        "name": "StationLineSelectionRequest",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "string",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "outputs": [
       {
         "name": "LineSelectionDecision",
         "type": "object",
@@ -970,24 +1445,6 @@
       }
     ],
     "public_interface": [
-      {
-        "name": "searchStations",
-        "description": "Request matching supported stations for a user query.",
-        "parameters": [
-          {
-            "name": "query",
-            "type": "string",
-            "optional": false
-          }
-        ],
-        "returns": "Promise<StationSearchResult[]>",
-        "preconditions": [
-          "The backend base URL is configured"
-        ],
-        "postconditions": [
-          "Resolves with supported station matches from the backend"
-        ]
-      },
       {
         "name": "fetchLineSelection",
         "description": "Request the line-selection decision for a chosen station.",
@@ -1091,8 +1548,70 @@
   },
   {
     "type": "new",
+    "module_name": "frontend.src.features.station_selection.flow",
+    "responsibility": "Own the post-selection station flow by using dedicated line-selection metadata fetching and choosing the next route.",
+    "non_responsibilities": [
+      "Render the station search interface",
+      "Fetch station search matches",
+      "Render the board page"
+    ],
+    "inputs": [
+      {
+        "name": "StationSelectionRequest",
+        "type": "object",
+        "fields": [
+          {
+            "name": "station_id",
+            "type": "string",
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "StationSelectionFlowContext",
+        "type": "object",
+        "fields": [
+          {
+            "name": "navigate",
+            "type": "(path: string) => void",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "StationSelectionAction",
+        "type": "object",
+        "fields": [
+          {
+            "name": "handle_station_selected",
+            "type": "function",
+            "optional": false
+          }
+        ]
+      }
+    ],
+    "public_interface": [
+      {
+        "name": "useStationSelectionFlow",
+        "description": "Provide the async station-selection handler used by the home page.",
+        "parameters": [],
+        "returns": "{ handleStationSelected: (stationId: string) => Promise<void> }",
+        "preconditions": [
+          "Frontend routing and station line-selection API modules are available"
+        ],
+        "postconditions": [
+          "Selecting a station fetches line-selection metadata before routing to the next page",
+          "Navigation branches stay outside the presentational page component"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "new",
     "module_name": "frontend.src.pages.home_page",
-    "responsibility": "Render the home page station search experience and trigger navigation after a station is chosen.",
+    "responsibility": "Render the home page station search experience while delegating post-selection flow control to a dedicated feature module.",
     "non_responsibilities": [
       "Perform HTTP requests directly",
       "Render the arrival board page",
@@ -1139,7 +1658,8 @@
           "Frontend routing and station search API modules are available"
         ],
         "postconditions": [
-          "Selecting a station transitions to either line selection or board view based on backend metadata"
+          "Selecting a station delegates to the station-selection flow controller",
+          "The page remains focused on search UI state and rendering"
         ]
       }
     ]
@@ -1187,7 +1707,7 @@
         "returns": "JSX.Element",
         "preconditions": [
           "The route includes a supported station identifier",
-          "Station line-selection metadata can be fetched from the backend"
+          "Station line-selection metadata can be fetched from the dedicated station-selection API module"
         ],
         "postconditions": [
           "Choosing a line navigates to the station board page for that line"

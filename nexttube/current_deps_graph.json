@@ -1,54 +1,78 @@
 {
-  "backend.app.domain.models": [],
+  "backend.app.domain.entities": [],
+  "backend.app.api.contracts": [
+    "backend.app.domain.entities"
+  ],
   "backend.app.repositories.static_catalog": [
-    "backend.app.domain.models"
+    "backend.app.domain.entities"
   ],
   "backend.app.services.station_catalog": [
-    "backend.app.domain.models",
+    "backend.app.domain.entities",
     "backend.app.repositories.static_catalog"
   ],
   "backend.app.services.line_selection": [
-    "backend.app.domain.models"
+    "backend.app.domain.entities"
   ],
   "backend.app.clients.tfl_api": [
-    "backend.app.domain.models"
+    "backend.app.domain.entities"
+  ],
+  "backend.app.services.arrival_filters": [
+    "backend.app.domain.entities"
+  ],
+  "backend.app.services.platform_normalizer": [],
+  "backend.app.services.board_transformer": [
+    "backend.app.domain.entities",
+    "backend.app.services.platform_normalizer"
   ],
   "backend.app.services.arrival_board": [
     "backend.app.clients.tfl_api",
-    "backend.app.domain.models",
+    "backend.app.services.arrival_filters",
+    "backend.app.services.board_transformer",
     "backend.app.services.station_catalog"
   ],
   "backend.app.api.routes.stations": [
-    "backend.app.domain.models",
+    "backend.app.api.contracts",
     "backend.app.services.line_selection",
     "backend.app.services.station_catalog"
   ],
   "backend.app.api.routes.boards": [
-    "backend.app.domain.models",
+    "backend.app.api.contracts",
     "backend.app.services.arrival_board"
   ],
   "backend.app.main": [
+    "backend.app.api.contracts",
     "backend.app.api.routes.boards",
     "backend.app.api.routes.stations",
     "backend.app.clients.tfl_api",
+    "backend.app.domain.entities",
     "backend.app.repositories.static_catalog",
     "backend.app.services.arrival_board",
+    "backend.app.services.arrival_filters",
+    "backend.app.services.board_transformer",
     "backend.app.services.line_selection",
+    "backend.app.services.platform_normalizer",
     "backend.app.services.station_catalog"
   ],
   "frontend.src.types.api": [],
   "frontend.src.features.station_search.api": [
     "frontend.src.types.api"
   ],
+  "frontend.src.features.station_selection.api": [
+    "frontend.src.types.api"
+  ],
+  "frontend.src.features.station_selection.flow": [
+    "frontend.src.features.station_selection.api"
+  ],
   "frontend.src.features.board.api": [
     "frontend.src.types.api"
   ],
   "frontend.src.pages.home_page": [
     "frontend.src.features.station_search.api",
+    "frontend.src.features.station_selection.flow",
     "frontend.src.types.api"
   ],
   "frontend.src.pages.select_line_page": [
-    "frontend.src.features.station_search.api",
+    "frontend.src.features.station_selection.api",
     "frontend.src.types.api"
   ],
   "frontend.src.pages.board_page": [

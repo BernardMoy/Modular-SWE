@@ -1,26 +1,26 @@
 [
   {
-    "module_name": "backend.app.domain.models",
-    "smell": "The module mixes core domain entities with API-facing response contracts and construction helpers.",
-    "improvement_instruction": "Split this module into separate backend domain entities and transport DTO modules, and move response assembly helpers closer to the API or service layer that owns them.",
-    "reason": "When the backend needs to change internal arrival grouping rules or expose a different HTTP payload version, a shared model module will force unrelated repository, client, and route code to change together, increasing ripple effects across the whole backend."
-  },
-  {
-    "module_name": "backend.app.services.arrival_board",
-    "smell": "The service concentrates multiple transformation responsibilities in one place: filtering predictions, grouping by direction, deduplicating by vehicle, normalizing platforms, and sorting output.",
-    "improvement_instruction": "Break the board-building flow into smaller collaborators or pure transformation modules for filtering, grouping, platform normalization, and final response assembly.",
-    "reason": "As soon as product requirements add alternate board layouts, exception handling for missing platform data, or different grouping rules per line, a single aggregation service will become the highest-risk place to modify and test."
-  },
-  {
-    "module_name": "frontend.src.pages.home_page",
-    "smell": "The page is responsible for both rendering the search experience and orchestrating post-selection navigation decisions.",
-    "improvement_instruction": "Extract the station-selection flow into a dedicated controller hook or feature module that owns the fetch-and-navigate decision, leaving the page focused on presentation and local UI state.",
-    "reason": "If the station selection flow gains loading retries, analytics, query persistence, or additional routing branches, the page will become a hard-to-read coordinator where UI changes and navigation logic interfere with each other."
+    "module_name": "backend.app.api.contracts",
+    "smell": "The API contract layer is duplicated conceptually in the frontend, creating two manually synchronized sources of truth for the same payload shapes.",
+    "improvement_instruction": "Define the API schema once and generate or derive the frontend contract types from the backend contract source, or move both sides to a shared contract package with clear ownership.",
+    "reason": "When a board or station payload gains a new field or changes an existing one, backend and frontend contract modules will need coordinated edits and can drift silently, turning a routine API evolution into a cross-stack compatibility risk."
   },
   {
     "module_name": "frontend.src.types.api",
-    "smell": "The frontend keeps handwritten API contracts that mirror backend response shapes, creating a cross-stack duplication point.",
-    "improvement_instruction": "Generate these contracts from a backend schema or move to a shared contract source so the frontend imports authoritative response types instead of maintaining local mirrors.",
-    "reason": "When backend fields are renamed, added, or versioned, duplicated contract definitions can silently drift and force developers to debug runtime integration issues that should have been caught at build time."
+    "smell": "The frontend keeps a second hand-maintained copy of backend response contracts instead of consuming a shared schema.",
+    "improvement_instruction": "Replace hand-authored mirrored types with generated or shared contract definitions so the frontend compiles against the same schema the backend exposes.",
+    "reason": "As endpoints evolve, duplicated contract ownership makes it easy for the UI to compile against stale assumptions, which raises maintenance cost and increases the chance of runtime breakage after otherwise small backend changes."
+  },
+  {
+    "module_name": "frontend.src.features.station_selection.flow",
+    "smell": "The station-selection flow centralizes navigation branching and line-selection fetching, while the select-line page also depends on the same metadata API, creating duplicated flow knowledge.",
+    "improvement_instruction": "Introduce a shared station-selection state or route-loader boundary so the decision data fetched after station selection can be reused by the select-line page instead of being rediscovered in multiple places.",
+    "reason": "If line-selection rules, error handling, or caching behavior change, the current split risks the flow hook and the line-selection page evolving differently, which makes navigation bugs and inconsistent UX more likely during feature expansion."
+  },
+  {
+    "module_name": "frontend.src.pages.select_line_page",
+    "smell": "The page depends directly on line-selection metadata fetching even though selection decisions are already part of the upstream station-selection flow.",
+    "improvement_instruction": "Refactor the page to consume resolved selection data from route state, a loader, or a dedicated shared store, leaving the page focused on rendering and user choice.",
+    "reason": "When the application adds prefetching, retries, or optimistic navigation, a second fetch-oriented ownership point inside the page will force duplicate changes and make it harder to reason about where the line-selection decision really lives."
   }
 ]

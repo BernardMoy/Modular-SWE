@@ -14,17 +14,17 @@ has_implementation: Whether the analyzer is working on the current design before
 Output: current_analyzer_result, pass / fail string (Returned) 
 """
 
-CODE_SMELLS_INST_HAS_IMPL = """
-- LCOM: Only flag if this is caused by methods having different responsibilities.
-- Cyclomatic complexity, WMC, long methods: Only flag if the complexity is caused by unrelated concerns, or cause the code to become difficult to understand or test.
-- Feature envy: Only flag if moving the method to another class would not drastically reduce reusability or introduce tight coupling."""
+# CODE_SMELLS_INST_HAS_IMPL = """
+# - LCOM: Only flag if this is caused by methods having different responsibilities.
+# - Cyclomatic complexity, WMC, long methods: Only flag if the complexity is caused by unrelated concerns, or cause the code to become difficult to understand or test.
+# - Feature envy: Only flag if moving the method to another class would not drastically reduce reusability or introduce tight coupling."""
 
-CODE_SMELLS_INST_NO_IMPL = """
-- Number of public methods: Only flag if the methods share different responsibilities, or they expose too much internal state that lead to feature envy of another module.  
+# CODE_SMELLS_INST_NO_IMPL = """
+# - Number of public methods: Only flag if the methods share different responsibilities, or they expose too much internal state that lead to feature envy of another module.  
 
-Apart from the code smells provided, consider the design semantics to identify issues before implementation: 
-- Module responsibility: Consider if a module has multiple concerns by inspecting if it has multiple responsibilities, or too many pre and postconditions in its design.
-- Duplicated or wrongly located methods: Consider if some methods are duplicated somewhere else, or if they should belong to another class."""
+# Apart from the code smells provided, consider the design semantics to identify issues before implementation: 
+# - Module responsibility: Consider if a module has multiple concerns by inspecting if it has multiple responsibilities, or too many pre and postconditions in its design.
+# - Duplicated or wrongly located methods: Consider if some methods are duplicated somewhere else, or if they should belong to another class."""
 
 def get_analyzer_prompt(has_implementation): 
     
@@ -46,11 +46,12 @@ You work with a OBSERVE - SUPPORT - SCORE cycle and you should not skip steps wh
     Repeat the OBSERVE-SUPPORT cycle multiple times until the codebase is thoroughly scanned and well understood, then begin scoring. 
 
     SCORE: Based on the observation and supporting code smells evidence, rank the software quality from 1 to 5 in the following aspects each: Readability, Simplicity, Maintainability, Modularity and Reusability. 
+    To ensure reliable results you should rank them multiple times internally and take the most confident score in your rankings. 
     Your score should be based on the rubrics in `rubrics.md`, and avoid giving the middle score too often as it carries less meaningful value.
 
-
-First, write a JSON object to `current_analyzer_result.json`, decsribing improvement suggestions only to modules that require refactoring, using the following schema. 
-Each suggestion should be backed up by a reason in the OBSERVE stage. 
+First, add (do NOT delete) to the JSON object in `current_analyzer_result.json`, decsribing improvement suggestions only to modules that require refactoring, using the following schema. 
+For each improvement, it should be detailed enough that implementing them won't create new maintainability issues due to bad designs. 
+There should also be an attempt of simulation by implementing all of them at once, making sure that this should not create new design issues and the software quality in the 5 above aspects should improve after the implementation. 
 {get_json_string("analyzer")}
 
 Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema. 

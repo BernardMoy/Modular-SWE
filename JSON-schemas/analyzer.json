@@ -14,9 +14,19 @@
       "improvement_instruction": {
         "description": "Improvement instructions that would help mitigate the code smell.",
         "type": "string"
+      },
+      "status": {
+        "description": "The resolution status of the suggestion.",
+        "type": "string",
+        "const": "unresolved",
+        "default": "unresolved"
+      },
+      "rejection_reason": {
+        "description": "Reason only present when the improvement suggestion is rejected.",
+        "type": "string"
       }
     },
-    "required": ["module_name", "smell", "improvement_instruction"],
+    "required": ["module_name", "smell", "improvement_instruction", "status"],
     "additionalProperties": false
   }
 }
