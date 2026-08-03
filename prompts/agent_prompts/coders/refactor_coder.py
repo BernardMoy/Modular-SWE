@@ -17,6 +17,5 @@ If a list of improvement suggestions for the current design is provided in `curr
 - Whether the suggestion conflict with issue requirements.
 
 Your task is to perform refactoring on the implementation code while preserving its functionality based on the improvement suggestions and your evaluation. 
-Additionally, create or add to the JSON object in `current_rejected_improvements.json` including each improvement suggestion that was rejected, using the following schema. Do NOT remove existing rejected suggestions unless necessary.
-{get_json_string("rejected_improvements")}
+Additionally, update any improvements listed in `current_analyzer_result.json` if present by changing the status field to either "accepted" or "rejected" and provide a reason if rejected. 
 """

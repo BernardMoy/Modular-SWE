@@ -151,7 +151,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold, entry_file_na
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
         print(json.dumps(a_output_json, indent=2))
-        if a_output_json["result"] == "pass": 
+        if code_quality_pass_fail(a_output_json):  
             passed = True
         
         # if passed, return
@@ -309,8 +309,14 @@ def modular_workflow():
                             print(future.result())
     
         # After implementation: 
+        # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed 
+        current_analyzer_json = AGENT_WORKSPACE / "current_analyzer_result.json"
+        if current_analyzer_json.exists(): 
+            current_analyzer_json.unlink() 
+        current_analyzer_json.touch() 
+
         # Refactor - Analyzer loop 
-        # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
+        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
