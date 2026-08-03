@@ -14,6 +14,10 @@ has_implementation: Whether the analyzer is working on the current design before
 Output: current_analyzer_result, pass / fail string (Returned) 
 """
 
+IMPROVEMENTS_CRITERIA = """
+- The problem is evidenced in the code today, and does not only make sense when something hypothetically changes in the future: Example includes modules that clearly mixes 2+ responsibilities, or a large chunk of duplicated code logic that needs to be modified together.
+- The suggestion should not be previously suggested, to prevent running into loops. """
+
 # CODE_SMELLS_INST_HAS_IMPL = """
 # - LCOM: Only flag if this is caused by methods having different responsibilities.
 # - Cyclomatic complexity, WMC, long methods: Only flag if the complexity is caused by unrelated concerns, or cause the code to become difficult to understand or test.
@@ -49,8 +53,8 @@ You work with a OBSERVE - SUPPORT - SCORE cycle and you should not skip steps wh
     To ensure reliable results you should rank them multiple times internally and take the most confident score in your rankings. 
     Your score should be based on the rubrics in `rubrics.md`, and avoid giving the middle score too often as it carries less meaningful value.
 
-First, add (do NOT delete) to the JSON object in `current_analyzer_result.json`, decsribing improvement suggestions only to modules that require refactoring, using the following schema. 
-For each improvement, it should be detailed enough that implementing them won't create new maintainability issues due to bad designs. 
+First, add (do NOT delete) to the JSON object in `current_analyzer_result.json`, decsribing improvement suggestions only to modules that require refactoring, using the following schema. These suggestions should follow these rules: {IMPROVEMENTS_CRITERIA}
+Each improvement should be detailed enough that implementing them won't create new maintainability issues due to bad designs. 
 There should also be an attempt of simulation by implementing all of them at once, making sure that this should not create new design issues and the software quality in the 5 above aspects should improve after the implementation. 
 {get_json_string("analyzer")}
 
