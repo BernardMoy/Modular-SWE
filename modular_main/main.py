@@ -26,8 +26,8 @@ SOLS_TESTS_DIR= Path("datasets/slopCodeBench/scb-problems-sols-tests")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
-DA_LOOP_THRESHOLD_BEFORE_IMPL = 5  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
@@ -94,7 +94,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
 # Refactor analyzer loop - happens after implementation. 
 # A first before R
 # For has impl = True only. 
-def analyzer_refactor_loop(executor, checkpoint_number, threshold, entry_file_name): 
+def analyzer_refactor_loop(executor, checkpoint_number, threshold): 
     iteration = 0 
     passed = False 
 
@@ -160,7 +160,8 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold, entry_file_na
 
         # if not passed, then call the refactor agent 
         print(f"========== [Iteration {iteration+1}] REFACTOR CODER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+        result = get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+        print(result)
 
         # Increment the iteration number 
         iteration += 1 
@@ -320,8 +321,12 @@ def modular_workflow():
             current_analyzer_json.unlink() 
         current_analyzer_json.touch() 
 
+        # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code) 
+        # as the agent_report would get overridden below 
+        shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
+
         # Refactor - Analyzer loop 
-        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL, ENTRY_FILE_NAME)
+        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
@@ -343,7 +348,7 @@ def modular_workflow():
         )
         # Also copy the agent report generated after it do its work 
         shutil.copy(
-            AGENT_WORKSPACE / "agent_report.json", 
+            AGENT_WORKSPACE / "implementation_report.json", 
             REPORT_DEST
         )
     else: 
