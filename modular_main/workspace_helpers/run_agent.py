@@ -38,6 +38,8 @@ async def run_agent(agent, model, prompt):
             # Print the agent's output to be captured later 
             print(result.final_response)
 
+            # print(result, getattr(result, "usage", None))
+
             for item in result.items:
                 # Add the all fields metadata to the log array 
                 data = item.model_dump() if hasattr(item, "model_dump") else (

@@ -264,6 +264,12 @@ def modular_workflow():
     if WORKFLOW_MODE == "noDesign": 
         print(f"========== CODING ALL MODULES ==========")
         result = get_prompt_and_run_agent(executor, "no_design_coder", N) 
+
+        # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code) 
+        # as the agent_report would get overridden below 
+        shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
+
+        
         print(result)
     
     else: 
