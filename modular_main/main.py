@@ -183,8 +183,13 @@ def modular_workflow():
     ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM]
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
     PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"  # Previous implementation depend on the workflow mode 
+    REPORT_DIR = PROBLEM_DIR / f"report_{WORKFLOW_MODE}"  # agent reports 
     PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
+
+    # Create the problem impl dir and report dir 
+    PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Step 1: Create the agent workspace 
     print("[MAIN 1/8] Creating agent workspace")
@@ -323,17 +328,23 @@ def modular_workflow():
     # Check if the implementation exists 
     implementation = AGENT_WORKSPACE / "implementation"
     IMPLEMENTATION_DEST = PROBLEM_IMPL_DIR / f"checkpoint_{N}"
+    REPORT_DEST = REPORT_DIR / f"checkpoint_{N}.json"
     if implementation.is_dir(): 
         # Remove the existing implementation if it exists, otherwise the new one will be merged 
         if IMPLEMENTATION_DEST.exists(): 
             shutil.rmtree(IMPLEMENTATION_DEST) 
-
+        
         # Copy back to the problem implementations folder 
         shutil.copytree(
             implementation, 
             IMPLEMENTATION_DEST, 
             dirs_exist_ok=True, 
             ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc")
+        )
+        # Also copy the agent report generated after it do its work 
+        shutil.copy(
+            AGENT_WORKSPACE / "agent_report.json", 
+            REPORT_DEST
         )
     else: 
         raise Exception(f"Missing implementation for checkpoint {N}.")

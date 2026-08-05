@@ -73,15 +73,15 @@ async def run_agent(agent, model, prompt):
                             if "path" in command_action: 
                                 read_files.append(command_action["path"])
 
-            # Currently the files edited and files read are NOT sorted in time order!! 
-            # Change if necessary. 
+            # The list of added / updated / deleted files are in time order. 
             summary = {
                 "added_files": added_files, 
-                "added_files_count": len(set(added_files)),
+                "added_files_count": len(set(added_files)),  # unique only 
                 "updated_files": updated_files, 
                 "updated_files_count": len(set(updated_files)), 
                 "deleted_files": deleted_files, 
                 "deleted_files_count": len(set(deleted_files)), 
+                "changed_files_count": len(set(added_files + updated_files + deleted_files)), # unique across add / update / delete 
                 "files_read": read_files,
                 "files_read_count": len(set(read_files)),
             }

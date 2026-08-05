@@ -36,7 +36,7 @@ def get_analyzer_prompt(has_implementation):
 You are a senior software code quality analyst. 
 Your job is to evaluate the following {'modular design' if not has_implementation else "implementation"} including kept, changed or new modules.
 Project root: agent_workspace
-{'Design: `current_design.json`' if not has_implementation else 'Implementation: `implementation/'}
+{'Design: `current_design.json`' if not has_implementation else 'Implementation: implementation/'}
 Dependency graph: `current_deps_graph.json`{', which is modified from `original_deps_graph.json`.' if has_implementation else ""} 
 
 You work with a OBSERVE - SUPPORT - SCORE cycle and you should not skip steps when performing your evaluation: 
