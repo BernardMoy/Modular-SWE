@@ -10,6 +10,6 @@ Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
 Propose a plan of test suites that would solve the issue specification completely. You should only ensure the documented requirements are met, including any edge cases. 
-Write to `current_test_plan.json` following the json schema below: 
+Write to `test_blueprint.json` following the json schema below: 
 {get_json_string("test_planner")}
 """

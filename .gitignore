@@ -12,6 +12,7 @@ DPy
 
 # agent implementation
 agent_workspace
+agent_test_storage
 agent_workspace copy
 agent_workspace_*
 

@@ -21,6 +21,7 @@ from prompts.code_quality_pass_fail import code_quality_pass_fail
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
+AGENT_TEST_STORAGE = Path("agent_test_storage")  # temp storage for tests, not visible in agent workspace
 PROBLEMS_DIR = Path("datasets/custom")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
@@ -182,11 +183,15 @@ def modular_workflow():
     PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Step 1: Create the agent workspace 
+    # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
     if AGENT_WORKSPACE.exists(): 
         shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r 
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
+
+    if AGENT_TEST_STORAGE.exists(): 
+        shutil.rmtree(AGENT_TEST_STORAGE) 
+    AGENT_TEST_STORAGE.mkdir(exist_ok=True)
 
     # Step 2: Copy the workspace_helpers folder to the agent workspace 
     print("[MAIN 2/8] Copying helper functions to agent workspace") 
@@ -249,10 +254,13 @@ def modular_workflow():
     # ================ MAIN WORKFLOW BEGINS ================
     print("[MAIN 6/8] Main workflow")
 
-    # Before coding, generate a test plan
-    print(f"========== CREATING TEST PLAN ==========")
+    # Before coding, generate a test blueprint
+    print(f"========== CREATING TEST BLUEPRINT ==========")
     test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
     print(test_plan_result)
+
+    # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
+    shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
 
     # if the mode is no design, jump straight to implementation
     if WORKFLOW_MODE == "noDesign": 
@@ -324,7 +332,19 @@ def modular_workflow():
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
 
         # Refactor - Analyzer loop 
-        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
+        # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
+
+    print(f"========== TESTER ==========")
+    # Move the blueprint from agent test storage back to the agent workspace 
+    shutil.move(AGENT_TEST_STORAGE / "test_blueprint.json", AGENT_WORKSPACE) 
+
+    # Run the tester agent - this will create the tests/ directory for tests if not exist 
+    test_result = get_prompt_and_run_agent(executor, "tester", N) 
+    print(test_result) 
+
+    # Move the tests/ directory and the blueprint back to the storage
+    shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
+    shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
@@ -351,27 +371,6 @@ def modular_workflow():
         )
     else: 
         raise Exception(f"Missing implementation for checkpoint {N}.")
-
-
-    # Run the tests and exit 
-    print(f"========== [MAIN 8/8] RUNNING TESTS ==========")
-    entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
-
-    # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
-    for test_no in range(N, 0, -1): 
-        print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
-        subprocess.run(
-            [
-                "scripts/pytest.sh",
-                PROBLEM,
-                entrypoint,
-                str(test_no)
-            ], 
-            check=False  # Allow previous checkpoints to still run even when tests fail 
-        )
-
-    # Rank the code quality using some metrics (?) 
-    # Probably most accurately using a human controlled method. 
 
 if __name__ == "__main__": 
     # run the modular workflow 
