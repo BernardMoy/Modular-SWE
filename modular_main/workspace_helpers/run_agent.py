@@ -38,7 +38,9 @@ async def run_agent(agent, model, prompt):
             # Print the agent's output to be captured later 
             print(result.final_response)
 
-            # print(result, getattr(result, "usage", None))
+            # Obtain the token usage from last and total 
+            last_dict = result.usage.last.model_dump() if hasattr(result.usage.last, "model_dump") else vars(result.usage.last)
+            total_dict = result.usage.total.model_dump() if hasattr(result.usage.total, "model_dump") else vars(result.usage.total)
 
             for item in result.items:
                 # Add the all fields metadata to the log array 
@@ -90,8 +92,11 @@ async def run_agent(agent, model, prompt):
 
             # clear the agent report json 
             # Write the summary and log (full data) to the json
+            
+            # As in overall_metrics (under metrics/) the "log" attribute must be present
+            # so metrics can be analyzed from the coding session. 
             with open(AGENT_REPORT_JSON, "w") as f:
-                json.dump({"summary": summary, "log": log}, f, indent=2, default=str)
+                json.dump({"summary": summary, "tokens": total_dict, "log": log}, f, indent=2, default=str)
 
     # run opencode agent 
     # https://github.com/anomalyco/opencode-sdk-python/blob/main/api.md
