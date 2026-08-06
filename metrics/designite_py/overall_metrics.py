@@ -8,7 +8,8 @@ from pathlib import Path
 def get_dpy_metrics(implementation_path): 
     """
     {
-        "function_cyclomatic_complexity_count": 0, 
+        "function_max_loc": 0,
+        "high_cc_functions_count": 0, 
         "high_fan_out_classes_count": 0, 
     }
     """
@@ -19,7 +20,8 @@ def get_dpy_metrics(implementation_path):
     FAN_OUT_THRESHOLD = 3 
 
     counts = {
-        "function_cyclomatic_complexity_count": 0, 
+        "function_max_loc": 0, 
+        "high_cc_functions_count": 0, 
         "high_fan_out_classes_count": 0, 
     }
 
@@ -41,7 +43,8 @@ def get_dpy_metrics(implementation_path):
         if (json_file.endswith("function_metrics.json")): 
             with open(TEMP_DIR / "dpy_metrics" / json_file, 'r') as f: 
                 data = json.load(f) 
-                counts["function_cyclomatic_complexity_count"] = len([x for x in data if x["CC"] >= CC_THRESHOLD])
+                counts["high_cc_functions_count"] = len([x for x in data if x["CC"] >= CC_THRESHOLD])
+                counts["function_max_loc"] = max(x["LOC"] for x in data)
 
     # Remove the temp dir 
     shutil.rmtree(TEMP_DIR) 

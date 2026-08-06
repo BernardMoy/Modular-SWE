@@ -28,3 +28,5 @@ nexttube/data
 node_modules
 
 temp_metrics
+
+agent_report.json

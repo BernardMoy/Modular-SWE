@@ -26,6 +26,7 @@ def _subprocess_env():
 
     return env
 
+## INCONSISTENT with other overall_metrics file: Fix later. Function name should be get_jscpd_metrics 
 def get_duplicates(implementation_path):
     """
     Return duplicated lines and tokens percentage 
