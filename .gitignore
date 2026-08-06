@@ -4,9 +4,7 @@
 # Venv
 .venv
 # snapshots of all github repos in the dataset 
-snapshots 
-scb-problems
-scb-problems-sols-tests
+datasets
 
 # Designite Python (Windows, Linux)
 DPy.exe  

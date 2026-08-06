@@ -1,6 +1,0 @@
-[
-  {
-    "improvement_instruction": "Generate these contracts from a backend schema or move to a shared contract source so the frontend imports authoritative response types instead of maintaining local mirrors.",
-    "rejection_reason": "The current checkpoint only requires a small fixed set of backend responses, so adding schema generation or a shared package would introduce extra build and release coupling that is larger than the duplication risk at this stage."
-  }
-]

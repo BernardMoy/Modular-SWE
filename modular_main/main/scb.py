@@ -1,22 +1,21 @@
 """
-Main entrypoint file for the entire workflow. 
+Main entrypoint file for the entire workflow for scb problems. 
 """
 
 import json 
 import shutil 
 import argparse
 from pathlib import Path
-from .entry_files import ENTRY_FILES
+from ..entry_files import ENTRY_FILES
 import subprocess
-from .BwrapExecutor import BwrapExecutor
-from prompts.get_prompt import get_prompt
-from .settings import AGENT, MODEL
+from ..BwrapExecutor import BwrapExecutor
+from ..get_prompt_and_run_agent import get_prompt_and_run_agent
 from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
-from .settings import WORKFLOW_MODE 
+from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
 # Constants for directory and file paths 
@@ -28,16 +27,6 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
-
-
-# Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor 
-def get_prompt_and_run_agent(executor, agent_name, *args): 
-    prompt = get_prompt(agent_name, *args)
-    output = executor.run([
-        "python3", "-m", "workspace_helpers.run_agent", 
-        AGENT, MODEL, prompt
-    ])
-    return output 
 
 
 # Decomposer analyzer loop. 
