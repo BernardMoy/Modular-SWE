@@ -60,5 +60,5 @@ PYTHONPATH="$ROOT" python "$ROOT/scripts/process_deps_graph.py" \
   -o "$OUTPUT_DIR/deps_graph.json"
 
 # 4. Remove the temp entry file 
-echo "[GRAPH 5/5] Removing temp file"
-rm -r $IMPL_DIR/$ENTRYFILE_NAME.py
+# echo "[GRAPH 5/5] Removing temp file"
+# rm -r $IMPL_DIR/$ENTRYFILE_NAME.py

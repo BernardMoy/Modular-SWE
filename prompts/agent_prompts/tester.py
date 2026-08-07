@@ -16,6 +16,7 @@ Test failures should be due to the functionality and the code behaviour, not its
 
 Hard constraints: 
 - Do not modify the testing blueprint. 
+- Do not include tests not specified in the blueprint. 
 - Do not modify the implementation for reasons other than making tests runnable; do not modify its internal logic in order to 'pass' more test cases. 
 
 After the tests are present, you should run them to make sure they works as expected and report the result. 
