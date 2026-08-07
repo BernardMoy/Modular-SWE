@@ -28,6 +28,7 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
+TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
 
 # Decomposer analyzer loop. 
@@ -79,6 +80,55 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
             passed = True
 
         # Increment the iteration number 
+        iteration += 1 
+
+# Test Refactor - Tester loop: Happens after implementation within the AR loop. 
+def tester_refactor_loop(executor, checkpoint_number, threshold): 
+    iteration = 0 
+    passed = False 
+
+    while (not passed and iteration < threshold): 
+        # Move the blueprint and tests folder into the agent workspace 
+        if (AGENT_TEST_STORAGE / "test_blueprint.json").exists(): 
+            shutil.move(AGENT_TEST_STORAGE / "test_blueprint.json", AGENT_WORKSPACE) 
+        if (AGENT_TEST_STORAGE / "tests").exists(): 
+            shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE) 
+
+        # Call the tester agent 
+        print(f"========== [Iteration {iteration+1}] WRITING AND RUNNING TESTS ==========")
+        tester_output = get_prompt_and_run_agent(executor, "tester", checkpoint_number)
+        print(tester_output) 
+
+        # Move the blueprint and tests outside the agent workspace. 
+        # This is so the test content and function signatures dont get leaked to the coders 
+        if (AGENT_WORKSPACE / "test_blueprint.json").exists(): 
+            shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE) 
+        if (AGENT_WORKSPACE / "tests").exists(): 
+            shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE) 
+
+        # Remove the report - it describes the test intention that cant be leaked to coders
+        (AGENT_WORKSPACE / "agent_report.json").unlink() 
+            
+        # Check the written current_test_results.json to discover if there are any failed tests 
+        print(f"========== ANALYZING TEST RESULTS ==========")
+        with open(AGENT_WORKSPACE / "current_test_results.json", 'r') as f: 
+            test_results_json = json.load(f) 
+
+            passed_tests = len([x for x in test_results_json if x["result"] == "pass"])
+            failed_tests = len([x for x in test_results_json if x["result"] == "fail"])
+
+            print(f"{passed_tests} passed, {failed_tests} failed.")
+
+        # if there are no failed tests, set passed = true 
+        if failed_tests == 0: 
+            passed = True 
+
+        else: 
+            # else call the test refactorer 
+            print(f"========== [Iteration {iteration+1}] TEST REFACTOR AGENT ==========")
+            test_refactor_output = get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
+            print(test_refactor_output)
+        
         iteration += 1 
 
 # Refactor analyzer loop - happens after implementation. 
@@ -262,6 +312,9 @@ def modular_workflow():
     # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
     shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
 
+    # Remove the agent_report.json - the tests data must not be leaked 
+    (AGENT_WORKSPACE / "agent_report.json").unlink() 
+
     # if the mode is no design, jump straight to implementation
     if WORKFLOW_MODE == "noDesign": 
         print(f"========== CODING ALL MODULES ==========")
@@ -334,17 +387,10 @@ def modular_workflow():
         # Refactor - Analyzer loop 
         # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
+    # input("Paused. Modify the code now.")
+
     print(f"========== TESTER ==========")
-    # Move the blueprint from agent test storage back to the agent workspace 
-    shutil.move(AGENT_TEST_STORAGE / "test_blueprint.json", AGENT_WORKSPACE) 
-
-    # Run the tester agent - this will create the tests/ directory for tests if not exist 
-    test_result = get_prompt_and_run_agent(executor, "tester", N) 
-    print(test_result) 
-
-    # Move the tests/ directory and the blueprint back to the storage
-    shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
-    shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+    tester_refactor_loop(executor, N, TR_LOOP_THRESHOLD)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
