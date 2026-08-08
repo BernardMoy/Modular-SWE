@@ -30,6 +30,9 @@ DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen
 DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
+# Whether or not a tester is employed to test the software. 
+# For CLI or software where we can verify its behaviour without knowing its internal function signatures, this is false 
+HAS_TESTER = False
 
 # Decomposer analyzer loop. 
 # D first before A 
@@ -251,8 +254,8 @@ def modular_workflow():
     print("[MAIN 3/8] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
-    # If the problem is nexttube, copy the data/ folder also 
-    if PROBLEM == "nexttube": 
+    # Copy the data/ folder also if it exists, it represents essential data that the application should work with 
+    if (PROBLEM_DIR / "data").exists(): 
         shutil.copytree(PROBLEM_DIR / "data", AGENT_WORKSPACE / "data")
 
     # if N>1, also copy the previous implementation, metrics (?) and deps graph 
@@ -305,15 +308,16 @@ def modular_workflow():
     print("[MAIN 6/8] Main workflow")
 
     # Before coding, generate a test blueprint
-    print(f"========== CREATING TEST BLUEPRINT ==========")
-    test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
-    print(test_plan_result)
+    if HAS_TESTER: 
+        print(f"========== CREATING TEST BLUEPRINT ==========")
+        test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
+        print(test_plan_result)
 
-    # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
-    shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+        # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
+        shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
 
-    # Remove the agent_report.json - the tests data must not be leaked 
-    (AGENT_WORKSPACE / "agent_report.json").unlink() 
+        # Remove the agent_report.json - the tests data must not be leaked 
+        (AGENT_WORKSPACE / "agent_report.json").unlink() 
 
     # if the mode is no design, jump straight to implementation
     if WORKFLOW_MODE == "noDesign": 
@@ -389,8 +393,9 @@ def modular_workflow():
 
     # input("Paused. Modify the code now.")
 
-    print(f"========== TESTER ==========")
-    tester_refactor_loop(executor, N, TR_LOOP_THRESHOLD)
+    if HAS_TESTER: 
+        print(f"========== TESTER ==========")
+        tester_refactor_loop(executor, N, TR_LOOP_THRESHOLD)
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
