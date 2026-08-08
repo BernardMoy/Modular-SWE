@@ -4,7 +4,12 @@
 # Venv
 .venv
 # snapshots of all github repos in the dataset 
-datasets
+# Keep custom in git - they are hand written checkpoints 
+datasets/aidev
+datasets/swe-bench-pro
+datasets/slopCodeBench/
+datasets/**/implementations_*/
+datasets/**/report_*/
 
 # Designite Python (Windows, Linux)
 DPy.exe  
