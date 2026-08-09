@@ -36,6 +36,7 @@ iris match-one <encoded_a.bin> <mask_a.bin> <encoded_b.bin> <mask_b.bin> [--thre
 ### `match-one` command
 
 - Given the encoded bin file (iriscode) and the mask bin file, compute the best hamming distance and valid bit count for each shift.
+- A hamming distance less than or equal to threshold is considered a match.
 - Print a summary in the following format for success and fail respectively.
 
 ```
@@ -46,6 +47,7 @@ Max shift: 8
 Best shift: +2
 Hamming distance: 0.081
 Valid bit count: 10944/12288
+Match: True
 
 Status: success
 ```

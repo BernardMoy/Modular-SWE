@@ -23,7 +23,7 @@ In this checkpoint you are building a normalization layer that unwraps the iris 
 ## Command
 
 ```
-iris normalize <segmentation_csv> [--output-dir normalized/] [--mask-dir masks/] [--anomalies anomalies.csv]
+iris normalize <segmentation_csv> [--output-dir normalized/] [--output-masks-dir masks/] [--anomalies anomalies.csv]
 iris normalize-one <image_path> --pupil <x,y,r> --iris <x,y,r> [--output output.png] [--output-mask mask.png]
 ```
 
