@@ -8,8 +8,6 @@ In this checkpoint you are building a segmentation layer that locates the pupil 
 
 ## Dataset csv format
 
-This csv is generated using the `scan` command.
-
 | column     | description                                         |
 | ---------- | --------------------------------------------------- |
 | subject_id | the subject name / subfolder name                   |
@@ -46,6 +44,8 @@ Dataset: dataset.csv
 Image processed: 1000
 Successful segmentation: 600
 Failed segmentation: 400
+
+Anomalies found: 5
 ```
 
 - If the `--output` path is present, write a segmentation csv in the following format:
@@ -82,7 +82,7 @@ Failed segmentation: 400
 Image: data/CASIA-iris-interval/001/L/S1001L01.jpg
 
 Pupil: center=(160, 142), radius=42
-Iris:  center=(158, 140), radius=110
+Iris: center=(158, 140), radius=110
 
 Status: success
 ```
