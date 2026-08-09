@@ -1,1 +1,3 @@
-# Part 6: Hamming Distance Comparison
+# Part 6: User Identification
+
+## Introduction

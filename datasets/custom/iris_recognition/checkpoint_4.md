@@ -6,16 +6,16 @@ You will be building a CLI tool for recognition of the user from iris images.
 Across the project you will be working with the CASIA-Iris-Interval dataset available under data/.
 In this checkpoint you are building an encoding layer that converts normalized image into iris code using 2D Gabor wavelet filters.
 
-## Normalized directory format
+## Normalized and masks directory format
 
-The normalized directory have the same format as the data/CASIA-Iris-Interval.
+The normalized and masks directory have the same format as the data/CASIA-Iris-Interval.
 Each image is a 64 (Height, radial) \* 512 (Width, angular) png file of normalized iris.
 
 ## Command
 
 ```
-iris encode <normalized_dir> [--output-dir encoded/] [--anomalies anomalies.csv]
-iris encode-one <normalized_image_path> [--output code.bin]
+iris encode <normalized_dir> <masks_dir> [--output-dir encoded/] [--output-masks-dir encoded-masks/] [--anomalies anomalies.csv]
+iris encode-one <normalized_image_path> <mask_image_path> [--output code.bin] [--output-mask mask.bin]
 ```
 
 ## Requirements
@@ -79,7 +79,8 @@ code_length = scales * orientations * grid_rows * grid_cols * 2
 ### `encode` command
 
 - This command should accept a normalized image directory.
-- For each image, apply the filter bank, sampling responses and quantize each into 2 bits, flattened into the iris code.
+- For each image, apply the filter bank, sampling responses and quantize each into 2 bits, flattened into the iris code.\
+- For each grid sampling location, look for the pixel value in the mask at that same coordinate space. If the pixel is 0, set both code bits to 0 in the mask. If the pixel is 255, set to 1.
 - Always print a summary in the following format:
 
 ```
@@ -92,7 +93,7 @@ Failed to encode: 400
 Anomalies found: 5
 ```
 
-- If the `--output-dir` folder path is present, write to it following the dataset's image folder structure, showing masked bin files in the same file names.
+- If the `--output-dir` folder path is present, write to it following the dataset's image folder structure, showing masked bin files in the same file names. Same for `--output-masks-dir`.
 
 - If the `--anomalies` path is present, anomalies csv file should be writtrn to the anomalies path in the following format:
   | column | description |
@@ -100,22 +101,25 @@ Anomalies found: 5
   | subject_id | the subject name / subfolder name |
   | eye | "L" or "R" |
   | image_path | path to the iris image relative to the dataset root |
-  | issue | Either: "failed_to_encode", "image_load_failed" |
+  | issue | Either: "failed_to_encode", "image_load_failed", "mask_load_failed" |
 
 ### `encode-one` command
 
-- This command should accept a normalized image path, and if the output path is present, write to the output path the iris code bin file.
+- This command should accept a normalized image path, and if the output path is present, write to the output path the iris code bin file. Same for the mask.
 
 - Always print a summary in the following format for success and fail respectively:
 
 ```
 Image: normalized/001/L/S1001L01.png
+Mask: masks/001_L_S1001L01.png
 Status: success
 Saved to: code.bin
+Mask saved to: mask.bin
 ```
 
 ```
-Image: data/CASIA-iris-interval/001/L/S1001L01.jpg
+Image: normalized/001/L/S1001L01.jpg
+Mask: masks/001_L_S1001L01.png
 Status: failed
-Reason: [Either: "failed_to_encode", "image_load_failed"]
+Reason: [Either: "failed_to_encode", "image_load_failed", "mask_load_failed"]
 ```

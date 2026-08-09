@@ -23,8 +23,8 @@ In this checkpoint you are building a normalization layer that unwraps the iris 
 ## Command
 
 ```
-iris normalize <segmentation_csv> [--output-dir normalized/] [--anomalies anomalies.csv]
-iris normalize-one <image_path> --pupil <x,y,r> --iris <x,y,r> [--output output.png]
+iris normalize <segmentation_csv> [--output-dir normalized/] [--mask-dir masks/] [--anomalies anomalies.csv]
+iris normalize-one <image_path> --pupil <x,y,r> --iris <x,y,r> [--output output.png] [--output-mask mask.png]
 ```
 
 ## Requirements
@@ -49,6 +49,13 @@ source_y = (1 - r) * pupil_edge_y + r * iris_edge_y
 
 - The default output size is 64 (Height, radial) \* 512 (Width, angular).
 
+### Validity mask
+
+For every normalized image, the system should also generate abinary validity mask as a png image:
+255 = valid iris pixel, 0 = invalid pixel.
+
+Invalid pixel includes when the source coordinate falls outside the source image.
+
 ### `normalize` command
 
 - This command should accept a segmentation csv in the above format specified. An error should be thrown if the csv format does not match exactly.
@@ -64,8 +71,8 @@ Failed normalization: 400
 Anomalies found: 5
 ```
 
-- If the `--output-dir` folder path is present, write to it following the dataset's image folder structure, showing normalized png in the specified default output dimensions.
-
+- If the `--output-dir` folder path is present, write to it following the dataset's image folder structure and names, showing normalized png in the specified default output dimensions.
+- If the `--mask-dir` folder path is present, write to it following dataset's image folder structure and names, showing the masks.
 - If the `--anomalies` path is present, anomalies csv file should be writtrn to the anomalies path in the following format:
   | column | description |
   |--------------|-----------------------------------------------------|
@@ -76,7 +83,7 @@ Anomalies found: 5
 
 ### `normalize-one` command
 
-- This command should accept an image path, pupil x,y,r and iris x,y,r, and if the output path is present, write to the output path the normalized png image in the default output dimensions.
+- This command should accept an image path, pupil x,y,r and iris x,y,r, and if the output path is present, write to the output path the normalized png image in the default output dimensions. If the mask path is present then write the mask png to it.
 
 - Always print a summary in the following format for success and fail respectively:
 
@@ -87,7 +94,8 @@ Pupil: center=(160, 142), radius=42
 Iris: center=(158, 140), radius=110
 
 Status: success
-Saved to: normalized.png
+Saved image to: normalized.png
+Saved mask to: mask.png
 ```
 
 ```
