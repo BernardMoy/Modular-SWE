@@ -39,3 +39,11 @@ Code: codes/001/L/encoded.bin
 Status: fail
 Reason: [Either: "files_not_found", "code_load_failed", "mask_load_failed"]
 ```
+
+## Tech stack
+
+Implement your solution using Python.
+
+## Entrypoint file
+
+The CLI entrypoint file must be named `iris.py`.

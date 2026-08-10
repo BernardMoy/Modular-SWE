@@ -22,7 +22,7 @@ from prompts.code_quality_pass_fail import code_quality_pass_fail
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
 AGENT_TEST_STORAGE = Path("agent_test_storage")  # temp storage for tests, not visible in agent workspace
-PROBLEMS_DIR = Path("datasets/custom")
+PROBLEMS_DIR = Path("datasets/custom/problems")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 

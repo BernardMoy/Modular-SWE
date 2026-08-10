@@ -123,3 +123,11 @@ Mask: masks/001_L_S1001L01.png
 Status: failed
 Reason: [Either: "failed_to_encode", "image_load_failed", "mask_load_failed"]
 ```
+
+## Tech stack
+
+Implement your solution using Python.
+
+## Entrypoint file
+
+The CLI entrypoint file must be named `iris.py`.

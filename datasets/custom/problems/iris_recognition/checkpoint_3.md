@@ -104,3 +104,11 @@ Image: data/CASIA-iris-interval/001/L/S1001L01.jpg
 Status: failed
 Reason: [Either: "failed_normalization", "image_load_failed"]
 ```
+
+## Tech stack
+
+Implement your solution using Python.
+
+## Entrypoint file
+
+The CLI entrypoint file must be named `iris.py`.

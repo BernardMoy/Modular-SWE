@@ -60,3 +60,11 @@ Max shift: 8
 Status: failed
 Reason: [Either: "files_not_found", "code_load_failed", "mask_load_failed"]
 ```
+
+## Tech stack
+
+Implement your solution using Python.
+
+## Entrypoint file
+
+The CLI entrypoint file must be named `iris.py`.
