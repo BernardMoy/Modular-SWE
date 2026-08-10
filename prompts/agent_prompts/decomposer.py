@@ -8,15 +8,18 @@ Input: new instruction, prev implementation (if checkpoint >1), current_design, 
 Output: current_design, current_deps_graph, current_rejected_improvements
 """
 
+# For the decomposer, it is considering whether or not modules splits are UNnecessary in order to critic analyzer suggestions 
 ANALYZER_CRITERIA="""
-- Whether the suggestion lead to reduced future effort when adding new features.
-- Whether the nature of the problem and the size of the file justifies the complexity without the refactoring. 
+- Whether the suggestions are splitting small modules, causes additional coupling, or make it more difficult to maintain the interface that outweigh the benefits. 
+- Whether the nature and complexity of the problem, and still having single responsibility justify the code without refactoring. 
 - Whether the suggestion conflict with issue requirements.
 """
 
+# Follows the 5 criteria for modular design. 
 MODULE_CODE_PRACTICES = """
-- A module should only expose the minimum amount of knowledge in its public interface.
-- Each module should only have a single responsibility and follow high cohesion low coupling. They should not have unrelated methods, or methods that should belong to another class. 
+- A module should have a single responsibility and one reason to change. 
+- A module should expose the minimum public interface and hide complex logic.
+- There should be minimum dependency with other modules, following high cohesion low coupling. 
 """
 
 def get_decomposer_prompt(checkpoint_number): 
@@ -32,10 +35,9 @@ Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
 If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, prioritise reusing existing modules instead of creating a new module where possible.
-If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, please consider accepting or rejecting them based on: {ANALYZER_CRITERIA}
+If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, consider accepting or rejecting them based on: {ANALYZER_CRITERIA}
 
-Propose a modular design that achieves the goal specified in the issue when integrated together. 
-You should follow best code practices, including: {MODULE_CODE_PRACTICES}
+Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}
 
 First, create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 

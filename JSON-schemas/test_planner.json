@@ -1,0 +1,26 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "requirement": {
+        "description": "The requirement in the spec that this test aim to verify.",
+        "type": "string"
+      },
+      "behaviour": {
+        "description": "A short, human-readable string describing the required behaviour that would pass this test.",
+        "type": "string"
+      },
+      "assertions": {
+        "description": "A list of assertions that should hold true in order to pass this test.",
+        "type": "array",
+        "items": {
+          "description": "An assertion of the test, considering edge cases also.",
+          "type": "string"
+        }
+      }
+    },
+    "required": ["requirement", "behaviour", "assertions"],
+    "additionalProperties": false
+  }
+}

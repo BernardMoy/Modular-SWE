@@ -1,0 +1,23 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "result": {
+        "description": "A single string either pass or fail for the test.",
+        "type": "string",
+        "enum": ["pass", "fail"]
+      },
+      "name": {
+        "description": "Name of the test.",
+        "type": "string"
+      },
+      "message": {
+        "description": "Only present when the test fails. A human readable message describing why the test failed, including the difference between what is expected and what is observed.",
+        "type": "string"
+      }
+    },
+    "required": ["result", "name"],
+    "additionalProperties": false
+  }
+}

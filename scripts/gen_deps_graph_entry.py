@@ -13,7 +13,8 @@ def write_entrypoint(directory, entryfile_name):
         # walk through the target directory
         for root, dirs, files in os.walk(target_dir):
             # skip the venv directory 
-            dirs[:] = [d for d in dirs if d not in {".venv", "__pycache__", ".git"}]
+            # node_modules contain modules with invalid names (@..). This will cause the graph to break and return an empty graph. 
+            dirs[:] = [d for d in dirs if d not in {".venv", "__pycache__", ".git", "node_modules"}]
 
             for pyfile in files: 
                 if not pyfile.endswith(".py"): 
