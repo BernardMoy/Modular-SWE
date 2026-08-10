@@ -15,7 +15,8 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
         }
     ]
     """
-    LCOM_THRESHOLD = 0.8
+    LCOM_THRESHOLD = 0.7
+    LCOM_NOM_THRESHOLD = 5 
     WMC_THRESHOLD = 50 
     NOPM_THRESHOLD = 20 
     FAN_IN_THRESHOLD = 7 
@@ -23,14 +24,15 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
 
     smells = [] 
     for entry in dpy_class_module_metrics: 
-        if entry["LCOM"] >= LCOM_THRESHOLD: 
+        # LCOM high is considered a smell only when its number of methods is also greater than a threshold 
+        if entry["LCOM"] >= LCOM_THRESHOLD and entry["NOM"] >= LCOM_NOM_THRESHOLD: 
             smells.append({
                 "Category": "Module level",  
                 "Package": entry["Package"],
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
                 "Smell": "High LCOM", 
-                "Description": f"The module '{entry['Module']}' has a high LCOM value of {entry['LCOM']}, check if it is violating single responsibility."
+                "Description": f"The module '{entry['Module']}' has a high LCOM value of {entry['LCOM']}, check if it is combining distinct responsibilities together."
             })
         
         # if entry["WMC"] >= WMC_THRESHOLD: 

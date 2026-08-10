@@ -71,7 +71,252 @@ The meaning of "statusSeverity" is given here:
 19 = Information
 20 = Service Closed
 
+This endpoint returns data in the following format:
+
+```
+[
+    {
+    "$type": "Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities",
+    "id": "waterloo-city",
+    "name": "Waterloo & City",
+    "modeName": "tube",
+    "disruptions": [],
+    "created": "2026-08-04T14:39:19.047Z",
+    "modified": "2026-08-04T14:39:19.047Z",
+    "lineStatuses": [
+      {
+        "$type": "Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities",
+        "id": 0,
+        "lineId": "waterloo-city",
+        "statusSeverity": 4,
+        "statusSeverityDescription": "Planned Closure",
+        "reason": "Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",
+        "created": "0001-01-01T00:00:00",
+        "validityPeriods": [
+          {
+            "$type": "Tfl.Api.Presentation.Entities.ValidityPeriod, Tfl.Api.Presentation.Entities",
+            "fromDate": "2026-08-08T23:00:00Z",
+            "toDate": "2026-08-09T00:15:00Z",
+            "isNow": false
+          },
+          {
+            "$type": "Tfl.Api.Presentation.Entities.ValidityPeriod, Tfl.Api.Presentation.Entities",
+            "fromDate": "2026-08-09T03:15:00Z",
+            "toDate": "2026-08-09T22:59:00Z",
+            "isNow": false
+          },
+          {
+            "$type": "Tfl.Api.Presentation.Entities.ValidityPeriod, Tfl.Api.Presentation.Entities",
+            "fromDate": "2026-08-09T23:00:00Z",
+            "toDate": "2026-08-09T23:45:00Z",
+            "isNow": false
+          }
+        ],
+        "disruption": {
+          "$type": "Tfl.Api.Presentation.Entities.Disruption, Tfl.Api.Presentation.Entities",
+          "category": "Information",
+          "categoryDescription": "Information",
+          "description": "Waterloo & City line: service operates 06:00 until 00:30, Monday to Friday only. There is no service on Saturdays, Sundays and on bank/public holidays.",
+          "created": "2026-01-04T01:21:00Z",
+          "affectedRoutes": [
+            {
+              "$type": "Tfl.Api.Presentation.Entities.DisruptedRoute, Tfl.Api.Presentation.Entities",
+              "id": "2078",
+              "name": "Bank Underground Station - Waterloo Underground Station",
+              "direction": "inbound",
+              "originationName": "Bank Underground Station",
+              "destinationName": "Waterloo Underground Station",
+              "isEntireRouteSection": true,
+              "routeSectionNaptanEntrySequence": [
+                {
+                  "$type": "Tfl.Api.Presentation.Entities.RouteSectionNaptanEntrySequence, Tfl.Api.Presentation.Entities",
+                  "ordinal": 0,
+                  "stopPoint": {
+                    "$type": "Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities",
+                    "naptanId": "940GZZLUBNK",
+                    "modes": [],
+                    "icsCode": "1000013",
+                    "stationNaptan": "940GZZLUBNK",
+                    "hubNaptanCode": "HUBBAN",
+                    "lines": [],
+                    "lineGroup": [],
+                    "lineModeGroups": [],
+                    "status": true,
+                    "id": "940GZZLUBNK",
+                    "commonName": "Bank Underground Station",
+                    "placeType": "StopPoint",
+                    "additionalProperties": [],
+                    "children": [],
+                    "lat": 0,
+                    "lon": 0
+                  }
+                },
+                {
+                  "$type": "Tfl.Api.Presentation.Entities.RouteSectionNaptanEntrySequence, Tfl.Api.Presentation.Entities",
+                  "ordinal": 1,
+                  "stopPoint": {
+                    "$type": "Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities",
+                    "naptanId": "940GZZLUWLO",
+                    "modes": [],
+                    "icsCode": "1000254",
+                    "stationNaptan": "940GZZLUWLO",
+                    "hubNaptanCode": "HUBWAT",
+                    "lines": [],
+                    "lineGroup": [],
+                    "lineModeGroups": [],
+                    "status": true,
+                    "id": "940GZZLUWLO",
+                    "commonName": "Waterloo Underground Station",
+                    "placeType": "StopPoint",
+                    "additionalProperties": [],
+                    "children": [],
+                    "lat": 0,
+                    "lon": 0
+                  }
+                }
+              ]
+            },
+            {
+              "$type": "Tfl.Api.Presentation.Entities.DisruptedRoute, Tfl.Api.Presentation.Entities",
+              "id": "2079",
+              "name": "Waterloo Underground Station - Bank Underground Station",
+              "direction": "outbound",
+              "originationName": "Waterloo Underground Station",
+              "destinationName": "Bank Underground Station",
+              "isEntireRouteSection": true,
+              "routeSectionNaptanEntrySequence": [
+                {
+                  "$type": "Tfl.Api.Presentation.Entities.RouteSectionNaptanEntrySequence, Tfl.Api.Presentation.Entities",
+                  "ordinal": 0,
+                  "stopPoint": {
+                    "$type": "Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities",
+                    "naptanId": "940GZZLUWLO",
+                    "modes": [],
+                    "icsCode": "1000254",
+                    "stationNaptan": "940GZZLUWLO",
+                    "hubNaptanCode": "HUBWAT",
+                    "lines": [],
+                    "lineGroup": [],
+                    "lineModeGroups": [],
+                    "status": true,
+                    "id": "940GZZLUWLO",
+                    "commonName": "Waterloo Underground Station",
+                    "placeType": "StopPoint",
+                    "additionalProperties": [],
+                    "children": [],
+                    "lat": 0,
+                    "lon": 0
+                  }
+                },
+                {
+                  "$type": "Tfl.Api.Presentation.Entities.RouteSectionNaptanEntrySequence, Tfl.Api.Presentation.Entities",
+                  "ordinal": 1,
+                  "stopPoint": {
+                    "$type": "Tfl.Api.Presentation.Entities.StopPoint, Tfl.Api.Presentation.Entities",
+                    "naptanId": "940GZZLUBNK",
+                    "modes": [],
+                    "icsCode": "1000013",
+                    "stationNaptan": "940GZZLUBNK",
+                    "hubNaptanCode": "HUBBAN",
+                    "lines": [],
+                    "lineGroup": [],
+                    "lineModeGroups": [],
+                    "status": true,
+                    "id": "940GZZLUBNK",
+                    "commonName": "Bank Underground Station",
+                    "placeType": "StopPoint",
+                    "additionalProperties": [],
+                    "children": [],
+                    "lat": 0,
+                    "lon": 0
+                  }
+                }
+              ]
+            }
+          ],
+          "affectedStops": [],
+          "closureText": "plannedClosure"
+        }
+      }
+    ],
+    "routeSections": [
+      {
+        "$type": "Tfl.Api.Presentation.Entities.MatchedRoute, Tfl.Api.Presentation.Entities",
+        "name": "Bank Underground Station - Waterloo Underground Station",
+        "direction": "inbound",
+        "originationName": "Bank Underground Station",
+        "destinationName": "Waterloo Underground Station",
+        "originator": "940GZZLUBNK",
+        "destination": "940GZZLUWLO",
+        "serviceType": "Regular",
+        "validTo": "2026-12-23T00:00:00Z",
+        "validFrom": "2026-08-03T00:00:00Z"
+      },
+      {
+        "$type": "Tfl.Api.Presentation.Entities.MatchedRoute, Tfl.Api.Presentation.Entities",
+        "name": "Waterloo Underground Station - Bank Underground Station",
+        "direction": "outbound",
+        "originationName": "Waterloo Underground Station",
+        "destinationName": "Bank Underground Station",
+        "originator": "940GZZLUWLO",
+        "destination": "940GZZLUBNK",
+        "serviceType": "Regular",
+        "validTo": "2026-12-23T00:00:00Z",
+        "validFrom": "2026-08-03T00:00:00Z"
+      }
+    ],
+    "serviceTypes": [
+      {
+        "$type": "Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities",
+        "name": "Regular",
+        "uri": "/Line/Route?ids=Waterloo & City&serviceTypes=Regular"
+      }
+    ],
+    "crowding": {
+      "$type": "Tfl.Api.Presentation.Entities.Crowding, Tfl.Api.Presentation.Entities"
+    }
+  }
+]
+```
+
 Get station disruptions: https://api.tfl.gov.uk/stopPoint/mode/tube/disruption
+
+This endpoint returns data in the following format:
+
+```
+[
+    {
+    "$type": "Tfl.Api.Presentation.Entities.DisruptedPoint, Tfl.Api.Presentation.Entities",
+    "atcoCode": "940GZZLUBSC",
+    "fromDate": "2026-07-06T03:30:00Z",
+    "toDate": "2026-11-30T01:29:00Z",
+    "description": "BARONS COURT STATION: From Monday 6 July until November, westbound trains will not call at Barons Court. If travelling westbound from the station, please use eastbound District or Piccadilly line trains and change to westbound services at West Kensington (on the District line) or Earls Court (on the Piccadilly line) and change to westbound services. If travelling westbound to the station, please continue to Hammersmith and change for eastbound District or Piccadilly line trains.",
+    "commonName": "Barons Court Underground Station",
+    "type": "Part Closure",
+    "mode": "tube",
+    "stationAtcoCode": "940GZZLUBSC",
+    "appearance": "PlannedWork",
+    "closureText": "partClosure",
+    "concernedLines": [
+      {
+        "$type": "Tfl.Api.Presentation.Entities.ConcernedLine, Tfl.Api.Presentation.Entities",
+        "id": "circle",
+        "direction": "inbound"
+      },
+      {
+        "$type": "Tfl.Api.Presentation.Entities.ConcernedLine, Tfl.Api.Presentation.Entities",
+        "id": "district",
+        "direction": "inbound"
+      },
+      {
+        "$type": "Tfl.Api.Presentation.Entities.ConcernedLine, Tfl.Api.Presentation.Entities",
+        "id": "piccadilly",
+        "direction": "inbound"
+      }
+    ]
+  }
+]
+```
 
 ## Tech stack
 

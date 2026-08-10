@@ -389,7 +389,7 @@ def modular_workflow():
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
 
         # Refactor - Analyzer loop 
-        # analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
+        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
     # input("Paused. Modify the code now.")
 

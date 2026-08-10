@@ -34,6 +34,78 @@ You will be using the TfL Unified API which does not require an API key to use f
 
 Get all arrivals per line: https://api.tfl.gov.uk/Line/{lineId}/Arrivals/
 
+This endpoint returns data in the following format:
+
+```
+[{
+    "id": "string",
+    "operationType": 0,
+    "vehicleId": "string",
+    "naptanId": "string",
+    "stationName": "string",
+    "lineId": "string",
+    "lineName": "string",
+    "platformName": "string",
+    "direction": "string",
+    "bearing": "string",
+    "destinationNaptanId": "string",
+    "destinationName": "string",
+    "timestamp": "string",
+    "timeToStation": 0,
+    "currentLocation": "string",
+    "towards": "string",
+    "expectedArrival": "string",
+    "timeToLive": "string",
+    "modeName": "string",
+    "timing": {
+        "countdownServerAdjustment": "string",
+        "source": "string",
+        "insert": "string",
+        "read": "string",
+        "sent": "string",
+        "received": "string"
+    }
+}]
+```
+
+For example:
+
+```
+{
+    "$type": "Tfl.Api.Presentation.Entities.Prediction, Tfl.Api.Presentation.Entities",
+    "id": "-712910209",
+    "operationType": 1,
+    "vehicleId": "315",
+    "naptanId": "940GZZLUBDS",
+    "stationName": "Bounds Green Underground Station",
+    "lineId": "piccadilly",
+    "lineName": "Piccadilly",
+    "platformName": "WestBound - Platform 2",
+    "direction": "inbound",
+    "bearing": "",
+    "destinationNaptanId": "940GZZLUHR5",
+    "destinationName": "Heathrow Terminal 5 Underground Station",
+    "timestamp": "2026-08-09T22:18:59.6814658Z",
+    "timeToStation": 68,
+    "currentLocation": "Approaching Bounds Green",
+    "towards": "Heathrow T123 + 5",
+    "expectedArrival": "2026-08-09T22:20:07Z",
+    "timeToLive": "2026-08-09T22:20:07Z",
+    "modeName": "tube",
+    "timing": {
+      "$type": "Tfl.Api.Presentation.Entities.PredictionTiming, Tfl.Api.Presentation.Entities",
+      "countdownServerAdjustment": "00:00:00",
+      "source": "0001-01-01T00:00:00",
+      "insert": "0001-01-01T00:00:00",
+      "read": "2026-08-09T22:19:39.176Z",
+      "sent": "2026-08-09T22:18:59Z",
+      "received": "0001-01-01T00:00:00"
+    }
+  }
+```
+
+Note that none of the fields are guaranteed to be present.
+
 ## Tech stack
 
 Backend
