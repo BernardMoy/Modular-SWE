@@ -107,6 +107,12 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
 
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
                     AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
+
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                    AGENT_WORKSPACE / "current_matrix.json") 
+        
+        shutil.copy(AGENT_WORKSPACE / "matrixs" / "matrix.png", 
+                    AGENT_WORKSPACE / "current_matrix.png") 
             
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
@@ -228,6 +234,12 @@ def modular_workflow():
         
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
                     AGENT_WORKSPACE / "original_deps_graph.json")
+
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                    AGENT_WORKSPACE / "original_matrix.json") 
+        
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
+                    AGENT_WORKSPACE / "original_matrix.png") 
         
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
