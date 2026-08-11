@@ -1,0 +1,18 @@
+{
+  "encoder": [],
+  "identifier": [
+    "matcher"
+  ],
+  "iris": [
+    "encoder",
+    "identifier",
+    "matcher",
+    "normalizer",
+    "scanner",
+    "segmenter"
+  ],
+  "matcher": [],
+  "normalizer": [],
+  "scanner": [],
+  "segmenter": []
+}
