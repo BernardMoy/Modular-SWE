@@ -34,6 +34,17 @@ TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop ha
 # For CLI or software where we can verify its behaviour without knowing its internal function signatures, this is false 
 HAS_TESTER = False
 
+# Function to decide whether to pass or fail, given the analyzer output. 
+def pass_fail(analyzer_output_json): 
+    # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
+    with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
+        analyzer_result = json.load(f) 
+        if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
+            return True 
+
+    # Else, pass the analyzer output json to another helper 
+    return code_quality_pass_fail(analyzer_output_json)
+
 # Decomposer analyzer loop. 
 # D first before A 
 # for has impl = False only.
@@ -79,7 +90,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
         print(json.dumps(a_output_json, indent=2))
-        if code_quality_pass_fail(a_output_json):  
+        if pass_fail(a_output_json):  
             passed = True
 
         # Increment the iteration number 
@@ -194,7 +205,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
         print(json.dumps(a_output_json, indent=2))
-        if code_quality_pass_fail(a_output_json):  
+        if pass_fail(a_output_json):  
             passed = True
         
         # if passed, return
