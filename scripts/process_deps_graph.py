@@ -46,7 +46,7 @@ def main():
     if module_count >0: 
         print(f"Dependency graph has {module_count} modules.")
     else: 
-        print("WARNING: DEPENDENCY GRAPH IS EMPTY.")
+        print(f"WARNING: DEPENDENCY GRAPH IS EMPTY.")
 
     # Write as JSON 
     output = args.o

@@ -91,6 +91,8 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+# Verifies that `scan` prints the full summary and writes both CSV outputs
+# with the expected valid-image rows and anomaly rows.
 def test_scan_prints_expected_summary_and_writes_csv_outputs(
     tmp_path: Path, run_cli
 ) -> None:
@@ -204,6 +206,8 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
     }
 
 
+# Verifies that `scan` still reports counts correctly when no CSV outputs are
+# requested and that invalid files do not count as valid images.
 def test_scan_ignores_non_image_files_when_output_is_not_requested(
     tmp_path: Path, run_cli
 ) -> None:
@@ -217,6 +221,7 @@ def test_scan_ignores_non_image_files_when_output_is_not_requested(
     assert "Anomalies found: 5\n" in result.stdout
 
 
+# Verifies that `inspect` lists filenames for a subject that has data for both eyes.
 def test_inspect_lists_images_for_existing_subject(tmp_path: Path, run_cli) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
 
@@ -245,6 +250,8 @@ def test_inspect_lists_images_for_existing_subject(tmp_path: Path, run_cli) -> N
     ) + "\n"
 
 
+# Verifies that `inspect` accepts non-numeric subject IDs and reports a missing
+# eye as `absent`.
 def test_inspect_marks_absent_eyes_and_accepts_string_subject_ids(
     tmp_path: Path, run_cli
 ) -> None:
@@ -273,6 +280,8 @@ def test_inspect_marks_absent_eyes_and_accepts_string_subject_ids(
     ) + "\n"
 
 
+# Verifies that `inspect` treats existing-but-empty eye folders the same as
+# missing eye folders.
 def test_inspect_treats_empty_eye_folders_as_absent(tmp_path: Path, run_cli) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
 
@@ -298,6 +307,7 @@ def test_inspect_treats_empty_eye_folders_as_absent(tmp_path: Path, run_cli) -> 
     ) + "\n"
 
 
+# Verifies that `inspect` prints the required message for an unknown subject ID.
 def test_inspect_reports_missing_subject(tmp_path: Path, run_cli) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
 

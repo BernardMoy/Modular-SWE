@@ -12,8 +12,8 @@ Issue path: checkpoint_{checkpoint_number}.md
 Implementation folder: implementation/
 
 If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, please consider accepting or rejecting them based on: 
-- Whether the suggestion lead to reduced future effort when adding new features.
-- Whether the nature of the problem justifies the current complexity without the refactoring.
+- Whether the suggestions are splitting small modules, causes additional coupling, or make it more difficult to maintain the interface that outweigh the benefits. 
+- Whether the nature and complexity of the problem, and still having single responsibility justify the code without refactoring. 
 - Whether the suggestion conflict with issue requirements.
 
 Your task is to perform refactoring on the implementation code while preserving its functionality based on the improvement suggestions and your evaluation. 

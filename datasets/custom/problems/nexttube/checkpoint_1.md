@@ -80,7 +80,7 @@ For example:
     "stationName": "Bounds Green Underground Station",
     "lineId": "piccadilly",
     "lineName": "Piccadilly",
-    "platformName": "WestBound - Platform 2",
+    "platformName": "Westbound - Platform 2",
     "direction": "inbound",
     "bearing": "",
     "destinationNaptanId": "940GZZLUHR5",
