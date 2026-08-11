@@ -28,18 +28,5 @@ def get_visibility_matrix(deps_graph):
         for dest in dests: 
             G.add_edge(dest, src) # Add the reverse direction 
 
-    transitive_dependencies = {v: nx.descendants(G, v) for v in G}
+    transitive_dependencies = {v: sorted(nx.descendants(G, v)) for v in G}
     return transitive_dependencies
-
-def main(): 
-    print(
-        get_visibility_matrix(
-            {
-                "A": ["B", "D"], 
-                "B": ["C", "Z"]
-            }
-        )
-    )
-
-if __name__ == "__main__": 
-    main() 

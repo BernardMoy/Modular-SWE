@@ -36,8 +36,7 @@ You work with a OBSERVE - SUPPORT - SCORE cycle and you should not skip steps wh
 
 You will be evaluating and giving improvement suggestions that should follow these criteria: {ANALYZER_CRITERIA}
 
-First, create `current_analyzer_result.json` with [] if it does not exist. Only if there are any significant improvements, then add (do NOT delete) to the JSON object.
-It shows improvement suggestions only to modules that require refactoring, using the following schema.
+First, only if there are any significant improvements, then add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema.
 Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
 After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues. It is expected that software quality in the 5 above aspects should improve after the implementation. 
 {get_json_string("analyzer")}

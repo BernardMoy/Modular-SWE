@@ -18,4 +18,4 @@ WORKFLOW_MODE: Literal[
     "byLayer", 
     "byModule", 
     "5aspects"
-    ] = "5aspects"
+    ] = "noDesign"

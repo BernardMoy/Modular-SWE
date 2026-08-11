@@ -87,6 +87,10 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
+        # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
+        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
+            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
         print(json.dumps(a_output_json, indent=2))
@@ -166,13 +170,19 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
             check=True,
         )
 
-        # Extract only the json and svg
+        # Extract only the json and svg, and also the visibility matrix json and png 
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
                     AGENT_WORKSPACE / "current_deps_graph.json")  # Replace the current deps graph json
 
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
                     AGENT_WORKSPACE / "current_deps_graph.svg")  # Generate a new svg file 
-            
+
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                    AGENT_WORKSPACE / "matrix.json") 
+        
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
+                    AGENT_WORKSPACE / "matrix.png") 
+                
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
         
@@ -201,6 +211,11 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+
+        # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
+        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
+            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
@@ -297,6 +312,12 @@ def modular_workflow():
         
         shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
                     AGENT_WORKSPACE / "original_deps_graph.json")
+        
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                    AGENT_WORKSPACE / "original_matrix.json") 
+        
+        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
+                    AGENT_WORKSPACE / "original_matrix.png") 
         
         # Remove the temp deps_graph/ directory 
         shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")

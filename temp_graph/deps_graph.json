@@ -1,0 +1,150 @@
+{
+  "hmock": [
+    "hmock_core",
+    "hmock_core.config",
+    "hmock_core.http_server",
+    "hmock_core.loader",
+    "hmock_core.logging",
+    "hmock_core.runtime"
+  ],
+  "hmock_core": [],
+  "hmock_core.action_validation": [
+    "hmock_core.mock_models",
+    "hmock_core.response_bodies",
+    "hmock_core.validation_helpers"
+  ],
+  "hmock_core.actions": [
+    "hmock_core.http_models",
+    "hmock_core.mock_models",
+    "hmock_core.outbound_http",
+    "hmock_core.redis_backend",
+    "hmock_core.runtime",
+    "hmock_core.template_engine"
+  ],
+  "hmock_core.behavior_inheritance": [
+    "hmock_core.mock_models"
+  ],
+  "hmock_core.config": [],
+  "hmock_core.http_models": [],
+  "hmock_core.http_server": [
+    "hmock_core.actions",
+    "hmock_core.http_models",
+    "hmock_core.logging",
+    "hmock_core.matcher",
+    "hmock_core.mock_models",
+    "hmock_core.runtime"
+  ],
+  "hmock_core.loader": [
+    "hmock_core.behavior_inheritance",
+    "hmock_core.mock_models",
+    "hmock_core.validation"
+  ],
+  "hmock_core.logging": [
+    "hmock_core.http_models"
+  ],
+  "hmock_core.matcher": [
+    "hmock_core.http_models",
+    "hmock_core.mock_models",
+    "hmock_core.runtime",
+    "hmock_core.template_engine",
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.mock_models": [],
+  "hmock_core.outbound_http": [
+    "hmock_core.http_models",
+    "hmock_core.mock_models",
+    "hmock_core.runtime",
+    "hmock_core.template_engine"
+  ],
+  "hmock_core.redis_backend": [],
+  "hmock_core.redis_external_backend": [
+    "hmock_core.redis_backend"
+  ],
+  "hmock_core.redis_factory": [
+    "hmock_core.redis_backend",
+    "hmock_core.redis_external_backend",
+    "hmock_core.redis_memory_backend"
+  ],
+  "hmock_core.redis_memory_backend": [
+    "hmock_core.redis_backend"
+  ],
+  "hmock_core.response_bodies": [],
+  "hmock_core.runtime": [
+    "hmock_core.config",
+    "hmock_core.redis_backend",
+    "hmock_core.redis_factory",
+    "hmock_core.template_functions",
+    "hmock_core.template_redis_functions",
+    "hmock_core.template_registry"
+  ],
+  "hmock_core.template_builtin_functions": [
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.template_crypto_functions": [],
+  "hmock_core.template_engine": [
+    "hmock_core.http_models",
+    "hmock_core.template_builtin_functions",
+    "hmock_core.template_errors",
+    "hmock_core.template_expression",
+    "hmock_core.template_parser",
+    "hmock_core.template_registry"
+  ],
+  "hmock_core.template_errors": [],
+  "hmock_core.template_expression": [
+    "hmock_core.http_models",
+    "hmock_core.template_errors",
+    "hmock_core.template_parser"
+  ],
+  "hmock_core.template_functions": [
+    "hmock_core.template_builtin_functions",
+    "hmock_core.template_crypto_functions",
+    "hmock_core.template_query_functions",
+    "hmock_core.template_regex_functions",
+    "hmock_core.template_text_functions"
+  ],
+  "hmock_core.template_gjson_functions": [
+    "hmock_core.template_query_common"
+  ],
+  "hmock_core.template_json_query_functions": [
+    "hmock_core.template_query_common"
+  ],
+  "hmock_core.template_parser": [
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.template_query_common": [
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.template_query_functions": [
+    "hmock_core.template_gjson_functions",
+    "hmock_core.template_json_query_functions",
+    "hmock_core.template_xml_query_functions"
+  ],
+  "hmock_core.template_redis_functions": [
+    "hmock_core.redis_backend",
+    "hmock_core.template_builtin_functions",
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.template_regex_functions": [],
+  "hmock_core.template_registry": [
+    "hmock_core.template_errors"
+  ],
+  "hmock_core.template_text_functions": [],
+  "hmock_core.template_xml_query_functions": [
+    "hmock_core.template_errors",
+    "hmock_core.template_query_common"
+  ],
+  "hmock_core.validation": [
+    "hmock_core.action_validation",
+    "hmock_core.mock_models",
+    "hmock_core.validation_helpers"
+  ],
+  "hmock_core.validation_helpers": [],
+  "tests.test_template_refactor_regressions": [
+    "hmock_core",
+    "hmock_core.action_validation",
+    "hmock_core.http_models",
+    "hmock_core.template_engine",
+    "hmock_core.template_errors",
+    "hmock_core.template_functions"
+  ]
+}
