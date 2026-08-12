@@ -1,309 +1,218 @@
 {
-  "hmock": [],
-  "hmock_core": [
-    "hmock",
-    "tests.test_template_refactor_regressions"
+  "iris": [],
+  "iris_dataset": [
+    "iris",
+    "tests.test_circle_search",
+    "tests.test_identifier",
+    "tests.test_matcher",
+    "tests.test_normalization",
+    "tests.test_pupil_detector"
   ],
-  "hmock_core.action_validation": [
-    "hmock",
-    "hmock_core.loader",
-    "hmock_core.validation",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.circle_search": [
+    "iris",
+    "iris_dataset.localization",
+    "iris_dataset.segmenter",
+    "tests.test_circle_search"
   ],
-  "hmock_core.actions": [
-    "hmock",
-    "hmock_core.http_server"
+  "iris_dataset.csv_exporter": [
+    "iris"
   ],
-  "hmock_core.behavior_inheritance": [
-    "hmock",
-    "hmock_core.loader"
+  "iris_dataset.csv_parsing": [
+    "iris",
+    "iris_dataset.dataset_csv",
+    "iris_dataset.normalizer",
+    "iris_dataset.segmentation_csv",
+    "iris_dataset.segmenter",
+    "tests.test_normalization"
   ],
-  "hmock_core.config": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime"
+  "iris_dataset.csv_schema": [
+    "iris",
+    "iris_dataset.csv_exporter",
+    "iris_dataset.dataset_csv",
+    "iris_dataset.normalizer",
+    "iris_dataset.segmentation_csv",
+    "iris_dataset.segmenter",
+    "tests.test_normalization"
   ],
-  "hmock_core.http_models": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.logging",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.template_engine",
-    "hmock_core.template_expression",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.dataset_csv": [
+    "iris",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core.http_server": [
-    "hmock"
+  "iris_dataset.dataset_layout": [
+    "iris",
+    "iris_dataset.encoder",
+    "iris_dataset.identifier",
+    "iris_dataset.scanner",
+    "tests.test_identifier",
+    "tests.test_matcher"
   ],
-  "hmock_core.loader": [
-    "hmock"
+  "iris_dataset.dataset_paths": [
+    "iris",
+    "iris_dataset.normalizer",
+    "iris_dataset.segmenter",
+    "tests.test_normalization"
   ],
-  "hmock_core.logging": [
-    "hmock",
-    "hmock_core.http_server"
+  "iris_dataset.encoder": [
+    "iris",
+    "tests.test_matcher"
   ],
-  "hmock_core.matcher": [
-    "hmock",
-    "hmock_core.http_server"
+  "iris_dataset.encoding_formatting": [
+    "iris"
   ],
-  "hmock_core.mock_models": [
-    "hmock",
-    "hmock_core.action_validation",
-    "hmock_core.actions",
-    "hmock_core.behavior_inheritance",
-    "hmock_core.http_server",
-    "hmock_core.loader",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.validation",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.encoding_io": [
+    "iris",
+    "iris_dataset.encoder",
+    "iris_dataset.identifier",
+    "iris_dataset.matcher",
+    "tests.test_identifier",
+    "tests.test_matcher"
   ],
-  "hmock_core.outbound_http": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server"
+  "iris_dataset.encoding_layout": [
+    "iris",
+    "iris_dataset.encoder",
+    "iris_dataset.identifier",
+    "iris_dataset.iris_code",
+    "iris_dataset.matcher",
+    "tests.test_identifier",
+    "tests.test_matcher"
   ],
-  "hmock_core.redis_backend": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.redis_external_backend",
-    "hmock_core.redis_factory",
-    "hmock_core.redis_memory_backend",
-    "hmock_core.runtime",
-    "hmock_core.template_redis_functions"
+  "iris_dataset.gabor": [
+    "iris",
+    "iris_dataset.encoder",
+    "tests.test_matcher"
   ],
-  "hmock_core.redis_external_backend": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.redis_factory",
-    "hmock_core.runtime"
+  "iris_dataset.identification_formatting": [
+    "iris",
+    "tests.test_identifier"
   ],
-  "hmock_core.redis_factory": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime"
+  "iris_dataset.identifier": [
+    "iris",
+    "tests.test_identifier"
   ],
-  "hmock_core.redis_memory_backend": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.redis_factory",
-    "hmock_core.runtime"
+  "iris_dataset.image_metadata": [
+    "iris",
+    "iris_dataset.dataset_layout",
+    "iris_dataset.encoder",
+    "iris_dataset.identifier",
+    "iris_dataset.scanner",
+    "iris_dataset.segmenter",
+    "tests.test_identifier",
+    "tests.test_matcher"
   ],
-  "hmock_core.response_bodies": [
-    "hmock",
-    "hmock_core.action_validation",
-    "hmock_core.loader",
-    "hmock_core.validation",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.image_preprocessing": [
+    "iris",
+    "iris_dataset.localization",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core.runtime": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http"
+  "iris_dataset.iris_code": [
+    "iris",
+    "iris_dataset.encoder",
+    "tests.test_matcher"
   ],
-  "hmock_core.template_builtin_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_engine",
-    "hmock_core.template_functions",
-    "hmock_core.template_redis_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.localization": [
+    "iris",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core.template_crypto_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.match_formatting": [
+    "iris",
+    "tests.test_matcher"
   ],
-  "hmock_core.template_engine": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.matcher": [
+    "iris",
+    "iris_dataset.identifier",
+    "tests.test_identifier",
+    "tests.test_matcher"
   ],
-  "hmock_core.template_errors": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_builtin_functions",
-    "hmock_core.template_engine",
-    "hmock_core.template_expression",
-    "hmock_core.template_functions",
-    "hmock_core.template_gjson_functions",
-    "hmock_core.template_json_query_functions",
-    "hmock_core.template_parser",
-    "hmock_core.template_query_common",
-    "hmock_core.template_query_functions",
-    "hmock_core.template_redis_functions",
-    "hmock_core.template_registry",
-    "hmock_core.template_xml_query_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.models": [
+    "iris",
+    "iris_dataset.circle_search",
+    "iris_dataset.csv_exporter",
+    "iris_dataset.csv_parsing",
+    "iris_dataset.dataset_csv",
+    "iris_dataset.dataset_layout",
+    "iris_dataset.encoder",
+    "iris_dataset.encoding_formatting",
+    "iris_dataset.encoding_layout",
+    "iris_dataset.gabor",
+    "iris_dataset.identification_formatting",
+    "iris_dataset.identifier",
+    "iris_dataset.image_metadata",
+    "iris_dataset.iris_code",
+    "iris_dataset.localization",
+    "iris_dataset.match_formatting",
+    "iris_dataset.matcher",
+    "iris_dataset.normalization_formatting",
+    "iris_dataset.normalized_image_io",
+    "iris_dataset.normalizer",
+    "iris_dataset.overlay",
+    "iris_dataset.rubber_sheet",
+    "iris_dataset.scan_formatting",
+    "iris_dataset.scanner",
+    "iris_dataset.segmentation_csv",
+    "iris_dataset.segmentation_formatting",
+    "iris_dataset.segmentation_validator",
+    "iris_dataset.segmenter",
+    "iris_dataset.summary",
+    "tests.test_circle_search",
+    "tests.test_identifier",
+    "tests.test_matcher",
+    "tests.test_normalization"
   ],
-  "hmock_core.template_expression": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.template_engine",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.normalization_formatting": [
+    "iris"
   ],
-  "hmock_core.template_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.normalized_image_io": [
+    "iris",
+    "iris_dataset.normalizer",
+    "tests.test_normalization"
   ],
-  "hmock_core.template_gjson_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "hmock_core.template_query_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.normalizer": [
+    "iris",
+    "tests.test_normalization"
   ],
-  "hmock_core.template_json_query_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "hmock_core.template_query_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.overlay": [
+    "iris",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core.template_parser": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.template_engine",
-    "hmock_core.template_expression",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.pupil_detector": [
+    "iris",
+    "iris_dataset.localization",
+    "iris_dataset.segmenter",
+    "tests.test_pupil_detector"
   ],
-  "hmock_core.template_query_common": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "hmock_core.template_gjson_functions",
-    "hmock_core.template_json_query_functions",
-    "hmock_core.template_query_functions",
-    "hmock_core.template_xml_query_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.rubber_sheet": [
+    "iris",
+    "iris_dataset.normalizer",
+    "tests.test_normalization"
   ],
-  "hmock_core.template_query_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.scan_formatting": [
+    "iris"
   ],
-  "hmock_core.template_redis_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime"
+  "iris_dataset.scanner": [
+    "iris"
   ],
-  "hmock_core.template_regex_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.segmentation_csv": [
+    "iris",
+    "iris_dataset.normalizer",
+    "tests.test_normalization"
   ],
-  "hmock_core.template_registry": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_engine",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.segmentation_formatting": [
+    "iris"
   ],
-  "hmock_core.template_text_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.segmentation_validator": [
+    "iris",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core.template_xml_query_functions": [
-    "hmock",
-    "hmock_core.actions",
-    "hmock_core.http_server",
-    "hmock_core.matcher",
-    "hmock_core.outbound_http",
-    "hmock_core.runtime",
-    "hmock_core.template_functions",
-    "hmock_core.template_query_functions",
-    "tests.test_template_refactor_regressions"
+  "iris_dataset.segmenter": [
+    "iris"
   ],
-  "hmock_core.validation": [
-    "hmock",
-    "hmock_core.loader"
+  "iris_dataset.summary": [
+    "iris",
+    "iris_dataset.scan_formatting"
   ],
-  "hmock_core.validation_helpers": [
-    "hmock",
-    "hmock_core.action_validation",
-    "hmock_core.loader",
-    "hmock_core.validation",
-    "tests.test_template_refactor_regressions"
-  ],
-  "tests.test_template_refactor_regressions": []
+  "tests.test_circle_search": [],
+  "tests.test_identifier": [],
+  "tests.test_matcher": [],
+  "tests.test_normalization": [],
+  "tests.test_pupil_detector": []
 }

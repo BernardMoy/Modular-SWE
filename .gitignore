@@ -31,6 +31,8 @@ __pycache__
 nexttube/data 
 node_modules
 
+# names for generating temp files / testing scripts 
 temp_metrics
+temp_graph 
 
 agent_report.json

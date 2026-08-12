@@ -1,10 +1,11 @@
-# Part 3: Iris Normalization
+# Part 3: Iris Normalization and Masking
 
 ## Introduction
 
 You will be building a CLI tool for recognition of the user from iris images.
 Across the project you will be working with the CASIA-Iris-Interval dataset available under data/.
-In this checkpoint you are building a normalization layer that unwraps the iris region bounded by 2 circles into a rectangular representation (Daugman's rubber sheet model).
+In this checkpoint you are building a normalization layer that unwraps the iris region bounded by 2 circles into a rectangular representation (Daugman's rubber sheet model),
+and a dynamic mask to filter out noise such as eyelids, eyelashes and reflections.
 
 ## Segmentation csv format
 
@@ -51,10 +52,13 @@ source_y = (1 - r) * pupil_edge_y + r * iris_edge_y
 
 ### Validity mask
 
-For every normalized image, the system should also generate abinary validity mask as a png image:
-255 = valid iris pixel, 0 = invalid pixel.
+For every normalized image, the system should also generate a binary validity mask as a png image:
+255 = valid iris pixel, 0 = invalid pixel. Pixel is set to 0 for any of the following conditions:
 
-Invalid pixel includes when the source coordinate falls outside the source image.
+1. Source coordinates fall outside the bounds of the raw image
+2. Glare or reflection: The pixel intensity at (source_x, source_y) exceeds 240.
+3. Eyelid: Source point lies above the upper eyelid boundary curve or below the lower eyelid boundary cuvre. You would want to detect upper/lower eyelid boundary curves for this.
+4. Eyelashes: Detect eyelash regions by local adaptive intensity thresholding and vertical edge detection.
 
 ### `normalize` command
 

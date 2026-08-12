@@ -20,5 +20,19 @@ python implementation/iris.py encode normalized/ masks/ --output-dir encoded/ --
 
 python implementation/iris.py match-one encoded/007/L/S1007L01.bin encoded-masks/007/L/S1007L01.bin encoded/007/L/S1007L02.bin encoded-masks/007/L/S1007L02.bin
 
-python implementation/iris.py identify encoded/007/L/S1007L01.bin encoded-masks/007/L/S1007L01.bin encoded/009/L/S1009L01.bin encoded/ encoded-masks/
+python implementation/iris.py identify data/CASIA-Iris-Interval/084/L/S1084L01.jpg encoded/ encoded-masks/
+```
+
+Remove 084 L .bin files for the first image on both encoded and encoded masks before running the last command.
+
+Expected result:
+
+```
+Code: encoded/084/L/S1084L02.bin
+
+Closest subject: 084, L
+Hamming distance: 0.115
+Match: True
+
+Status: success
 ```

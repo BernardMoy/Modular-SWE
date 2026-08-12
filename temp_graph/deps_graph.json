@@ -1,150 +1,171 @@
 {
-  "hmock": [
-    "hmock_core",
-    "hmock_core.config",
-    "hmock_core.http_server",
-    "hmock_core.loader",
-    "hmock_core.logging",
-    "hmock_core.runtime"
+  "iris": [
+    "iris_dataset",
+    "iris_dataset.csv_exporter",
+    "iris_dataset.encoder",
+    "iris_dataset.encoding_formatting",
+    "iris_dataset.identification_formatting",
+    "iris_dataset.identifier",
+    "iris_dataset.match_formatting",
+    "iris_dataset.matcher",
+    "iris_dataset.models",
+    "iris_dataset.normalization_formatting",
+    "iris_dataset.normalizer",
+    "iris_dataset.scan_formatting",
+    "iris_dataset.scanner",
+    "iris_dataset.segmentation_formatting",
+    "iris_dataset.segmenter"
   ],
-  "hmock_core": [],
-  "hmock_core.action_validation": [
-    "hmock_core.mock_models",
-    "hmock_core.response_bodies",
-    "hmock_core.validation_helpers"
+  "iris_dataset": [],
+  "iris_dataset.circle_search": [
+    "iris_dataset.models"
   ],
-  "hmock_core.actions": [
-    "hmock_core.http_models",
-    "hmock_core.mock_models",
-    "hmock_core.outbound_http",
-    "hmock_core.redis_backend",
-    "hmock_core.runtime",
-    "hmock_core.template_engine"
+  "iris_dataset.csv_exporter": [
+    "iris_dataset.csv_schema",
+    "iris_dataset.models"
   ],
-  "hmock_core.behavior_inheritance": [
-    "hmock_core.mock_models"
+  "iris_dataset.csv_parsing": [
+    "iris_dataset.models"
   ],
-  "hmock_core.config": [],
-  "hmock_core.http_models": [],
-  "hmock_core.http_server": [
-    "hmock_core.actions",
-    "hmock_core.http_models",
-    "hmock_core.logging",
-    "hmock_core.matcher",
-    "hmock_core.mock_models",
-    "hmock_core.runtime"
+  "iris_dataset.csv_schema": [],
+  "iris_dataset.dataset_csv": [
+    "iris_dataset.csv_parsing",
+    "iris_dataset.csv_schema",
+    "iris_dataset.models"
   ],
-  "hmock_core.loader": [
-    "hmock_core.behavior_inheritance",
-    "hmock_core.mock_models",
-    "hmock_core.validation"
+  "iris_dataset.dataset_layout": [
+    "iris_dataset.image_metadata",
+    "iris_dataset.models"
   ],
-  "hmock_core.logging": [
-    "hmock_core.http_models"
+  "iris_dataset.dataset_paths": [],
+  "iris_dataset.encoder": [
+    "iris_dataset.dataset_layout",
+    "iris_dataset.encoding_io",
+    "iris_dataset.encoding_layout",
+    "iris_dataset.gabor",
+    "iris_dataset.iris_code",
+    "iris_dataset.models"
   ],
-  "hmock_core.matcher": [
-    "hmock_core.http_models",
-    "hmock_core.mock_models",
-    "hmock_core.runtime",
-    "hmock_core.template_engine",
-    "hmock_core.template_errors"
+  "iris_dataset.encoding_formatting": [
+    "iris_dataset.models"
   ],
-  "hmock_core.mock_models": [],
-  "hmock_core.outbound_http": [
-    "hmock_core.http_models",
-    "hmock_core.mock_models",
-    "hmock_core.runtime",
-    "hmock_core.template_engine"
+  "iris_dataset.encoding_io": [],
+  "iris_dataset.encoding_layout": [
+    "iris_dataset.models"
   ],
-  "hmock_core.redis_backend": [],
-  "hmock_core.redis_external_backend": [
-    "hmock_core.redis_backend"
+  "iris_dataset.gabor": [
+    "iris_dataset.models"
   ],
-  "hmock_core.redis_factory": [
-    "hmock_core.redis_backend",
-    "hmock_core.redis_external_backend",
-    "hmock_core.redis_memory_backend"
+  "iris_dataset.identification_formatting": [
+    "iris_dataset.models"
   ],
-  "hmock_core.redis_memory_backend": [
-    "hmock_core.redis_backend"
+  "iris_dataset.identifier": [
+    "iris_dataset.dataset_layout",
+    "iris_dataset.matcher",
+    "iris_dataset.models"
   ],
-  "hmock_core.response_bodies": [],
-  "hmock_core.runtime": [
-    "hmock_core.config",
-    "hmock_core.redis_backend",
-    "hmock_core.redis_factory",
-    "hmock_core.template_functions",
-    "hmock_core.template_redis_functions",
-    "hmock_core.template_registry"
+  "iris_dataset.image_metadata": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_builtin_functions": [
-    "hmock_core.template_errors"
+  "iris_dataset.image_preprocessing": [],
+  "iris_dataset.iris_code": [
+    "iris_dataset.encoding_layout",
+    "iris_dataset.models"
   ],
-  "hmock_core.template_crypto_functions": [],
-  "hmock_core.template_engine": [
-    "hmock_core.http_models",
-    "hmock_core.template_builtin_functions",
-    "hmock_core.template_errors",
-    "hmock_core.template_expression",
-    "hmock_core.template_parser",
-    "hmock_core.template_registry"
+  "iris_dataset.localization": [
+    "iris_dataset.circle_search",
+    "iris_dataset.image_preprocessing",
+    "iris_dataset.models",
+    "iris_dataset.pupil_detector"
   ],
-  "hmock_core.template_errors": [],
-  "hmock_core.template_expression": [
-    "hmock_core.http_models",
-    "hmock_core.template_errors",
-    "hmock_core.template_parser"
+  "iris_dataset.match_formatting": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_functions": [
-    "hmock_core.template_builtin_functions",
-    "hmock_core.template_crypto_functions",
-    "hmock_core.template_query_functions",
-    "hmock_core.template_regex_functions",
-    "hmock_core.template_text_functions"
+  "iris_dataset.matcher": [
+    "iris_dataset.encoding_io",
+    "iris_dataset.encoding_layout",
+    "iris_dataset.models"
   ],
-  "hmock_core.template_gjson_functions": [
-    "hmock_core.template_query_common"
+  "iris_dataset.models": [],
+  "iris_dataset.normalization_formatting": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_json_query_functions": [
-    "hmock_core.template_query_common"
+  "iris_dataset.normalized_image_io": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_parser": [
-    "hmock_core.template_errors"
+  "iris_dataset.normalizer": [
+    "iris_dataset.dataset_paths",
+    "iris_dataset.models",
+    "iris_dataset.normalized_image_io",
+    "iris_dataset.rubber_sheet",
+    "iris_dataset.segmentation_csv"
   ],
-  "hmock_core.template_query_common": [
-    "hmock_core.template_errors"
+  "iris_dataset.overlay": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_query_functions": [
-    "hmock_core.template_gjson_functions",
-    "hmock_core.template_json_query_functions",
-    "hmock_core.template_xml_query_functions"
+  "iris_dataset.pupil_detector": [],
+  "iris_dataset.rubber_sheet": [
+    "iris_dataset.models"
   ],
-  "hmock_core.template_redis_functions": [
-    "hmock_core.redis_backend",
-    "hmock_core.template_builtin_functions",
-    "hmock_core.template_errors"
+  "iris_dataset.scan_formatting": [
+    "iris_dataset.models",
+    "iris_dataset.summary"
   ],
-  "hmock_core.template_regex_functions": [],
-  "hmock_core.template_registry": [
-    "hmock_core.template_errors"
+  "iris_dataset.scanner": [
+    "iris_dataset.dataset_layout",
+    "iris_dataset.image_metadata",
+    "iris_dataset.models"
   ],
-  "hmock_core.template_text_functions": [],
-  "hmock_core.template_xml_query_functions": [
-    "hmock_core.template_errors",
-    "hmock_core.template_query_common"
+  "iris_dataset.segmentation_csv": [
+    "iris_dataset.csv_parsing",
+    "iris_dataset.csv_schema",
+    "iris_dataset.models"
   ],
-  "hmock_core.validation": [
-    "hmock_core.action_validation",
-    "hmock_core.mock_models",
-    "hmock_core.validation_helpers"
+  "iris_dataset.segmentation_formatting": [
+    "iris_dataset.models"
   ],
-  "hmock_core.validation_helpers": [],
-  "tests.test_template_refactor_regressions": [
-    "hmock_core",
-    "hmock_core.action_validation",
-    "hmock_core.http_models",
-    "hmock_core.template_engine",
-    "hmock_core.template_errors",
-    "hmock_core.template_functions"
+  "iris_dataset.segmentation_validator": [
+    "iris_dataset.models"
+  ],
+  "iris_dataset.segmenter": [
+    "iris_dataset.dataset_csv",
+    "iris_dataset.dataset_paths",
+    "iris_dataset.image_metadata",
+    "iris_dataset.localization",
+    "iris_dataset.models",
+    "iris_dataset.overlay",
+    "iris_dataset.segmentation_validator"
+  ],
+  "iris_dataset.summary": [
+    "iris_dataset.models"
+  ],
+  "tests.test_circle_search": [
+    "iris_dataset",
+    "iris_dataset.circle_search",
+    "iris_dataset.models"
+  ],
+  "tests.test_identifier": [
+    "iris_dataset",
+    "iris_dataset.identification_formatting",
+    "iris_dataset.identifier"
+  ],
+  "tests.test_matcher": [
+    "iris_dataset",
+    "iris_dataset.encoder",
+    "iris_dataset.encoding_layout",
+    "iris_dataset.match_formatting",
+    "iris_dataset.matcher",
+    "iris_dataset.models"
+  ],
+  "tests.test_normalization": [
+    "iris_dataset",
+    "iris_dataset.models",
+    "iris_dataset.normalizer",
+    "iris_dataset.rubber_sheet",
+    "iris_dataset.segmentation_csv"
+  ],
+  "tests.test_pupil_detector": [
+    "iris_dataset",
+    "iris_dataset.pupil_detector"
   ]
 }

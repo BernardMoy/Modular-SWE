@@ -3,9 +3,9 @@ from typing import Literal
 # For the coding agent: Codex / Claude Code 
 AGENT: Literal["codex", "opencode"] = "codex"
 MODEL: Literal[
-                "gpt-5.5", 
+                "gpt-5.4", 
                 "Nemotron 3 Ultra Free", "Big Pickle", "DeepSeek V4 Flash Free"
-               ] = "gpt-5.5"
+               ] = "gpt-5.4"
 
 # For the modular workflow. 
 # noDesign: Directly implement all modules at once (reference) 

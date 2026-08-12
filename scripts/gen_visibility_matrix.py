@@ -50,7 +50,7 @@ def main():
         for tgt in targets:
             adj_matrix[idx[src], idx[tgt]] = 1
     
-    fig, ax = plt.subplots(figsize=(n,n))
+    fig, ax = plt.subplots(figsize=(1.2*n+2, 1.2*n+2))
     
     # highlight in blue if the matrix is connected, else gray 
     for i in range(n):

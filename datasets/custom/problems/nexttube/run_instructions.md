@@ -17,6 +17,8 @@ pip install -r requirements.txt
 uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+Change the uvicorn command to target <the main file> : app
+
 ## Run frontend
 
 ```

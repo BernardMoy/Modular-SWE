@@ -14,12 +14,12 @@ Each stores .bin files for the encoded iriscode and the encoded mask respectivel
 ## Command
 
 ```
-iris identify <encoded.bin> <mask.bin> <encoded-dir> <encoded-masks-dir> [--threshold 0.32]
+iris identify <image> <encoded-dir> <encoded-masks-dir> [--threshold 0.32]
 ```
 
 ## Requirements
 
-- For each (subject_id, eye) under the encoded and encoded-masks directories, call the `match-one` command to get the hamming distance, best_shift and valid_bit_count.
+- For each (subject_id, eye) under the encoded and encoded-masks directories, call existing commands on the image to process it to encoded bin and mask bin files, and finally the `match-one` command to get the hamming distance, best_shift and valid_bit_count.
 - The top ranked candidate is the identification result only when its hamming distance <= threshold: If the top ranked candidate does not meet this condition then there is no match.
 - Print a summary in the following format for success and fail respectively:
 
