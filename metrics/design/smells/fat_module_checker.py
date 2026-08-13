@@ -4,7 +4,7 @@ import json
 # Given a current design json file 
 # Return all fat modules with a large public interface 
 # with size greater than the below threshold 
-NOPM_THRESHOLD = 20 
+NOPM_THRESHOLD = 7
 
 def check_fat_module(json_object): 
     """

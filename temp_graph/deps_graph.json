@@ -1,171 +1,150 @@
 {
-  "iris": [
-    "iris_dataset",
-    "iris_dataset.csv_exporter",
-    "iris_dataset.encoder",
-    "iris_dataset.encoding_formatting",
-    "iris_dataset.identification_formatting",
-    "iris_dataset.identifier",
-    "iris_dataset.match_formatting",
-    "iris_dataset.matcher",
-    "iris_dataset.models",
-    "iris_dataset.normalization_formatting",
-    "iris_dataset.normalizer",
-    "iris_dataset.scan_formatting",
-    "iris_dataset.scanner",
-    "iris_dataset.segmentation_formatting",
-    "iris_dataset.segmenter"
+  "flask": [
+    "flask.app",
+    "flask.blueprints",
+    "flask.config",
+    "flask.ctx",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json",
+    "flask.signals",
+    "flask.templating",
+    "flask.wrappers"
   ],
-  "iris_dataset": [],
-  "iris_dataset.circle_search": [
-    "iris_dataset.models"
+  "flask.__main__": [
+    "flask.cli"
   ],
-  "iris_dataset.csv_exporter": [
-    "iris_dataset.csv_schema",
-    "iris_dataset.models"
+  "flask.app": [
+    "flask.cli",
+    "flask.ctx",
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sessions",
+    "flask.signals",
+    "flask.templating",
+    "flask.testing",
+    "flask.typing",
+    "flask.wrappers"
   ],
-  "iris_dataset.csv_parsing": [
-    "iris_dataset.models"
+  "flask.blueprints": [
+    "flask.cli",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.blueprints",
+    "flask.sansio.scaffold",
+    "flask.wrappers"
   ],
-  "iris_dataset.csv_schema": [],
-  "iris_dataset.dataset_csv": [
-    "iris_dataset.csv_parsing",
-    "iris_dataset.csv_schema",
-    "iris_dataset.models"
+  "flask.cli": [
+    "flask.app",
+    "flask.globals",
+    "flask.helpers"
   ],
-  "iris_dataset.dataset_layout": [
-    "iris_dataset.image_metadata",
-    "iris_dataset.models"
+  "flask.config": [
+    "flask.sansio",
+    "flask.sansio.app"
   ],
-  "iris_dataset.dataset_paths": [],
-  "iris_dataset.encoder": [
-    "iris_dataset.dataset_layout",
-    "iris_dataset.encoding_io",
-    "iris_dataset.encoding_layout",
-    "iris_dataset.gabor",
-    "iris_dataset.iris_code",
-    "iris_dataset.models"
+  "flask.ctx": [
+    "flask.app",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sessions",
+    "flask.signals",
+    "flask.typing",
+    "flask.wrappers"
   ],
-  "iris_dataset.encoding_formatting": [
-    "iris_dataset.models"
+  "flask.debughelpers": [
+    "flask.blueprints",
+    "flask.globals",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.wrappers"
   ],
-  "iris_dataset.encoding_io": [],
-  "iris_dataset.encoding_layout": [
-    "iris_dataset.models"
+  "flask.globals": [
+    "flask.app",
+    "flask.ctx",
+    "flask.sessions",
+    "flask.wrappers"
   ],
-  "iris_dataset.gabor": [
-    "iris_dataset.models"
+  "flask.helpers": [
+    "flask.globals",
+    "flask.signals",
+    "flask.wrappers"
   ],
-  "iris_dataset.identification_formatting": [
-    "iris_dataset.models"
+  "flask.json": [
+    "flask.globals",
+    "flask.json.provider",
+    "flask.wrappers"
   ],
-  "iris_dataset.identifier": [
-    "iris_dataset.dataset_layout",
-    "iris_dataset.matcher",
-    "iris_dataset.models"
+  "flask.json.provider": [
+    "flask.sansio",
+    "flask.sansio.app"
   ],
-  "iris_dataset.image_metadata": [
-    "iris_dataset.models"
+  "flask.json.tag": [],
+  "flask.logging": [
+    "flask.globals",
+    "flask.sansio",
+    "flask.sansio.app"
   ],
-  "iris_dataset.image_preprocessing": [],
-  "iris_dataset.iris_code": [
-    "iris_dataset.encoding_layout",
-    "iris_dataset.models"
+  "flask.sansio": [],
+  "flask.sansio.app": [
+    "flask.config",
+    "flask.ctx",
+    "flask.helpers",
+    "flask.json",
+    "flask.json.provider",
+    "flask.logging",
+    "flask.sansio.blueprints",
+    "flask.sansio.scaffold",
+    "flask.templating",
+    "flask.testing",
+    "flask.typing"
   ],
-  "iris_dataset.localization": [
-    "iris_dataset.circle_search",
-    "iris_dataset.image_preprocessing",
-    "iris_dataset.models",
-    "iris_dataset.pupil_detector"
+  "flask.sansio.blueprints": [
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.typing"
   ],
-  "iris_dataset.match_formatting": [
-    "iris_dataset.models"
+  "flask.sansio.scaffold": [
+    "flask.helpers",
+    "flask.templating",
+    "flask.typing"
   ],
-  "iris_dataset.matcher": [
-    "iris_dataset.encoding_io",
-    "iris_dataset.encoding_layout",
-    "iris_dataset.models"
+  "flask.sessions": [
+    "flask.app",
+    "flask.json",
+    "flask.json.tag",
+    "flask.wrappers"
   ],
-  "iris_dataset.models": [],
-  "iris_dataset.normalization_formatting": [
-    "iris_dataset.models"
+  "flask.signals": [],
+  "flask.templating": [
+    "flask.ctx",
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.signals"
   ],
-  "iris_dataset.normalized_image_io": [
-    "iris_dataset.models"
+  "flask.testing": [
+    "flask.app",
+    "flask.cli",
+    "flask.sessions"
   ],
-  "iris_dataset.normalizer": [
-    "iris_dataset.dataset_paths",
-    "iris_dataset.models",
-    "iris_dataset.normalized_image_io",
-    "iris_dataset.rubber_sheet",
-    "iris_dataset.segmentation_csv"
+  "flask.typing": [],
+  "flask.views": [
+    "flask.globals",
+    "flask.typing"
   ],
-  "iris_dataset.overlay": [
-    "iris_dataset.models"
-  ],
-  "iris_dataset.pupil_detector": [],
-  "iris_dataset.rubber_sheet": [
-    "iris_dataset.models"
-  ],
-  "iris_dataset.scan_formatting": [
-    "iris_dataset.models",
-    "iris_dataset.summary"
-  ],
-  "iris_dataset.scanner": [
-    "iris_dataset.dataset_layout",
-    "iris_dataset.image_metadata",
-    "iris_dataset.models"
-  ],
-  "iris_dataset.segmentation_csv": [
-    "iris_dataset.csv_parsing",
-    "iris_dataset.csv_schema",
-    "iris_dataset.models"
-  ],
-  "iris_dataset.segmentation_formatting": [
-    "iris_dataset.models"
-  ],
-  "iris_dataset.segmentation_validator": [
-    "iris_dataset.models"
-  ],
-  "iris_dataset.segmenter": [
-    "iris_dataset.dataset_csv",
-    "iris_dataset.dataset_paths",
-    "iris_dataset.image_metadata",
-    "iris_dataset.localization",
-    "iris_dataset.models",
-    "iris_dataset.overlay",
-    "iris_dataset.segmentation_validator"
-  ],
-  "iris_dataset.summary": [
-    "iris_dataset.models"
-  ],
-  "tests.test_circle_search": [
-    "iris_dataset",
-    "iris_dataset.circle_search",
-    "iris_dataset.models"
-  ],
-  "tests.test_identifier": [
-    "iris_dataset",
-    "iris_dataset.identification_formatting",
-    "iris_dataset.identifier"
-  ],
-  "tests.test_matcher": [
-    "iris_dataset",
-    "iris_dataset.encoder",
-    "iris_dataset.encoding_layout",
-    "iris_dataset.match_formatting",
-    "iris_dataset.matcher",
-    "iris_dataset.models"
-  ],
-  "tests.test_normalization": [
-    "iris_dataset",
-    "iris_dataset.models",
-    "iris_dataset.normalizer",
-    "iris_dataset.rubber_sheet",
-    "iris_dataset.segmentation_csv"
-  ],
-  "tests.test_pupil_detector": [
-    "iris_dataset",
-    "iris_dataset.pupil_detector"
+  "flask.wrappers": [
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json"
   ]
 }

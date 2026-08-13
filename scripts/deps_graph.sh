@@ -43,14 +43,16 @@ echo "[GRAPH 3/6] Generating dependency graph"
 pydeps "$IMPL_DIR/$ENTRYFILE_NAME.py" \
   -o "$OUTPUT_DIR/deps_graph.svg" \
   --noshow --max-bacon=0 --reverse \
-  --only "${REAL_MODULES[@]}"
+  --only "${REAL_MODULES[@]}" \
+  # --exclude click jinja2 werkzeug itsdangerous blinker importlib
 
 # generate the dot
 pydeps "$IMPL_DIR/$ENTRYFILE_NAME.py" \
   -T dot \
   -o "$OUTPUT_DIR/deps_graph.dot" \
   --noshow --max-bacon=0 --reverse \
-  --only "${REAL_MODULES[@]}"
+  --only "${REAL_MODULES[@]}" \
+  # --exclude click jinja2 werkzeug itsdangerous blinker importlib
 
 # 3. Process the graph to generate the json format for the agent to read
 echo "[GRAPH 4/6] Converting the dependency graphs to JSON"

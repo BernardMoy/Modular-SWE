@@ -14,7 +14,7 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from write_metrics.write_metrics_from_dpy_and_pylint import write_metrics_from_dpy_and_pylint
 from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
@@ -133,10 +133,9 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         )
 
         # Write metrics from dpy pylint and deps graph 
-        write_metrics_from_dpy_pylint_and_deps_graph(
+        write_metrics_from_dpy_and_pylint(
             AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
             AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
-            AGENT_WORKSPACE / "current_deps_graph.json", 
             AGENT_WORKSPACE / "current_metrics.json"
         )
 

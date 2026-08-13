@@ -7,6 +7,7 @@
 # Keep custom in git - they are hand written checkpoints 
 datasets/aidev
 datasets/swe-bench-pro
+datasets/references
 datasets/slopCodeBench
 datasets/**/implementations_*/
 datasets/**/report_*/
