@@ -190,7 +190,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
         subprocess.run(
             [
-                "scripts/metrics.sh",
+                "scripts/raw_metrics.sh",
                 AGENT_WORKSPACE / "implementation",
                 AGENT_WORKSPACE / "metrics"
             ],

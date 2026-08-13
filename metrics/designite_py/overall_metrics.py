@@ -27,7 +27,7 @@ def get_dpy_metrics(implementation_path):
 
     # Run the metrics script against the implementation path 
     subprocess.run([
-        "scripts/metrics.sh", 
+        "scripts/raw_metrics.sh", 
         implementation_path, 
         TEMP_DIR 
     ])

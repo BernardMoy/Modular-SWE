@@ -1,3 +1,17 @@
+"""
+IMPORTANT INFORMATION
+
+THE DESIGN JSON OLD IS CURRENTLY UNUSED HERE
+AND THE SUMMARY IS NOT USED, 
+
+MAINLY BECAUSE ANALYZING THE NEW / OLD INFO
+REQUIRES COMPARING INFO ACROSS 2 DIFFERENT TOOLS
+AGENT <> DPY
+AGENT <> PYDEPS
+
+WHICH IS NOT A FAIR COMPARISON. 
+"""
+
 # Given the NEW and OLD design json (NEW one comes first!) (Only the old one is available in the first checkpoint) 
 # Return the summary 
 def get_summary(design_json_new, design_json_old = None): 

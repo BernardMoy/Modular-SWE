@@ -32,6 +32,7 @@ def main():
     parser.add_argument("dpy_path", help="Abs path to the dpy folder")
     parser.add_argument("pylint_path", help="Abs path to the pylint folder")
     parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
+    parser.add_argument("new_path", nargs="?", default=None)
     args = parser.parse_args()
 
     write_metrics_from_dpy_and_pylint(

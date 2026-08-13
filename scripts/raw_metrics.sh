@@ -7,7 +7,7 @@ set -euo pipefail
 
 # Incorrect number of params 
 if [[ $# -ne 2 ]]; then
-  echo "Usage: ./metrics.sh <implementation_path> <output_dir>" >&2
+  echo "Usage: ./raw_metrics.sh <implementation_path> <output_dir>" >&2
   exit 1
 fi
 
