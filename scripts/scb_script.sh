@@ -55,7 +55,7 @@ if [[ "$N" -gt 1 ]]; then
 
   # Generate the DPy and Pylint metrics from the previous impl 
   echo "[2.3/6] DPy and Pylint metrics"
-  $ROOT/scripts/raw_metrics.sh $PREV_IMPLEMENTATION "$AGENT_WORKSPACE/metrics"
+  $ROOT/scripts/metrics.sh $PREV_IMPLEMENTATION "$AGENT_WORKSPACE/metrics"
 
   # Update the current deps graph json, and copy the svg also 
   echo "[2.4/6] Updating current_deps_graph.json"

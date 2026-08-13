@@ -5,15 +5,14 @@ import os
 import json 
 
 def _get_summary_metrics(dpy_folder): 
+    n, nom, nopm, cc = 0, 0, 0, 0
     for json_file in os.listdir(dpy_folder): 
-        n, nom, nopm, cc = 0, 0, 0, 0
-
         # class module metrics 
         if (json_file.endswith("class_module_metrics.json")): 
             with open(os.path.join(dpy_folder, json_file), 'r') as f: 
                 # Filter out __init__.py. May add more files such as __main__.py later 
                 class_json = [x for x in (json.load(f)) if x ["Module"] != "__init__"]
-                n = len(class_json)
+                n = len(set(x["Module"] for x in class_json))
                 nom = sum([x["NOM"] for x in class_json]) / len(class_json) if len(class_json) > 0 else 0
                 nopm = sum([x["NOPM"] for x in class_json]) / len(class_json) if len(class_json) > 0 else 0
                 
@@ -26,12 +25,12 @@ def _get_summary_metrics(dpy_folder):
 
     return {
         "n": n,
-        "nom": nom, 
-        "nopm": nopm, 
-        "cc": cc 
+        "nom": round(nom, 2), 
+        "nopm": round(nopm, 2), 
+        "cc": round(cc, 2)
     }
 
-def get_summary(dpy_folder_new, dpy_folder_old = None): 
+def get_dpy_summary(dpy_folder_new, dpy_folder_old = None): 
     """
     Return in the format [
         {
@@ -77,10 +76,10 @@ def get_summary(dpy_folder_new, dpy_folder_old = None):
 
     # add the changed values also if the old folder is present 
     if dpy_folder_old:  
-        n_change = new_metrics["n"] - old_metrics["n"]
-        nom_change = new_metrics["nom"] - old_metrics["nom"]
-        nopm_change = new_metrics["nopm"] - old_metrics["nopm"]
-        cc_change = new_metrics["cc"] - old_metrics["cc"]
+        n_change = round(new_metrics["n"] - old_metrics["n"], 2)
+        nom_change = round(new_metrics["nom"] - old_metrics["nom"], 2)
+        nopm_change = round(new_metrics["nopm"] - old_metrics["nopm"], 2)
+        cc_change = round(new_metrics["cc"] - old_metrics["cc"], 2)
 
         summary["number_of_modules"]["change"] = f"+{n_change}" if n_change > 0 else str(n_change)
         summary["number_of_methods_per_module"]["change"] = f"+{nom_change}" if nom_change > 0 else str(nom_change)

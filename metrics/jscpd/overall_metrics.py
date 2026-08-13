@@ -63,7 +63,9 @@ def get_duplicates(implementation_path):
     REPORT_PATH = Path("temp_duplicates") / "jscpd-report.json"
     with open(REPORT_PATH, 'r') as f: 
         report_json = json.load(f)
-        print(json.dumps(report_json, indent=2))
+
+        # See which lines are the duplicated ones 
+        # print(json.dumps(report_json, indent=2))
         
         # Only return the percentage duplicated for lines and tokens 
         duplicates["lines"] = report_json["statistics"]["total"]["percentage"] / 100

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash 
 # Usage: 
 # ./metrics.sh <implementation_path> <output_dir>
-# Writes the dpy metrics, pylint metrics separately to the directory. 
+# Writes all RAW dpy metrics, pylint metrics separately to the directory. 
 
 set -euo pipefail
 
 # Incorrect number of params 
 if [[ $# -ne 2 ]]; then
-  echo "Usage: ./raw_metrics.sh <implementation_path> <output_dir>" >&2
+  echo "Usage: ./metrics.sh <implementation_path> <output_dir>" >&2
   exit 1
 fi
 

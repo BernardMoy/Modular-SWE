@@ -14,7 +14,7 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from write_metrics.write_metrics_from_dpy_and_pylint import write_metrics_from_dpy_and_pylint
+from write_metrics.write_metrics_from_implementation import write_metrics_from_dpy_and_pylint
 from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
@@ -128,7 +128,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
         subprocess.run(
             [
-                "scripts/raw_metrics.sh",
+                "scripts/metrics.sh",
                 AGENT_WORKSPACE / "implementation",
                 AGENT_WORKSPACE / "metrics"
             ],
