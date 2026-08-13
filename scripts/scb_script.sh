@@ -53,25 +53,16 @@ if [[ "$N" -gt 1 ]]; then
   echo "[2.2/6] Dependency Graph"  
   $ROOT/scripts/deps_graph.sh "$PREV_IMPLEMENTATION/$ENTRY_FILE.py" "$AGENT_WORKSPACE/deps_graphs"
 
-  # Generate the DPy and Pylint metrics from the previous impl 
-  echo "[2.3/6] DPy and Pylint metrics"
-  $ROOT/scripts/metrics.sh $PREV_IMPLEMENTATION "$AGENT_WORKSPACE/metrics"
-
   # Update the current deps graph json, and copy the svg also 
-  echo "[2.4/6] Updating current_deps_graph.json"
+  echo "[2.3/6] Updating current_deps_graph.json"
   cp -r "$AGENT_WORKSPACE/deps_graphs/deps_graph.json" "$AGENT_WORKSPACE/current_deps_graph.json"
   cp -r "$AGENT_WORKSPACE/deps_graphs/deps_graph.svg" "$AGENT_WORKSPACE/original_deps_graph.svg"  # this wont get updated by the agent 
 
   # Update the current metrics json 
-  echo "[2.5/6] Updating current_metrics.json"
-  python -m write_metrics.write_metrics_from_dpy_and_pylint \
-  "$AGENT_WORKSPACE/metrics/dpy_metrics" "$AGENT_WORKSPACE/metrics/pylint_metrics.json" "$AGENT_WORKSPACE/current_deps_graph.json" \
+  echo "[2.4/6] Updating current_metrics.json"
+  python -m write_metrics.write_metrics_from_implementation \
+  "$AGENT_WORKSPACE/implementation" \
   "$AGENT_WORKSPACE/current_metrics.json"
-
-  # Delete the copied directories above, to limit what the agent can see 
-  echo "[2.6/6] Deleting unnecessary directories"
-  rm -rf "$AGENT_WORKSPACE/deps_graphs"
-  rm -rf "$AGENT_WORKSPACE/metrics"
 fi
 
 # 3. Docker volume mount 
