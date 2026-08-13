@@ -15,7 +15,7 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from write_metrics.write_metrics_from_dpy_and_pylint import write_metrics_from_dpy_pylint
+from write_metrics.write_metrics_from_dpy_and_pylint import write_metrics_from_dpy_and_pylint
 from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
@@ -212,9 +212,11 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
-        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
-            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
 
+        if not analyzer_result_path.exists():
+            with open(analyzer_result_path, "w") as f:
+                f.write("[]")
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 

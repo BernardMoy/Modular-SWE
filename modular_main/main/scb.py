@@ -72,8 +72,11 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
-        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
-            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
+
+        if not analyzer_result_path.exists():
+            with open(analyzer_result_path, "w") as f:
+                f.write("[]")
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 

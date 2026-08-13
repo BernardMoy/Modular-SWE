@@ -14,11 +14,6 @@ AGENT_REPORT_JSON = "agent_report.json"
 
 
 async def run_agent(agent, model, prompt): 
-    # TEMPORARY MOCK 
-    # print(
-    # """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
-    # )
-
     log = []
     read_files = [] 
     added_files = [] 
@@ -33,7 +28,36 @@ async def run_agent(agent, model, prompt):
                 sandbox=Sandbox.full_access, 
                 approval_mode=ApprovalMode.deny_all
             )
+
             result = await thread.run(prompt) 
+
+            # Handle human questions asked by the agent 
+            # By re-assigning the variable 'result' 
+            while True: 
+                response = result.final_response
+
+                # Identify questions asked by codex to humans: They are always in the form "HUMAN_QUESTION: <question>"
+                if response.startswith("HUMAN_QUESTION:"):
+                    # Strip the prefix to get the question
+                    question = response.removeprefix("HUMAN_QUESTION:").strip()
+
+                    print(f"\nQuestion: \n{question}")
+
+                    # Obtain the human response from the input 
+                    human_response = input("\n Your answer: ")
+
+                    # Call the agent in the same thread again to continue the conversation
+                    # with the human response added to the context 
+                    new_prompt = f"""The human has responded to your previous question: 
+{human_response}
+
+Continue your task or ask another question in the format HUMAN_QUESTION: <question>. 
+""" 
+                    # Re-assign the result variable 
+                    result = await thread.run(new_prompt)
+                
+                else: 
+                    break 
 
             # Print the agent's output to be captured later 
             print(result.final_response)
