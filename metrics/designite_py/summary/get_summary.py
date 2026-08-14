@@ -4,6 +4,9 @@
 import os 
 import json 
 
+def _format_change(number): 
+    return f"+{number}" if number > 0 else str(number)
+
 def _get_summary_metrics(dpy_folder): 
     n, nom, nopm, cc = 0, 0, 0, 0
     for json_file in os.listdir(dpy_folder): 
@@ -12,6 +15,7 @@ def _get_summary_metrics(dpy_folder):
             with open(os.path.join(dpy_folder, json_file), 'r') as f: 
                 # Filter out __init__.py. May add more files such as __main__.py later 
                 class_json = [x for x in (json.load(f)) if x ["Module"] != "__init__"]
+                loc = sum([x["LOC"] for x in class_json])
                 n = len(set(x["Module"] for x in class_json))
                 nom = sum([x["NOM"] for x in class_json]) / len(class_json) if len(class_json) > 0 else 0
                 nopm = sum([x["NOPM"] for x in class_json]) / len(class_json) if len(class_json) > 0 else 0
@@ -25,6 +29,7 @@ def _get_summary_metrics(dpy_folder):
 
     return {
         "n": n,
+        "loc": loc, 
         "nom": round(nom, 2), 
         "nopm": round(nopm, 2), 
         "cc": round(cc, 2)
@@ -37,6 +42,10 @@ def get_dpy_summary(dpy_folder_new, dpy_folder_old = None):
             "number_of_modules": {
                 "new_value": 20, 
                 "change": "+4"
+            },
+            "lines_of_code": {
+                "new_value": 20, 
+                "change": "+4
             },
             "number_of_methods_per_module": {
                 "new_value": 20, 
@@ -63,6 +72,9 @@ def get_dpy_summary(dpy_folder_new, dpy_folder_old = None):
                 "number_of_modules": {
                     "new_value": new_metrics["n"]
                 },
+                "lines_of_code": {
+                    "new_value": new_metrics["loc"]
+                },
                 "number_of_methods_per_module": {
                     "new_value": new_metrics["nom"], 
                 }, 
@@ -77,13 +89,15 @@ def get_dpy_summary(dpy_folder_new, dpy_folder_old = None):
     # add the changed values also if the old folder is present 
     if dpy_folder_old:  
         n_change = round(new_metrics["n"] - old_metrics["n"], 2)
+        loc_change = round(new_metrics["loc"] - old_metrics["loc"], 2)
         nom_change = round(new_metrics["nom"] - old_metrics["nom"], 2)
         nopm_change = round(new_metrics["nopm"] - old_metrics["nopm"], 2)
         cc_change = round(new_metrics["cc"] - old_metrics["cc"], 2)
 
-        summary["number_of_modules"]["change"] = f"+{n_change}" if n_change > 0 else str(n_change)
-        summary["number_of_methods_per_module"]["change"] = f"+{nom_change}" if nom_change > 0 else str(nom_change)
-        summary["number_of_public_methods_per_module"]["change"] = f"+{nopm_change}" if nopm_change > 0 else str(nopm_change)
-        summary["cyclomatic_complexity_per_function"]["change"] = f"+{cc_change}" if cc_change > 0 else str(cc_change)
-
+        summary["number_of_modules"]["change"] = _format_change(n_change)
+        summary["lines_of_code"]["change"] = _format_change(loc_change)
+        summary["number_of_methods_per_module"]["change"] = _format_change(nom_change)
+        summary["number_of_public_methods_per_module"]["change"] = _format_change(nopm_change)
+        summary["cyclomatic_complexity_per_function"]["change"] = _format_change(cc_change)
+        
     return summary 
