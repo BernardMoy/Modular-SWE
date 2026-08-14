@@ -294,10 +294,11 @@ def modular_workflow():
             design_json
         )
         print(modules_array)
+        modules_array_flattened = [item for sublist in modules_array for item in sublist]
 
-        # for the all at once mode, implement all modules 
+        # for the all at once mode, implement all modules       
         if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects": 
-            result = get_prompt_and_run_agent(executor, "all_at_once_coder", N)
+            result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
             print(result)
         
         else: 

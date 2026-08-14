@@ -9,8 +9,7 @@ Use flat file imports and do not add an __init__.py file inside the implementati
     return f"""
 You are working on the following issue: checkpoint_{checkpoint_number}.md
 Implement your solution in implementation/ folder.
-{'Extend your solution based on previous_implementation/.' if checkpoint_number > 1 else ""}
-
+{'Extend your solution based on previous_implementation/.\n' if checkpoint_number > 1 else ""}
 {venv_text}
 
 {import_instructions_text} 

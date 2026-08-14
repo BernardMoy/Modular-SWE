@@ -1,5 +1,3 @@
-from ...json_helper import get_json_string
-
 def get_test_refactor_coder_prompt(checkpoint_number): 
     return f"""
 Your job is to fix the code implementation based on failed tests. 
