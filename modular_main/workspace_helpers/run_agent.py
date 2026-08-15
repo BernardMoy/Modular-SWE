@@ -44,7 +44,11 @@ async def run_agent(agent, model, prompt):
                     print(f"\nQuestion: \n{question}")
 
                     # Obtain the human response from the input 
-                    human_response = input("\n Your answer: ")
+                    human_response = input("\nYour answer ('exit' to quit): ")
+
+                    # if human response == exit, quit 
+                    if human_response.strip() == "exit": 
+                        break 
 
                     # Call the agent in the same thread again to continue the conversation
                     # with the human response added to the context 

@@ -32,6 +32,6 @@ def get_jscpd_summary(implementation_new, implementation_old = None):
         old_value = get_duplicates(implementation_path=implementation_old)["lines"]
         dup_change = round(new_value-old_value, 2)
 
-        summary["duplicated_lines"]["change"]= f"+{dup_change}" if dup_change > 0 else 0
+        summary["duplicated_lines"]["change"]= f"+{dup_change}" if dup_change > 0 else "0"
 
     return summary 
