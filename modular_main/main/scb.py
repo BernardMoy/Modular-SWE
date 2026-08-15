@@ -130,7 +130,8 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # Write metrics from implementation
         write_metrics_from_implementation(
             implementation_path=AGENT_WORKSPACE / "implementation", 
-            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json"
+            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json",
+            prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None
         )
         
 

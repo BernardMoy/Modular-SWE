@@ -42,6 +42,10 @@ def pass_fail(analyzer_output_json):
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
+    # For the human mode, if there are any unresolved issues, then fail 
+    if WORKFLOW_MODE == "human": 
+        return False 
+    
     # Else, pass the analyzer output json to another helper 
     return code_quality_pass_fail(analyzer_output_json)
 
@@ -79,16 +83,20 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
 
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
+        if WORKFLOW_MODE == "human": 
+            a_output = get_prompt_and_run_agent(executor, "analyzer_human", False)
+        else: 
+            a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
         if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
             (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
 
+        print(a_output)
         # If the analyzer return pass, set the passed flag to true 
-        a_output_json = json.loads(a_output) 
-        print(json.dumps(a_output_json, indent=2))
-        if pass_fail(a_output_json):  
+        # a_output_json = json.loads(a_output) 
+        # print(json.dumps(a_output_json, indent=2))
+        if pass_fail("[]"):  
             passed = True
 
         # Increment the iteration number 
@@ -183,15 +191,19 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # Generate metrics using the actual implementation
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
 
-        # Write metrics from implementation
+        # Write metrics from implementation - include the previous implementation if it exists 
         write_metrics_from_implementation(
             implementation_path=AGENT_WORKSPACE / "implementation", 
-            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json"
+            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json",
+            prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None 
         )
 
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+        if WORKFLOW_MODE == "human": 
+            a_output = get_prompt_and_run_agent(executor, "analyzer_human", True)
+        else: 
+            a_output = get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -199,11 +211,11 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         if not analyzer_result_path.exists():
             with open(analyzer_result_path, "w") as f:
                 f.write("[]")
-
+        print(a_output)
         # If the analyzer return pass, set the passed flag to true 
-        a_output_json = json.loads(a_output) 
-        print(json.dumps(a_output_json, indent=2))
-        if pass_fail(a_output_json):  
+        # a_output_json = json.loads(a_output) 
+        # print(json.dumps(a_output_json, indent=2))
+        if pass_fail("[]"):  
             passed = True
         
         # if passed, return
@@ -371,7 +383,7 @@ def modular_workflow():
         modules_array_flattened = [item for sublist in modules_array for item in sublist]
 
         # for the all at once mode, implement all modules       
-        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects": 
+        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects" or WORKFLOW_MODE == "human": 
             result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
             print(result)
         

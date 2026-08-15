@@ -60,9 +60,18 @@ if [[ "$N" -gt 1 ]]; then
 
   # Update the current metrics json 
   echo "[2.4/6] Updating current_metrics.json"
-  python -m write_metrics.write_metrics_from_implementation \
-  "$AGENT_WORKSPACE/implementation" \
-  "$AGENT_WORKSPACE/current_metrics.json"
+  PREV_IMPLEMENTATION="$PROBLEM_DIR/implementations/checkpoint_$((N - 1))"
+  if [[ -d "$PREV_IMPLEMENTATION" ]]; then
+    python -m write_metrics.write_metrics_from_implementation \
+    "$AGENT_WORKSPACE/implementation" \
+    "$AGENT_WORKSPACE/current_metrics.json" \
+    "$AGENT_WORKSPACE/previous_implementation"
+  else 
+    python -m write_metrics.write_metrics_from_implementation \
+    "$AGENT_WORKSPACE/implementation" \
+    "$AGENT_WORKSPACE/current_metrics.json"
+  fi
+
 fi
 
 # 3. Docker volume mount 
