@@ -41,7 +41,7 @@ def pass_fail(analyzer_output_json):
         content = f.read().strip() 
         # if the content is empty, then set the result to []. Else, load json
         # this wont raise an error if the file is empty 
-        analyzer_result = json.load(f) if content else [] 
+        analyzer_result = json.loads(content) if content else [] 
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
@@ -214,7 +214,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
 
         if not analyzer_result_path.exists():
             analyzer_result_path.touch() 
-            
+
         print(a_output)
         # If the analyzer return pass, set the passed flag to true 
         # a_output_json = json.loads(a_output) 
@@ -292,37 +292,38 @@ def modular_workflow():
         
         # copy the metrics (is it necessary?) 
 
-        # Generate the deps graph 
-        subprocess.run(
-            [
-                "scripts/deps_graph.sh",
-                AGENT_WORKSPACE / "previous_implementation",
-                AGENT_WORKSPACE / "deps_graphs",
-            ],
-            check=True,
-        )
+        # Generate the deps graph if the workflow mode is not noDesign 
+        if WORKFLOW_MODE != "noDesign": 
+            subprocess.run(
+                [
+                    "scripts/deps_graph.sh",
+                    AGENT_WORKSPACE / "previous_implementation",
+                    AGENT_WORKSPACE / "deps_graphs",
+                ],
+                check=True,
+            )
 
-        # Extract only the json and svg
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-                    AGENT_WORKSPACE / "current_deps_graph.json")
+            # Extract only the json and svg
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                        AGENT_WORKSPACE / "current_deps_graph.json")
 
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
-                    AGENT_WORKSPACE / "original_deps_graph.svg")
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-                    AGENT_WORKSPACE / "original_deps_graph.json")
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
-                    AGENT_WORKSPACE / "original_matrix.json") 
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
-                    AGENT_WORKSPACE / "original_matrix.png") 
-        
-        # Remove the temp deps_graph/ directory 
-        shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+                        AGENT_WORKSPACE / "original_deps_graph.svg")
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                        AGENT_WORKSPACE / "original_deps_graph.json")
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                        AGENT_WORKSPACE / "original_matrix.json") 
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
+                        AGENT_WORKSPACE / "original_matrix.png") 
+            
+            # Remove the temp deps_graph/ directory 
+            shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
     # copy the rubrics md file 
-    shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
+    # shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
 
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")

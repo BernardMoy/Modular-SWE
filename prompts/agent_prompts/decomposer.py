@@ -26,19 +26,19 @@ If a list of improvement suggestions for the current design is provided in `curr
 
 Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}
 
-First, create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
+1. create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 
 (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
 (2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
 - The module_name field should follow pydeps conventions, stripping the .py extension for modules and specify the file path separated by dots (.) 
 {get_json_string("decomposer")}
 
-Second, create or update the dependency graph in `current_deps_graph.json`, using the following schema of an adjacency list. Rules: 
+2. create or update the dependency graph in `current_deps_graph.json`, using the following schema of an adjacency list. Rules: 
 - Arrows point to the modules that they import. 
 - Include all lazy imports. 
 - Do not include standard python libraries. 
 - The names used in the dependency graph must match exactly the `module_name` field in `current_design.json`. 
 {get_json_string("dependency_graph")}
 
-Third, update any improvements listed in `current_analyzer_result.json` if present by changing the status field to either "accepted" or "rejected" and provide a reason if rejected. 
+3. update any improvements listed in `current_analyzer_result.json` if present by changing the status field to either "accepted" or "rejected" and provide a reason if rejected. 
 """

@@ -20,6 +20,8 @@ def get_radon_metrics(implementation_path):
 
     # Iterate over all python files, read them and pass them to radon 
     for (root, dirs, files) in os.walk(implementation_path): 
+        # ignore certain files 
+        dirs[:] = [d for d in dirs if d not in {"dist", "node_modules", "__pycache__", ".venv"}]
         for f in files: 
             if f.endswith(".py"): 
                 py_file_path = os.path.join(root, f) 
