@@ -50,6 +50,8 @@ async def run_agent(agent, model, prompt):
                     if human_response.strip() == "exit": 
                         break 
 
+                    print("Response recorded.")
+
                     # Call the agent in the same thread again to continue the conversation
                     # with the human response added to the context 
                     new_prompt = f"""The human has responded to your previous question: 

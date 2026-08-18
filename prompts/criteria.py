@@ -11,13 +11,3 @@ DECOMPOSER_SUGGESTIONS_CRITERIA="""
 - Whether the nature and complexity of the problem, and still having single responsibility justify the code without refactoring. 
 - Whether the suggestion conflict with issue requirements.
 """
-
-# Follows the 5 criteria for modular design. For the decomposer. 
-MODULE_CODE_PRACTICES = """
-- There should be as little number of modules as possible.
-- A module should have a single responsibility and one reason to change. 
-- A module should expose the minimum public interface. 
-- A module should have a proper reason to exist, such as hiding complex logic. Avoid wrapper modules, or duplication of existing logic or data without adding much value. 
-- Do not make assumptions about code that has not been implemented, start small and simple. 
-- There should be minimum dependency with other modules, following high cohesion low coupling. 
-"""
