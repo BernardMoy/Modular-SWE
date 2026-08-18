@@ -38,7 +38,10 @@ HAS_TESTER = False
 def pass_fail(analyzer_output_json): 
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
     with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
-        analyzer_result = json.load(f) 
+        content = f.read().strip() 
+        # if the content is empty, then set the result to []. Else, load json
+        # this wont raise an error if the file is empty 
+        analyzer_result = json.load(f) if content else [] 
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
@@ -91,8 +94,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
         if not analyzer_result_path.exists():
-            with open(analyzer_result_path, "w") as f:
-                f.write("[]")
+            analyzer_result_path.touch() 
 
         print(a_output)
         # If the analyzer return pass, set the passed flag to true 
@@ -211,8 +213,8 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
 
         if not analyzer_result_path.exists():
-            with open(analyzer_result_path, "w") as f:
-                f.write("[]")
+            analyzer_result_path.touch() 
+            
         print(a_output)
         # If the analyzer return pass, set the passed flag to true 
         # a_output_json = json.loads(a_output) 

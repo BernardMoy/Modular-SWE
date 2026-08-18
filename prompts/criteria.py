@@ -15,6 +15,8 @@ DECOMPOSER_SUGGESTIONS_CRITERIA="""
 # Follows the 5 criteria for modular design. For the decomposer. 
 MODULE_CODE_PRACTICES = """
 - A module should have a single responsibility and one reason to change. 
-- A module should expose the minimum public interface and hide complex logic.
+- A module should expose the minimum public interface. 
+- A module should have a proper reason to exist, such as hiding complex logic. Avoid wrapper modules, or duplication of existing modules without much value. 
+- Do not make assumptions about code that has not been implemented, start small and simple. 
 - There should be minimum dependency with other modules, following high cohesion low coupling. 
 """
