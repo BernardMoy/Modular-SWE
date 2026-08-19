@@ -27,7 +27,7 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
 # Whether or not a tester is employed to test the software. 
@@ -260,6 +260,9 @@ def modular_workflow():
     # Create the problem impl dir and report dir 
     PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Print the workflow mode 
+    print(f"MODE: {WORKFLOW_MODE}")
 
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")

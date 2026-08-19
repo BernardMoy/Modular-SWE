@@ -32,7 +32,7 @@ Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
 If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, prioritise reusing existing modules instead of creating a new module where possible.
-If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, consider accepting or rejecting them based on: {DECOMPOSER_SUGGESTIONS_CRITERIA}
+If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, implement the changes in the design. 
 
 Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}
 
@@ -68,7 +68,9 @@ Task:
 - The names used in the dependency graph must match exactly the `module_name` field in `current_design.json`. 
 {get_json_string("dependency_graph")}
 
-3. update any improvements listed in `current_analyzer_result.json` if present: by changing the status field to either "accepted" or "rejected" and provide a reason if rejected. 
+3. update any improvements listed in `current_analyzer_result.json` if present: by changing the status field to "accepted" 
 """
 
 #  consider accepting or rejecting them based on: {DECOMPOSER_SUGGESTIONS_CRITERIA}
+
+# either "accepted" or "rejected" and provide a reason if rejected. 

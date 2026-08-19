@@ -1,0 +1,85 @@
+{
+  "summary": {
+    "number_of_modules": {
+      "new_value": 37
+    },
+    "lines_of_code": {
+      "new_value": 1861
+    },
+    "number_of_methods_per_module": {
+      "new_value": 3.19
+    },
+    "number_of_public_methods_per_module": {
+      "new_value": 1.0
+    },
+    "cyclomatic_complexity_per_function": {
+      "new_value": 1.9
+    },
+    "duplicated_lines": {
+      "new_value": 0.0
+    }
+  },
+  "smells": [
+    {
+      "Category": "Function level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "config",
+      "Class": "",
+      "Method": "_parse_port",
+      "Smell": "Magic number",
+      "Description": "Magic number 65535 used in _parse_port."
+    },
+    {
+      "Category": "Function level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "template_engine",
+      "Class": "TemplateRenderer",
+      "Method": "_render_named_template",
+      "Smell": "Magic number",
+      "Description": "Magic number 2 used in _render_named_template."
+    },
+    {
+      "Category": "Function level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "template_engine",
+      "Class": "TemplateRenderer",
+      "Method": "_render_named_template",
+      "Smell": "Magic number",
+      "Description": "Magic number 3 used in _render_named_template."
+    },
+    {
+      "Category": "Function level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "template_engine",
+      "Class": "TemplateRenderer",
+      "Method": "_render_named_template",
+      "Smell": "Magic number",
+      "Description": "Magic number 2 used in _render_named_template."
+    },
+    {
+      "Category": "Function level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "redis_memory_backend",
+      "Class": "MemoryRedisBackend",
+      "Method": "_hset",
+      "Smell": "Magic number",
+      "Description": "Magic number 2 used in _hset."
+    },
+    {
+      "Category": "Module level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "validation_helpers",
+      "Class": "",
+      "Smell": "High LCOM",
+      "Description": "The module 'validation_helpers' has a high LCOM value of 1, check if it is combining distinct responsibilities together."
+    },
+    {
+      "Category": "Design level",
+      "Package": "checkpoint_4.hmock_core",
+      "Module": "template_expression",
+      "Class": "TemplateExpressionEvaluator",
+      "Smell": "Feature envy",
+      "Description": "Method '_lookup_context' in class 'TemplateExpressionEvaluator' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_expression`."
+    }
+  ]
+}

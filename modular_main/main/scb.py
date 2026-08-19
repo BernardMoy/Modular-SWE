@@ -187,6 +187,9 @@ def modular_workflow():
     PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
+    # Print the workflow mode 
+    print(f"MODE: {WORKFLOW_MODE}")
+
     # Step 1: Create the agent workspace 
     print("[MAIN 1/8] Creating agent workspace")
     if AGENT_WORKSPACE.exists(): 

@@ -31,26 +31,31 @@ Approach:
 If these information would affect whether or not the refactoring should be performed, STOP and ask a human question where you will then receive extra context to work with. 
 Else, continue to the next issue. 
 
-The following are examples what to ask human questions: 
-Example 1: In the design stage. Agent response: 
---- 
+Example 1 (Design stage): 
+Identify smell: backend.app.api_service combines API fetching and processing of API return fields. 
+Identify suggestion and trade-offs: Separate into 2 modules. While better isolate the responsibilities, this would however cause each module to only have 1 method and add an extra layer, considering that the text processing is simple date formatting and stripping. 
+As the feature is small, if both the API and processing change together, keeping them as a single module follows high cohesion and avoid introducing unnecessary complexity. 
+I cannot decide whether they would change together or diverge, so I need clarification from human. 
+
+Output:  
 HUMAN_QUESTION: 
 Smell: The module backend.app.api_service handles API fetching and text processing together. 
 Suggestion: Split the api_service module into fetch_api and api_processing modules that preserves existing functionalities, and the api_service module calls them sequentially. 
-Trade-offs: This would increase the number of modules by 2, and adds an interface and an extra file to navigate especially that it only involves text and date reformatting.  
-
+Trade-offs: This would increase the number of modules by 1, and adds an interface and an extra file to navigate especially that it only involves text and date reformatting.  
 How often does the API and processing change, so I can decide whether or not to split the api_service module? 
----
 
-Example 2: In the implementation stage where duplication statistics are available. Agent response:
----
+Example 2 (Implementation stage): 
+Identify smell: The same url processing function is duplicated across the backend.app.logger and backend.app.verifier modules. 
+Identify suggestion and trade-offs: Extract a shared helper module. While reducing duplication, this would increase module count. 
+This is only a minor issue as the URL processing function is not the core feature of the app, and it seems to be a solved problem instead of a unique app feature that would change frequently. 
+I am also not sure if the duplicated code would diverge, so I need to ask a human. 
+
+Output: 
 HUMAN_QUESTION: 
 Smell: The module backend.app.logger and backend.app.verifier duplicates url processing functions. 
 Suggestion: Extract a helper module url_processor that contains the existing url processing method, that is imported by both modules.
 Trade-offs: The metrics summary shows that the duplication increased by 2% in this checkpoint, extracting this helper function can bring the duplication down. However, this is a small function and changes to this would now ripple across more files, increase the number of modules, and make the workflow more difficult to understand. 
-
 Should the url_processor helper module be extracted even when it is small? 
----
 
 4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}. 
 Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
