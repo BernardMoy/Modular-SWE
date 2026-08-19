@@ -37,7 +37,9 @@ The CASIA-Iris-Interval dataset follows this structure:
 
 ### `scan` command
 
-- This command should identify the L/ and R/ folders under each subject. It should always print a summary in the following human-readable format (numbers are arbitrary):
+- This command should identify the L/ and R/ folders under each subject.
+  Only valid images (see anomalies below, they are considered invalid images) should count towards the numbers below "Subjects found".
+  It should always print a summary in the following human-readable format (numbers are arbitrary):
 
 ```
 Dataset root: /data/CASIA-iris-interval
@@ -80,6 +82,8 @@ Anomalies are explained below:
 - invalid_format: The image is not in one of the following formats: .jpg, .jpeg, .png
 - zero_dimension_image: The image has width and height both equal to zero.
 - missing_both_eyes: The subject is missing both the L/ and R/ folders, or the folders are present but both are empty.
+
+Found anomalies should be silently recorded, meaning they should not crash the application.
 
 ### `inspect` command
 

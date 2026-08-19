@@ -124,13 +124,13 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
     output_lines = result.stdout.splitlines()
     assert output_lines[0] == f"Dataset root: {dataset_root}"
     assert "Subjects found: 7" in output_lines
-    assert "- Both eyes present: 2" in output_lines
+    assert "- Both eyes present: 2" in output_lines  # Review - not sure about this. It seems to count whether or not the folders are simply non-empty rather than checking if the images are valid 
     assert "- Left eyes only: 2" in output_lines
     assert "- Right eyes only: 1" in output_lines
     assert "- Neither eye present: 2" in output_lines
     assert "Total valid images:" in output_lines
-    assert "- Left: 3" in output_lines
-    assert "- Right: 2" in output_lines
+    assert "- Left: 3" in output_lines  # 001 (2) + Alpha 
+    assert "- Right: 2" in output_lines  # 001 003 
     assert "Anomalies found: 5" in output_lines
 
     dataset_rows = _read_csv(output_csv)

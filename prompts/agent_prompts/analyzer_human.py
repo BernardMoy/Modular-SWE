@@ -26,9 +26,9 @@ Approach:
 2. If metrics has been provided in `current_metrics.json`, use them to support the antipatterns you found. These metrics may have false positives and their job is to help discover issues, not to be eliminated completely. 
 3. For every potential issue, before writing the suggestion to the {'design' if not has_implementation else 'code'}, determine if there are any contextual information that cannot be determined solely from the code, dependency graph and the issue. You MUST NOT guess the following information: 
 - How frequently does a feature change 
-- Whether duplicated code, especially smaller snippets, would diverge in the future 
+- Whether duplicated code, especially smaller snippets, would diverge in the future and should not be refactored now
 - Whether a sub-feature is unique to the app or is a generic, solved problem that stays the same 
-If these information would affect whether or not the refactoring should be performed, STOP and ask a human question where you will then receive extra context to work with. 
+If these information would affect whether or not the refactoring is necessary, STOP and ask a human question where you will then receive extra context to work with. 
 Else, continue to the next issue. 
 
 Example 1 (Design stage): 

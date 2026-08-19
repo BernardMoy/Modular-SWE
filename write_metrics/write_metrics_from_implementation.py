@@ -64,7 +64,7 @@ def write_metrics_from_implementation(implementation_path, current_metrics_path,
     # obtain the summary from dpy and jscpd 
     dpy_summary = get_dpy_summary(dpy_folder_new=TEMP_METRICS_NEW_DIR / "dpy_metrics", dpy_folder_old=(TEMP_METRICS_OLD_DIR / "dpy_metrics" if prev_implementation_path else None)) 
     jscpd_summary = get_jscpd_summary(implementation_new=implementation_path, implementation_old=prev_implementation_path)
-    summary = {**dpy_summary, **jscpd_summary}
+    summary = {**dpy_summary, **jscpd_summary}  # jscpd summary already includes the duplicates data 
 
     # Remove the temp metrics new and old dir 
     shutil.rmtree(TEMP_METRICS_NEW_DIR)

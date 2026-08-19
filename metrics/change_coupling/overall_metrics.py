@@ -2,6 +2,9 @@ import os
 from pathlib import Path 
 from collections import defaultdict 
 
+# Files not considered in the module count and the add / change / deleted modules count. 
+EXCLUDED = {".venv", "__pycache__", ".git", "node_modules", ".pytest_cache"}
+
 # Return a list of files that are added. 
 def get_added_files(implementation_path_old, implementation_path_new): 
     s = set() # Set of file names 
@@ -94,6 +97,18 @@ def get_deleted_files(implementation_path_old, implementation_path_new):
 
     return list(s) 
 
+# Return the total number of files. 
+# Used for getting the change proportion
+def get_all_modules(implementation_path): 
+    s = set() 
+    for (root, dirs, files) in os.walk(implementation_path): 
+            for f in files: 
+                if f.endswith(".py"): 
+                    py_file_path = Path(root) / f
+                    rel_path = py_file_path.relative_to(implementation_path)
+                    s.add(rel_path)
+
+    return list(s) 
 
 # Return the proportion of original files that were changed. 
 def get_changed_proportion(implementation_path_old, implementation_path_new): 
