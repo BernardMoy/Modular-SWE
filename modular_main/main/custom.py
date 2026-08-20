@@ -169,7 +169,8 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
         subprocess.run(
             [
-                "scripts/deps_graph.sh",
+                "python", 
+                "scripts/deps_graph.py",
                 AGENT_WORKSPACE / "implementation",
                 AGENT_WORKSPACE / "deps_graphs"
             ],
@@ -299,7 +300,8 @@ def modular_workflow():
         if WORKFLOW_MODE != "noDesign": 
             subprocess.run(
                 [
-                    "scripts/deps_graph.sh",
+                    "python", 
+                    "scripts/deps_graph.py",
                     AGENT_WORKSPACE / "previous_implementation",
                     AGENT_WORKSPACE / "deps_graphs",
                 ],

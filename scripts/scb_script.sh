@@ -51,7 +51,7 @@ if [[ "$N" -gt 1 ]]; then
 
   # Generate the dependency graph of checkpoint N-1
   echo "[2.2/6] Dependency Graph"  
-  $ROOT/scripts/deps_graph.sh "$PREV_IMPLEMENTATION/$ENTRY_FILE.py" "$AGENT_WORKSPACE/deps_graphs"
+  python scripts/deps_graph.py "$PREV_IMPLEMENTATION" "$AGENT_WORKSPACE/deps_graphs"
 
   # Update the current deps graph json, and copy the svg also 
   echo "[2.3/6] Updating current_deps_graph.json"

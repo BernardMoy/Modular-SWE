@@ -53,7 +53,8 @@ def get_deps_graph_metrics(implementation_path):
     TEMP_FILE = Path("temp_graph")
 
     subprocess.run([
-        "scripts/deps_graph.sh", 
+        "python", 
+        "scripts/deps_graph.py", 
         implementation_path,
         TEMP_FILE
     ])
