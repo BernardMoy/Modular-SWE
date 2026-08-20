@@ -19,4 +19,4 @@ WORKFLOW_MODE: Literal[
     "byModule", 
     "5aspects", 
     "human"
-    ] = "5aspects"
+    ] = "noDesign"
