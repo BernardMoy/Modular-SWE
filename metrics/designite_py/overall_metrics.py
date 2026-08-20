@@ -8,7 +8,10 @@ from pathlib import Path
 def get_dpy_metrics(implementation_path): 
     """
     {
+        "number_of_functions": 0, 
+        "cc_per_function": 0, 
         "function_max_loc": 0,
+        "function_max_cc": 0,
         "high_cc_functions_count": 0, 
         "high_fan_out_classes_count": 0, 
     }
@@ -20,7 +23,10 @@ def get_dpy_metrics(implementation_path):
     FAN_OUT_THRESHOLD = 3 
 
     counts = {
+        "number_of_functions": 0, 
+        "cc_per_function": 0, 
         "function_max_loc": 0, 
+        "function_max_cc": 0,
         "high_cc_functions_count": 0, 
         "high_fan_out_classes_count": 0, 
     }
@@ -39,12 +45,16 @@ def get_dpy_metrics(implementation_path):
             with open(TEMP_DIR / "dpy_metrics" / json_file, 'r') as f: 
                 data = json.load(f) 
                 counts["high_fan_out_classes_count"] = len([x for x in data if x["Fan-Out"] >= FAN_OUT_THRESHOLD])
-        
+
         if (json_file.endswith("function_metrics.json")): 
             with open(TEMP_DIR / "dpy_metrics" / json_file, 'r') as f: 
                 data = json.load(f) 
                 counts["high_cc_functions_count"] = len([x for x in data if x["CC"] >= CC_THRESHOLD])
                 counts["function_max_loc"] = max(x["LOC"] for x in data)
+                counts["function_max_cc"] = max(x["CC"] for x in data)
+                counts["number_of_functions"] = len(data)
+                total_cc = sum(x["CC"] for x in data)
+                counts["cc_per_function"] = total_cc / len(data)
 
     # Remove the temp dir 
     shutil.rmtree(TEMP_DIR) 

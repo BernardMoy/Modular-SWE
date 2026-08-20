@@ -1,9 +1,5 @@
 import json 
 import argparse 
-from metrics.deps_graph.metrics import get_metrics_from_deps_graph
-from metrics.design.summary.get_summary import get_summary
-from metrics.design.metrics import get_metrics_from_design
-from reusables.sort_smells import sort_smells
 from metrics.radon.overall_metrics import get_radon_metrics
 from metrics.deps_graph.overall_metrics import get_deps_graph_metrics
 from metrics.designite_py.overall_metrics import get_dpy_metrics
@@ -11,75 +7,79 @@ from metrics.jscpd.overall_metrics import get_duplicates
 
 # Given an impl path (by agent), output eval metrics 
 def get_eval_metrics(implementation_path): 
-    """
-    Return: 
-    {
-        "lloc": 0, 
-        "loc": 0, 
-        "lloc_per_function": 0, 
-        "lloc_per_modules": 0, 
-        "max_loc_function": 0, 
-        "max_loc_modules": 0, 
 
-        "cc_per_function": 0, 
-        "high_cc_function_numbers": 0, 
-        "max_cc_function": 0, 
+    radon_metrics = get_radon_metrics(implementation_path) 
+    deps_graph_metrics = get_deps_graph_metrics(implementation_path) 
+    dpy_metrics = get_dpy_metrics(implementation_path) 
+    jscpd_metrics = get_duplicates(implementation_path) 
 
-        "number_of_modules": 0, 
-        "weighted_mi": 0, 
-        "prop_cost": 0, 
+    # organised into the 5 aspects we care about 
+    result = {
+            "lloc": 0, 
+            "loc": 0, 
+            "lloc_per_function": 0, 
+            "lloc_per_module": 0, 
+            "function_max_loc": 0, 
+            "modules_max_lloc": 0, 
+            "comments_percentage": 0, 
+    
+            "cc_per_function": 0, 
+            "high_cc_functions_count": 0, 
+            "function_max_cc": 0, 
 
-        "nopm_per_module": 0, 
-        "max_nopm_module": 0, 
-        
-        "duplicated_lines": 0
-    }
-    """
+            "has_cycles": 0, 
+            "number_of_modules": 0, 
+            "number_of_functions": 0, 
+            "weighted_mi": 0, 
+            "propagation_cost": 0, 
+            "impact_size": 0,
+    
+            "nopm_per_module": 0, 
+            "max_nopm_module": 0, 
+            
+            "duplicated_lines": 0
+        }
 
-    radon_metrics = [] 
-    deps_graph_metrics = [] 
-    dpy_metrics = [] 
-    jscpd_metrics = [] 
+    result["lloc"] = radon_metrics["lloc"]
+    result["loc"] = radon_metrics["loc"]
+    result["lloc_per_function"] = result["lloc"] / dpy_metrics["number_of_functions"]
+    result["lloc_per_module"] = result["lloc"] / deps_graph_metrics["number_of_modules"]
+    result["function_max_loc"] = dpy_metrics["function_max_loc"]
+    result["modules_max_lloc"] = radon_metrics["modules_max_lloc"]
+    result["comments_percentage"] = radon_metrics["comments_percentage"]
 
-# Given a reference problem, output eval metrics 
-# This differs in the deps graph generation 
-def get_eval_metrics_reference(reference_problem): 
-    """
-    Return: 
-    {
-        "lloc": 0, 
-        "loc": 0, 
-        "lloc_per_function": 0, 
-        "lloc_per_modules": 0, 
-        "max_loc_function": 0, 
-        "max_loc_modules": 0, 
+    result["cc_per_function"] = dpy_metrics["cc_per_function"]
+    result["high_cc_functions_count"] = dpy_metrics["high_cc_functions_count"]
+    result["function_max_cc"] = dpy_metrics["function_max_cc"]
 
-        "cc_per_function": 0, 
-        "high_cc_function_numbers": 0, 
-        "max_cc_function": 0, 
+    result["has_cycles"] = deps_graph_metrics["has_cycles"]
+    result["number_of_modules"] = deps_graph_metrics["number_of_modules"]
+    result["number_of_functions"] = dpy_metrics["number_of_functions"]
+    result["weighted_mi"] = radon_metrics["weighted_maintainability_index"]
+    result["propagation_cost"] = deps_graph_metrics["propagation_cost"]
+    result["impact_size"] = deps_graph_metrics["impact_size"]
 
-        "number_of_modules": 0, 
-        "weighted_mi": 0, 
-        "prop_cost": 0, 
+    result["duplicated_lines"] = jscpd_metrics["lines"]
 
-        "nopm_per_module": 0, 
-        "max_nopm_module": 0, 
-        
-        "duplicated_lines": 0
-    }
-    """
+    # trim all results to round 3 dp 
+    for key, value in result.items(): 
+        if key == "has_cycles": 
+            continue 
+        result[key] = round(value, 3) 
+
+    return result 
+
 
 
 
 # usage: write.py [implementation_path] 
 def main(): 
     parser = argparse.ArgumentParser()
-    parser.add_argument("design_path", help="Current design file, should be in the second iter only to ensure the public_interface field exists")
-    parser.add_argument("deps_graph_path", help="Abs path to the dependency graph JSON file")
-    parser.add_argument("current_metrics_path", help="Abs path to write the metrics to")
+    parser.add_argument("implementation_path", help="Impl folder path")
     args = parser.parse_args()
 
-    write_metrics_from_design_and_deps_graph(args.design_path, args.deps_graph_path, args.current_metrics_path)
+    result = get_eval_metrics(args.implementation_path)
+    print(json.dumps(result, indent=2)) 
 
 if __name__ == "__main__": 
     main() 
