@@ -2,11 +2,17 @@ def get_test_refactor_coder_prompt(checkpoint_number):
     return f"""
 Your job is to fix the code implementation based on failed tests. 
 
-Project root: agent_workspace
+Project root: agent_workspace_test
 Issue path: checkpoint_{checkpoint_number}.md
 Implementation folder: implementation/
+Test: test_script.py 
 
-A list of pass and failed test names derived from the requirements, and their differing behaviour is given in `current_test_results.json`. 
-Your task is to perform refactoring on the implementation code to fix the failed tests, while preserving the behaviour of passed tests. 
-Focus on the functionality and avoid performing large refactoring on how the code is implemented. 
+You should run pytest by setting up a virtual environment and installing the required packages: 
+`pytest test_script.py --implementation implementation/` 
+
+Modify implementation/ to fix the failed tests. 
 """
+
+# A list of pass and failed test names derived from the requirements, and their differing behaviour is given in `current_test_results.json`. 
+# Your task is to perform refactoring on the implementation code to fix the failed tests, while preserving the behaviour of passed tests. 
+# Focus on the functionality and avoid performing large refactoring on how the code is implemented. 
