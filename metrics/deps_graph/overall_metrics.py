@@ -71,6 +71,38 @@ def get_deps_graph_metrics(implementation_path):
         "impact_size": get_impact_size(graph) 
     }
 
+# Same as get deps graph metrics, except that it accepts a problem
+# and calls a separate deps graph generation script 
+def get_deps_graph_metrics_reference(problem): 
+    """
+    {
+        "number_of_modules": 0, 
+        "has_cycles": False, 
+        "propagation_cost": 0, 
+        "impact_size": 0, 
+    }
+    """
+
+    TEMP_FILE = Path("temp_graph")
+
+    subprocess.run([
+        "python scripts/references_deps_graph.py", 
+        problem,
+        TEMP_FILE
+    ])
+
+    with open(TEMP_FILE / "deps_graph.json", 'r') as f: 
+        graph = json.load(f) 
+
+    shutil.rmtree(TEMP_FILE)
+    
+    return {
+        "number_of_modules": get_n(graph), 
+        "has_cycles": len(check_circular_dependency(graph)) > 0, 
+        "propagation_cost": get_propagation_cost(graph), 
+        "impact_size": get_impact_size(graph) 
+    }
+
 def main(): 
     parser = argparse.ArgumentParser()
     parser.add_argument("implementation_path", help="Path to the impl folder")

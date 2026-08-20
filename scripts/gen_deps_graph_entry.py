@@ -5,13 +5,13 @@ that imports all python files inside that directory.
 import argparse 
 from pathlib import Path 
 import os 
-from constants import IGNORED_DIRS, INVALID_CHARS
-from references_rules import validate_reference_entrypoint_modules
+from constants import IGNORED_DIRS, INVALID_CHARS, BASE_REFERENCE_DIR, IMPL_DIR_DICT
+from constants import ENTRYFILE_NAME
 
-def write_entrypoint(directory, entryfile_name): 
-    target_dir = Path(directory)
+def write_entrypoint(implementation_path, deps_graph_path): 
+    target_dir = Path(deps_graph_path)
 
-    with open(target_dir / f"{entryfile_name}.py", 'w') as f: 
+    with open(target_dir / Path(ENTRYFILE_NAME), 'w') as f: 
         # walk through the target directory
         for root, dirs, files in os.walk(target_dir):
             # skip the venv directory 
@@ -23,7 +23,7 @@ def write_entrypoint(directory, entryfile_name):
                     continue 
                 
                 # skip the entrypoint name file 
-                if pyfile == f"{entryfile_name}.py": 
+                if pyfile == ENTRYFILE_NAME: 
                     continue 
                 
                 pyfile_path = Path(root) / pyfile
@@ -46,20 +46,29 @@ def write_entrypoint(directory, entryfile_name):
                 if any(chars in module for chars in INVALID_CHARS): 
                     continue 
 
-                # Apply problem-specific rules 
-                if not validate_reference_entrypoint_modules(module, directory): 
-                    continue 
+                # Apply problem-specific rules if the problem is coming from the base directory 
+                # Use the original implementation path instead of deps graph graph
+                # See constants: the dict: keys are the impl paths, values are the deps graph paths 
+                if implementation_path.startswith(BASE_REFERENCE_DIR): 
+                    # Remove the base dir, process through the dict, then join back 
+                    problem_dir = implementation_path.removeprefix(BASE_REFERENCE_DIR).removesuffix("/")
+                    if problem_dir in IMPL_DIR_DICT: 
+                        fn = IMPL_DIR_DICT[problem_dir]["processing_fn"]
+
+                        # if the fn returns false, then ignore the module 
+                        if not fn(module): 
+                            continue 
 
                 f.write(f"import {module}\n")
                                     
 
 def main(): 
     parser = argparse.ArgumentParser() 
-    parser.add_argument("directory", help="directory to the implementation")
-    parser.add_argument("entryfile_name", help="name of the entrypoint file to be created, no .py needed")
+    parser.add_argument("implementation_path", help="directory to the implementation")
+    parser.add_argument("deps_graph_path", help="the path to generate dependency graph, different for reference problems.")
     args = parser.parse_args()
 
-    write_entrypoint(args.directory, args.entryfile_name)
+    write_entrypoint(args.implementation_path, args.deps_graph_path)
 
 if __name__ == "__main__":
     main()
