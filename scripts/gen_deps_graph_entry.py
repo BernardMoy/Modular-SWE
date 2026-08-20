@@ -6,6 +6,8 @@ import argparse
 from pathlib import Path 
 import os 
 
+IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest_cache"}
+
 def write_entrypoint(directory, entryfile_name): 
     target_dir = Path(directory)
 
@@ -14,7 +16,7 @@ def write_entrypoint(directory, entryfile_name):
         for root, dirs, files in os.walk(target_dir):
             # skip the venv directory 
             # node_modules contain modules with invalid names (@..). This will cause the graph to break and return an empty graph. 
-            dirs[:] = [d for d in dirs if d not in {".venv", "__pycache__", ".git", "node_modules", ".pytest_cache"}]
+            dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
 
             for pyfile in files: 
                 if not pyfile.endswith(".py"): 
@@ -27,6 +29,9 @@ def write_entrypoint(directory, entryfile_name):
                 pyfile_path = Path(root) / pyfile
                 rel_path = pyfile_path.relative_to(target_dir)
                 module = ".".join(rel_path.with_suffix("").parts)
+
+                # if module in {"__init__", "__main__"}: 
+                #     continue 
 
                 # Convert package.__init__ to "import package"
                 if module.endswith(".__init__"):

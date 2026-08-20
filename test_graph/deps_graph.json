@@ -1,0 +1,150 @@
+{
+  "flask": [
+    "flask.app",
+    "flask.blueprints",
+    "flask.config",
+    "flask.ctx",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json",
+    "flask.signals",
+    "flask.templating",
+    "flask.wrappers"
+  ],
+  "flask.__main__": [
+    "flask.cli"
+  ],
+  "flask.app": [
+    "flask.cli",
+    "flask.ctx",
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sessions",
+    "flask.signals",
+    "flask.templating",
+    "flask.testing",
+    "flask.typing",
+    "flask.wrappers"
+  ],
+  "flask.blueprints": [
+    "flask.cli",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.blueprints",
+    "flask.sansio.scaffold",
+    "flask.wrappers"
+  ],
+  "flask.cli": [
+    "flask.app",
+    "flask.globals",
+    "flask.helpers"
+  ],
+  "flask.config": [
+    "flask.sansio",
+    "flask.sansio.app"
+  ],
+  "flask.ctx": [
+    "flask.app",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sessions",
+    "flask.signals",
+    "flask.typing",
+    "flask.wrappers"
+  ],
+  "flask.debughelpers": [
+    "flask.blueprints",
+    "flask.globals",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.wrappers"
+  ],
+  "flask.globals": [
+    "flask.app",
+    "flask.ctx",
+    "flask.sessions",
+    "flask.wrappers"
+  ],
+  "flask.helpers": [
+    "flask.globals",
+    "flask.signals",
+    "flask.wrappers"
+  ],
+  "flask.json": [
+    "flask.globals",
+    "flask.json.provider",
+    "flask.wrappers"
+  ],
+  "flask.json.provider": [
+    "flask.sansio",
+    "flask.sansio.app"
+  ],
+  "flask.json.tag": [],
+  "flask.logging": [
+    "flask.globals",
+    "flask.sansio",
+    "flask.sansio.app"
+  ],
+  "flask.sansio": [],
+  "flask.sansio.app": [
+    "flask.config",
+    "flask.ctx",
+    "flask.helpers",
+    "flask.json",
+    "flask.json.provider",
+    "flask.logging",
+    "flask.sansio.blueprints",
+    "flask.sansio.scaffold",
+    "flask.templating",
+    "flask.testing",
+    "flask.typing"
+  ],
+  "flask.sansio.blueprints": [
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.typing"
+  ],
+  "flask.sansio.scaffold": [
+    "flask.helpers",
+    "flask.templating",
+    "flask.typing"
+  ],
+  "flask.sessions": [
+    "flask.app",
+    "flask.json",
+    "flask.json.tag",
+    "flask.wrappers"
+  ],
+  "flask.signals": [],
+  "flask.templating": [
+    "flask.ctx",
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.sansio",
+    "flask.sansio.app",
+    "flask.sansio.scaffold",
+    "flask.signals"
+  ],
+  "flask.testing": [
+    "flask.app",
+    "flask.cli",
+    "flask.sessions"
+  ],
+  "flask.typing": [],
+  "flask.views": [
+    "flask.globals",
+    "flask.typing"
+  ],
+  "flask.wrappers": [
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json"
+  ]
+}

@@ -6,13 +6,14 @@ import argparse
 from pathlib import Path
 import os
 
+IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest_cache"}
 
 def gen_missing_init_files(directory):
     target_dir = Path(directory)
 
     for root, dirs, files in os.walk(target_dir):
         # skip the venv directory
-        dirs[:] = [d for d in dirs if d not in {".venv", "__pycache__", ".git"}]
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
 
         if root == str(target_dir):
             continue
