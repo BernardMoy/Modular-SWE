@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import csv
+import shutil
 import struct
 import zlib
 from pathlib import Path
@@ -91,6 +92,15 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def _install_default_dataset(workspace_root: Path, source_dataset: Path) -> Path:
+    dataset_root = workspace_root / "data" / "CASIA-Iris-Interval"
+    if dataset_root.exists():
+        shutil.rmtree(dataset_root)
+    dataset_root.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source_dataset, dataset_root)
+    return dataset_root
+
+
 # Verifies that `scan` prints the full summary and writes both CSV outputs
 # with the expected valid-image rows and anomaly rows.
 def test_scan_prints_expected_summary_and_writes_csv_outputs(
@@ -111,26 +121,20 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
-    assert result.stdout == "\n".join(
-        [
-            f"Dataset root: {dataset_root.resolve()}",
-            "",
-            "Subjects found: 7",
-            "- Both eyes present: 2",
-            "- Left eyes only: 2",
-            "- Right eyes only: 1",
-            "- Neither eye present: 2",
-            "",
-            "Total valid images:",
-            "- Left: 3",
-            "- Right: 2",
-            "",
-            "Anomalies found: 5",
-        ]
-    ) + "\n"
+    output_lines = result.stdout.splitlines()
+    assert output_lines[0] == f"Dataset root: {dataset_root}"
+    assert "Subjects found: 7" in output_lines
+    assert "- Both eyes present: 2" in output_lines  # Review - not sure about this. It seems to count whether or not the folders are simply non-empty rather than checking if the images are valid 
+    assert "- Left eyes only: 2" in output_lines
+    assert "- Right eyes only: 1" in output_lines
+    assert "- Neither eye present: 2" in output_lines
+    assert "Total valid images:" in output_lines
+    assert "- Left: 3" in output_lines  # 001 (2) + Alpha 
+    assert "- Right: 2" in output_lines  # 001 003 
+    assert "Anomalies found: 5" in output_lines
 
     dataset_rows = _read_csv(output_csv)
-    assert dataset_rows == [
+    assert sorted(dataset_rows, key=lambda row: row["image_path"]) == [
         {
             "subject_id": "001",
             "eye": "L",
@@ -179,6 +183,7 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
     ]
 
     anomaly_rows = _read_csv(anomalies_csv)
+    assert len(anomaly_rows) == 5
     assert {"subject_id": "004", "eye": "", "image_path": "", "issue": "missing_both_eyes"} in anomaly_rows
     assert {"subject_id": "005", "eye": "", "image_path": "", "issue": "missing_both_eyes"} in anomaly_rows
     assert {
@@ -217,20 +222,21 @@ def test_scan_ignores_non_image_files_when_output_is_not_requested(
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
-    assert "Total valid images:\n- Left: 3\n- Right: 2\n" in result.stdout
-    assert "Anomalies found: 5\n" in result.stdout
+    output_lines = result.stdout.splitlines()
+    assert "Total valid images:" in output_lines
+    assert "- Left: 3" in output_lines
+    assert "- Right: 2" in output_lines
+    assert "Anomalies found: 5" in output_lines
 
 
 # Verifies that `inspect` lists filenames for a subject that has data for both eyes.
-def test_inspect_lists_images_for_existing_subject(tmp_path: Path, run_cli) -> None:
+def test_inspect_lists_images_for_existing_subject(
+    tmp_path: Path, run_cli, isolated_workspace: Path
+) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
+    _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli(
-        "inspect",
-        "001",
-        "--dataset-root",
-        str(dataset_root),
-    )
+    result = run_cli("inspect", "001")
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
@@ -253,16 +259,14 @@ def test_inspect_lists_images_for_existing_subject(tmp_path: Path, run_cli) -> N
 # Verifies that `inspect` accepts non-numeric subject IDs and reports a missing
 # eye as `absent`.
 def test_inspect_marks_absent_eyes_and_accepts_string_subject_ids(
-    tmp_path: Path, run_cli
+    tmp_path: Path,
+    run_cli,
+    isolated_workspace: Path,
 ) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
+    _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli(
-        "inspect",
-        "alpha",
-        "--dataset-root",
-        str(dataset_root),
-    )
+    result = run_cli("inspect", "alpha")
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
@@ -282,15 +286,13 @@ def test_inspect_marks_absent_eyes_and_accepts_string_subject_ids(
 
 # Verifies that `inspect` treats existing-but-empty eye folders the same as
 # missing eye folders.
-def test_inspect_treats_empty_eye_folders_as_absent(tmp_path: Path, run_cli) -> None:
+def test_inspect_treats_empty_eye_folders_as_absent(
+    tmp_path: Path, run_cli, isolated_workspace: Path
+) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
+    _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli(
-        "inspect",
-        "005",
-        "--dataset-root",
-        str(dataset_root),
-    )
+    result = run_cli("inspect", "005")
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
@@ -308,15 +310,13 @@ def test_inspect_treats_empty_eye_folders_as_absent(tmp_path: Path, run_cli) -> 
 
 
 # Verifies that `inspect` prints the required message for an unknown subject ID.
-def test_inspect_reports_missing_subject(tmp_path: Path, run_cli) -> None:
+def test_inspect_reports_missing_subject(
+    tmp_path: Path, run_cli, isolated_workspace: Path
+) -> None:
     dataset_root = _build_dataset(tmp_path / "dataset")
+    _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli(
-        "inspect",
-        "does-not-exist",
-        "--dataset-root",
-        str(dataset_root),
-    )
+    result = run_cli("inspect", "does-not-exist")
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""

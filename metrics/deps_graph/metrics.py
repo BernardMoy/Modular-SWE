@@ -12,6 +12,7 @@ def get_metrics_from_deps_graph(deps_graph_json):
     1. Unstable dependencies 
     2. Circular import 
     3. Isolated module 
+    4. Hub like modularisation
     """
 
     deps_graph_metrics = [] 

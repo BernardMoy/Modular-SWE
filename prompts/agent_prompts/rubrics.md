@@ -2,7 +2,7 @@
 
 ## Relevant Metrics
 
-Lines of code per function, naming conventions
+Lines of code per function, number of modules, naming conventions
 
 ## Scoring Rubric
 

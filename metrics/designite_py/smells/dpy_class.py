@@ -1,9 +1,9 @@
 def get_metrics_from_dpy_class(dpy_class_module_metrics): 
     """
     1. High LCOM 
-    2. Complex class (WMC) - IGNORED 
-    3. Fat module (NOPM) - IGNORED 
-    4. Hub like modularisation - IGNORED (Before design already addressed)
+    2. Complex class (WMC) - IGNORED because too many false positives 
+    3. Fat module (NOPM) - IGNORED because handled in design stage 
+    4. Hub like modularisation - IGNORED because handled in design stage 
     Return in the format [
         {
             "Category": "Module level", 

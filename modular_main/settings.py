@@ -17,5 +17,6 @@ WORKFLOW_MODE: Literal[
     "allAtOnce", 
     "byLayer", 
     "byModule", 
-    "5aspects"
-    ] = "noDesign"
+    "5aspects", 
+    "human"
+    ] = "human"

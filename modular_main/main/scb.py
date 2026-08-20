@@ -14,7 +14,7 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
 from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
@@ -72,8 +72,11 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
-        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
-            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
+
+        if not analyzer_result_path.exists():
+            with open(analyzer_result_path, "w") as f:
+                f.write("[]")
 
         # If the analyzer return pass, set the passed flag to true 
         a_output_json = json.loads(a_output) 
@@ -123,25 +126,14 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         
         # Generate metrics using the actual implementation
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
-        subprocess.run(
-            [
-                "scripts/metrics.sh",
-                AGENT_WORKSPACE / "implementation",
-                AGENT_WORKSPACE / "metrics"
-            ],
-            check=True,
-        )
 
-        # Write metrics from dpy pylint and deps graph 
-        write_metrics_from_dpy_pylint_and_deps_graph(
-            AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
-            AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
-            AGENT_WORKSPACE / "current_deps_graph.json", 
-            AGENT_WORKSPACE / "current_metrics.json"
+        # Write metrics from implementation
+        write_metrics_from_implementation(
+            implementation_path=AGENT_WORKSPACE / "implementation", 
+            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json",
+            prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None
         )
-
-        # Remove the temporary metrics directory 
-        shutil.rmtree(AGENT_WORKSPACE / "metrics")
+        
 
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
@@ -194,6 +186,9 @@ def modular_workflow():
     # Create the problem impl dir and report dir 
     PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Print the workflow mode 
+    print(f"MODE: {WORKFLOW_MODE}")
 
     # Step 1: Create the agent workspace 
     print("[MAIN 1/8] Creating agent workspace")
@@ -303,10 +298,11 @@ def modular_workflow():
             design_json
         )
         print(modules_array)
+        modules_array_flattened = [item for sublist in modules_array for item in sublist]
 
-        # for the all at once mode, implement all modules 
+        # for the all at once mode, implement all modules       
         if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects": 
-            result = get_prompt_and_run_agent(executor, "all_at_once_coder", N)
+            result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
             print(result)
         
         else: 

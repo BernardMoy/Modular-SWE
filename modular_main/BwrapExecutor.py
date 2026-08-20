@@ -57,7 +57,7 @@ class BwrapExecutor:
             # 2. Let the LLM write to a shared file, and read from there after it returns 
             # The first option is currently used for its simplicity. 
             # Capture the output of the LLM through stdout 
-            result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+            result = subprocess.run(cmd, check=True, text=True)  # capture_output=True is ignored - it blocks agent ask questions 
             return result.stdout
         
         except subprocess.CalledProcessError as e:

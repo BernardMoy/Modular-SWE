@@ -15,7 +15,7 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from write_metrics.write_metrics_from_dpy_pylint_and_deps_graph import write_metrics_from_dpy_pylint_and_deps_graph
+from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
 from ..settings import WORKFLOW_MODE 
 from prompts.code_quality_pass_fail import code_quality_pass_fail
 
@@ -27,7 +27,7 @@ WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
 DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
-DA_LOOP_THRESHOLD_AFTER_IMPL = 1  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
+DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
 # Whether or not a tester is employed to test the software. 
@@ -38,10 +38,17 @@ HAS_TESTER = False
 def pass_fail(analyzer_output_json): 
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
     with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
-        analyzer_result = json.load(f) 
+        content = f.read().strip() 
+        # if the content is empty, then set the result to []. Else, load json
+        # this wont raise an error if the file is empty 
+        analyzer_result = json.loads(content) if content else [] 
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
+    # For the human mode, if there are any unresolved issues, then fail 
+    if WORKFLOW_MODE == "human": 
+        return False 
+    
     # Else, pass the analyzer output json to another helper 
     return code_quality_pass_fail(analyzer_output_json)
 
@@ -77,24 +84,23 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
             AGENT_WORKSPACE / "current_metrics.json"
         )
 
-        # If the iteration number == 0, also call the pre-analyzer agent 
-        # if iteration == 0: 
-        #     print(f"========== [Iteration {iteration+1}] PRE-ANALYZER AGENT ==========")
-        #     pre_a_output = get_prompt_and_run_agent(executor, "pre_analyzer") 
-        #     print(pre_a_output) 
-
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
+        if WORKFLOW_MODE == "human": 
+            a_output = get_prompt_and_run_agent(executor, "analyzer_human", False)
+        else: 
+            a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
-        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
-            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
+        if not analyzer_result_path.exists():
+            analyzer_result_path.touch() 
 
+        print(a_output)
         # If the analyzer return pass, set the passed flag to true 
-        a_output_json = json.loads(a_output) 
-        print(json.dumps(a_output_json, indent=2))
-        if pass_fail(a_output_json):  
+        # a_output_json = json.loads(a_output) 
+        # print(json.dumps(a_output_json, indent=2))
+        if pass_fail("[]"):  
             passed = True
 
         # Increment the iteration number 
@@ -188,39 +194,32 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         
         # Generate metrics using the actual implementation
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
-        subprocess.run(
-            [
-                "scripts/metrics.sh",
-                AGENT_WORKSPACE / "implementation",
-                AGENT_WORKSPACE / "metrics"
-            ],
-            check=True,
-        )
 
-        # Write metrics from dpy pylint and deps graph 
-        write_metrics_from_dpy_pylint_and_deps_graph(
-            AGENT_WORKSPACE / "metrics" / "dpy_metrics", 
-            AGENT_WORKSPACE / "metrics" / "pylint_metrics.json", 
-            AGENT_WORKSPACE / "current_deps_graph.json", 
-            AGENT_WORKSPACE / "current_metrics.json"
+        # Write metrics from implementation - include the previous implementation if it exists 
+        write_metrics_from_implementation(
+            implementation_path=AGENT_WORKSPACE / "implementation", 
+            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json",
+            prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None 
         )
-
-        # Remove the temporary metrics directory 
-        shutil.rmtree(AGENT_WORKSPACE / "metrics")
 
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
-        a_output = get_prompt_and_run_agent(executor, "analyzer", True) 
+        if WORKFLOW_MODE == "human": 
+            a_output = get_prompt_and_run_agent(executor, "analyzer_human", True)
+        else: 
+            a_output = get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
-        if not (AGENT_WORKSPACE / "current_analyzer_result.json").exists(): 
-            (AGENT_WORKSPACE / "current_analyzer_result.json").touch() 
+        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
 
+        if not analyzer_result_path.exists():
+            analyzer_result_path.touch() 
 
+        print(a_output)
         # If the analyzer return pass, set the passed flag to true 
-        a_output_json = json.loads(a_output) 
-        print(json.dumps(a_output_json, indent=2))
-        if pass_fail(a_output_json):  
+        # a_output_json = json.loads(a_output) 
+        # print(json.dumps(a_output_json, indent=2))
+        if pass_fail("[]"):  
             passed = True
         
         # if passed, return
@@ -262,6 +261,9 @@ def modular_workflow():
     PROBLEM_IMPL_DIR.mkdir(parents=True, exist_ok=True)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
+    # Print the workflow mode 
+    print(f"MODE: {WORKFLOW_MODE}")
+
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
     if AGENT_WORKSPACE.exists(): 
@@ -293,37 +295,38 @@ def modular_workflow():
         
         # copy the metrics (is it necessary?) 
 
-        # Generate the deps graph 
-        subprocess.run(
-            [
-                "scripts/deps_graph.sh",
-                AGENT_WORKSPACE / "previous_implementation",
-                AGENT_WORKSPACE / "deps_graphs",
-            ],
-            check=True,
-        )
+        # Generate the deps graph if the workflow mode is not noDesign 
+        if WORKFLOW_MODE != "noDesign": 
+            subprocess.run(
+                [
+                    "scripts/deps_graph.sh",
+                    AGENT_WORKSPACE / "previous_implementation",
+                    AGENT_WORKSPACE / "deps_graphs",
+                ],
+                check=True,
+            )
 
-        # Extract only the json and svg
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-                    AGENT_WORKSPACE / "current_deps_graph.json")
+            # Extract only the json and svg
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                        AGENT_WORKSPACE / "current_deps_graph.json")
 
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
-                    AGENT_WORKSPACE / "original_deps_graph.svg")
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
-                    AGENT_WORKSPACE / "original_deps_graph.json")
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
-                    AGENT_WORKSPACE / "original_matrix.json") 
-        
-        shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
-                    AGENT_WORKSPACE / "original_matrix.png") 
-        
-        # Remove the temp deps_graph/ directory 
-        shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg", 
+                        AGENT_WORKSPACE / "original_deps_graph.svg")
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json", 
+                        AGENT_WORKSPACE / "original_deps_graph.json")
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.json", 
+                        AGENT_WORKSPACE / "original_matrix.json") 
+            
+            shutil.copy(AGENT_WORKSPACE / "deps_graphs" / "matrix.png", 
+                        AGENT_WORKSPACE / "original_matrix.png") 
+            
+            # Remove the temp deps_graph/ directory 
+            shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
     # copy the rubrics md file 
-    shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
+    # shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
 
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")
@@ -378,15 +381,18 @@ def modular_workflow():
         with open(AGENT_WORKSPACE / "current_design.json", 'r') as f: 
             design_json = json.load(f)
 
+        # Obtain a list of list for modules to implement layer by layer 
         modules_array = bfs_get_modules_to_implement(
             deps_graph_json, 
             design_json
         )
         print(modules_array)
 
-        # for the all at once mode, implement all modules 
-        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects": 
-            result = get_prompt_and_run_agent(executor, "all_at_once_coder", N)
+        modules_array_flattened = [item for sublist in modules_array for item in sublist]
+
+        # for the all at once mode, implement all modules       
+        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects" or WORKFLOW_MODE == "human": 
+            result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
             print(result)
         
         else: 

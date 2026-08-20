@@ -1,6 +1,6 @@
 def get_metrics_from_dpy_implementation(dpy_implementation_smells): 
     """
-    1. Magic number 
+    1. Magic number - ignored because too many false positives 
     Return in the same format.
     """
     # Ignored due to too many false positives. 

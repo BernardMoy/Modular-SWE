@@ -5,6 +5,8 @@ import json
 # Return all duplicate lines of code with lines >= 20
 # Change this in the scb script, may refactor this later
 
+# UNUSED - replaced by jscpd 
+
 def check_duplicated_lines_of_code(json_object): 
     """
     Return in the format 
@@ -20,13 +22,13 @@ def check_duplicated_lines_of_code(json_object):
     """
 
     dups = [] 
-    for entry in json_object: 
-        dups.append({
-            "Category": "Design level",  
-            "Module": entry["module"], 
-            "Smell": "Duplicate code",
-            "Description": entry["message"]
-        })
+    # for entry in json_object: 
+    #     dups.append({
+    #         "Category": "Design level",  
+    #         "Module": entry["module"], 
+    #         "Smell": "Duplicate code",
+    #         "Description": entry["message"]
+    #     })
 
     return dups
     

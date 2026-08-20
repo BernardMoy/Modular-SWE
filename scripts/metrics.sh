@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 # Usage: 
 # ./metrics.sh <implementation_path> <output_dir>
-# Writes the dpy metrics, pylint metrics separately to the directory. 
+# Writes all RAW dpy metrics, pylint metrics separately to the directory. 
 
 set -euo pipefail
 

@@ -4,7 +4,7 @@ import json
 # Given a current design json file 
 # Return all fat modules with a large public interface 
 # with size greater than the below threshold 
-NOPM_THRESHOLD = 20 
+NOPM_THRESHOLD = 7
 
 def check_fat_module(json_object): 
     """
@@ -25,7 +25,7 @@ def check_fat_module(json_object):
                     "Category": "Module level",  
                     "Module": entry["module_name"], 
                     "Smell": "Fat module", 
-                    "Description": f"The module '{entry['module_name']}' has a high number of public methods ({entry['NOPM']}), indicating insufficient modularisation."
+                    "Description": f"The module '{entry['module_name']}' has a high number of public methods ({entry["public_interface"]}), indicating insufficient modularisation."
                 }
             )
     return smells

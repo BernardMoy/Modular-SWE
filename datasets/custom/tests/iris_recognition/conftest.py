@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -45,8 +46,18 @@ def implementation_dir(pytestconfig: pytest.Config) -> Path:
 
 
 @pytest.fixture(scope="session")
-def entrypoint(implementation_dir: Path) -> Path:
-    return implementation_dir / "iris.py"
+def isolated_workspace(
+    implementation_dir: Path, tmp_path_factory: pytest.TempPathFactory
+) -> Path:
+    workspace_dir = tmp_path_factory.mktemp("iris_cli_workspace")
+    copied_implementation_dir = workspace_dir / "implementation"
+    shutil.copytree(implementation_dir, copied_implementation_dir)
+    return workspace_dir
+
+
+@pytest.fixture(scope="session")
+def entrypoint(isolated_workspace: Path) -> Path:
+    return isolated_workspace / "implementation" / "iris.py"
 
 
 @pytest.fixture(scope="session")
@@ -72,7 +83,7 @@ def cli_python(
 
 
 @pytest.fixture
-def run_cli(cli_python: Path, entrypoint: Path):
+def run_cli(cli_python: Path, entrypoint: Path, isolated_workspace: Path):
     def _run(*args: str, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
         pythonpath_entries = [str(_find_import_root(entrypoint))]
@@ -82,7 +93,7 @@ def run_cli(cli_python: Path, entrypoint: Path):
 
         return subprocess.run(
             [str(cli_python), str(entrypoint), *args],
-            cwd=str(cwd or entrypoint.parent),
+            cwd=str(cwd or isolated_workspace),
             env=env,
             text=True,
             capture_output=True,
