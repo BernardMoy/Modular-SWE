@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path 
 import os 
 from constants import IGNORED_DIRS, INVALID_CHARS
+from references_rules import validate_reference_entrypoint_modules
 
 def write_entrypoint(directory, entryfile_name): 
     target_dir = Path(directory)
@@ -43,6 +44,10 @@ def write_entrypoint(directory, entryfile_name):
 
                 # if the module name contains invalid characters such as '-',  ignore this as it will crash on import 
                 if any(chars in module for chars in INVALID_CHARS): 
+                    continue 
+
+                # Apply problem-specific rules 
+                if not validate_reference_entrypoint_modules(module, directory): 
                     continue 
 
                 f.write(f"import {module}\n")
