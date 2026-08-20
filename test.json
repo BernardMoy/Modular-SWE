@@ -1,258 +1,41 @@
 {
   "summary": {
     "number_of_modules": {
-      "new_value": 13
+      "new_value": 7
     },
     "lines_of_code": {
-      "new_value": 3762
+      "new_value": 740
     },
     "number_of_methods_per_module": {
-      "new_value": 7.06
+      "new_value": 3.53
     },
     "number_of_public_methods_per_module": {
-      "new_value": 1.34
+      "new_value": 2.59
     },
     "cyclomatic_complexity_per_function": {
-      "new_value": 2.43
+      "new_value": 2.27
     },
     "duplicated_lines": {
-      "new_value": 0.048
+      "new_value": 0.0
     },
-    "duplicates": [
-      {
-        "firstFile": "action_executor.py (line 90-181)",
-        "secondFile": "http_server.py (line 223-314)",
-        "lines_duplicated": 92
-      },
-      {
-        "firstFile": "action_executor.py (line 188-223)",
-        "secondFile": "http_server.py (line 320-355)",
-        "lines_duplicated": 36
-      },
-      {
-        "firstFile": "evaluation.py (line 263-281)",
-        "secondFile": "http_server.py (line 159-177)",
-        "lines_duplicated": 19
-      },
-      {
-        "firstFile": "action_executor.py (line 188-205)",
-        "secondFile": "evaluation.py (line 298-315)",
-        "lines_duplicated": 18
-      },
-      {
-        "firstFile": "template_engine.py (line 516-525)",
-        "secondFile": "template_engine.py (line 570-579)",
-        "lines_duplicated": 10
-      },
-      {
-        "firstFile": "admin_server.py (line 141-149)",
-        "secondFile": "http_server.py (line 107-115)",
-        "lines_duplicated": 9
-      },
-      {
-        "firstFile": "action_executor.py (line 181-188)",
-        "secondFile": "grpc_server.py (line 239-246)",
-        "lines_duplicated": 8
-      }
-    ]
+    "duplicates": []
   },
   "smells": [
     {
-      "Category": "Function level",
-      "Package": "checkpoint_8",
-      "Module": "mock_loader",
-      "Class": "",
-      "Method": "_validate_partial_expect",
-      "Smell": "Complex method",
-      "Description": "The method has high cyclomatic complexity of 14."
-    },
-    {
-      "Category": "Function level",
-      "Package": "checkpoint_8",
-      "Module": "mock_loader",
-      "Class": "",
-      "Method": "_build_behavior",
-      "Smell": "Complex method",
-      "Description": "The method has high cyclomatic complexity of 11."
-    },
-    {
-      "Category": "Function level",
-      "Package": "checkpoint_8",
-      "Module": "mock_loader",
-      "Class": "",
-      "Method": "_validate_actions",
-      "Smell": "Complex method",
-      "Description": "The method has high cyclomatic complexity of 20."
-    },
-    {
-      "Category": "Function level",
-      "Package": "checkpoint_8",
-      "Module": "mock_loader",
-      "Class": "",
-      "Method": "_validate_send_http",
-      "Smell": "Complex method",
-      "Description": "The method has high cyclomatic complexity of 12."
-    },
-    {
-      "Category": "Function level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "",
-      "Method": "_tokenize_template",
-      "Smell": "Complex method",
-      "Description": "The method has high cyclomatic complexity of 11."
-    },
-    {
-      "Category": "Module level",
-      "Package": "checkpoint_8",
-      "Module": "mock_store",
-      "Class": "",
-      "Smell": "High LCOM",
-      "Description": "The module 'mock_store' has a high LCOM value of 0.71, check if it is combining distinct responsibilities together."
-    },
-    {
       "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "grpc_server",
-      "Class": "GrpcDescriptorRegistry",
-      "Smell": "Feature envy",
-      "Description": "Method '__init__' in class 'GrpcDescriptorRegistry' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `grpc_server`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "grpc_server",
-      "Class": "HMockGrpcHandler",
-      "Smell": "Feature envy",
-      "Description": "Method '_handle_unary' in class 'HMockGrpcHandler' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `grpc_server`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "message_runtime",
-      "Class": "message_runtime",
-      "Smell": "Feature envy",
-      "Description": "Function 'start_message_services' in module 'message_runtime' seems to access code elements that are outside of the module more than its internal to module members. It seems the method is more suitable in `message_runtime`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "mock_loader",
-      "Class": "mock_loader",
-      "Smell": "Insufficient modularisation",
-      "Description": "Module 'mock_loader' is insufficiently modularized with NOPM: 6, WMC: 203, NOM: 42."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "template_engine",
+      "Package": "src.dotenv",
+      "Module": "main",
+      "Class": "main",
       "Smell": "Access to protected members",
-      "Description": "Module 'template_engine' accesses non-public code elements _render_tokens from _render_token_slice"
+      "Description": "Module 'main' accesses non-public code elements _getframe from find_dotenv"
     },
     {
       "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "template_engine",
-      "Smell": "Insufficient modularisation",
-      "Description": "Module 'template_engine' is insufficiently modularized with NOPM: 0, WMC: 142, NOM: 47."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "TemplateRenderer",
-      "Smell": "Feature envy",
-      "Description": "Method 'render' in class 'TemplateRenderer' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_engine`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "TemplateRenderer",
-      "Smell": "Feature envy",
-      "Description": "Method '_render_tokens' in class 'TemplateRenderer' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_engine`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "TemplateRenderer",
-      "Smell": "Feature envy",
-      "Description": "Method '_render_if' in class 'TemplateRenderer' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_engine`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "TemplateRenderer",
-      "Smell": "Feature envy",
-      "Description": "Method '_render_range' in class 'TemplateRenderer' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_engine`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "template_engine",
-      "Class": "TemplateRenderer",
-      "Smell": "Feature envy",
-      "Description": "Method '_eval_command' in class 'TemplateRenderer' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `template_engine`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "redis_backend",
-      "Class": "MemoryRedisBackend",
-      "Smell": "Feature envy",
-      "Description": "Method 'execute' in class 'MemoryRedisBackend' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `redis_backend`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "redis_backend",
-      "Class": "MemoryRedisBackend",
-      "Smell": "Feature envy",
-      "Description": "Method '_execute' in class 'MemoryRedisBackend' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `redis_backend`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "redis_backend",
-      "Class": "ExternalRedisBackend",
-      "Smell": "Feature envy",
-      "Description": "Method 'execute' in class 'ExternalRedisBackend' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `redis_backend`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "redis_backend",
-      "Class": "ExternalRedisBackend",
-      "Smell": "Feature envy",
-      "Description": "Method '_authenticate' in class 'ExternalRedisBackend' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `redis_backend`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "redis_backend",
-      "Class": "ExternalRedisBackend",
-      "Smell": "Feature envy",
-      "Description": "Method '_select_database' in class 'ExternalRedisBackend' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `redis_backend`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "action_executor",
-      "Class": "ActionExecutor",
-      "Smell": "Feature envy",
-      "Description": "Method '_execute_one' in class 'ActionExecutor' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `action_executor`."
-    },
-    {
-      "Category": "Design level",
-      "Package": "checkpoint_8",
-      "Module": "mock_store",
-      "Class": "PersistentMockStore",
-      "Smell": "Feature envy",
-      "Description": "Method '_load' in class 'PersistentMockStore' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `mock_store`."
+      "Package": "src.dotenv",
+      "Module": "cli",
+      "Class": "cli",
+      "Smell": "Access to protected members",
+      "Description": "Module 'cli' accesses non-public code elements __version__ from cli"
     }
   ]
 }

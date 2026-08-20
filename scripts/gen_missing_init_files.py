@@ -5,8 +5,7 @@ Otherwise pydeps wont recognise it
 import argparse
 from pathlib import Path
 import os
-
-IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest_cache"}
+from constants import IGNORED_DIRS
 
 def gen_missing_init_files(directory):
     target_dir = Path(directory)

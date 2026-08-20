@@ -1,0 +1,857 @@
+{
+  "summary": {
+    "number_of_modules": {
+      "new_value": 16
+    },
+    "lines_of_code": {
+      "new_value": 10284
+    },
+    "number_of_methods_per_module": {
+      "new_value": 5.51
+    },
+    "number_of_public_methods_per_module": {
+      "new_value": 3.54
+    },
+    "cyclomatic_complexity_per_function": {
+      "new_value": 2.65
+    },
+    "duplicated_lines": {
+      "new_value": 0.008
+    },
+    "duplicates": [
+      {
+        "firstFile": "click/termui.py (line 423-440)",
+        "secondFile": "click/termui.py (line 443-460)",
+        "lines_duplicated": 18
+      },
+      {
+        "firstFile": "click/shell_completion.py (line 432-444)",
+        "secondFile": "click/shell_completion.py (line 454-466)",
+        "lines_duplicated": 13
+      },
+      {
+        "firstFile": "click/shell_completion.py (line 432-444)",
+        "secondFile": "click/shell_completion.py (line 530-542)",
+        "lines_duplicated": 13
+      },
+      {
+        "firstFile": "click/shell_completion.py (line 455-467)",
+        "secondFile": "click/shell_completion.py (line 531-543)",
+        "lines_duplicated": 13
+      },
+      {
+        "firstFile": "click/termui.py (line 154-165)",
+        "secondFile": "click/termui.py (line 168-179)",
+        "lines_duplicated": 12
+      },
+      {
+        "firstFile": "click/decorators.py (line 547-557)",
+        "secondFile": "click/decorators.py (line 589-599)",
+        "lines_duplicated": 11
+      },
+      {
+        "firstFile": "click/termui.py (line 410-419)",
+        "secondFile": "click/termui.py (line 431-440)",
+        "lines_duplicated": 10
+      },
+      {
+        "firstFile": "click/termui.py (line 836-845)",
+        "secondFile": "click/termui.py (line 849-858)",
+        "lines_duplicated": 10
+      },
+      {
+        "firstFile": "click/types.py (line 735-742)",
+        "secondFile": "click/types.py (line 767-774)",
+        "lines_duplicated": 8
+      }
+    ]
+  },
+  "smells": [
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "exceptions",
+      "Class": "MissingParameter",
+      "Method": "format_message",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 11."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "",
+      "Method": "prompt",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 15."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "",
+      "Method": "style",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 13."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "Path",
+      "Method": "convert",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 15."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Method": "isolation",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 13."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Method": "invoke",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 19."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Context",
+      "Method": "__init__",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 24."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Method": "main",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 14."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Group",
+      "Method": "__init__",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 12."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Parameter",
+      "Method": "handle_parse_result",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 13."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Method": "_validate",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 12."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Method": "_parse_decls",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 14."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Method": "get_help_extra",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 29."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "",
+      "Method": "version_option",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 16."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "_compat",
+      "Class": "",
+      "Method": "open_stream",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 12."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "_termui_impl",
+      "Class": "",
+      "Method": "_pipepager",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 12."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "",
+      "Method": "echo",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 11."
+    },
+    {
+      "Category": "Function level",
+      "Package": "src.click",
+      "Module": "_textwrap",
+      "Class": "TextWrapper",
+      "Method": "_wrap_chunks",
+      "Smell": "Complex method",
+      "Description": "The method has high cyclomatic complexity of 26."
+    },
+    {
+      "Category": "Module level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "Tuple",
+      "Smell": "High LCOM",
+      "Description": "The module 'types' has a high LCOM value of 1, check if it is combining distinct responsibilities together."
+    },
+    {
+      "Category": "Module level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "",
+      "Smell": "High LCOM",
+      "Description": "The module 'core' has a high LCOM value of 1, check if it is combining distinct responsibilities together."
+    },
+    {
+      "Category": "Module level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "",
+      "Smell": "High LCOM",
+      "Description": "The module 'utils' has a high LCOM value of 0.85, check if it is combining distinct responsibilities together."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_winconsole",
+      "Class": "_winconsole",
+      "Smell": "Access to protected members",
+      "Description": "Module '_winconsole' accesses non-public code elements _NonClosingTextIOWrapper from _get_text_stdin"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "termui",
+      "Smell": "Access to protected members",
+      "Description": "Module 'termui' accesses non-public code elements _compat from _readline_prompt"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "termui",
+      "Smell": "Access to protected members",
+      "Description": "Module 'termui' accesses non-public code elements _LazyFile from _format_default"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "termui",
+      "Smell": "Insufficient modularisation",
+      "Description": "Module 'termui' is insufficiently modularized with NOPM: 22, WMC: 89, NOM: 27."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "termui",
+      "Class": "termui",
+      "Smell": "Feature envy",
+      "Description": "Function 'edit' in module 'termui' seems to access code elements that are outside of the module more than its internal to module members. It seems the method is more suitable in `_termui_impl`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "globals",
+      "Class": "globals",
+      "Smell": "Access to protected members",
+      "Description": "Module 'globals' accesses non-public code elements __dict__ from push_context"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "parser",
+      "Class": "_OptionParser",
+      "Smell": "Access to protected members",
+      "Description": "Class '_OptionParser' accesses non-public code elements _short_opts from add_option"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "parser",
+      "Class": "_OptionParser",
+      "Smell": "Access to protected members",
+      "Description": "Class '_OptionParser' accesses non-public code elements _long_opts from add_option"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "parser",
+      "Class": "_OptionParser",
+      "Smell": "Feature envy",
+      "Description": "Method '_process_args_for_args' in class '_OptionParser' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `parser`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "FuncParamType",
+      "Smell": "Access to protected members",
+      "Description": "Class 'FuncParamType' accesses non-public code elements __name__ from __init__"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "StringParamType",
+      "Smell": "Access to protected members",
+      "Description": "Class 'StringParamType' accesses non-public code elements _get_argv_encoding from convert"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "File",
+      "Smell": "Access to protected members",
+      "Description": "Class 'File' accesses non-public code elements _LazyFile from convert"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "File",
+      "Smell": "Access to protected members",
+      "Description": "Class 'File' accesses non-public code elements _safecall from convert"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "types",
+      "Smell": "Insufficient modularisation",
+      "Description": "Module 'types' is insufficiently modularized with NOPM: 4, WMC: 132, NOM: 6."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "types",
+      "Class": "Tuple",
+      "Smell": "Feature envy",
+      "Description": "Method 'name' in class 'Tuple' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `types`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Access to protected members",
+      "Description": "Class 'CliRunner' accesses non-public code elements _CHUNK_SIZE from isolation"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Access to protected members",
+      "Description": "Class 'CliRunner' accesses non-public code elements _getchar from isolation"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Access to protected members",
+      "Description": "Class 'CliRunner' accesses non-public code elements __stdin__ from isolation"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Access to protected members",
+      "Description": "Class 'CliRunner' accesses non-public code elements __stdout__ from isolation"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Access to protected members",
+      "Description": "Class 'CliRunner' accesses non-public code elements _compat from isolation"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "testing",
+      "Smell": "Access to protected members",
+      "Description": "Module 'testing' accesses non-public code elements _paused from _pause_echo"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "testing",
+      "Smell": "Access to protected members",
+      "Description": "Module 'testing' accesses non-public code elements _find_binary_reader from make_input_stream"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Feature envy",
+      "Description": "Method 'isolation' in class 'CliRunner' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `testing`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "testing",
+      "Class": "CliRunner",
+      "Smell": "Feature envy",
+      "Description": "Method 'invoke' in class 'CliRunner' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `testing`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Context",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Context' accesses non-public code elements _opt_prefixes from __init__"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _OptionParser from make_parser"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _make_default_short_help from get_short_help_str"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _opt_prefixes from parse_args"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _opt_prefixes from parse_args"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _protected_args from shell_complete"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _expand_args from main"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _detect_program_name from main"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Command' accesses non-public code elements _PacifyFlushWrapper from main"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Group",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Group' accesses non-public code elements _make_sub_context from to_info_dict"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Group",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Group' accesses non-public code elements _protected_args from parse_args"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Group",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Group' accesses non-public code elements _split_opt from resolve_command"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Parameter",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Parameter' accesses non-public code elements _default_map_has from get_default"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Parameter",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Parameter' accesses non-public code elements _OptionParser from add_to_parser"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Parameter",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Parameter' accesses non-public code elements _param_default_explicit from handle_parse_result"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Option' accesses non-public code elements _split_opt from _parse_decls"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Option' accesses non-public code elements _OptionParser from add_to_parser"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Option' accesses non-public code elements _NumberRangeBase from get_help_extra"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Argument",
+      "Smell": "Access to protected members",
+      "Description": "Class 'Argument' accesses non-public code elements _OptionParser from add_to_parser"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Context",
+      "Smell": "Insufficient modularisation",
+      "Description": "Class 'Context' is insufficiently modularized with NOPM: 26, WMC: 76, NOM: 32."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Insufficient modularisation",
+      "Description": "Class 'Command' is insufficiently modularized with NOPM: 22, WMC: 90, NOM: 26."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Smell": "Insufficient modularisation",
+      "Description": "Class 'Option' is insufficiently modularized with NOPM: 13, WMC: 126, NOM: 19."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "core",
+      "Smell": "Insufficient modularisation",
+      "Description": "Module 'core' is insufficiently modularized with NOPM: 3, WMC: 484, NOM: 9."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Context",
+      "Smell": "Feature envy",
+      "Description": "Method 'invoke' in class 'Context' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `core`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Command",
+      "Smell": "Feature envy",
+      "Description": "Method 'shell_complete' in class 'Command' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `core`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Group",
+      "Smell": "Feature envy",
+      "Description": "Method 'shell_complete' in class 'Group' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `core`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Parameter",
+      "Smell": "Feature envy",
+      "Description": "Method 'consume_value' in class 'Parameter' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `core`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "core",
+      "Class": "Option",
+      "Smell": "Feature envy",
+      "Description": "Method 'consume_value' in class 'Option' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `core`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __name__ from make_pass_decorator"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __doc__ from pass_meta_key"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __click_params__ from command"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __doc__ from command"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __name__ from command"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Access to protected members",
+      "Description": "Module 'decorators' accesses non-public code elements __doc__ from command"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "decorators",
+      "Class": "decorators",
+      "Smell": "Insufficient modularisation",
+      "Description": "Module 'decorators' is insufficiently modularized with NOPM: 21, WMC: 53, NOM: 22."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "formatting",
+      "Class": "formatting",
+      "Smell": "Access to protected members",
+      "Description": "Module 'formatting' accesses non-public code elements _split_opt from join_options"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "formatting",
+      "Class": "HelpFormatter",
+      "Smell": "Feature envy",
+      "Description": "Method 'write_dl' in class 'HelpFormatter' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `formatting`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "formatting",
+      "Class": "formatting",
+      "Smell": "Feature envy",
+      "Description": "Function 'wrap_text' in module 'formatting' seems to access code elements that are outside of the module more than its internal to module members. It seems the method is more suitable in `_textwrap`."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_compat",
+      "Class": "_compat",
+      "Smell": "Access to protected members",
+      "Description": "Module '_compat' accesses non-public code elements _stream from _is_jupyter_kernel_output"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_compat",
+      "Class": "_compat",
+      "Smell": "Access to protected members",
+      "Description": "Module '_compat' accesses non-public code elements __class__ from _is_jupyter_kernel_output"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_termui_impl",
+      "Class": "ProgressBar",
+      "Smell": "Access to protected members",
+      "Description": "Class 'ProgressBar' accesses non-public code elements _default_text_stdout from __init__"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_termui_impl",
+      "Class": "_termui_impl",
+      "Smell": "Access to protected members",
+      "Description": "Module '_termui_impl' accesses non-public code elements _default_text_stdout from _pager_contextmanager"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_termui_impl",
+      "Class": "_termui_impl",
+      "Smell": "Insufficient modularisation",
+      "Description": "Module '_termui_impl' is insufficiently modularized with NOPM: 2, WMC: 131, NOM: 9."
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "utils",
+      "Smell": "Access to protected members",
+      "Description": "Module 'utils' accesses non-public code elements _default_text_stderr from echo"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "utils",
+      "Smell": "Access to protected members",
+      "Description": "Module 'utils' accesses non-public code elements _default_text_stdout from echo"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "utils",
+      "Smell": "Access to protected members",
+      "Description": "Module 'utils' accesses non-public code elements _find_binary_writer from echo"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "utils",
+      "Class": "utils",
+      "Smell": "Access to protected members",
+      "Description": "Module 'utils' accesses non-public code elements __package__ from _detect_program_name"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "shell_completion",
+      "Class": "shell_completion",
+      "Smell": "Access to protected members",
+      "Description": "Module 'shell_completion' accesses non-public code elements _opt_prefixes from _start_of_option"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "shell_completion",
+      "Class": "shell_completion",
+      "Smell": "Access to protected members",
+      "Description": "Module 'shell_completion' accesses non-public code elements _protected_args from _resolve_context"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "shell_completion",
+      "Class": "shell_completion",
+      "Smell": "Access to protected members",
+      "Description": "Module 'shell_completion' accesses non-public code elements _protected_args from _resolve_context"
+    },
+    {
+      "Category": "Design level",
+      "Package": "src.click",
+      "Module": "_textwrap",
+      "Class": "_textwrap",
+      "Smell": "Access to protected members",
+      "Description": "Module '_textwrap' accesses non-public code elements _ansi_re from _truncate_visible"
+    }
+  ]
+}

@@ -5,8 +5,7 @@ that imports all python files inside that directory.
 import argparse 
 from pathlib import Path 
 import os 
-
-IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest_cache"}
+from constants import IGNORED_DIRS, INVALID_CHARS
 
 def write_entrypoint(directory, entryfile_name): 
     target_dir = Path(directory)
@@ -30,12 +29,21 @@ def write_entrypoint(directory, entryfile_name):
                 rel_path = pyfile_path.relative_to(target_dir)
                 module = ".".join(rel_path.with_suffix("").parts)
 
-                # if module in {"__init__", "__main__"}: 
-                #     continue 
+                if module in {"__init__", "__main__"}: 
+                    continue 
 
                 # Convert package.__init__ to "import package"
                 if module.endswith(".__init__"):
                     module = module.removesuffix(".__init__")
+
+                # if the module starts with ".agents" (start with .) 
+                # ignore it because it would cause an import error 
+                if module.startswith("."): 
+                    continue 
+
+                # if the module name contains invalid characters such as '-',  ignore this as it will crash on import 
+                if any(chars in module for chars in INVALID_CHARS): 
+                    continue 
 
                 f.write(f"import {module}\n")
                                     
