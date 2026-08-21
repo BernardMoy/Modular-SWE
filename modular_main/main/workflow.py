@@ -15,12 +15,13 @@ from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
-from ..settings import WORKFLOW_MODE, AGENT, MODEL
+from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
+from ..entry_files import ENTRY_FILES
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
 AGENT_TEST_STORAGE = Path("agent_test_storage")  # temp storage for tests, not visible in agent workspace
-PROBLEMS_DIR = Path("datasets/custom/problems")
+PROBLEMS_DIR = Path("datasets/custom/problems") if PROBLEM_TYPE == "custom" else Path("datasets/slopCodeBench/scb-problems")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
@@ -250,14 +251,20 @@ def modular_workflow():
     PROBLEM = args.problem_name 
     N = int(args.checkpoint_number) 
 
-    # Get the entrypoint name 
+    # For scb problems only: if the problem name is not in the list of entry files, 
+    # raise an exception
+    if PROBLEM_TYPE == "scb" and PROBLEM not in ENTRY_FILES: 
+        raise Exception(f"Invalid SCB problem name: {PROBLEM}")
+    ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM] if PROBLEM_TYPE == "scb" else None 
+
+    # Get the problem dir 
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
 
     # if the problem dir does not exist, raise exception
     if not PROBLEM_DIR.exists(): 
         raise Exception(f"Invalid problem: {PROBLEM}")
-    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"  # Previous implementation depend on the workflow mode 
-    REPORT_DIR = PROBLEM_DIR / f"report_{WORKFLOW_MODE}"  # agent reports 
+    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}_{AGENT}_{MODEL}"  # Previous implementation depend on the workflow mode 
+    REPORT_DIR = PROBLEM_DIR / f"report_{WORKFLOW_MODE}_{AGENT}_{MODEL}"  # agent reports 
     PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
@@ -269,6 +276,10 @@ def modular_workflow():
     print(f"AGENT: {AGENT}")
     print(f"MODEL: {MODEL}")
     print(f"MODE: {WORKFLOW_MODE}")
+    print(f"PROBLEM TYPE: {PROBLEM_TYPE}")
+    print(f"PROBLEM NAME: {PROBLEM}")
+    print(f"CHECKPOINT: {N}")
+    print("="*20)
 
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
@@ -288,9 +299,15 @@ def modular_workflow():
     print("[MAIN 3/8] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
-    # Copy the data/ folder also if it exists, it represents essential data that the application should work with 
-    if (PROBLEM_DIR / "data").exists(): 
+    # Custom only: Copy the data/ folder also if it exists, it represents essential data that the application should work with 
+    if PROBLEM_TYPE == "custom" and (PROBLEM_DIR / "data").exists(): 
         shutil.copytree(PROBLEM_DIR / "data", AGENT_WORKSPACE / "data")
+
+    # scb only: Write an extra instruction specifying the entrypoint file 
+    if PROBLEM_TYPE == "scb": 
+        with open(AGENT_WORKSPACE / f"checkpoint_{N}.md", 'a') as f: 
+            f.write("\n## Entrypoint file")
+            f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE_NAME}.py`")
 
     # if N>1, also copy the previous implementation, metrics (?) and deps graph 
     if N>1: 
@@ -437,15 +454,34 @@ def modular_workflow():
             implementation, 
             IMPLEMENTATION_DEST, 
             dirs_exist_ok=True, 
-            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc")
+            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc", "node_modules")
         )
         # Also copy the agent report generated after it do its work 
+        REPORT_DEST.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(
             AGENT_WORKSPACE / "implementation_report.json", 
             REPORT_DEST
         )
     else: 
         raise Exception(f"Missing implementation for checkpoint {N}.")
+
+    # scb only: run tests 
+    if PROBLEM_TYPE == "scb": 
+        print(f"========== [MAIN 8/8] RUNNING SCB TESTS ==========")
+        entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
+
+        # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
+        for test_no in range(N, 0, -1): 
+            print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
+            subprocess.run(
+                [
+                    "scripts/pytest.sh",
+                    PROBLEM,
+                    entrypoint,
+                    str(test_no)
+                ], 
+                check=False  # Allow previous checkpoints to still run even when tests fail 
+            )
 
 if __name__ == "__main__": 
     # run the modular workflow 

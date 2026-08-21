@@ -3,7 +3,7 @@ import subprocess
 import shutil 
 import argparse 
 from ..BwrapExecutor import BwrapExecutor
-from ..settings import WORKFLOW_MODE
+from ..settings import WORKFLOW_MODE, AGENT, MODEL
 from ..get_prompt_and_run_agent import get_prompt_and_run_agent
 
 AGENT_WORKSPACE = Path("agent_workspace_test")
@@ -33,7 +33,7 @@ def workflow():
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
     # Copy the implementation 
-    IMPL_PATH = Path(f"datasets/custom/problems/{PROBLEM}/implementations_{WORKFLOW_MODE}/checkpoint_{N}")
+    IMPL_PATH = Path(f"datasets/custom/problems/{PROBLEM}/implementations_{WORKFLOW_MODE}_{AGENT}_{MODEL}/checkpoint_{N}")
     CHECKPOINT_PATH = Path(f"datasets/custom/problems/{PROBLEM}/checkpoint_{N}.md")
     WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
