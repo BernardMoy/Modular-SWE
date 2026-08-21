@@ -1,0 +1,2152 @@
+[
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "tqdm_notebook",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "tnrange",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "auto",
+        "Class": "",
+        "Method": "trange",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_tqdm_pandas",
+        "Class": "",
+        "Method": "tqdm_pandas",
+        "LOC": 15,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "dask",
+        "Class": "TqdmCallback",
+        "Method": "__init__",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "dask",
+        "Class": "TqdmCallback",
+        "Method": "_start_state",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "dask",
+        "Class": "TqdmCallback",
+        "Method": "_posttask",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "dask",
+        "Class": "TqdmCallback",
+        "Method": "_finish",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "dask",
+        "Class": "TqdmCallback",
+        "Method": "display",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmWarning",
+        "Method": "__init__",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "__init__",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "acquire",
+        "LOC": 3,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "release",
+        "LOC": 3,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "__enter__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "__exit__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "create_mp_lock",
+        "LOC": 7,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "TqdmDefaultWriteLock",
+        "Method": "create_th_lock",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "Bar",
+        "Method": "__init__",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "Bar",
+        "Method": "colour",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "Bar",
+        "Method": "colour",
+        "LOC": 16,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "Bar",
+        "Method": "__format__",
+        "LOC": 24,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "EMA",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "EMA",
+        "Method": "__call__",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "format_sizeof",
+        "LOC": 12,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "format_interval",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "format_num",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "status_printer",
+        "LOC": 17,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "format_meter",
+        "LOC": 116,
+        "CC": 24,
+        "PC": 14
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__new__",
+        "LOC": 15,
+        "CC": 5,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "_get_free_pos",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "_decr_instances",
+        "LOC": 22,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "write",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 5
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "external_write_mode",
+        "LOC": 27,
+        "CC": 9,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "set_lock",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "get_lock",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "pandas",
+        "LOC": 141,
+        "CC": 25,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__init__",
+        "LOC": 117,
+        "CC": 33,
+        "PC": 26
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__bool__",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__len__",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__reversed__",
+        "LOC": 10,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__contains__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__enter__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__exit__",
+        "LOC": 8,
+        "CC": 3,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__del__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__str__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "_comparable",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__hash__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "__iter__",
+        "LOC": 29,
+        "CC": 7,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "update",
+        "LOC": 40,
+        "CC": 13,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "close",
+        "LOC": 32,
+        "CC": 6,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "clear",
+        "LOC": 13,
+        "CC": 6,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "refresh",
+        "LOC": 15,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "unpause",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "reset",
+        "LOC": 14,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "set_description",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "set_description_str",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "set_postfix",
+        "LOC": 17,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "set_postfix_str",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "moveto",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "format_dict",
+        "LOC": 15,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "display",
+        "LOC": 22,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "tqdm",
+        "Method": "wrapattr",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 5
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "",
+        "Method": "TRLock",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Class": "",
+        "Method": "trange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "gui",
+        "Class": "tqdm_gui",
+        "Method": "__init__",
+        "LOC": 50,
+        "CC": 5,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "gui",
+        "Class": "tqdm_gui",
+        "Method": "close",
+        "LOC": 13,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "gui",
+        "Class": "tqdm_gui",
+        "Method": "clear",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "gui",
+        "Class": "tqdm_gui",
+        "Method": "display",
+        "LOC": 47,
+        "CC": 9,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "gui",
+        "Class": "",
+        "Method": "tgrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "bar2callback",
+        "LOC": 11,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "__init__",
+        "LOC": 18,
+        "CC": 5,
+        "PC": 5
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "on_train_begin",
+        "LOC": 5,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "on_epoch_begin",
+        "LOC": 22,
+        "CC": 9,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "on_train_end",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "display",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "_implements_train_batch_hooks",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "_implements_test_batch_hooks",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "keras",
+        "Class": "TqdmCallback",
+        "Method": "_implements_predict_batch_hooks",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "__init__",
+        "LOC": 16,
+        "CC": 5,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "__aiter__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "__anext__",
+        "LOC": 14,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "send",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "as_completed",
+        "LOC": 10,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "tqdm_asyncio",
+        "Method": "gather",
+        "LOC": 14,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Class": "",
+        "Method": "tarange",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "__init__",
+        "LOC": 10,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "_atexit_signal",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "exit",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "get_instances",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "run",
+        "LOC": 40,
+        "CC": 7,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Class": "TMonitor",
+        "Method": "report",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "__init__",
+        "LOC": 50,
+        "CC": 8,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "close",
+        "LOC": 18,
+        "CC": 6,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "clear",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "display",
+        "LOC": 11,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "set_description",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "set_description_str",
+        "LOC": 6,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "cancel",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "reset",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "tqdm_tk",
+        "Method": "_tk_dispatching_helper",
+        "LOC": 8,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Class": "",
+        "Method": "ttkrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "FormatReplace",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "FormatReplace",
+        "Method": "__format__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__lt__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__le__",
+        "LOC": 2,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__eq__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__ne__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__gt__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "Comparable",
+        "Method": "__ge__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "ObjectWrapper",
+        "Method": "__getattr__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "ObjectWrapper",
+        "Method": "__setattr__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "ObjectWrapper",
+        "Method": "wrapper_getattr",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "ObjectWrapper",
+        "Method": "wrapper_setattr",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "ObjectWrapper",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "SimpleTextIOWrapper",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "SimpleTextIOWrapper",
+        "Method": "write",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "SimpleTextIOWrapper",
+        "Method": "__eq__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "DisableOnWriteError",
+        "Method": "disable_on_exception",
+        "LOC": 22,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "DisableOnWriteError",
+        "Method": "__init__",
+        "LOC": 8,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "DisableOnWriteError",
+        "Method": "__eq__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "CallbackIOWrapper",
+        "Method": "__init__",
+        "LOC": 21,
+        "CC": 2,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "envwrap",
+        "LOC": 40,
+        "CC": 9,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_is_utf",
+        "LOC": 12,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_supports_unicode",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_is_ascii",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_screen_shape_wrapper",
+        "LOC": 11,
+        "CC": 0,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_environ_cols_wrapper",
+        "LOC": 11,
+        "CC": 0,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_term_move_up",
+        "LOC": 2,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "_text_width",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "disp_len",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Class": "",
+        "Method": "disp_trim",
+        "LOC": 12,
+        "CC": 3,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "FractionColumn",
+        "Method": "__init__",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "FractionColumn",
+        "Method": "render",
+        "LOC": 17,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "RateColumn",
+        "Method": "__init__",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "RateColumn",
+        "Method": "render",
+        "LOC": 15,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "tqdm_rich",
+        "Method": "__init__",
+        "LOC": 28,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "tqdm_rich",
+        "Method": "close",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "tqdm_rich",
+        "Method": "clear",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "tqdm_rich",
+        "Method": "display",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "tqdm_rich",
+        "Method": "reset",
+        "LOC": 6,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "rich",
+        "Class": "",
+        "Method": "trrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "TqdmHBox",
+        "Method": "_json_",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "TqdmHBox",
+        "Method": "__repr__",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "TqdmHBox",
+        "Method": "_repr_pretty_",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "status_printer",
+        "LOC": 31,
+        "CC": 8,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "display",
+        "LOC": 36,
+        "CC": 15,
+        "PC": 5
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "colour",
+        "LOC": 3,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "colour",
+        "LOC": 3,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "__init__",
+        "LOC": 28,
+        "CC": 9,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "__iter__",
+        "LOC": 8,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "update",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "close",
+        "LOC": 11,
+        "CC": 5,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "clear",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "tqdm_notebook",
+        "Method": "reset",
+        "LOC": 12,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "notebook",
+        "Class": "",
+        "Method": "tnrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "cli",
+        "Class": "",
+        "Method": "cast",
+        "LOC": 34,
+        "CC": 9,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "cli",
+        "Class": "",
+        "Method": "posix_pipe",
+        "LOC": 43,
+        "CC": 10,
+        "PC": 6
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "cli",
+        "Class": "",
+        "Method": "main",
+        "LOC": 151,
+        "CC": 31,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "DummyTqdmFile",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "DummyTqdmFile",
+        "Method": "write",
+        "LOC": 10,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "DummyTqdmFile",
+        "Method": "__del__",
+        "LOC": 7,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "builtin_iterable",
+        "LOC": 4,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "tenumerate",
+        "LOC": 12,
+        "CC": 3,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "tzip",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "__init__",
+        "Class": "",
+        "Method": "tmap",
+        "LOC": 5,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "_TqdmLoggingHandler",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "_TqdmLoggingHandler",
+        "Method": "emit",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "",
+        "Method": "_is_console_logging_handler",
+        "LOC": 3,
+        "CC": 2,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "",
+        "Method": "_get_first_found_console_logging_handler",
+        "LOC": 4,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "",
+        "Method": "logging_redirect_tqdm",
+        "LOC": 22,
+        "CC": 6,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "logging",
+        "Class": "",
+        "Method": "tqdm_logging_redirect",
+        "LOC": 9,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "SlackIO",
+        "Method": "__init__",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "SlackIO",
+        "Method": "write",
+        "LOC": 17,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "tqdm_slack",
+        "Method": "__init__",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "tqdm_slack",
+        "Method": "display",
+        "LOC": 13,
+        "CC": 4,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "tqdm_slack",
+        "Method": "clear",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Class": "",
+        "Method": "tsrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "TelegramIO",
+        "Method": "__init__",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "TelegramIO",
+        "Method": "message_id",
+        "LOC": 19,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "TelegramIO",
+        "Method": "write",
+        "LOC": 19,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "TelegramIO",
+        "Method": "delete",
+        "LOC": 9,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "tqdm_telegram",
+        "Method": "__init__",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "tqdm_telegram",
+        "Method": "display",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "tqdm_telegram",
+        "Method": "clear",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "tqdm_telegram",
+        "Method": "close",
+        "LOC": 6,
+        "CC": 5,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Class": "",
+        "Method": "ttgrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "DiscordIO",
+        "Method": "__init__",
+        "LOC": 7,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "DiscordIO",
+        "Method": "message_id",
+        "LOC": 19,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "DiscordIO",
+        "Method": "write",
+        "LOC": 20,
+        "CC": 3,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "DiscordIO",
+        "Method": "delete",
+        "LOC": 10,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "tqdm_discord",
+        "Method": "__init__",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "tqdm_discord",
+        "Method": "display",
+        "LOC": 7,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "tqdm_discord",
+        "Method": "clear",
+        "LOC": 4,
+        "CC": 2,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "tqdm_discord",
+        "Method": "close",
+        "LOC": 6,
+        "CC": 5,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Class": "",
+        "Method": "tdrange",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "_InterpreterLock",
+        "Method": "__init__",
+        "LOC": 6,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "_InterpreterLock",
+        "Method": "acquire",
+        "LOC": 26,
+        "CC": 4,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "_InterpreterLock",
+        "Method": "release",
+        "LOC": 8,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "_InterpreterLock",
+        "Method": "__enter__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "_InterpreterLock",
+        "Method": "__exit__",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "ensure_lock",
+        "LOC": 11,
+        "CC": 4,
+        "PC": 3
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "_get_interpreter_init",
+        "LOC": 13,
+        "CC": 1,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "_min_map_len",
+        "LOC": 2,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "_executor_map",
+        "LOC": 43,
+        "CC": 12,
+        "PC": 2
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "thread_map",
+        "LOC": 5,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "interpreter_map",
+        "LOC": 12,
+        "CC": 1,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Class": "",
+        "Method": "process_map",
+        "LOC": 15,
+        "CC": 4,
+        "PC": 1
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "chain",
+        "LOC": 7,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "product",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "permutations",
+        "LOC": 13,
+        "CC": 4,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "combinations",
+        "LOC": 12,
+        "CC": 4,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "combinations_with_replacement",
+        "LOC": 13,
+        "CC": 5,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Class": "",
+        "Method": "batched",
+        "LOC": 9,
+        "CC": 3,
+        "PC": 4
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "utils_worker",
+        "Class": "MonoWorker",
+        "Method": "__init__",
+        "LOC": 3,
+        "CC": 1,
+        "PC": 0
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "utils_worker",
+        "Class": "MonoWorker",
+        "Method": "submit",
+        "LOC": 16,
+        "CC": 5,
+        "PC": 1
+    }
+]

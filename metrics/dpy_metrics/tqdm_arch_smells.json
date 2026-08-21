@@ -1,0 +1,14 @@
+[
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Smell": "Feature concentration",
+        "Description": "The component realizes more than one architectural concern/feature. Independent sets of related modules within this component are: [auto]; [_tqdm_notebook]; [version]; [_tqdm_pandas]; [dask]; [_tqdm_gui]; [std; utils]; [autonotebook]; [gui]; [_main]; [keras]; [asyncio]; [_monitor]; [tk]; [_utils]; [__main__]; [rich]; [notebook]; [_tqdm]; [cli]. LCC (Lack of Component Cohesion) = 0.95"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Smell": "Feature concentration",
+        "Description": "The component realizes more than one architectural concern/feature. Independent sets of related modules within this component are: [logging]; [bells]; [slack; utils_worker; telegram; discord]; [concurrent]; [itertools]. LCC (Lack of Component Cohesion) = 0.62"
+    }
+]

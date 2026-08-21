@@ -27,17 +27,18 @@ def get_eval_metrics(implementation_path):
             "high_cc_functions_count": 0, 
             "function_max_cc": 0, 
 
-            "has_cycles": 0, 
-            "number_of_modules": 0, 
-            "number_of_functions": 0, 
             "weighted_mi": 0, 
             "propagation_cost": 0, 
             "impact_size": 0,
-    
-            "nopm_per_module": 0, 
-            "max_nopm_module": 0, 
+
+            "has_cycles": 0, 
+            "number_of_modules": 0, 
+            "number_of_functions": 0, 
+            "nopm_per_class": 0, 
+            "class_max_nopm": 0, 
             
-            "duplicated_lines": 0
+            "duplicated_lines": 0,
+            "duplicated_tokens": 0 
         }
 
     result["lloc"] = radon_metrics["lloc"]
@@ -52,14 +53,18 @@ def get_eval_metrics(implementation_path):
     result["high_cc_functions_count"] = dpy_metrics["high_cc_functions_count"]
     result["function_max_cc"] = dpy_metrics["function_max_cc"]
 
-    result["has_cycles"] = deps_graph_metrics["has_cycles"]
-    result["number_of_modules"] = deps_graph_metrics["number_of_modules"]
-    result["number_of_functions"] = dpy_metrics["number_of_functions"]
     result["weighted_mi"] = radon_metrics["weighted_maintainability_index"]
     result["propagation_cost"] = deps_graph_metrics["propagation_cost"]
     result["impact_size"] = deps_graph_metrics["impact_size"]
 
+    result["has_cycles"] = deps_graph_metrics["has_cycles"]
+    result["number_of_modules"] = deps_graph_metrics["number_of_modules"]
+    result["number_of_functions"] = dpy_metrics["number_of_functions"]
+    result["nopm_per_class"] = dpy_metrics["nopm_per_class"]
+    result["class_max_nopm"] = dpy_metrics["class_max_nopm"]
+ 
     result["duplicated_lines"] = jscpd_metrics["lines"]
+    result["duplicated_tokens"] = jscpd_metrics["tokens"]
 
     # trim all results to round 3 dp 
     for key, value in result.items(): 

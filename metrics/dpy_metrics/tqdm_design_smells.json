@@ -1,0 +1,342 @@
+[
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Broken hierarchy",
+        "Class": "TqdmExperimentalWarning",
+        "Line no": "52",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'TqdmExperimentalWarning' and its superclass 'TqdmWarning' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Broken hierarchy",
+        "Class": "TqdmDeprecationWarning",
+        "Line no": "56",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'TqdmDeprecationWarning' and its superclass 'TqdmWarning' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Broken hierarchy",
+        "Class": "TqdmMonitorWarning",
+        "Line no": "61",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'TqdmMonitorWarning' and its superclass 'TqdmWarning' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Broken hierarchy",
+        "Class": "tqdm",
+        "Line no": "242",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' and its superclass 'Comparable' may not share a proper 'IS-A' relationship."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm",
+        "Line no": "640",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' accesses non-public code elements _is_ascii from format_meter"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm",
+        "Line no": "665",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' accesses non-public code elements __new__ from __new__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm",
+        "Line no": "1019",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' accesses non-public code elements _screen_shape_wrapper from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm",
+        "Line no": "1044",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' accesses non-public code elements _supports_unicode from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm",
+        "Line no": "1451",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' accesses non-public code elements _term_move_up from moveto"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Insufficient modularization",
+        "Class": "tqdm",
+        "Line no": "242",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Class 'tqdm' is insufficiently modularized with NOPM: 24, WMC: 198, NOM: 39."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Insufficient modularization",
+        "Class": "std",
+        "Line no": "1",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Module 'std' is insufficiently modularized with NOPM: 2, WMC: 234, NOM: 2."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "std",
+        "Smell": "Feature envy",
+        "Class": "tqdm",
+        "Line no": "1510",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/std.py",
+        "Description": "Method 'wrapattr' in class 'tqdm' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `std`."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm_asyncio",
+        "Line no": "28",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/asyncio.py",
+        "Description": "Class 'tqdm_asyncio' accesses non-public code elements __anext__ from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm_asyncio",
+        "Line no": "31",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/asyncio.py",
+        "Description": "Class 'tqdm_asyncio' accesses non-public code elements __aiter__ from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "asyncio",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm_asyncio",
+        "Line no": "35",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/asyncio.py",
+        "Description": "Class 'tqdm_asyncio' accesses non-public code elements __next__ from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "_monitor",
+        "Smell": "Deficient encapsulation",
+        "Class": "TMonitor",
+        "Line no": "32",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/_monitor.py",
+        "Description": "Class 'TMonitor' accesses non-public code elements __init__ from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm_tk",
+        "Line no": "63",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/tk.py",
+        "Description": "Class 'tqdm_tk' accesses non-public code elements _default_root from __init__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "tk",
+        "Smell": "Deficient encapsulation",
+        "Class": "tqdm_tk",
+        "Line no": "181",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/tk.py",
+        "Description": "Class 'tqdm_tk' accesses non-public code elements _current_frames from _tk_dispatching_helper"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Smell": "Deficient encapsulation",
+        "Class": "Comparable",
+        "Line no": "103",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/utils.py",
+        "Description": "Class 'Comparable' accesses non-public code elements _comparable from __lt__"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Smell": "Deficient encapsulation",
+        "Class": "ObjectWrapper",
+        "Line no": "131",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/utils.py",
+        "Description": "Class 'ObjectWrapper' accesses non-public code elements __getattr__ from wrapper_getattr"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Smell": "Deficient encapsulation",
+        "Class": "ObjectWrapper",
+        "Line no": "137",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/utils.py",
+        "Description": "Class 'ObjectWrapper' accesses non-public code elements __setattr__ from wrapper_setattr"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Smell": "Multifaceted abstraction",
+        "Class": "Comparable",
+        "Line no": "100",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/utils.py",
+        "Description": "Class 'Comparable' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "utils",
+        "Smell": "Multifaceted abstraction",
+        "Class": "SimpleTextIOWrapper",
+        "Line no": "146",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/utils.py",
+        "Description": "Class 'SimpleTextIOWrapper' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "cli",
+        "Smell": "Deficient encapsulation",
+        "Class": "cli",
+        "Line no": "182",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/cli.py",
+        "Description": "Module 'cli' accesses non-public code elements __doc__ from main"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm",
+        "Module": "cli",
+        "Smell": "Deficient encapsulation",
+        "Class": "cli",
+        "Line no": "210",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/cli.py",
+        "Description": "Module 'cli' accesses non-public code elements __version__ from main"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "slack",
+        "Smell": "Multifaceted abstraction",
+        "Class": "tqdm_slack",
+        "Line no": "59",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/slack.py",
+        "Description": "Class 'tqdm_slack' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Smell": "Multifaceted abstraction",
+        "Class": "tqdm_telegram",
+        "Line no": "91",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/telegram.py",
+        "Description": "Class 'tqdm_telegram' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "telegram",
+        "Smell": "Feature envy",
+        "Class": "tqdm_telegram",
+        "Line no": "108",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/telegram.py",
+        "Description": "Method '__init__' in class 'tqdm_telegram' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `telegram`."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Smell": "Multifaceted abstraction",
+        "Class": "tqdm_discord",
+        "Line no": "96",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/discord.py",
+        "Description": "Class 'tqdm_discord' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "discord",
+        "Smell": "Feature envy",
+        "Class": "tqdm_discord",
+        "Line no": "111",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/discord.py",
+        "Description": "Method '__init__' in class 'tqdm_discord' seems to access code elements that are outside of the class more than its internal to class members. It seems the method is more suitable in `discord`."
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Smell": "Deficient encapsulation",
+        "Class": "concurrent",
+        "Line no": "81",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/concurrent.py",
+        "Description": "Module 'concurrent' accesses non-public code elements _lock from ensure_lock"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Smell": "Deficient encapsulation",
+        "Class": "concurrent",
+        "Line no": "94",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/concurrent.py",
+        "Description": "Module 'concurrent' accesses non-public code elements __module__ from _get_interpreter_init"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "concurrent",
+        "Smell": "Deficient encapsulation",
+        "Class": "concurrent",
+        "Line no": "95",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/concurrent.py",
+        "Description": "Module 'concurrent' accesses non-public code elements __qualname__ from _get_interpreter_init"
+    },
+    {
+        "Project": "tqdm",
+        "Package": "tqdm.contrib",
+        "Module": "itertools",
+        "Smell": "Multifaceted abstraction",
+        "Class": "itertools",
+        "Line no": "1",
+        "File": "/home/bernardmoy/modular-SWE/datasets/references/tqdm/tqdm/contrib/itertools.py",
+        "Description": "Class 'itertools' has a high LCOM value of 1, indicating it may have multiple responsibilities."
+    }
+]
