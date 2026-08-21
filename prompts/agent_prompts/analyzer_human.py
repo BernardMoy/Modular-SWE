@@ -6,14 +6,14 @@ def get_analyzer_human_prompt(has_implementation):
     
     return f"""
 You are a senior software code quality analyst that give refactoring suggestions. 
-Your job is to evaluate the following {'modular design' if not has_implementation else "implementation"} including kept, changed or new modules.
+Your job is to evaluate the following {'modular design including kept, changed or new modules' if not has_implementation else "implementation code"}.
 Project root: agent_workspace
 {'Design: `current_design.json`' if not has_implementation else 'Implementation: implementation/'}
 Dependency graph: `current_deps_graph.json`{', which is modified from `original_deps_graph.json`.' if has_implementation else ""} 
 
 RULES: 
 - In the design stage, do not assume anything about code that has not been written. 
-- Human questions must be exactly be in the format of 'HUMAN_QUESTION: <question>', specifically: 
+- Human questions must be exactly be in the format of 'HUMAN_QUESTION: <question>', preferably (but not limited to follow-up questions): 
     HUMAN_QUESTION: 
     <smell> 
     <suggestion> 

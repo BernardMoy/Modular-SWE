@@ -14,10 +14,8 @@ from ..get_prompt_and_run_agent import get_prompt_and_run_agent
 from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
-from ..settings import WORKFLOW_MODE 
-from prompts.code_quality_pass_fail import code_quality_pass_fail
+from ..settings import WORKFLOW_MODE, AGENT, MODEL
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -26,7 +24,7 @@ PROBLEMS_DIR = Path("datasets/custom/problems")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
-DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 2  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
@@ -35,7 +33,7 @@ TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop ha
 HAS_TESTER = False
 
 # Function to decide whether to pass or fail, given the analyzer output. 
-def pass_fail(analyzer_output_json): 
+def pass_fail(): 
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
     with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
         content = f.read().strip() 
@@ -45,12 +43,8 @@ def pass_fail(analyzer_output_json):
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
-    # For the human mode, if there are any unresolved issues, then fail 
-    if WORKFLOW_MODE == "human": 
-        return False 
-    
-    # Else, pass the analyzer output json to another helper 
-    return code_quality_pass_fail(analyzer_output_json)
+    # if there are any unresolved issues, then fail 
+    return False 
 
 # Decomposer analyzer loop. 
 # D first before A 
@@ -73,6 +67,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # Currently, if this array is non empty, throw an error 
         v_output_list = list(v_output) 
         if v_output_list: 
+            print(v_output_list)
             raise Exception("Validator failed.")
         print("Passed") 
 
@@ -88,7 +83,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             a_output = get_prompt_and_run_agent(executor, "analyzer_human", False)
-        else: 
+        elif WORKFLOW_MODE == "auto": 
             a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -96,11 +91,11 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         if not analyzer_result_path.exists():
             analyzer_result_path.touch() 
 
+        # Print the analyzer output 
         print(a_output)
+
         # If the analyzer return pass, set the passed flag to true 
-        # a_output_json = json.loads(a_output) 
-        # print(json.dumps(a_output_json, indent=2))
-        if pass_fail("[]"):  
+        if pass_fail():  
             passed = True
 
         # Increment the iteration number 
@@ -159,12 +154,8 @@ def tester_refactor_loop(executor, checkpoint_number, threshold):
 # A first before R
 # For has impl = True only. 
 def analyzer_refactor_loop(executor, checkpoint_number, threshold): 
-    iteration = 0 
-    passed = False 
 
-    # Initial decomposer agent 
-    # Run these inside the bind mounted space 
-    while (not passed and iteration < threshold): 
+    def update_metrics(): 
         # Update the dependency graph
         print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
         subprocess.run(
@@ -203,11 +194,19 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
             prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None 
         )
 
+    iteration = 0 
+    passed = False 
+
+    # Initial decomposer agent 
+    # Run these inside the bind mounted space 
+    while (not passed and iteration < threshold): 
+        update_metrics() 
+
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             a_output = get_prompt_and_run_agent(executor, "analyzer_human", True)
-        else: 
+        elif WORKFLOW_MODE == "auto": 
             a_output = get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -220,7 +219,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         # a_output_json = json.loads(a_output) 
         # print(json.dumps(a_output_json, indent=2))
-        if pass_fail("[]"):  
+        if pass_fail():  
             passed = True
         
         # if passed, return
@@ -234,6 +233,10 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
 
         # Increment the iteration number 
         iteration += 1 
+
+    # Once the loop ends because it hits the threshold, invoke the update metrics function again to show the latest changes to the metrics 
+    if iteration == threshold: 
+        update_metrics() 
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
@@ -263,6 +266,8 @@ def modular_workflow():
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Print the workflow mode 
+    print(f"AGENT: {AGENT}")
+    print(f"MODEL: {MODEL}")
     print(f"MODE: {WORKFLOW_MODE}")
 
     # Step 1: Create the agent workspace and test storage
@@ -293,11 +298,10 @@ def modular_workflow():
             shutil.copytree(PREV_IMPL, AGENT_WORKSPACE / "previous_implementation", symlinks=True)
         else: 
             raise Exception(f"Previous implementation for checkpoint {N-1} does not exist.")
-        
-        # copy the metrics (is it necessary?) 
+    
 
-        # Generate the deps graph if the workflow mode is not noDesign 
-        if WORKFLOW_MODE != "noDesign": 
+        # Generate the deps graph if the workflow mode is auto / human
+        if WORKFLOW_MODE in ["human", "auto"]: 
             subprocess.run(
                 [
                     "python", 
@@ -327,7 +331,7 @@ def modular_workflow():
             # Remove the temp deps_graph/ directory 
             shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
-    # copy the rubrics md file 
+    # copy the rubrics md file (Not used, for LLM to analyze code using 5 aspects only)
     # shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
 
     # Step 4: Sign in to the agent 
@@ -391,32 +395,12 @@ def modular_workflow():
         print(modules_array)
 
         modules_array_flattened = [item for sublist in modules_array for item in sublist]
+        print(f"Updating {len(modules_array_flattened)} modules.")
 
         # for the all at once mode, implement all modules       
-        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects" or WORKFLOW_MODE == "human": 
-            result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
-            print(result)
+        result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
+        print(result)
         
-        else: 
-            # For each layer of the bfs tree, implement the modules in parallel 
-            for layer in modules_array: 
-                print(f"========== CODING: {layer} ==========")
-                if WORKFLOW_MODE == "byLayer": 
-                    # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
-                    result = get_prompt_and_run_agent(executor, "modular_coder", N, layer)
-                    print(result) 
-
-                elif WORKFLOW_MODE == "byModule": 
-                    with ThreadPoolExecutor() as exec: 
-                        # Submit the task of coding each module to the thread pool
-                        futures = [
-                            exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
-                            for module in layer
-                        ]
-
-                        for future in as_completed(futures): 
-                            print(future.result())
-    
         # After implementation: 
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed 
         current_analyzer_json = AGENT_WORKSPACE / "current_analyzer_result.json"

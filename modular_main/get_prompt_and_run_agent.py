@@ -14,3 +14,38 @@ def get_prompt_and_run_agent(executor, agent_name, *args):
         AGENT, MODEL, prompt
     ])
     return output 
+
+
+"""Backup code for running multiple instances at once: 
+
+(By Module mode) 
+with ThreadPoolExecutor() as exec: 
+    # Submit the task of coding each module to the thread pool
+    futures = [
+        exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
+        for module in layer
+    ]
+
+    for future in as_completed(futures): 
+        print(future.result())
+
+(By Layer mode) 
+# For each layer of the bfs tree, implement the modules in parallel 
+for layer in modules_array: 
+    print(f"========== CODING: {layer} ==========")
+    if WORKFLOW_MODE == "byLayer": 
+        # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
+        result = get_prompt_and_run_agent(executor, "modular_coder", N, layer)
+        print(result) 
+
+    elif WORKFLOW_MODE == "byModule": 
+        with ThreadPoolExecutor() as exec: 
+        # Submit the task of coding each module to the thread pool
+        futures = [
+            exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
+            for module in layer
+        ]
+
+        for future in as_completed(futures): 
+            print(future.result())
+"""

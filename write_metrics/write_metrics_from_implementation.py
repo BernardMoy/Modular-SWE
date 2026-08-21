@@ -8,6 +8,7 @@ from reusables.sort_smells import sort_smells
 from metrics.designite_py.summary.get_summary import get_dpy_summary
 from metrics.jscpd.summary.get_summary import get_jscpd_summary
 from pathlib import Path
+from metrics.deps_graph.metrics import get_metrics_from_deps_graph
 
 SCRIPT_DIR = Path(__file__).resolve().parent.parent 
 TEMP_METRICS_NEW_DIR = Path("metrics_new")
@@ -32,6 +33,26 @@ def _get_smells_from_dpy_and_pylint(dpy_path, pylint_path):
 
     # Return the smells 
     return smells 
+
+def _get_smells_from_deps_graph(implementation_path): 
+    TEMP_FILE = Path("temp_graph")
+    
+    subprocess.run([
+        "python", 
+        "scripts/deps_graph.py", 
+        implementation_path,
+        TEMP_FILE
+    ])
+
+    smells = [] 
+    with open(TEMP_FILE / "deps_graph.json", 'r') as f: 
+        graph = json.load(f) 
+        smells = get_metrics_from_deps_graph(graph)
+
+    shutil.rmtree(TEMP_FILE)
+
+    return smells 
+
 
 def write_metrics_from_implementation(implementation_path, current_metrics_path, prev_implementation_path = None): 
 
@@ -59,6 +80,8 @@ def write_metrics_from_implementation(implementation_path, current_metrics_path,
     smells = _get_smells_from_dpy_and_pylint(
         TEMP_METRICS_NEW_DIR / "dpy_metrics", 
         TEMP_METRICS_NEW_DIR / "pylint_metrics.json"
+    ) + _get_smells_from_deps_graph(
+        implementation_path
     )
 
     # obtain the summary from dpy and jscpd 

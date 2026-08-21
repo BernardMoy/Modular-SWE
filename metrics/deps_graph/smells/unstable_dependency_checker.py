@@ -25,8 +25,8 @@ def check_unstable_dependency(json_object):
         for v in value: 
             # Check each dependency from key --> v 
             # Flag if v is less stable than key 
-            source_stability = data[key]["instability"]
-            dest_stability = data[v]["instability"]
+            source_stability = round(data[key]["instability"], 3)
+            dest_stability = round(data[v]["instability"], 3)
 
             if dest_stability > source_stability: 
                 unstables.append({

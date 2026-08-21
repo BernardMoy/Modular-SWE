@@ -15,6 +15,8 @@ def get_eval_metrics(implementation_path):
 
     # organised into the 5 aspects we care about 
     result = {
+            "implementation_path": implementation_path, 
+
             "lloc": 0, 
             "loc": 0, 
             "lloc_per_function": 0, 
@@ -68,7 +70,7 @@ def get_eval_metrics(implementation_path):
 
     # trim all results to round 3 dp 
     for key, value in result.items(): 
-        if key == "has_cycles": 
+        if key in ["has_cycles", "implementation_path"]: 
             continue 
         result[key] = round(value, 3) 
 

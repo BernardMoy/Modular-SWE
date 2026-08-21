@@ -50,5 +50,9 @@ IMPL_DIR_DICT = {
         "path": "requests/src", 
         "processing_fn": lambda name: name
     }, 
+    "cli/httpie/cli": {
+        "path": "cli", 
+        "processing_fn": lambda name: name.startswith("httpie.cli.")
+    }
 }
 
