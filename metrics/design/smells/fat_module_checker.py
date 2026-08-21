@@ -25,7 +25,7 @@ def check_fat_module(json_object):
                     "Category": "Module level",  
                     "Module": entry["module_name"], 
                     "Smell": "Fat module", 
-                    "Description": f"The module '{entry['module_name']}' has a high number of public methods ({entry["public_interface"]}), indicating insufficient modularisation."
+                    "Description": f"The module '{entry['module_name']}' has a number of public methods ({entry["public_interface"]}), flag this if the large interface is causing tight coupling with other modules, or unclear boundaries that lowers maintainability."
                 }
             )
     return smells

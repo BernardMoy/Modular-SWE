@@ -33,7 +33,7 @@ def check_unstable_dependency(json_object):
                     "Category": "Design level",  
                     "Module": key, 
                     "Smell": "Dependency on less stable modules",
-                    "Description": f"Module '{key}' (instability: {source_stability}) is depending on module '{v}' (instability: {dest_stability}), which is less stable."
+                    "Description": f"Module '{key}' (instability: {source_stability}) is depending on module '{v}' (instability: {dest_stability}), which is less stable. Worth flagging if changes would ripple and become expensive, but can be ignored if the module being depended on is non-volatile or if it is intentional by design."
                 })
 
     return unstables
