@@ -124,8 +124,8 @@ def main():
     )
 
     # 6. Remove temporary entry file
-    # print("[GRAPH 6/6] Removing temp file")
-    # entryfile_path.unlink()
+    print("[GRAPH 6/6] Removing temp file")
+    entryfile_path.unlink()
 
     
 # usage: python scripts/references_deps_graph.py <problem> <output> 

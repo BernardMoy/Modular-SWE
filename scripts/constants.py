@@ -14,16 +14,13 @@ ENTRYFILE_NAME="temp_entrypoint_123456789.py"
 # The base directory for all implementations for reference modules 
 BASE_REFERENCE_DIR = "datasets/references/"
 
-"""
-Instructions on adding a new reference module: 
-1. Add to the impl dir dict which is the directory that the deps graph script should point to
-2. Sometimes due to how the modules are imported, the directory has to be the outer one. However this may include some directories we are not interested in, such as docs / tests. 
-In this case, add a rule to filter them in reference_rules.py 
-"""
-
 # The IMPLEMENTATION DIRECTORY (i.e. src) must be provided
 # THIS is the directory you want to analyze metrics (LOC...) on 
 # which gets mapped to the directory (may be same or different) for generating deps graph
+# For example, while we want to analyze tqdm/tqdm, because of how the modules are imported, 
+# the graph must be called from tqdm/ (path) and then filter modules starting with 'tqdm.' (processing fn)  
+# Keys (IMPLEMENTATION PATHS) are the paths you want to ANALYZE (they count towards module counts); 
+# Values (DEPS GRAPH PATHS) are the path used for deps graph generation
 IMPL_DIR_DICT = {
     "tqdm/tqdm": {
         "path": "tqdm", 
@@ -32,6 +29,26 @@ IMPL_DIR_DICT = {
     "python-dotenv/src": {
         "path": "python-dotenv/src", 
         "processing_fn": lambda name: name
-    }
+    }, 
+    "click/src": {
+        "path": "click/src", 
+        "processing_fn": lambda name: name
+    }, 
+    "fastapi/fastapi": {
+        "path": "fastapi", 
+        "processing_fn": lambda name: name.startswith("fastapi.") and ".." not in name  # avoid fastapi..agents 
+    }, 
+    "flask/src": {
+        "path": "flask", 
+        "processing_fn": lambda name: name.startswith("src.flask.")
+    }, 
+    "uvicorn/uvicorn": {
+        "path": "uvicorn", 
+        "processing_fn": lambda name: name.startswith("uvicorn.")
+    }, 
+    "requests/src": {
+        "path": "requests/src", 
+        "processing_fn": lambda name: name
+    }, 
 }
 
