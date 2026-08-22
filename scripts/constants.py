@@ -56,30 +56,29 @@ IMPL_DIR_DICT = {
             "processing_fn": lambda name: name.startswith("fastapi.") and ".." not in name # avoid fastapi..agents 
         } for version in _get_reference_versions("fastapi")
     }, 
+    **{
+        f"python-dotenv/{version}/src": {
+            "path": f"python-dotenv/{version}/src", 
+            "processing_fn": lambda name: name
+        } for version in _get_reference_versions("python-dotenv")
+    }, 
+    **{
+        f"tqdm/{version}/tqdm": {
+            "path": f"tqdm/{version}", 
+            "processing_fn": lambda name: name.startswith("tqdm.")
+        } for version in _get_reference_versions("tqdm")
+    }, 
+    **{
+        f"uvicorn/{version}/uvicorn": {
+            "path": f"uvicorn/{version}", 
+            "processing_fn": lambda name: name.startswith("uvicorn.")
+        } for version in _get_reference_versions("uvicorn")
+    }, 
+    **{
+        f"requests/{version}/requests": {
+            "path": f"requests/{version}", 
+            "processing_fn": lambda name: name.startswith("requests.")
+        } for version in _get_reference_versions("requests")
+    }, 
 }
-#     "tqdm/tqdm": {
-#         "path": "tqdm", 
-#         "processing_fn": lambda name: name.startswith("tqdm.")
-#     }, 
-#     "python-dotenv/src": {
-#         "path": "python-dotenv/src", 
-#         "processing_fn": lambda name: name
-#     }, 
-#     "fastapi/fastapi": {
-#         "path": "fastapi", 
-#         "processing_fn": lambda name: name.startswith("fastapi.") and ".." not in name  # avoid fastapi..agents 
-#     }, 
-#     "uvicorn/uvicorn": {
-#         "path": "uvicorn", 
-#         "processing_fn": lambda name: name.startswith("uvicorn.")
-#     }, 
-#     "requests/src": {
-#         "path": "requests/src", 
-#         "processing_fn": lambda name: name
-#     }, 
-#     "cli/httpie/cli": {
-#         "path": "cli", 
-#         "processing_fn": lambda name: name.startswith("httpie.cli.")
-#     }
-# }
 
