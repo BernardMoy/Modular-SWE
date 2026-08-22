@@ -14,9 +14,10 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics. 
 WORKFLOW_MODE: Literal[
     "noDesign", 
+    "noMetric", 
     "auto", 
     "human"
-    ] = "human"
+    ] = "noDesign"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 

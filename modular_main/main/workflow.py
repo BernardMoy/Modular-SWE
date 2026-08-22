@@ -241,15 +241,11 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
 
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
-def modular_workflow(): 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("problem_name", help="Name of the problem")
-    parser.add_argument("checkpoint_number", help="Checkpoint number")
-    args = parser.parse_args()
+def modular_workflow_single(problem, n, logged_in = False): 
 
-    # Obtain the problem name and checkpoint no from arguments
-    PROBLEM = args.problem_name 
-    N = int(args.checkpoint_number) 
+    # Obtain the problem name and checkpoint no
+    PROBLEM = problem
+    N = n
 
     # For scb problems only: if the problem name is not in the list of entry files, 
     # raise an exception
@@ -353,9 +349,10 @@ def modular_workflow():
 
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")
-    subprocess.run([
-        "python", "-m", "modular_main.login"
-    ], check=True)
+    if not logged_in: 
+        subprocess.run([
+            "python", "-m", "modular_main.login"
+        ], check=True)
 
     # Step 5: Volume mount 
     print("[MAIN 5/8] Agent workspace volume mount")
@@ -482,6 +479,26 @@ def modular_workflow():
                 ], 
                 check=False  # Allow previous checkpoints to still run even when tests fail 
             )
+
+# usage: python -m modular_main.main <problem_name> <checkpoint_number> <checkpoint_number_end> 
+# e.g. problem 1 8 means implement checkpoints 1,2, ... 8
+def modular_workflow(): 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("problem_name", help="Name of the problem")
+    parser.add_argument("checkpoint_number", help="Checkpoint number")
+    parser.add_argument("checkpoint_number_end", help="Checkpoint number's end range value, inclusive. optional", nargs="?")
+    args = parser.parse_args()
+
+    start = args.checkpoint_number 
+    end = args.checkpoint_number_end if args.checkpoint_number_end else start
+    start = int(start)
+    end = int(end) 
+
+    for n in range(start, end+1): 
+        if n == start: 
+            modular_workflow_single(args.problem_name, n, False) 
+        else: 
+            modular_workflow_single(args.problem_name, n, True) 
 
 if __name__ == "__main__": 
     # run the modular workflow 

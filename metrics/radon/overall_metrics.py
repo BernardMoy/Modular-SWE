@@ -11,7 +11,7 @@ def get_radon_metrics(implementation_path):
         "sloc": 0, 
         "modules_max_lloc": 0, 
         "comments_percentage": 0,
-
+        "number_of_py_files": 0,  
         "weighted_maintainability_index": 0, 
     }
     """
@@ -21,6 +21,7 @@ def get_radon_metrics(implementation_path):
     total_lloc = 0 
     total_loc = 0 
     total_comments = 0 
+    file_count = 0 
     cur_max_lloc = 0 
 
 
@@ -31,6 +32,7 @@ def get_radon_metrics(implementation_path):
         for f in files: 
             if f.endswith(".py"): 
                 py_file_path = os.path.join(root, f) 
+                file_count += 1 
 
                 # open the file 
                 try: 
@@ -53,6 +55,7 @@ def get_radon_metrics(implementation_path):
         "sloc": total_sloc, 
         "modules_max_lloc": cur_max_lloc, 
         "comments_percentage": 100*total_comments / total_loc if total_loc > 0 else 0, 
+        "number_of_py_files": file_count,  
         "weighted_maintainability_index": weighted_mi / total_sloc if total_sloc > 0 else -1, 
     }
 

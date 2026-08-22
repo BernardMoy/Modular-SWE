@@ -1,0 +1,359 @@
+{
+  "examples.javascript.js_example": [
+    "flask"
+  ],
+  "examples.javascript.js_example.views": [
+    "flask"
+  ],
+  "examples.javascript.setup": [
+    "setuptools"
+  ],
+  "examples.tutorial.flaskr": [
+    "flask"
+  ],
+  "examples.tutorial.flaskr.auth": [
+    "flask"
+  ],
+  "examples.tutorial.flaskr.blog": [
+    "flask"
+  ],
+  "examples.tutorial.flaskr.db": [
+    "flask",
+    "flask.cli"
+  ],
+  "examples.tutorial.setup": [
+    "setuptools"
+  ],
+  "flask": [
+    "flask.app",
+    "flask.blueprints",
+    "flask.config",
+    "flask.ctx",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json",
+    "flask.sessions",
+    "flask.signals",
+    "flask.templating"
+  ],
+  "flask.__main__": [
+    "flask.cli"
+  ],
+  "flask._compat": [],
+  "flask.app": [
+    "flask._compat",
+    "flask.cli",
+    "flask.config",
+    "flask.ctx",
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.helpers",
+    "flask.json",
+    "flask.logging",
+    "flask.sessions",
+    "flask.signals",
+    "flask.templating",
+    "flask.testing",
+    "flask.wrappers"
+  ],
+  "flask.blueprints": [
+    "flask.helpers"
+  ],
+  "flask.cli": [
+    "flask._compat",
+    "flask.globals",
+    "flask.helpers"
+  ],
+  "flask.config": [
+    "flask._compat",
+    "flask.json"
+  ],
+  "flask.ctx": [
+    "flask._compat",
+    "flask.globals",
+    "flask.signals"
+  ],
+  "flask.debughelpers": [
+    "flask._compat",
+    "flask.app",
+    "flask.blueprints",
+    "flask.globals"
+  ],
+  "flask.globals": [],
+  "flask.helpers": [
+    "flask._compat",
+    "flask.globals",
+    "flask.signals"
+  ],
+  "flask.json": [
+    "flask._compat",
+    "flask.globals"
+  ],
+  "flask.json.tag": [
+    "flask._compat"
+  ],
+  "flask.logging": [
+    "flask.globals"
+  ],
+  "flask.sessions": [
+    "flask.helpers",
+    "flask.json",
+    "flask.json.tag"
+  ],
+  "flask.signals": [],
+  "flask.templating": [
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.signals"
+  ],
+  "flask.testing": [
+    "flask.cli",
+    "flask.json"
+  ],
+  "flask.views": [
+    "flask._compat",
+    "flask.globals"
+  ],
+  "flask.wrappers": [
+    "flask.debughelpers",
+    "flask.globals",
+    "flask.json"
+  ],
+  "setup": [
+    "setuptools"
+  ],
+  "setuptools": [
+    "setuptools.depends",
+    "setuptools.discovery",
+    "setuptools.dist",
+    "setuptools.extension",
+    "setuptools.logging",
+    "setuptools.monkey",
+    "setuptools.version",
+    "setuptools.warnings"
+  ],
+  "setuptools._core_metadata": [
+    "setuptools._normalization",
+    "setuptools._reqs",
+    "setuptools._static",
+    "setuptools.warnings"
+  ],
+  "setuptools._discovery": [],
+  "setuptools._distutils._log": [],
+  "setuptools._distutils._modified": [
+    "setuptools._distutils.compat",
+    "setuptools._distutils.compat.py39",
+    "setuptools._distutils.errors"
+  ],
+  "setuptools._distutils.ccompiler": [
+    "setuptools._distutils.compat",
+    "setuptools._distutils.compat.numpy"
+  ],
+  "setuptools._distutils.compat": [],
+  "setuptools._distutils.compat.numpy": [],
+  "setuptools._distutils.compat.py39": [],
+  "setuptools._distutils.debug": [],
+  "setuptools._distutils.errors": [],
+  "setuptools._distutils.spawn": [
+    "setuptools._distutils._log",
+    "setuptools._distutils.debug",
+    "setuptools._distutils.errors",
+    "setuptools._distutils.util"
+  ],
+  "setuptools._distutils.sysconfig": [
+    "setuptools._distutils.ccompiler",
+    "setuptools._distutils.compat",
+    "setuptools._distutils.compat.py39",
+    "setuptools._distutils.errors",
+    "setuptools._distutils.util"
+  ],
+  "setuptools._distutils.util": [
+    "setuptools._distutils._log",
+    "setuptools._distutils._modified",
+    "setuptools._distutils.errors",
+    "setuptools._distutils.spawn"
+  ],
+  "setuptools._entry_points": [
+    "setuptools._importlib",
+    "setuptools._itertools",
+    "setuptools.errors"
+  ],
+  "setuptools._imp": [],
+  "setuptools._importlib": [],
+  "setuptools._itertools": [],
+  "setuptools._normalization": [],
+  "setuptools._path": [],
+  "setuptools._reqs": [],
+  "setuptools._shutil": [
+    "setuptools.compat",
+    "setuptools.compat.py311"
+  ],
+  "setuptools._static": [
+    "setuptools.warnings"
+  ],
+  "setuptools.archive_util": [
+    "setuptools._path"
+  ],
+  "setuptools.command": [],
+  "setuptools.command._requirestxt": [
+    "setuptools._reqs"
+  ],
+  "setuptools.command.bdist_egg": [
+    "setuptools._path",
+    "setuptools.extension"
+  ],
+  "setuptools.command.bdist_wheel": [
+    "setuptools._core_metadata",
+    "setuptools._normalization",
+    "setuptools._shutil",
+    "setuptools.command.egg_info",
+    "setuptools.warnings"
+  ],
+  "setuptools.command.build": [
+    "setuptools.dist"
+  ],
+  "setuptools.command.egg_info": [
+    "setuptools._entry_points",
+    "setuptools._importlib",
+    "setuptools._normalization",
+    "setuptools.command._requirestxt",
+    "setuptools.command.bdist_egg",
+    "setuptools.command.sdist",
+    "setuptools.command.setopt",
+    "setuptools.glob",
+    "setuptools.unicode_utils",
+    "setuptools.warnings"
+  ],
+  "setuptools.command.sdist": [
+    "setuptools._importlib",
+    "setuptools.command.build",
+    "setuptools.dist"
+  ],
+  "setuptools.command.setopt": [
+    "setuptools.unicode_utils"
+  ],
+  "setuptools.compat": [],
+  "setuptools.compat.py310": [],
+  "setuptools.compat.py311": [],
+  "setuptools.compat.py39": [],
+  "setuptools.config": [
+    "setuptools.config.setupcfg",
+    "setuptools.warnings"
+  ],
+  "setuptools.config._apply_pyprojecttoml": [
+    "setuptools._importlib",
+    "setuptools._path",
+    "setuptools._static",
+    "setuptools.config.expand",
+    "setuptools.dist",
+    "setuptools.errors",
+    "setuptools.extension",
+    "setuptools.warnings"
+  ],
+  "setuptools.config._validate_pyproject": [
+    "setuptools.config._validate_pyproject.error_reporting",
+    "setuptools.config._validate_pyproject.extra_validations",
+    "setuptools.config._validate_pyproject.fastjsonschema_exceptions",
+    "setuptools.config._validate_pyproject.fastjsonschema_validations",
+    "setuptools.config._validate_pyproject.formats"
+  ],
+  "setuptools.config._validate_pyproject.error_reporting": [
+    "setuptools.config._validate_pyproject.fastjsonschema_exceptions"
+  ],
+  "setuptools.config._validate_pyproject.extra_validations": [
+    "setuptools.config._validate_pyproject.error_reporting"
+  ],
+  "setuptools.config._validate_pyproject.fastjsonschema_exceptions": [],
+  "setuptools.config._validate_pyproject.fastjsonschema_validations": [
+    "setuptools.config._validate_pyproject.fastjsonschema_exceptions"
+  ],
+  "setuptools.config._validate_pyproject.formats": [],
+  "setuptools.config.expand": [
+    "setuptools._path",
+    "setuptools._static",
+    "setuptools.discovery",
+    "setuptools.dist",
+    "setuptools.warnings"
+  ],
+  "setuptools.config.pyprojecttoml": [
+    "setuptools._path",
+    "setuptools.compat",
+    "setuptools.compat.py310",
+    "setuptools.config._apply_pyprojecttoml",
+    "setuptools.config._validate_pyproject",
+    "setuptools.config.expand",
+    "setuptools.dist",
+    "setuptools.errors",
+    "setuptools.warnings"
+  ],
+  "setuptools.config.setupcfg": [
+    "setuptools._path",
+    "setuptools._static",
+    "setuptools.config.expand",
+    "setuptools.dist",
+    "setuptools.errors",
+    "setuptools.warnings"
+  ],
+  "setuptools.depends": [
+    "setuptools._imp"
+  ],
+  "setuptools.discovery": [
+    "setuptools._path",
+    "setuptools.errors"
+  ],
+  "setuptools.dist": [
+    "setuptools._entry_points",
+    "setuptools._importlib",
+    "setuptools._normalization",
+    "setuptools._path",
+    "setuptools._reqs",
+    "setuptools._static",
+    "setuptools.command",
+    "setuptools.command.bdist_wheel",
+    "setuptools.config",
+    "setuptools.config.pyprojecttoml",
+    "setuptools.config.setupcfg",
+    "setuptools.discovery",
+    "setuptools.errors",
+    "setuptools.installer",
+    "setuptools.monkey",
+    "setuptools.warnings",
+    "setuptools.windows_support"
+  ],
+  "setuptools.errors": [],
+  "setuptools.extension": [
+    "setuptools._path",
+    "setuptools.monkey"
+  ],
+  "setuptools.glob": [],
+  "setuptools.installer": [
+    "setuptools._importlib",
+    "setuptools._reqs",
+    "setuptools.warnings",
+    "setuptools.wheel"
+  ],
+  "setuptools.logging": [
+    "setuptools.monkey"
+  ],
+  "setuptools.monkey": [
+    "setuptools._core_metadata"
+  ],
+  "setuptools.unicode_utils": [
+    "setuptools.compat",
+    "setuptools.compat.py39",
+    "setuptools.warnings"
+  ],
+  "setuptools.version": [
+    "setuptools._importlib"
+  ],
+  "setuptools.warnings": [],
+  "setuptools.wheel": [
+    "setuptools._discovery",
+    "setuptools._importlib",
+    "setuptools.archive_util",
+    "setuptools.command",
+    "setuptools.command.egg_info",
+    "setuptools.unicode_utils"
+  ],
+  "setuptools.windows_support": []
+}

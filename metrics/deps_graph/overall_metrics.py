@@ -25,7 +25,7 @@ def get_propagation_cost(deps_graph):
 
     visibility_matrix = get_visibility_matrix(deps_graph)
     N = len(visibility_matrix)
-    propagation_cost = (sum([len(value) for value in visibility_matrix.values()])+N) / (N*N)
+    propagation_cost = (sum([len(value) for value in visibility_matrix.values()])+N) / (N*N) if N > 0 else 1
     return propagation_cost
 
 def get_impact_size(deps_graph): 

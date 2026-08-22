@@ -151,14 +151,46 @@ def get_changed_proportion(implementation_path_old, implementation_path_new):
     
     return changed_count / original_count if original_count > 0 else 0 
 
-# UNUSED - handled in evaluation.ipynb
-# def get_changed_files_from_history(implementation_history): 
-#     d = defaultdict(int) 
-#     for i in range(1, len(implementation_history)): 
-#         prev = implementation_history[i-1]
-#         cur = implementation_history[i] 
-#         changed_files = get_changed_files(prev, cur) 
-#         for f in changed_files: 
-#             d[f] += 1 
-    
-#     return d 
+
+# When given a history list of implementation paths, 
+def get_change_coupling(implementation_path_history): 
+    if len(implementation_path_history) == 0: return {} 
+
+    d_pair = defaultdict(int)  # (a,b): how many times a and b changed together 
+    d_versions = defaultdict(list)   # a: {1,2,3} indicate that these 3 modules has a changed 
+
+    # for each consecutive snapshots of the history, get its changed modules 
+    for i in range(1, len(implementation_path_history)): 
+        first = implementation_path_history[i-1]
+        second = implementation_path_history[i] 
+
+        changed_modules = list(get_changed_files(first, second))
+
+        # iterate each pair of changed modules 
+        for j in range(len(changed_modules)): 
+            for k in range(j+1, len(changed_modules)): 
+                key = (changed_modules[j], changed_modules[k])
+                d_pair[key] += 1 
+
+        # for each changed modules, increment its count by appending to the list using the version change's key (i) 
+        for module in changed_modules: 
+            d_versions[module].append(i) 
+
+    result = {} 
+
+    # for all pairs inside d_pair, calculate change coupling = Count that (A,B) changed together / Count that either A or B changed 
+    for key, value in d_pair.items(): 
+        a, b = key  
+        number_either_changed = len(
+            set(
+                d_versions[a] + d_versions[b]
+                )
+            )
+
+        if number_either_changed > 0: 
+            result[key] = d_pair[key] / number_either_changed
+
+    # Return pairs sorted by change coupling
+    return sorted(result.items(), key=lambda item: item[1], reverse=True)
+
+

@@ -45,8 +45,8 @@ def get_eval_metrics(implementation_path):
 
     result["lloc"] = radon_metrics["lloc"]
     result["loc"] = radon_metrics["loc"]
-    result["lloc_per_function"] = result["lloc"] / dpy_metrics["number_of_functions"]
-    result["lloc_per_module"] = result["lloc"] / deps_graph_metrics["number_of_modules"]
+    result["lloc_per_function"] = result["lloc"] / dpy_metrics["number_of_functions"] if dpy_metrics["number_of_functions"] > 0 else 0
+    result["lloc_per_module"] = result["lloc"] / radon_metrics["number_of_py_files"] if radon_metrics["number_of_py_files"] > 0 else 0
     result["function_max_loc"] = dpy_metrics["function_max_loc"]
     result["modules_max_lloc"] = radon_metrics["modules_max_lloc"]
     result["comments_percentage"] = radon_metrics["comments_percentage"]
@@ -60,7 +60,7 @@ def get_eval_metrics(implementation_path):
     result["impact_size"] = deps_graph_metrics["impact_size"]
 
     result["has_cycles"] = deps_graph_metrics["has_cycles"]
-    result["number_of_modules"] = deps_graph_metrics["number_of_modules"]
+    result["number_of_modules"] = radon_metrics["number_of_py_files"]
     result["number_of_functions"] = dpy_metrics["number_of_functions"]
     result["nopm_per_class"] = dpy_metrics["nopm_per_class"]
     result["class_max_nopm"] = dpy_metrics["class_max_nopm"]
