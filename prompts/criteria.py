@@ -13,3 +13,10 @@ DECOMPOSER_SUGGESTIONS_CRITERIA="""
 - Whether the nature and complexity of the problem, and still having single responsibility justify the code without refactoring. 
 - Whether the suggestion conflict with issue requirements.
 """
+
+# used by both the tester and test writer (before impl) 
+TEST_WRITER_CRITERIA = """
+- The tests must be black box; only the behaviour of the CLI should be tested. Tests should never depend on the names of internal function signatures or actual datasets with a hard-coded path. 
+- Only test behaviour that can be explicitly inferred from the requirements.
+- Include all possible edge cases. 
+"""

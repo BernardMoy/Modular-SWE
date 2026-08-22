@@ -29,9 +29,6 @@ DA_LOOP_THRESHOLD_BEFORE_IMPL = 2  # how many times can the D <> A Loop happen
 DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
-# Whether or not a tester is employed to test the software. 
-# For CLI or software where we can verify its behaviour without knowing its internal function signatures, this is false 
-HAS_TESTER = False
 
 # Function to decide whether to pass or fail, given the analyzer output. 
 def pass_fail(): 
@@ -84,7 +81,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             a_output = get_prompt_and_run_agent(executor, "analyzer_human", False)
-        elif WORKFLOW_MODE == "auto": 
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
             a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -207,7 +204,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             a_output = get_prompt_and_run_agent(executor, "analyzer_human", True)
-        elif WORKFLOW_MODE == "auto": 
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
             a_output = get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -314,7 +311,7 @@ def modular_workflow_single(problem, n, logged_in = False):
     
 
         # Generate the deps graph if the workflow mode is auto / human
-        if WORKFLOW_MODE in ["human", "auto"]: 
+        if WORKFLOW_MODE in ["human", "auto", "autoTest", "autoNoMetric"]: 
             subprocess.run(
                 [
                     "python", 
@@ -362,17 +359,28 @@ def modular_workflow_single(problem, n, logged_in = False):
     # ================ MAIN WORKFLOW BEGINS ================
     print("[MAIN 6/8] Main workflow")
 
-    # Before coding, generate a test blueprint
-    if HAS_TESTER: 
-        print(f"========== CREATING TEST BLUEPRINT ==========")
-        test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
-        print(test_plan_result)
+    # Before coding, write black box tests 
+    if WORKFLOW_MODE == "autoTest": 
+        print(f"========== WRITING TESTS BEFORE IMPL ==========")
+        result = get_prompt_and_run_agent(executor, "black_box_test_writer", N) 
 
-        # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
-        shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+        # Move the test suites outside the agent workspace so not to leak it
+        shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
 
         # Remove the agent_report.json - the tests data must not be leaked 
         (AGENT_WORKSPACE / "agent_report.json").unlink() 
+
+    # Before coding, generate a test blueprint
+    # if HAS_TESTER: 
+    #     print(f"========== CREATING TEST BLUEPRINT ==========")
+    #     test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
+    #     print(test_plan_result)
+
+    #     # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
+    #     shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+
+    #     # Remove the agent_report.json - the tests data must not be leaked 
+    #     (AGENT_WORKSPACE / "agent_report.json").unlink() 
 
     # if the mode is no design, jump straight to implementation
     if WORKFLOW_MODE == "noDesign": 
@@ -384,7 +392,7 @@ def modular_workflow_single(problem, n, logged_in = False):
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
         print(result)
     
-    else: 
+    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
         # Initial decomposer agent 
         # Run these inside the bind mounted space 
         decomposer_analyzer_loop(
@@ -429,11 +437,30 @@ def modular_workflow_single(problem, n, logged_in = False):
         # Refactor - Analyzer loop 
         analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
-    # input("Paused. Modify the code now.")
-
-    if HAS_TESTER: 
+    
+    # After coding: Run tests 
+    if WORKFLOW_MODE == "autoTest": 
         print(f"========== TESTER ==========")
-        tester_refactor_loop(executor, N, TR_LOOP_THRESHOLD)
+
+        # Move tests from the storage to the workspace 
+        if (AGENT_TEST_STORAGE / "tests").exists(): 
+            shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE) 
+        
+        test_refactor_coder_output = get_prompt_and_run_agent(executor, "test_refactor_coder", N)
+        print(test_refactor_coder_output) 
+
+        # Move tests back to the external storage 
+        if (AGENT_WORKSPACE / "tests").exists(): 
+            shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE) 
+        
+        # Remove the report - it describes the test intention that cant be leaked to coders
+        (AGENT_WORKSPACE / "agent_report.json").unlink() 
+
+        # Remove the pytest cache path - it also exposes the test intention
+        pytest_cache = AGENT_WORKSPACE / ".pytest_cache"
+        if pytest_cache.exists(): 
+            pytest_cache.unlink() 
+                    
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     

@@ -5,7 +5,10 @@ AGENT: Literal["codex", "opencode"] = "codex"
 MODEL: Literal[
                 "gpt-5.4", 
                 "gpt-5.6-luna",
-                "Nemotron 3 Ultra Free", "Big Pickle", "DeepSeek V4 Flash Free"
+                
+                "Nemotron 3 Ultra Free", 
+                "Big Pickle", 
+                "DeepSeek V4 Flash Free"
                ] = "gpt-5.6-luna"
 
 # For the modular workflow. 
@@ -14,10 +17,11 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics. 
 WORKFLOW_MODE: Literal[
     "noDesign", 
-    "noMetric", 
+    "autoNoMetric", 
+    "autoTest"
     "auto", 
     "human"
-    ] = "noDesign"
+    ] = "autoTest"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 
