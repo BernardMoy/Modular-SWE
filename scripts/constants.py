@@ -19,11 +19,10 @@ BASE_REFERENCE_DIR = "datasets/references/"
 
 # Version numbers for directory matching. 
 # Given a dataset reference source dir, return a list of direct subfolder names 
+# e.g. ["v2_0_0", "v3_0_0", ...]
 def _get_reference_versions(problem):
     problem_dir = Path(BASE_REFERENCE_DIR) / problem
     return [entry.name for entry in os.scandir(problem_dir) if entry.is_dir()]
-
-FLASK_VERSIONS = _get_reference_versions("flask")
 
 # The IMPLEMENTATION DIRECTORY (i.e. src) must be provided
 # THIS is the directory you want to analyze metrics (LOC...) on 
@@ -37,8 +36,26 @@ IMPL_DIR_DICT = {
         f"flask/{version}/src": {
             "path": f"flask/{version}", 
             "processing_fn": lambda name: name.startswith("src.flask.")
-        } for version in FLASK_VERSIONS
-    }
+        } for version in _get_reference_versions("flask")
+    }, 
+    **{
+        f"click/{version}/src": {
+            "path": f"click/{version}/src", 
+            "processing_fn": lambda name: name
+        } for version in _get_reference_versions("click")
+    }, 
+    **{
+        f"cli/{version}/httpie/cli": {
+            "path": f"cli/{version}", 
+            "processing_fn": lambda name: name.startswith("httpie.cli")
+        } for version in _get_reference_versions("cli")
+    }, 
+    **{
+        f"fastapi/{version}/fastapi": {
+            "path": f"fastapi/{version}", 
+            "processing_fn": lambda name: name.startswith("fastapi.") and ".." not in name # avoid fastapi..agents 
+        } for version in _get_reference_versions("fastapi")
+    }, 
 }
 #     "tqdm/tqdm": {
 #         "path": "tqdm", 
@@ -48,17 +65,9 @@ IMPL_DIR_DICT = {
 #         "path": "python-dotenv/src", 
 #         "processing_fn": lambda name: name
 #     }, 
-#     "click/src": {
-#         "path": "click/src", 
-#         "processing_fn": lambda name: name
-#     }, 
 #     "fastapi/fastapi": {
 #         "path": "fastapi", 
 #         "processing_fn": lambda name: name.startswith("fastapi.") and ".." not in name  # avoid fastapi..agents 
-#     }, 
-#     "flask/2.0.0/src": {
-#         "path": "flask/2.0.0", 
-#         "processing_fn": lambda name: name.startswith("src.flask.")
 #     }, 
 #     "uvicorn/uvicorn": {
 #         "path": "uvicorn", 
