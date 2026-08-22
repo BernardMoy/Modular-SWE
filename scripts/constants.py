@@ -1,3 +1,6 @@
+import os
+from pathlib import Path 
+
 # This assumes the convention that dist/ is the distributable (compiled code) 
 # and tests/ are pytest library
 # both are safe to ignore otherwise it contains many files 
@@ -15,8 +18,12 @@ ENTRYFILE_NAME="temp_entrypoint_123456789.py"
 BASE_REFERENCE_DIR = "datasets/references/"
 
 # Version numbers for directory matching. 
-# These should be inferred by reading the files instead of being hard coded here 
-FLASK_VERSIONS = ["v2_0_0", "v2_3_0", "v3_0_0", "v3_1_3"]
+# Given a dataset reference source dir, return a list of direct subfolder names 
+def _get_reference_versions(problem):
+    problem_dir = Path(BASE_REFERENCE_DIR) / problem
+    return [entry.name for entry in os.scandir(problem_dir) if entry.is_dir()]
+
+FLASK_VERSIONS = _get_reference_versions("flask")
 
 # The IMPLEMENTATION DIRECTORY (i.e. src) must be provided
 # THIS is the directory you want to analyze metrics (LOC...) on 

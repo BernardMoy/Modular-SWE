@@ -1,7 +1,9 @@
 
 from ..json_helper import get_json_string
 from ..criteria import ANALYZER_CRITERIA 
+from modular_main.settings import WORKFLOW_MODE 
 
+# current_metrics.json is not used if workflow mode == auto no metric
 def get_analyzer_prompt(has_implementation): 
     
     return f"""
@@ -14,8 +16,8 @@ Dependency graph: `current_deps_graph.json`{', which is modified from `original_
 In the design stage, do not assume anything about code that has not been written. 
 
 Approach: 
-1. Observe the {'code implementation' if has_implementation else 'design'}, and state antipatterns or maintainability issues that you have discovered
-2. If metrics has been provided in `current_metrics.json`, use them to support the antipatterns you found. These metrics may have false positives and their job is to help discover issues, not to be eliminated completely. 
+1. Observe the {'code implementation' if has_implementation else 'design'}{", and state antipatterns or maintainability issues that you have discovered" if WORKFLOW_MODE != "autoNoMetric" else ""}
+2. {"If metrics has been provided in `current_metrics.json`, use them to support the antipatterns you found. These metrics may have false positives and their job is to help discover issues, not to be eliminated completely. " if WORKFLOW_MODE != "autoNoMetric" else "Discover any antipatterns or maintainability issues that you have discovered."}
 3. For every potential issue, before writing the suggestion to the {'design' if not has_implementation else 'code'}, clarify any contextual information that would potentially affect whether or not the refactoring is necessary, such as: 
 - How frequently does a feature change 
 - Whether duplicated code, especially smaller snippets, would diverge in the future and should not be refactored now

@@ -221,8 +221,9 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         if WORKFLOW_MODE == "autoTest": 
             tester_agent() 
 
-        # write metrics from impl 
-        update_metrics() 
+        # write metrics from impl if workflow is not nometric 
+        if WORKFLOW_MODE != "autoNoMetric": 
+            update_metrics() 
 
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
@@ -255,6 +256,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         iteration += 1 
 
     # Once the loop ends because it hits the threshold, invoke the update metrics function again to show the latest changes to the metrics 
+    # this is unaffected by the workflow mode - for developer see only, not for agents to see. 
     if iteration == threshold: 
         update_metrics() 
 
