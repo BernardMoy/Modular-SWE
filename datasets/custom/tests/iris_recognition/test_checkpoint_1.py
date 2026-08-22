@@ -123,13 +123,13 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
     assert result.stderr == ""
     output_lines = result.stdout.splitlines()
     assert output_lines[0] == f"Dataset root: {dataset_root}"
-    assert "Subjects found: 7" in output_lines
-    assert "- Both eyes present: 2" in output_lines  # Review - not sure about this. It seems to count whether or not the folders are simply non-empty rather than checking if the images are valid 
-    assert "- Left eyes only: 2" in output_lines
-    assert "- Right eyes only: 1" in output_lines
-    assert "- Neither eye present: 2" in output_lines
+    assert "Subjects found: 7" in output_lines  # Count all subjects that simply present 
+    assert "- Both eyes present: 1" in output_lines  # 001 only - note that both must have valid entries 
+    assert "- Left eyes only: 1" in output_lines # alpha
+    assert "- Right eyes only: 1" in output_lines # 003 
+    assert "- Neither eye present: 4" in output_lines  # 004, 005, 006, 007
     assert "Total valid images:" in output_lines
-    assert "- Left: 3" in output_lines  # 001 (2) + Alpha 
+    assert "- Left: 3" in output_lines  # 001 001 alpha
     assert "- Right: 2" in output_lines  # 001 003 
     assert "Anomalies found: 5" in output_lines
 
@@ -223,7 +223,7 @@ def test_scan_ignores_non_image_files_when_output_is_not_requested(
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
     output_lines = result.stdout.splitlines()
-    assert "Total valid images:" in output_lines
+    assert "Total valid images:" in output_lines  # numbers same as previous test, see above 
     assert "- Left: 3" in output_lines
     assert "- Right: 2" in output_lines
     assert "Anomalies found: 5" in output_lines
@@ -292,7 +292,7 @@ def test_inspect_treats_empty_eye_folders_as_absent(
     dataset_root = _build_dataset(tmp_path / "dataset")
     _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli("inspect", "005")
+    result = run_cli("inspect", "005")  # 005 has an empty L and empty R folders --> absent 
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""

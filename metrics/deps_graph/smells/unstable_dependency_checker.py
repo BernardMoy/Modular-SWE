@@ -25,15 +25,15 @@ def check_unstable_dependency(json_object):
         for v in value: 
             # Check each dependency from key --> v 
             # Flag if v is less stable than key 
-            source_stability = data[key]["instability"]
-            dest_stability = data[v]["instability"]
+            source_stability = round(data[key]["instability"], 3)
+            dest_stability = round(data[v]["instability"], 3)
 
             if dest_stability > source_stability: 
                 unstables.append({
                     "Category": "Design level",  
                     "Module": key, 
                     "Smell": "Dependency on less stable modules",
-                    "Description": f"Module '{key}' (instability: {source_stability}) is depending on module '{v}' (instability: {dest_stability}), which is less stable."
+                    "Description": f"Module '{key}' (instability: {source_stability}) is depending on module '{v}' (instability: {dest_stability}), which is less stable. Worth flagging if changes would ripple and become expensive, but can be ignored if the module being depended on is non-volatile or if it is intentional by design."
                 })
 
     return unstables

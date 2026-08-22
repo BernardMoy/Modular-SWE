@@ -3,16 +3,6 @@ def get_metrics_from_dpy_design(dpy_design_smells):
     1. Feature envy
     2. Intrusive coupling / Protected access
     3. Insufficient modularization
-    Return in the format [
-        {
-            "Category": "Design level",  
-            "Package": ..., 
-            "Module": ..., 
-            "Class": ..., 
-            "Smell": "High LCOM", 
-            "Description": "The module _ has a high LCOM value of _, indicating it might be violating single responsibility."
-        }
-    ]
     """
     smells = [] 
 
@@ -27,7 +17,6 @@ def get_metrics_from_dpy_design(dpy_design_smells):
                 "Smell": "Feature envy",
                 "Description": entry["Description"]
             })
-
 
         if entry["Smell"] == "Deficient encapsulation":
             smells.append({

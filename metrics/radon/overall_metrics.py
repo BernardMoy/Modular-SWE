@@ -7,7 +7,11 @@ def get_radon_metrics(implementation_path):
     """
     {
         "lloc": 0,
+        "loc": 0, 
+        "sloc": 0, 
+        "modules_max_lloc": 0, 
         "comments_percentage": 0,
+        "number_of_py_files": 0,  
         "weighted_maintainability_index": 0, 
     }
     """
@@ -17,6 +21,9 @@ def get_radon_metrics(implementation_path):
     total_lloc = 0 
     total_loc = 0 
     total_comments = 0 
+    file_count = 0 
+    cur_max_lloc = 0 
+
 
     # Iterate over all python files, read them and pass them to radon 
     for (root, dirs, files) in os.walk(implementation_path): 
@@ -25,6 +32,7 @@ def get_radon_metrics(implementation_path):
         for f in files: 
             if f.endswith(".py"): 
                 py_file_path = os.path.join(root, f) 
+                file_count += 1 
 
                 # open the file 
                 try: 
@@ -36,13 +44,18 @@ def get_radon_metrics(implementation_path):
                     total_loc += analyzed.loc 
                     total_comments += analyzed.comments 
                     weighted_mi += mi*analyzed.sloc
+                    cur_max_lloc = max(cur_max_lloc, analyzed.lloc) 
 
                 except Exception as e: 
                     print(e)
 
     return {
         "lloc": total_lloc, 
+        "loc": total_loc, 
+        "sloc": total_sloc, 
+        "modules_max_lloc": cur_max_lloc, 
         "comments_percentage": 100*total_comments / total_loc if total_loc > 0 else 0, 
+        "number_of_py_files": file_count,  
         "weighted_maintainability_index": weighted_mi / total_sloc if total_sloc > 0 else -1, 
     }
 

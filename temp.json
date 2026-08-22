@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "number_of_modules": {
+      "new_value": 10
+    },
+    "lines_of_code": {
+      "new_value": 542
+    },
+    "number_of_methods_per_module": {
+      "new_value": 1.66
+    },
+    "number_of_public_methods_per_module": {
+      "new_value": 0.62
+    },
+    "cyclomatic_complexity_per_function": {
+      "new_value": 2.23
+    },
+    "duplicated_lines": {
+      "new_value": 0.006
+    },
+    "duplicates": [
+      {
+        "firstFile": "backend/app/arrivals/client.py (line 29-37)",
+        "secondFile": "backend/app/status/client.py (line 48-55)",
+        "lines_duplicated": 9
+      }
+    ]
+  },
+  "smells": []
+}

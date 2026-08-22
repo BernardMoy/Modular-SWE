@@ -14,28 +14,24 @@ from ..get_prompt_and_run_agent import get_prompt_and_run_agent
 from validators.module_name_validator import module_name_validator
 from write_metrics.write_metrics_from_design_and_deps_graph import write_metrics_from_design_and_deps_graph
 from metrics.deps_graph.bfs import bfs_get_modules_to_implement
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
-from ..settings import WORKFLOW_MODE 
-from prompts.code_quality_pass_fail import code_quality_pass_fail
+from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
+from ..entry_files import ENTRY_FILES
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
 AGENT_TEST_STORAGE = Path("agent_test_storage")  # temp storage for tests, not visible in agent workspace
-PROBLEMS_DIR = Path("datasets/custom/problems")
+PROBLEMS_DIR = Path("datasets/custom/problems") if PROBLEM_TYPE == "custom" else Path("datasets/slopCodeBench/scb-problems")
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 # Constants for the modular workflow 
-DA_LOOP_THRESHOLD_BEFORE_IMPL = 3  # how many times can the D <> A Loop happen 
+DA_LOOP_THRESHOLD_BEFORE_IMPL = 2  # how many times can the D <> A Loop happen 
 DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
-# Whether or not a tester is employed to test the software. 
-# For CLI or software where we can verify its behaviour without knowing its internal function signatures, this is false 
-HAS_TESTER = False
 
 # Function to decide whether to pass or fail, given the analyzer output. 
-def pass_fail(analyzer_output_json): 
+def pass_fail(): 
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
     with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
         content = f.read().strip() 
@@ -45,12 +41,8 @@ def pass_fail(analyzer_output_json):
         if len([x for x in analyzer_result if x["status"] == "unresolved"]) == 0: 
             return True 
 
-    # For the human mode, if there are any unresolved issues, then fail 
-    if WORKFLOW_MODE == "human": 
-        return False 
-    
-    # Else, pass the analyzer output json to another helper 
-    return code_quality_pass_fail(analyzer_output_json)
+    # if there are any unresolved issues, then fail 
+    return False 
 
 # Decomposer analyzer loop. 
 # D first before A 
@@ -63,8 +55,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
     # Run these inside the bind mounted space 
     while (not passed and iteration < threshold): 
         print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
-        d_output = get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
-        print(d_output)
+        get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
 
         # Validator for the module names 
         print(f"========== [Iteration {iteration+1}] VALIDATOR FOR MODULE NAMES ==========")
@@ -73,6 +64,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # Currently, if this array is non empty, throw an error 
         v_output_list = list(v_output) 
         if v_output_list: 
+            print(v_output_list)
             raise Exception("Validator failed.")
         print("Passed") 
 
@@ -87,20 +79,18 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
-            a_output = get_prompt_and_run_agent(executor, "analyzer_human", False)
-        else: 
-            a_output = get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
+            get_prompt_and_run_agent(executor, "analyzer_human", False)
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
+            get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
         if not analyzer_result_path.exists():
             analyzer_result_path.touch() 
 
-        print(a_output)
+
         # If the analyzer return pass, set the passed flag to true 
-        # a_output_json = json.loads(a_output) 
-        # print(json.dumps(a_output_json, indent=2))
-        if pass_fail("[]"):  
+        if pass_fail():  
             passed = True
 
         # Increment the iteration number 
@@ -120,8 +110,7 @@ def tester_refactor_loop(executor, checkpoint_number, threshold):
 
         # Call the tester agent 
         print(f"========== [Iteration {iteration+1}] WRITING AND RUNNING TESTS ==========")
-        tester_output = get_prompt_and_run_agent(executor, "tester", checkpoint_number)
-        print(tester_output) 
+        get_prompt_and_run_agent(executor, "tester", checkpoint_number)
 
         # Move the blueprint and tests outside the agent workspace. 
         # This is so the test content and function signatures dont get leaked to the coders 
@@ -150,26 +139,46 @@ def tester_refactor_loop(executor, checkpoint_number, threshold):
         else: 
             # else call the test refactorer 
             print(f"========== [Iteration {iteration+1}] TEST REFACTOR AGENT ==========")
-            test_refactor_output = get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
-            print(test_refactor_output)
+            get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
         
         iteration += 1 
 
 # Refactor analyzer loop - happens after implementation. 
 # A first before R
 # For has impl = True only. 
+# Loop: 
+# Run tests and fix code --> Update metrics --> Analyzer --> 
 def analyzer_refactor_loop(executor, checkpoint_number, threshold): 
-    iteration = 0 
-    passed = False 
+    # After coding: Run tests 
+    def tester_agent(): 
+        print(f"========== TESTER ==========")
 
-    # Initial decomposer agent 
-    # Run these inside the bind mounted space 
-    while (not passed and iteration < threshold): 
+        # Move tests from the storage to the workspace 
+        if (AGENT_TEST_STORAGE / "tests").exists(): 
+            shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE) 
+        
+        get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
+
+        # Move tests back to the external storage 
+        if (AGENT_WORKSPACE / "tests").exists(): 
+            shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE) 
+        
+        # Remove the report - it describes the test intention that cant be leaked to coders
+        (AGENT_WORKSPACE / "agent_report.json").unlink() 
+
+        # Remove the pytest cache path - it also exposes the test intention
+        pytest_cache = AGENT_WORKSPACE / ".pytest_cache"
+        if pytest_cache.exists():
+            shutil.rmtree(pytest_cache)
+
+    # update current_metrics.json using the implementation
+    def update_metrics(): 
         # Update the dependency graph
         print(f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH ==========")
         subprocess.run(
             [
-                "scripts/deps_graph.sh",
+                "python", 
+                "scripts/deps_graph.py",
                 AGENT_WORKSPACE / "implementation",
                 AGENT_WORKSPACE / "deps_graphs"
             ],
@@ -202,12 +211,26 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
             prev_implementation_path = AGENT_WORKSPACE / "previous_implementation" if (AGENT_WORKSPACE / "previous_implementation").exists() else None 
         )
 
+    iteration = 0 
+    passed = False 
+
+    # Initial decomposer agent 
+    # Run these inside the bind mounted space 
+    while (not passed and iteration < threshold): 
+        # run tests 
+        if WORKFLOW_MODE == "autoTest": 
+            tester_agent() 
+
+        # write metrics from impl if workflow is not nometric 
+        if WORKFLOW_MODE != "autoNoMetric": 
+            update_metrics() 
+
         # Analyzer agent 
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
-            a_output = get_prompt_and_run_agent(executor, "analyzer_human", True)
-        else: 
-            a_output = get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
+            get_prompt_and_run_agent(executor, "analyzer_human", True)
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
+            get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -215,11 +238,10 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         if not analyzer_result_path.exists():
             analyzer_result_path.touch() 
 
-        print(a_output)
         # If the analyzer return pass, set the passed flag to true 
         # a_output_json = json.loads(a_output) 
         # print(json.dumps(a_output_json, indent=2))
-        if pass_fail("[]"):  
+        if pass_fail():  
             passed = True
         
         # if passed, return
@@ -228,32 +250,38 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
 
         # if not passed, then call the refactor agent 
         print(f"========== [Iteration {iteration+1}] REFACTOR CODER AGENT ==========")
-        result = get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
-        print(result)
+        get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
 
         # Increment the iteration number 
         iteration += 1 
 
+    # Once the loop ends because it hits the threshold, invoke the update metrics function again to show the latest changes to the metrics 
+    # this is unaffected by the workflow mode - for developer see only, not for agents to see. 
+    if iteration == threshold: 
+        update_metrics() 
+
 # main entrypoint of the modular workflow 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> 
-def modular_workflow(): 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("problem_name", help="Name of the problem")
-    parser.add_argument("checkpoint_number", help="Checkpoint number")
-    args = parser.parse_args()
+def modular_workflow_single(problem, n, logged_in = False): 
 
-    # Obtain the problem name and checkpoint no from arguments
-    PROBLEM = args.problem_name 
-    N = int(args.checkpoint_number) 
+    # Obtain the problem name and checkpoint no
+    PROBLEM = problem
+    N = n
 
-    # Get the entrypoint name 
+    # For scb problems only: if the problem name is not in the list of entry files, 
+    # raise an exception
+    if PROBLEM_TYPE == "scb" and PROBLEM not in ENTRY_FILES: 
+        raise Exception(f"Invalid SCB problem name: {PROBLEM}")
+    ENTRY_FILE_NAME = ENTRY_FILES[PROBLEM] if PROBLEM_TYPE == "scb" else None 
+
+    # Get the problem dir 
     PROBLEM_DIR = PROBLEMS_DIR / PROBLEM 
 
     # if the problem dir does not exist, raise exception
     if not PROBLEM_DIR.exists(): 
         raise Exception(f"Invalid problem: {PROBLEM}")
-    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}"  # Previous implementation depend on the workflow mode 
-    REPORT_DIR = PROBLEM_DIR / f"report_{WORKFLOW_MODE}"  # agent reports 
+    PROBLEM_IMPL_DIR = PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}_{AGENT}_{MODEL}"  # Previous implementation depend on the workflow mode 
+    REPORT_DIR = PROBLEM_DIR / f"report_{WORKFLOW_MODE}_{AGENT}_{MODEL}"  # agent reports 
     PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
 
@@ -262,7 +290,13 @@ def modular_workflow():
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Print the workflow mode 
+    print(f"AGENT: {AGENT}")
+    print(f"MODEL: {MODEL}")
     print(f"MODE: {WORKFLOW_MODE}")
+    print(f"PROBLEM TYPE: {PROBLEM_TYPE}")
+    print(f"PROBLEM NAME: {PROBLEM}")
+    print(f"CHECKPOINT: {N}")
+    print("="*20)
 
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
@@ -282,9 +316,15 @@ def modular_workflow():
     print("[MAIN 3/8] Copying files to agent workspace") 
     shutil.copy(PROBLEM_INSTRUCTIONS, AGENT_WORKSPACE)
 
-    # Copy the data/ folder also if it exists, it represents essential data that the application should work with 
-    if (PROBLEM_DIR / "data").exists(): 
+    # Custom only: Copy the data/ folder also if it exists, it represents essential data that the application should work with 
+    if PROBLEM_TYPE == "custom" and (PROBLEM_DIR / "data").exists(): 
         shutil.copytree(PROBLEM_DIR / "data", AGENT_WORKSPACE / "data")
+
+    # scb only: Write an extra instruction specifying the entrypoint file 
+    if PROBLEM_TYPE == "scb": 
+        with open(AGENT_WORKSPACE / f"checkpoint_{N}.md", 'a') as f: 
+            f.write("\n## Entrypoint file")
+            f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE_NAME}.py`")
 
     # if N>1, also copy the previous implementation, metrics (?) and deps graph 
     if N>1: 
@@ -292,14 +332,14 @@ def modular_workflow():
             shutil.copytree(PREV_IMPL, AGENT_WORKSPACE / "previous_implementation", symlinks=True)
         else: 
             raise Exception(f"Previous implementation for checkpoint {N-1} does not exist.")
-        
-        # copy the metrics (is it necessary?) 
+    
 
-        # Generate the deps graph if the workflow mode is not noDesign 
-        if WORKFLOW_MODE != "noDesign": 
+        # Generate the deps graph if the workflow mode is auto / human
+        if WORKFLOW_MODE in ["human", "auto", "autoTest", "autoNoMetric"]: 
             subprocess.run(
                 [
-                    "scripts/deps_graph.sh",
+                    "python", 
+                    "scripts/deps_graph.py",
                     AGENT_WORKSPACE / "previous_implementation",
                     AGENT_WORKSPACE / "deps_graphs",
                 ],
@@ -325,14 +365,15 @@ def modular_workflow():
             # Remove the temp deps_graph/ directory 
             shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
 
-    # copy the rubrics md file 
+    # copy the rubrics md file (Not used, for LLM to analyze code using 5 aspects only)
     # shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
 
     # Step 4: Sign in to the agent 
     print("[MAIN 4/8] Coding agent sign in")
-    subprocess.run([
-        "python", "-m", "modular_main.login"
-    ], check=True)
+    if not logged_in: 
+        subprocess.run([
+            "python", "-m", "modular_main.login"
+        ], check=True)
 
     # Step 5: Volume mount 
     print("[MAIN 5/8] Agent workspace volume mount")
@@ -342,29 +383,44 @@ def modular_workflow():
     # ================ MAIN WORKFLOW BEGINS ================
     print("[MAIN 6/8] Main workflow")
 
-    # Before coding, generate a test blueprint
-    if HAS_TESTER: 
-        print(f"========== CREATING TEST BLUEPRINT ==========")
-        test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
-        print(test_plan_result)
+    # Before coding, write black box tests 
+    if WORKFLOW_MODE == "autoTest": 
+        print(f"========== WRITING TESTS BEFORE IMPL ==========")
+        get_prompt_and_run_agent(executor, "black_box_test_writer", N) 
 
-        # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
-        shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+        # Move the test suites outside the agent workspace so not to leak it
+        shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
 
         # Remove the agent_report.json - the tests data must not be leaked 
         (AGENT_WORKSPACE / "agent_report.json").unlink() 
 
+        # Remove the pytest cache file -- do not leak test intention
+        pytest_cache = AGENT_WORKSPACE / ".pytest_cache"
+        if pytest_cache.exists():
+            shutil.rmtree(pytest_cache)
+
+    # Before coding, generate a test blueprint
+    # if HAS_TESTER: 
+    #     print(f"========== CREATING TEST BLUEPRINT ==========")
+    #     test_plan_result = get_prompt_and_run_agent(executor, "test_planner", N)
+    #     print(test_plan_result)
+
+    #     # Move the test blueprint out of the agent workspace so the coder and designer agents cant see it 
+    #     shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
+
+    #     # Remove the agent_report.json - the tests data must not be leaked 
+    #     (AGENT_WORKSPACE / "agent_report.json").unlink() 
+
     # if the mode is no design, jump straight to implementation
     if WORKFLOW_MODE == "noDesign": 
         print(f"========== CODING ALL MODULES ==========")
-        result = get_prompt_and_run_agent(executor, "no_design_coder", N) 
+        get_prompt_and_run_agent(executor, "no_design_coder", N) 
 
         # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code) 
         # as the agent_report would get overridden below 
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
-        print(result)
-    
-    else: 
+
+    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
         # Initial decomposer agent 
         # Run these inside the bind mounted space 
         decomposer_analyzer_loop(
@@ -389,32 +445,11 @@ def modular_workflow():
         print(modules_array)
 
         modules_array_flattened = [item for sublist in modules_array for item in sublist]
+        print(f"Updating {len(modules_array_flattened)} modules.")
 
         # for the all at once mode, implement all modules       
-        if WORKFLOW_MODE == "allAtOnce" or WORKFLOW_MODE == "5aspects" or WORKFLOW_MODE == "human": 
-            result = get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
-            print(result)
-        
-        else: 
-            # For each layer of the bfs tree, implement the modules in parallel 
-            for layer in modules_array: 
-                print(f"========== CODING: {layer} ==========")
-                if WORKFLOW_MODE == "byLayer": 
-                    # Submit a single prompt to the modular coder agent, passing all modules of the layer to it 
-                    result = get_prompt_and_run_agent(executor, "modular_coder", N, layer)
-                    print(result) 
+        get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
 
-                elif WORKFLOW_MODE == "byModule": 
-                    with ThreadPoolExecutor() as exec: 
-                        # Submit the task of coding each module to the thread pool
-                        futures = [
-                            exec.submit(get_prompt_and_run_agent, executor, "modular_coder", N, [module])  # Pass the args after the function call name 
-                            for module in layer
-                        ]
-
-                        for future in as_completed(futures): 
-                            print(future.result())
-    
         # After implementation: 
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed 
         current_analyzer_json = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -429,11 +464,7 @@ def modular_workflow():
         # Refactor - Analyzer loop 
         analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
-    # input("Paused. Modify the code now.")
-
-    if HAS_TESTER: 
-        print(f"========== TESTER ==========")
-        tester_refactor_loop(executor, N, TR_LOOP_THRESHOLD)
+                    
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
     
@@ -451,15 +482,54 @@ def modular_workflow():
             implementation, 
             IMPLEMENTATION_DEST, 
             dirs_exist_ok=True, 
-            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc")
+            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.pyc", "node_modules")
         )
         # Also copy the agent report generated after it do its work 
+        REPORT_DEST.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(
             AGENT_WORKSPACE / "implementation_report.json", 
             REPORT_DEST
         )
     else: 
         raise Exception(f"Missing implementation for checkpoint {N}.")
+
+    # scb only: run tests 
+    if PROBLEM_TYPE == "scb": 
+        print(f"========== [MAIN 8/8] RUNNING SCB TESTS ==========")
+        entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
+
+        # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
+        for test_no in range(N, 0, -1): 
+            print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
+            subprocess.run(
+                [
+                    "scripts/pytest.sh",
+                    PROBLEM,
+                    entrypoint,
+                    str(test_no)
+                ], 
+                check=False  # Allow previous checkpoints to still run even when tests fail 
+            )
+
+# usage: python -m modular_main.main <problem_name> <checkpoint_number> <checkpoint_number_end> 
+# e.g. problem 1 8 means implement checkpoints 1,2, ... 8
+def modular_workflow(): 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("problem_name", help="Name of the problem")
+    parser.add_argument("checkpoint_number", help="Checkpoint number")
+    parser.add_argument("checkpoint_number_end", help="Checkpoint number's end range value, inclusive. optional", nargs="?")
+    args = parser.parse_args()
+
+    start = args.checkpoint_number 
+    end = args.checkpoint_number_end if args.checkpoint_number_end else start
+    start = int(start)
+    end = int(end) 
+
+    for n in range(start, end+1): 
+        if n == start: 
+            modular_workflow_single(args.problem_name, n, False) 
+        else: 
+            modular_workflow_single(args.problem_name, n, True) 
 
 if __name__ == "__main__": 
     # run the modular workflow 

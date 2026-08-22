@@ -1,11 +1,10 @@
 from pathlib import Path 
 import subprocess 
-from ..workspace_helpers.run_agent import run_agent
-from ..settings import MODEL, AGENT
-import asyncio 
 import shutil 
 import argparse 
-from ..settings import WORKFLOW_MODE
+from ..BwrapExecutor import BwrapExecutor
+from ..settings import WORKFLOW_MODE, AGENT, MODEL
+from ..get_prompt_and_run_agent import get_prompt_and_run_agent
 
 AGENT_WORKSPACE = Path("agent_workspace_test")
 
@@ -34,8 +33,10 @@ def workflow():
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
     # Copy the implementation 
-    IMPL_PATH = Path(f"datasets/custom/problems/{PROBLEM}/implementations_{WORKFLOW_MODE}/checkpoint_{N}")
+    IMPL_PATH = Path(f"datasets/custom/problems/{PROBLEM}/implementations_{WORKFLOW_MODE}_{AGENT}_{MODEL}/checkpoint_{N}")
     CHECKPOINT_PATH = Path(f"datasets/custom/problems/{PROBLEM}/checkpoint_{N}.md")
+    WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
+    shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
     shutil.copytree(IMPL_PATH, AGENT_WORKSPACE / "implementation")
     shutil.copy(CHECKPOINT_PATH, AGENT_WORKSPACE / f"checkpoint_{N}.md")
 
@@ -52,7 +53,10 @@ def workflow():
 
     # Single agent prompt to allow the agent to run tests + Fix issues
     # Target is to see how much effort is required to fix the tests + whether code quality is preserved after that 
-
+    print("[3/3] Agent prompt")
+    agent_workspace_abs = str(AGENT_WORKSPACE.resolve())
+    executor = BwrapExecutor(agent_workspace_abs)
+    get_prompt_and_run_agent(executor, "test_refactor_coder", N)
 
 if __name__ == "__main__": 
     workflow() 

@@ -9,13 +9,6 @@ from pathlib import Path
 import pytest
 
 
-def _find_import_root(entrypoint: Path) -> Path:
-    for candidate in entrypoint.resolve().parents:
-        if (candidate / "datasets").is_dir():
-            return candidate
-    return entrypoint.resolve().parent
-
-
 def pytest_addoption(parser: pytest.Parser) -> None:
     parser.addoption(
         "--implementation",
@@ -86,10 +79,9 @@ def cli_python(
 def run_cli(cli_python: Path, entrypoint: Path, isolated_workspace: Path):
     def _run(*args: str, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
         env = os.environ.copy()
-        pythonpath_entries = [str(_find_import_root(entrypoint))]
-        if env.get("PYTHONPATH"):
-            pythonpath_entries.append(env["PYTHONPATH"])
-        env["PYTHONPATH"] = os.pathsep.join(pythonpath_entries)
+        # Keep CLI execution self-contained: rely on the copied implementation
+        # and the process working directory instead of any ambient import paths.
+        env.pop("PYTHONPATH", None)
 
         return subprocess.run(
             [str(cli_python), str(entrypoint), *args],

@@ -32,7 +32,7 @@ def get_metrics_from_dpy_class(dpy_class_module_metrics):
                 "Module": entry["Module"], 
                 "Class": entry["Class"], 
                 "Smell": "High LCOM", 
-                "Description": f"The module '{entry['Module']}' has a high LCOM value of {entry['LCOM']}, check if it is combining distinct responsibilities together."
+                "Description": f"The module '{entry['Module']}' has a high LCOM of {entry['LCOM']}. Only flag this as a problem if it combines distinct responsibilities."
             })
         
         # if entry["WMC"] >= WMC_THRESHOLD: 

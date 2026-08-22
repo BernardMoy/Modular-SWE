@@ -8,6 +8,7 @@ from .agent_prompts.test_planner import get_test_planner_prompt
 from .agent_prompts.tester import get_tester_prompt
 from .agent_prompts.coders.test_refactor_coder import get_test_refactor_coder_prompt
 from .agent_prompts.analyzer_human import get_analyzer_human_prompt
+from .agent_prompts.black_box_test_writer import get_black_box_test_writer_prompt 
 
 def get_prompt(agent_name, *args):
     # Given the agent name and a variable number of arguments. 
@@ -37,6 +38,8 @@ def get_prompt(agent_name, *args):
         return get_test_refactor_coder_prompt(*args)
     elif agent_name == "analyzer_human": 
         return get_analyzer_human_prompt(*args)
+    elif agent_name == "black_box_test_writer": 
+        return get_black_box_test_writer_prompt(*args)
     else: 
         # none match, throw error 
         raise Exception(f"Invalid agent name: {agent_name}")
