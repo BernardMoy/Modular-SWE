@@ -17,6 +17,7 @@ from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from write_metrics.write_metrics_from_implementation import write_metrics_from_implementation
 from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
 from ..entry_files import ENTRY_FILES
+from scripts.pytest_scb import pytest_scb
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -501,15 +502,12 @@ def modular_workflow_single(problem, n, logged_in = False):
         # Run tests for all previous checkpoints from 1 to N: all of them should still pass 
         for test_no in range(N, 0, -1): 
             print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
-            subprocess.run(
-                [
-                    "scripts/pytest.sh",
-                    PROBLEM,
-                    entrypoint,
-                    str(test_no)
-                ], 
-                check=False  # Allow previous checkpoints to still run even when tests fail 
+            test_results = pytest_scb(
+                problem_name=PROBLEM, 
+                entrypoint_path=entrypoint, 
+                checkpoint_number_to_test_against=test_no
             )
+            print(test_results)
 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> <checkpoint_number_end> 
 # e.g. problem 1 8 means implement checkpoints 1,2, ... 8

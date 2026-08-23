@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 # Usage: 
-# ./pytest.sh <custom_problem> <implementation_path> <checkpoint_number_to_test_against>
+# ./pytest_custom.sh <custom_problem> <implementation_path> <checkpoint_number_to_test_against>
 # Give the entrypoint path, not the implementation/ folder. 
 set -euo pipefail
 
