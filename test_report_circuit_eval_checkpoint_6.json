@@ -1,0 +1,1645 @@
+{
+  "created": 1787485926.204368,
+  "duration": 3.2879908084869385,
+  "exitcode": 1,
+  "root": "/home/bernardmoy/modular-SWE",
+  "environment": {},
+  "summary": { "passed": 46, "failed": 5, "total": 51, "collected": 51 },
+  "collectors": [
+    {
+      "nodeid": "",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "type": "Module"
+        }
+      ]
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "outcome": "passed",
+      "result": [
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_basic_structure",
+          "type": "Function",
+          "lineno": 177
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[majority_vote-MAJORITY_VOTE-expected0]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[parity-PARITY-expected1]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[decoder-DECODER-expected2]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[duplicate_edge-input a\\noutput y\\ny = AND(a, a)\\n-expected3]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[literal_only-input a\\noutput y\\ny = 1\\n-expected4]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[chain_depth-input a\\noutput y\\nwire t1 t2 t3\\nt1 = NOT(a)\\nt2 = NOT(t1)\\nt3 = NOT(t2)\\ny = NOT(t3)\\n-expected5]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[multi_depth-input a\\noutput y1 y2\\nwire t\\nt = NOT(a)\\ny1 = t\\ny2 = NOT(t)\\n-expected6]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[no_wires-input a b\\noutput y\\ny = AND(a, b)\\n-expected7]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[multi_arity-input a b c\\noutput y\\ny = AND(a, b, c)\\n-expected8]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[all_buf-input a b\\noutput y z\\nwire t\\nt = a\\ny = t\\nz = b\\n-expected9]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[nested-input a b c\\noutput y\\ny = OR(a, AND(b, c))\\n-expected10]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[index_slice-input v[3:0]\\noutput y[1:0]\\ny = AND(v[3:2], v[1:0])\\n-expected11]",
+          "type": "Function",
+          "lineno": 210
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_depth_uses_maximum_output_path",
+          "type": "Function",
+          "lineno": 297
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_op_histogram_coverage",
+          "type": "Function",
+          "lineno": 312
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_all_buf_histogram",
+          "type": "Function",
+          "lineno": 339
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[circ]",
+          "type": "Function",
+          "lineno": 360
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[json]",
+          "type": "Function",
+          "lineno": 360
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[bench]",
+          "type": "Function",
+          "lineno": 360
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_no_warnings",
+          "type": "Function",
+          "lineno": 399
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[unused_one-input a b c\\noutput y\\ny = AND(a, b)\\n-expected_types0-expected_names0]",
+          "type": "Function",
+          "lineno": 415
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[all_unused-input a b c\\noutput y\\ny = 1\\n-expected_types1-expected_names1]",
+          "type": "Function",
+          "lineno": 415
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[const_one-input a b\\noutput y\\ny = OR(a, NOT(a))\\n-expected_types2-expected_names2]",
+          "type": "Function",
+          "lineno": 415
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[const_zero-input a b\\noutput y\\ny = AND(a, NOT(a))\\n-expected_types3-expected_names3]",
+          "type": "Function",
+          "lineno": 415
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_constant_output_values",
+          "type": "Function",
+          "lineno": 460
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_constant_vector_format",
+          "type": "Function",
+          "lineno": 489
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[16-16-run]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[17-16-skip]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[20-16-skip]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[8-16-run]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[20-20-run]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[10-8-skip]",
+          "type": "Function",
+          "lineno": 509
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits_sums_mixed_ports_at_threshold",
+          "type": "Function",
+          "lineno": 558
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits_sums_mixed_ports_above_threshold",
+          "type": "Function",
+          "lineno": 584
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warning_sorting",
+          "type": "Function",
+          "lineno": 616
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_invalid_circuit",
+          "type": "Function",
+          "lineno": 647
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[circ]",
+          "type": "Function",
+          "lineno": 672
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[json]",
+          "type": "Function",
+          "lineno": 672
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[bench]",
+          "type": "Function",
+          "lineno": 672
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_basic_structure",
+          "type": "Function",
+          "lineno": 704
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_node_ids_and_labels",
+          "type": "Function",
+          "lineno": 740
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_edges",
+          "type": "Function",
+          "lineno": 780
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_no_duplicate_edges",
+          "type": "Function",
+          "lineno": 807
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_vector_labels",
+          "type": "Function",
+          "lineno": 831
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs0-included0-excluded0]",
+          "type": "Function",
+          "lineno": 856
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs1-included1-excluded1]",
+          "type": "Function",
+          "lineno": 856
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs2-included2-excluded2]",
+          "type": "Function",
+          "lineno": 856
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_unknown_output",
+          "type": "Function",
+          "lineno": 895
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[circ]",
+          "type": "Function",
+          "lineno": 917
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[json]",
+          "type": "Function",
+          "lineno": 917
+        },
+        {
+          "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[bench]",
+          "type": "Function",
+          "lineno": 917
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_basic_structure",
+      "lineno": 177,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_basic_structure",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0034421219997966546, "outcome": "passed" },
+      "call": { "duration": 0.07259054999985892, "outcome": "passed" },
+      "teardown": { "duration": 0.00010840899994946085, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[majority_vote-MAJORITY_VOTE-expected0]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[majority_vote-MAJORITY_VOTE-expected0]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "majority_vote-MAJORITY_VOTE-expected0",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0014761679999537591, "outcome": "passed" },
+      "call": { "duration": 0.06292965900001946, "outcome": "passed" },
+      "teardown": { "duration": 0.00031322799986810423, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[parity-PARITY-expected1]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[parity-PARITY-expected1]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "parity-PARITY-expected1",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0013584980001724034, "outcome": "passed" },
+      "call": { "duration": 0.058121604999996634, "outcome": "passed" },
+      "teardown": { "duration": 0.0001699530000678351, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[decoder-DECODER-expected2]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[decoder-DECODER-expected2]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "decoder-DECODER-expected2",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.000944102999937968, "outcome": "passed" },
+      "call": { "duration": 0.05611271499992654, "outcome": "passed" },
+      "teardown": { "duration": 0.00011046099984923785, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[duplicate_edge-input a\\noutput y\\ny = AND(a, a)\\n-expected3]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[duplicate_edge-input a\\noutput y\\ny = AND(a, a)\\n-expected3]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "duplicate_edge-input a\\noutput y\\ny = AND(a, a)\\n-expected3",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0010325250000278174, "outcome": "passed" },
+      "call": { "duration": 0.060439696000003096, "outcome": "passed" },
+      "teardown": { "duration": 0.00020717899997180211, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[literal_only-input a\\noutput y\\ny = 1\\n-expected4]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[literal_only-input a\\noutput y\\ny = 1\\n-expected4]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "literal_only-input a\\noutput y\\ny = 1\\n-expected4",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.001302910000049451, "outcome": "passed" },
+      "call": { "duration": 0.05967684699999154, "outcome": "passed" },
+      "teardown": { "duration": 0.00010321700005988532, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[chain_depth-input a\\noutput y\\nwire t1 t2 t3\\nt1 = NOT(a)\\nt2 = NOT(t1)\\nt3 = NOT(t2)\\ny = NOT(t3)\\n-expected5]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[chain_depth-input a\\noutput y\\nwire t1 t2 t3\\nt1 = NOT(a)\\nt2 = NOT(t1)\\nt3 = NOT(t2)\\ny = NOT(t3)\\n-expected5]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "chain_depth-input a\\noutput y\\nwire t1 t2 t3\\nt1 = NOT(a)\\nt2 = NOT(t1)\\nt3 = NOT(t2)\\ny = NOT(t3)\\n-expected5",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.004752261000021463, "outcome": "passed" },
+      "call": { "duration": 0.06503536199988957, "outcome": "passed" },
+      "teardown": { "duration": 0.0001384219999636116, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[multi_depth-input a\\noutput y1 y2\\nwire t\\nt = NOT(a)\\ny1 = t\\ny2 = NOT(t)\\n-expected6]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[multi_depth-input a\\noutput y1 y2\\nwire t\\nt = NOT(a)\\ny1 = t\\ny2 = NOT(t)\\n-expected6]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "multi_depth-input a\\noutput y1 y2\\nwire t\\nt = NOT(a)\\ny1 = t\\ny2 = NOT(t)\\n-expected6",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0009634689999984403, "outcome": "passed" },
+      "call": { "duration": 0.06078685200009204, "outcome": "passed" },
+      "teardown": { "duration": 0.00017710099996293138, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[no_wires-input a b\\noutput y\\ny = AND(a, b)\\n-expected7]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[no_wires-input a b\\noutput y\\ny = AND(a, b)\\n-expected7]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "no_wires-input a b\\noutput y\\ny = AND(a, b)\\n-expected7",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0011940019999201468, "outcome": "passed" },
+      "call": { "duration": 0.05977216399992358, "outcome": "passed" },
+      "teardown": { "duration": 0.00010621699993862421, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[multi_arity-input a b c\\noutput y\\ny = AND(a, b, c)\\n-expected8]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[multi_arity-input a b c\\noutput y\\ny = AND(a, b, c)\\n-expected8]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "multi_arity-input a b c\\noutput y\\ny = AND(a, b, c)\\n-expected8",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0010055590000774828, "outcome": "passed" },
+      "call": { "duration": 0.05687484599980053, "outcome": "passed" },
+      "teardown": { "duration": 0.00010063300010187959, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[all_buf-input a b\\noutput y z\\nwire t\\nt = a\\ny = t\\nz = b\\n-expected9]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[all_buf-input a b\\noutput y z\\nwire t\\nt = a\\ny = t\\nz = b\\n-expected9]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "all_buf-input a b\\noutput y z\\nwire t\\nt = a\\ny = t\\nz = b\\n-expected9",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0014798730001075455, "outcome": "passed" },
+      "call": { "duration": 0.05721732499978316, "outcome": "passed" },
+      "teardown": { "duration": 0.00011719600001924846, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[nested-input a b c\\noutput y\\ny = OR(a, AND(b, c))\\n-expected10]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[nested-input a b c\\noutput y\\ny = OR(a, AND(b, c))\\n-expected10]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "nested-input a b c\\noutput y\\ny = OR(a, AND(b, c))\\n-expected10",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0013289050000366842, "outcome": "passed" },
+      "call": { "duration": 0.06282337899983759, "outcome": "passed" },
+      "teardown": { "duration": 0.00023165800007518556, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_metrics[index_slice-input v[3:0]\\noutput y[1:0]\\ny = AND(v[3:2], v[1:0])\\n-expected11]",
+      "lineno": 210,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_metrics[index_slice-input v[3:0]\\noutput y[1:0]\\ny = AND(v[3:2], v[1:0])\\n-expected11]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "index_slice-input v[3:0]\\noutput y[1:0]\\ny = AND(v[3:2], v[1:0])\\n-expected11",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.00096816499990382, "outcome": "passed" },
+      "call": { "duration": 0.056581415999971796, "outcome": "passed" },
+      "teardown": { "duration": 0.00010352300000704417, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_depth_uses_maximum_output_path",
+      "lineno": 297,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_depth_uses_maximum_output_path",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0012956519999534066, "outcome": "passed" },
+      "call": { "duration": 0.06131845599998087, "outcome": "passed" },
+      "teardown": { "duration": 0.00025696499983496324, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_op_histogram_coverage",
+      "lineno": 312,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_op_histogram_coverage",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0013456589999805146, "outcome": "passed" },
+      "call": { "duration": 0.06145968700002413, "outcome": "passed" },
+      "teardown": { "duration": 0.0001976819999072177, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_all_buf_histogram",
+      "lineno": 339,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_all_buf_histogram",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008013700000901736, "outcome": "passed" },
+      "call": { "duration": 0.06306118400016203, "outcome": "passed" },
+      "teardown": { "duration": 0.00012224900001456263, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[circ]",
+      "lineno": 360,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_cross_format[circ]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "circ",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008125469998958579, "outcome": "passed" },
+      "call": { "duration": 0.06756700100004309, "outcome": "passed" },
+      "teardown": { "duration": 0.00020051499996043276, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[json]",
+      "lineno": 360,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_cross_format[json]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "json",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0014845549999336072, "outcome": "passed" },
+      "call": { "duration": 0.06210919899990586, "outcome": "passed" },
+      "teardown": { "duration": 0.00018693499987421092, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_stats_cross_format[bench]",
+      "lineno": 360,
+      "outcome": "passed",
+      "keywords": [
+        "test_stats_cross_format[bench]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "bench",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.000987574999953722, "outcome": "passed" },
+      "call": { "duration": 0.06073105500013298, "outcome": "passed" },
+      "teardown": { "duration": 0.00022835100003248954, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_no_warnings",
+      "lineno": 399,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_no_warnings",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.001079091999827142, "outcome": "passed" },
+      "call": { "duration": 0.06167615000003934, "outcome": "passed" },
+      "teardown": { "duration": 0.0001963960000921361, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[unused_one-input a b c\\noutput y\\ny = AND(a, b)\\n-expected_types0-expected_names0]",
+      "lineno": 415,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_warnings[unused_one-input a b c\\noutput y\\ny = AND(a, b)\\n-expected_types0-expected_names0]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "unused_one-input a b c\\noutput y\\ny = AND(a, b)\\n-expected_types0-expected_names0",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0028950549999535724, "outcome": "passed" },
+      "call": { "duration": 0.06432605399982094, "outcome": "passed" },
+      "teardown": { "duration": 0.00016588900007263874, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[all_unused-input a b c\\noutput y\\ny = 1\\n-expected_types1-expected_names1]",
+      "lineno": 415,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_warnings[all_unused-input a b c\\noutput y\\ny = 1\\n-expected_types1-expected_names1]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "all_unused-input a b c\\noutput y\\ny = 1\\n-expected_types1-expected_names1",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0022239950001221587, "outcome": "passed" },
+      "call": { "duration": 0.06138730099996792, "outcome": "passed" },
+      "teardown": { "duration": 0.00025567900001988164, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[const_one-input a b\\noutput y\\ny = OR(a, NOT(a))\\n-expected_types2-expected_names2]",
+      "lineno": 415,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_warnings[const_one-input a b\\noutput y\\ny = OR(a, NOT(a))\\n-expected_types2-expected_names2]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "const_one-input a b\\noutput y\\ny = OR(a, NOT(a))\\n-expected_types2-expected_names2",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0012896680000267224, "outcome": "passed" },
+      "call": { "duration": 0.06397770800003855, "outcome": "passed" },
+      "teardown": { "duration": 0.00022127000011096243, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warnings[const_zero-input a b\\noutput y\\ny = AND(a, NOT(a))\\n-expected_types3-expected_names3]",
+      "lineno": 415,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_warnings[const_zero-input a b\\noutput y\\ny = AND(a, NOT(a))\\n-expected_types3-expected_names3]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "const_zero-input a b\\noutput y\\ny = AND(a, NOT(a))\\n-expected_types3-expected_names3",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0020420420000846207, "outcome": "passed" },
+      "call": { "duration": 0.0659727859999748, "outcome": "passed" },
+      "teardown": { "duration": 0.00028300899998612294, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_constant_output_values",
+      "lineno": 460,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_constant_output_values",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0006262370000058581, "outcome": "passed" },
+      "call": { "duration": 0.1231553200000235, "outcome": "passed" },
+      "teardown": { "duration": 0.00012699700005214254, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_constant_vector_format",
+      "lineno": 489,
+      "outcome": "failed",
+      "keywords": [
+        "test_lint_constant_vector_format",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008150470000600762, "outcome": "passed" },
+      "call": {
+        "duration": 0.05973447700012002,
+        "outcome": "failed",
+        "crash": {
+          "path": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "lineno": 501,
+          "message": "assert 3 == 0\n +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input a width 1 does not match declared width 4\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode"
+        },
+        "traceback": [
+          {
+            "path": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+            "lineno": 501,
+            "message": "AssertionError"
+          }
+        ],
+        "longrepr": "entrypoint_argv = ['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-luna/checkpoint_8/circopt.py']\ntmp_path = PosixPath('/tmp/pytest-of-bernardmoy/pytest-0/test_lint_constant_vector_form0')\n\n    @pytest.mark.functionality\n    def test_lint_constant_vector_format(\n        entrypoint_argv: list[str],\n        tmp_path: Path,\n    ) -> None:\n        \"\"\"Verify constant vector output uses 0b format with exact width.\"\"\"\n        path = write_circ(tmp_path, \"constvec.circ\", CONST_VECTOR_CIRC)\n        result, payload = run_json_command(\n            entrypoint_argv,\n            [\"lint\", str(path), \"--json\"],\n        )\n>       assert result.returncode == 0\nE       assert 3 == 0\nE        +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input a width 1 does not match declared width 4\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode\n\ndatasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py:501: AssertionError"
+      },
+      "teardown": { "duration": 0.00020217400015098974, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[16-16-run]",
+      "lineno": 509,
+      "outcome": "failed",
+      "keywords": [
+        "test_lint_max_input_bits[16-16-run]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "16-16-run",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008757140001307562, "outcome": "passed" },
+      "call": {
+        "duration": 0.06048846500016225,
+        "outcome": "failed",
+        "crash": {
+          "path": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "lineno": 541,
+          "message": "assert 3 == 0\n +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...Error\",\"message\":\"input v width 1 does not match declared width 16\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode"
+        },
+        "traceback": [
+          {
+            "path": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+            "lineno": 541,
+            "message": "AssertionError"
+          }
+        ],
+        "longrepr": "entrypoint_argv = ['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-luna/checkpoint_8/circopt.py']\ntmp_path = PosixPath('/tmp/pytest-of-bernardmoy/pytest-0/test_lint_max_input_bits_16_160'), bits = 16, limit = 16\nexpectation = 'run'\n\n    @pytest.mark.functionality\n    @pytest.mark.parametrize(\n        (\"bits\", \"limit\", \"expectation\"),\n        [\n            (16, 16, \"run\"),   # M=N boundary: should run check\n            (17, 16, \"skip\"),  # M=N+1 boundary: should skip\n            (20, 16, \"skip\"),  # M>N: should skip\n            (8, 16, \"run\"),    # M<N: should run check\n            (20, 20, \"run\"),   # M=N with larger limit: should run check\n            (10, 8, \"skip\"),   # M>N with smaller limit: should skip\n        ],\n    )\n    def test_lint_max_input_bits(\n        entrypoint_argv: list[str],\n        tmp_path: Path,\n        bits: int,\n        limit: int,\n        expectation: str,\n    ) -> None:\n        \"\"\"Verify --max-input-bits flag controls constant check threshold.\"\"\"\n        # Create circuit with specified input bits\n        circuit = f\"\"\"\\\n    input v[{bits-1}:0]\n    output y\n    y = REDUCE_XOR(v)\n    \"\"\"\n        path = write_circ(tmp_path, f\"bits{bits}.circ\", circuit)\n        result, payload = run_json_command(\n            entrypoint_argv,\n            [\"lint\", str(path), \"--max-input-bits\", str(limit), \"--json\"],\n        )\n>       assert result.returncode == 0\nE       assert 3 == 0\nE        +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...Error\",\"message\":\"input v width 1 does not match declared width 16\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode\n\ndatasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py:541: AssertionError"
+      },
+      "teardown": { "duration": 0.00018839900008060795, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[17-16-skip]",
+      "lineno": 509,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_max_input_bits[17-16-skip]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "17-16-skip",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0009625929999401706, "outcome": "passed" },
+      "call": { "duration": 0.061966514999994615, "outcome": "passed" },
+      "teardown": { "duration": 0.00017303000004176283, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[20-16-skip]",
+      "lineno": 509,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_max_input_bits[20-16-skip]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "20-16-skip",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0012446969999473367, "outcome": "passed" },
+      "call": { "duration": 0.061821718999908626, "outcome": "passed" },
+      "teardown": { "duration": 0.00013029999990976648, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[8-16-run]",
+      "lineno": 509,
+      "outcome": "failed",
+      "keywords": [
+        "test_lint_max_input_bits[8-16-run]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "8-16-run",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.005455282999946576, "outcome": "passed" },
+      "call": {
+        "duration": 0.06139590800012229,
+        "outcome": "failed",
+        "crash": {
+          "path": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "lineno": 541,
+          "message": "assert 3 == 0\n +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input v width 1 does not match declared width 8\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode"
+        },
+        "traceback": [
+          {
+            "path": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+            "lineno": 541,
+            "message": "AssertionError"
+          }
+        ],
+        "longrepr": "entrypoint_argv = ['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-luna/checkpoint_8/circopt.py']\ntmp_path = PosixPath('/tmp/pytest-of-bernardmoy/pytest-0/test_lint_max_input_bits_8_16_0'), bits = 8, limit = 16\nexpectation = 'run'\n\n    @pytest.mark.functionality\n    @pytest.mark.parametrize(\n        (\"bits\", \"limit\", \"expectation\"),\n        [\n            (16, 16, \"run\"),   # M=N boundary: should run check\n            (17, 16, \"skip\"),  # M=N+1 boundary: should skip\n            (20, 16, \"skip\"),  # M>N: should skip\n            (8, 16, \"run\"),    # M<N: should run check\n            (20, 20, \"run\"),   # M=N with larger limit: should run check\n            (10, 8, \"skip\"),   # M>N with smaller limit: should skip\n        ],\n    )\n    def test_lint_max_input_bits(\n        entrypoint_argv: list[str],\n        tmp_path: Path,\n        bits: int,\n        limit: int,\n        expectation: str,\n    ) -> None:\n        \"\"\"Verify --max-input-bits flag controls constant check threshold.\"\"\"\n        # Create circuit with specified input bits\n        circuit = f\"\"\"\\\n    input v[{bits-1}:0]\n    output y\n    y = REDUCE_XOR(v)\n    \"\"\"\n        path = write_circ(tmp_path, f\"bits{bits}.circ\", circuit)\n        result, payload = run_json_command(\n            entrypoint_argv,\n            [\"lint\", str(path), \"--max-input-bits\", str(limit), \"--json\"],\n        )\n>       assert result.returncode == 0\nE       assert 3 == 0\nE        +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input v width 1 does not match declared width 8\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode\n\ndatasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py:541: AssertionError"
+      },
+      "teardown": { "duration": 0.00023198899998533307, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[20-20-run]",
+      "lineno": 509,
+      "outcome": "failed",
+      "keywords": [
+        "test_lint_max_input_bits[20-20-run]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "20-20-run",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.000977039999952467, "outcome": "passed" },
+      "call": {
+        "duration": 0.062177385000040886,
+        "outcome": "failed",
+        "crash": {
+          "path": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "lineno": 541,
+          "message": "assert 3 == 0\n +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...Error\",\"message\":\"input v width 1 does not match declared width 20\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode"
+        },
+        "traceback": [
+          {
+            "path": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+            "lineno": 541,
+            "message": "AssertionError"
+          }
+        ],
+        "longrepr": "entrypoint_argv = ['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-luna/checkpoint_8/circopt.py']\ntmp_path = PosixPath('/tmp/pytest-of-bernardmoy/pytest-0/test_lint_max_input_bits_20_200'), bits = 20, limit = 20\nexpectation = 'run'\n\n    @pytest.mark.functionality\n    @pytest.mark.parametrize(\n        (\"bits\", \"limit\", \"expectation\"),\n        [\n            (16, 16, \"run\"),   # M=N boundary: should run check\n            (17, 16, \"skip\"),  # M=N+1 boundary: should skip\n            (20, 16, \"skip\"),  # M>N: should skip\n            (8, 16, \"run\"),    # M<N: should run check\n            (20, 20, \"run\"),   # M=N with larger limit: should run check\n            (10, 8, \"skip\"),   # M>N with smaller limit: should skip\n        ],\n    )\n    def test_lint_max_input_bits(\n        entrypoint_argv: list[str],\n        tmp_path: Path,\n        bits: int,\n        limit: int,\n        expectation: str,\n    ) -> None:\n        \"\"\"Verify --max-input-bits flag controls constant check threshold.\"\"\"\n        # Create circuit with specified input bits\n        circuit = f\"\"\"\\\n    input v[{bits-1}:0]\n    output y\n    y = REDUCE_XOR(v)\n    \"\"\"\n        path = write_circ(tmp_path, f\"bits{bits}.circ\", circuit)\n        result, payload = run_json_command(\n            entrypoint_argv,\n            [\"lint\", str(path), \"--max-input-bits\", str(limit), \"--json\"],\n        )\n>       assert result.returncode == 0\nE       assert 3 == 0\nE        +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...Error\",\"message\":\"input v width 1 does not match declared width 20\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode\n\ndatasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py:541: AssertionError"
+      },
+      "teardown": { "duration": 0.00033645199982856866, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits[10-8-skip]",
+      "lineno": 509,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_max_input_bits[10-8-skip]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "10-8-skip",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.001090441999849645, "outcome": "passed" },
+      "call": { "duration": 0.06179335699994226, "outcome": "passed" },
+      "teardown": { "duration": 0.00014701500003866386, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits_sums_mixed_ports_at_threshold",
+      "lineno": 558,
+      "outcome": "failed",
+      "keywords": [
+        "test_lint_max_input_bits_sums_mixed_ports_at_threshold",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0007786740000028658, "outcome": "passed" },
+      "call": {
+        "duration": 0.06218785500004742,
+        "outcome": "failed",
+        "crash": {
+          "path": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+          "lineno": 577,
+          "message": "assert 3 == 0\n +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input a width 1 does not match declared width 3\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode"
+        },
+        "traceback": [
+          {
+            "path": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+            "lineno": 577,
+            "message": "AssertionError"
+          }
+        ],
+        "longrepr": "entrypoint_argv = ['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-luna/checkpoint_8/circopt.py']\ntmp_path = PosixPath('/tmp/pytest-of-bernardmoy/pytest-0/test_lint_max_input_bits_sums_0')\n\n    @pytest.mark.functionality\n    def test_lint_max_input_bits_sums_mixed_ports_at_threshold(\n        entrypoint_argv: list[str],\n        tmp_path: Path,\n    ) -> None:\n        path = write_circ(\n            tmp_path,\n            \"mixed_threshold.circ\",\n            \"\"\"\\\n            input a[2:0] b[1:0] c\n            output y\n            y = REDUCE_XOR({a, b, c})\n            \"\"\",\n        )\n        result, payload = run_json_command(\n            entrypoint_argv,\n            [\"lint\", str(path), \"--max-input-bits\", \"6\", \"--json\"],\n        )\n>       assert result.returncode == 0\nE       assert 3 == 0\nE        +  where 3 = CompletedProcess(args=['python', 'datasets/slopCodeBench/scb-problems/circuit_eval/implementations_auto_codex_gpt-5.6-...hError\",\"message\":\"input a width 1 does not match declared width 3\",\"file\":null,\"line\":null,\"col\":null}}\\n', stderr='').returncode\n\ndatasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py:577: AssertionError"
+      },
+      "teardown": { "duration": 0.00016395299985560996, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_max_input_bits_sums_mixed_ports_above_threshold",
+      "lineno": 584,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_max_input_bits_sums_mixed_ports_above_threshold",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.004895025999985592, "outcome": "passed" },
+      "call": { "duration": 0.06271878000006836, "outcome": "passed" },
+      "teardown": { "duration": 0.0001689499999883992, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_warning_sorting",
+      "lineno": 616,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_warning_sorting",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0024052109999956883, "outcome": "passed" },
+      "call": { "duration": 0.06588101500005905, "outcome": "passed" },
+      "teardown": { "duration": 0.00016714399998818408, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_invalid_circuit",
+      "lineno": 647,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_invalid_circuit",
+        "error",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.001065420000031736, "outcome": "passed" },
+      "call": { "duration": 0.05845867100015312, "outcome": "passed" },
+      "teardown": { "duration": 0.00012395599992487405, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[circ]",
+      "lineno": 672,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_cross_format[circ]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "circ",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0007425169999351056, "outcome": "passed" },
+      "call": { "duration": 0.04872879799995644, "outcome": "passed" },
+      "teardown": { "duration": 0.00020760299980793206, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[json]",
+      "lineno": 672,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_cross_format[json]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "json",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0007556720001957729, "outcome": "passed" },
+      "call": { "duration": 0.051562912999997934, "outcome": "passed" },
+      "teardown": { "duration": 0.00010707700016610033, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_lint_cross_format[bench]",
+      "lineno": 672,
+      "outcome": "passed",
+      "keywords": [
+        "test_lint_cross_format[bench]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "bench",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.000696183999934874, "outcome": "passed" },
+      "call": { "duration": 0.05047088500009522, "outcome": "passed" },
+      "teardown": { "duration": 9.693400011201447e-5, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_basic_structure",
+      "lineno": 704,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_basic_structure",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0006098859998928674, "outcome": "passed" },
+      "call": { "duration": 0.04853990100014016, "outcome": "passed" },
+      "teardown": { "duration": 0.00018250299990540952, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_node_ids_and_labels",
+      "lineno": 740,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_node_ids_and_labels",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0015028160000838398, "outcome": "passed" },
+      "call": { "duration": 0.05488298099999156, "outcome": "passed" },
+      "teardown": { "duration": 0.0001331580001533439, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_edges",
+      "lineno": 780,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_edges",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0005477710001287051, "outcome": "passed" },
+      "call": { "duration": 0.05144193400019503, "outcome": "passed" },
+      "teardown": { "duration": 0.00010763699992821785, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_no_duplicate_edges",
+      "lineno": 807,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_no_duplicate_edges",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0006605650000892638, "outcome": "passed" },
+      "call": { "duration": 0.05286716199998409, "outcome": "passed" },
+      "teardown": { "duration": 0.00010942700009763939, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_vector_labels",
+      "lineno": 831,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_vector_labels",
+        "functionality",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0006502240000827442, "outcome": "passed" },
+      "call": { "duration": 0.04990394500009643, "outcome": "passed" },
+      "teardown": { "duration": 0.0001064009998117399, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs0-included0-excluded0]",
+      "lineno": 856,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cone_filter[cone_outputs0-included0-excluded0]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "cone_outputs0-included0-excluded0",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008834750001369684, "outcome": "passed" },
+      "call": { "duration": 0.054189654000083465, "outcome": "passed" },
+      "teardown": { "duration": 0.00023026999997455277, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs1-included1-excluded1]",
+      "lineno": 856,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cone_filter[cone_outputs1-included1-excluded1]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "cone_outputs1-included1-excluded1",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0016585240000495105, "outcome": "passed" },
+      "call": { "duration": 0.04905037900016396, "outcome": "passed" },
+      "teardown": { "duration": 0.00020777400004590163, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_filter[cone_outputs2-included2-excluded2]",
+      "lineno": 856,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cone_filter[cone_outputs2-included2-excluded2]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "cone_outputs2-included2-excluded2",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.005384844999980487, "outcome": "passed" },
+      "call": { "duration": 0.053703158999951484, "outcome": "passed" },
+      "teardown": { "duration": 0.00020715499999823805, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cone_unknown_output",
+      "lineno": 895,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cone_unknown_output",
+        "error",
+        "pytestmark",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0019321279999076069, "outcome": "passed" },
+      "call": { "duration": 0.05273270600014257, "outcome": "passed" },
+      "teardown": { "duration": 0.00012619300014193868, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[circ]",
+      "lineno": 917,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cross_format[circ]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "circ",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0008476369998788869, "outcome": "passed" },
+      "call": { "duration": 0.05568033899999136, "outcome": "passed" },
+      "teardown": { "duration": 0.000269022000111363, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[json]",
+      "lineno": 917,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cross_format[json]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "json",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.0018315540000912733, "outcome": "passed" },
+      "call": { "duration": 0.05717853800001649, "outcome": "passed" },
+      "teardown": { "duration": 0.00020620500004042697, "outcome": "passed" }
+    },
+    {
+      "nodeid": "datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py::test_dot_cross_format[bench]",
+      "lineno": 917,
+      "outcome": "passed",
+      "keywords": [
+        "test_dot_cross_format[bench]",
+        "parametrize",
+        "functionality",
+        "pytestmark",
+        "bench",
+        "test_checkpoint_6.py",
+        "tests",
+        "circuit_eval",
+        "scb-problems-sols-tests",
+        "slopCodeBench",
+        "datasets",
+        "modular-SWE",
+        ""
+      ],
+      "setup": { "duration": 0.001748988999906942, "outcome": "passed" },
+      "call": { "duration": 0.049947383000017, "outcome": "passed" },
+      "teardown": { "duration": 0.0003177309999955469, "outcome": "passed" }
+    }
+  ],
+  "warnings": [
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 211
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 298
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 313
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 340
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 361
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 416
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 461
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 490
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 510
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 559
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 585
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 617
+    },
+    {
+      "message": "Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 648
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 673
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 741
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 781
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 808
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 832
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 857
+    },
+    {
+      "message": "Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 896
+    },
+    {
+      "message": "Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html",
+      "category": "PytestUnknownMarkWarning",
+      "when": "collect",
+      "filename": "/home/bernardmoy/modular-SWE/datasets/slopCodeBench/scb-problems-sols-tests/circuit_eval/tests/test_checkpoint_6.py",
+      "lineno": 918
+    }
+  ]
+}

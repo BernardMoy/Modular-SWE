@@ -9,10 +9,10 @@ from metrics.designite_py.summary.get_summary import get_dpy_summary
 from metrics.jscpd.summary.get_summary import get_jscpd_summary
 from pathlib import Path
 from metrics.deps_graph.metrics import get_metrics_from_deps_graph
+from time import time 
 
 SCRIPT_DIR = Path(__file__).resolve().parent.parent 
-TEMP_METRICS_NEW_DIR = Path("metrics_new")
-TEMP_METRICS_OLD_DIR = Path("metrics_old")
+
 
 
 def _get_smells_from_dpy_and_pylint(dpy_path, pylint_path): 
@@ -35,7 +35,7 @@ def _get_smells_from_dpy_and_pylint(dpy_path, pylint_path):
     return smells 
 
 def _get_smells_from_deps_graph(implementation_path): 
-    TEMP_FILE = Path("temp_graph")
+    TEMP_FILE = Path(f"temp_graph_{time.time()}")
     
     subprocess.run([
         "python", 
@@ -55,7 +55,9 @@ def _get_smells_from_deps_graph(implementation_path):
 
 
 def write_metrics_from_implementation(implementation_path, current_metrics_path, prev_implementation_path = None): 
-
+    TEMP_METRICS_NEW_DIR = Path(f"metrics_new_{time.time()}")
+    TEMP_METRICS_OLD_DIR = Path(f"metrics_old_{time.time()}")
+    
     # generate the metrics folder 
     subprocess.run(
         [

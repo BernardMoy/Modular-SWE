@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from metrics.deps_graph.smells.visibility_matrix import get_visibility_matrix
 from metrics.deps_graph.smells.circular_dependency_checker import check_circular_dependency
+import time 
 
 def get_n(deps_graph): 
     """
@@ -50,7 +51,7 @@ def get_deps_graph_metrics(implementation_path):
     }
     """
 
-    TEMP_FILE = Path("temp_graph")
+    TEMP_FILE = Path(f"temp_graph_{time.time()}")
 
     subprocess.run([
         "python", 
@@ -84,7 +85,7 @@ def get_deps_graph_metrics_reference(problem):
     }
     """
 
-    TEMP_FILE = Path("temp_graph")
+    TEMP_FILE = Path(f"temp_graph_{time.time()}")
 
     subprocess.run([
         "python scripts/references_deps_graph.py", 

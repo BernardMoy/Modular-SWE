@@ -22,4 +22,6 @@ SOLS_TESTS_DIR="$ROOT/datasets/slopCodeBench/scb-problems-sols-tests/$PROBLEM"
 # Run the pytest command 
 uv run pytest "$SOLS_TESTS_DIR/tests/test_checkpoint_${CHECKPOINT_NO}.py"  \
   --entrypoint "python $ENTRYPOINT_PATH" \
-  --checkpoint "checkpoint_${CHECKPOINT_NO}"
+  --checkpoint "checkpoint_${CHECKPOINT_NO}" \
+  --json-report \
+  --json-report-file="test_report_${PROBLEM}_checkpoint_${CHECKPOINT_NO}.json"

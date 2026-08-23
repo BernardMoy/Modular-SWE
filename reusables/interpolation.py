@@ -1,4 +1,5 @@
 import numpy as np
+from collections import defaultdict
 
 # Given a varying array length, convert to an array of length N through linear interpolation
 # Plot the array on a graph, for the x axis it spans, divide into N sections
@@ -18,7 +19,21 @@ def linear_interpolation(arr, N):
 
     return np.interp(x_new, x_old, arr).tolist() 
 
-# Given an array in the form of [{metrics}, {metrics}], 
+# Given an array in the form of [{metrics}, {metrics}] coorresponding to the eval metrics columns, 
 # linearly interpolate all metrics 
 def linear_interpolation_metrics(metrics_arr, N): 
-    pass 
+    result = defaultdict(list) 
+
+    for key, value in metrics_arr.items(): 
+        if key in ["implementation_path", "has_cycles"]: 
+            continue 
+
+        result[key].append(value) 
+
+    # for all the value arrays inside result, linear interpolate them 
+    for key, value in result.items(): 
+        result[key] = linear_interpolation(value, N) 
+
+    return result 
+
+        
