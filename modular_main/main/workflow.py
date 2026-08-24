@@ -18,6 +18,7 @@ from write_metrics.write_metrics_from_implementation import write_metrics_from_i
 from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
 from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
+from json_schemas.formatters.design_formatter import get_design_summary
 
 # Constants for directory and file paths 
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -30,6 +31,10 @@ DA_LOOP_THRESHOLD_BEFORE_IMPL = 2  # how many times can the D <> A Loop happen
 DA_LOOP_THRESHOLD_AFTER_IMPL = 2  # how many times can the A <> R loop happen - refers to how many times the RC agent can be invoked 
 TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop happen
 
+# set the thresholds to infinite if human mode 
+if WORKFLOW_MODE == "human": 
+    DA_LOOP_THRESHOLD_BEFORE_IMPL = 555
+    DA_LOOP_THRESHOLD_AFTER_IMPL = 555 
 
 # Function to decide whether to pass or fail, given the analyzer output. 
 def pass_fail(): 
@@ -59,6 +64,12 @@ def run_decomposer(executor, checkpoint_number):
         print(v_output_list)
         raise Exception("Validator failed.")
     print("Passed") 
+
+    # # after running the decomposer, read the current design and print its formatted summary 
+    # with open(AGENT_WORKSPACE / 'current_design.json', 'r') as f: 
+    #     design_json = json.load(f) 
+
+    # print(f"Change summary: {get_design_summary(design_json)}")
 
 # Decomposer analyzer loop. 
 # D first before A 

@@ -70,4 +70,11 @@ Task:
 {get_json_string("dependency_graph")}
 
 3. update any improvements listed in `current_analyzer_result.json` if present: by changing the status field to {'"accepted"' if True else f'either "accepted" or "rejected" and provide a reason if rejected. '}
+4. Once all these steps are done, print a natural language summary in the form: 
+<Short summary, describing the objective of the problem requirements that are satisfied, or analyzer suggestions accepted.>
+
+Modules change: 
+- Added: <module_name> <its responsibility> <any other design decisions made>
+- Changed: ... 
+- Removed: ...
 """

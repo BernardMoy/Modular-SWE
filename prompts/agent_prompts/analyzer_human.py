@@ -63,7 +63,16 @@ Leave the file unchanged if there are none.
 Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
 {get_json_string("analyzer")}
 
-5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues.
+5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues. Refine the suggestions if that is the case.
+6. After all suggestions have been written, you should ask for human review by returning in the following format that MUST start with "HUMAN_QUESTION:": 
+HUMAN_QUESTION: 
+<short summary> 
+
+<N> suggestions were given: 
+- <suggestion_1>: <what problem it addresses> <decisions made, e.g. based on code / design observations, metrics, human opinions etc.>
+- <suggestion_2>: ...
+
+7. The human would decide whether or not to continue the conversation. Refine analyzer suggestions based on the feedback given if any. 
 """
 
 # Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema. 

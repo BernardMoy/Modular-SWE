@@ -37,7 +37,7 @@ async def run_agent(agent, model, prompt):
                 response = result.final_response
 
                 # Identify questions asked by codex to humans: They are always in the form "HUMAN_QUESTION: <question>"
-                if response.startswith("HUMAN_QUESTION:"):
+                if response.strip().startswith("HUMAN_QUESTION:"):
                     # Strip the prefix to get the question
                     question = response.removeprefix("HUMAN_QUESTION:").strip()
 
