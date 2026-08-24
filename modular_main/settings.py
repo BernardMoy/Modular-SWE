@@ -21,7 +21,7 @@ WORKFLOW_MODE: Literal[
     "autoTest"
     "auto", 
     "human"
-    ] = "autoTest"
+    ] = "human"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 
@@ -29,4 +29,4 @@ WORKFLOW_MODE: Literal[
 # byModule: BFS and one prompt per module. Modules in the same layer are coded in parallel
 
 # Problem type: Either "custom" or "scb" 
-PROBLEM_TYPE: Literal["custom", "scb"] = "scb"
+PROBLEM_TYPE: Literal["custom", "scb"] = "custom"

@@ -9,7 +9,7 @@ from metrics.designite_py.summary.get_summary import get_dpy_summary
 from metrics.jscpd.summary.get_summary import get_jscpd_summary
 from pathlib import Path
 from metrics.deps_graph.metrics import get_metrics_from_deps_graph
-from time import time 
+import time 
 
 SCRIPT_DIR = Path(__file__).resolve().parent.parent 
 

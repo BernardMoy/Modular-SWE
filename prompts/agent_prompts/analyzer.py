@@ -22,8 +22,18 @@ Approach:
 - How frequently does a feature change 
 - Whether duplicated code, especially smaller snippets, would diverge in the future and should not be refactored now
 - Whether a sub-feature is unique to the app or is a generic, solved problem that stays the same 
+You should not make assumptions about these factors unless they are obvious. 
 
-4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}. 
+Example 1: 
+Identified smell: backend.app.api_service combines API fetching, and json processing functions that are CORE and UNIQUE to the app. 
+Suggestion: Split the json text processing into its own module, with an orchestrator performing the workflow of api fetching and text processing. 
+
+Example 2: 
+Identified smell: the function process_final_amount is complex, and it combines price calculation and discount calculation in the same function. 
+Backed up by metrics: the function has a high cyclomatic complexity of 22, making it difficult to test in isolation. 
+Suggestion: Split the function into internal private helpers, concerning about price calculation and discount application. 
+
+4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}
 Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
 Leave the file unchanged if there are none. 
 Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 

@@ -45,6 +45,21 @@ def pass_fail():
     # if there are any unresolved issues, then fail 
     return False 
 
+# pipeline to run decomposer + validate 
+def run_decomposer(executor, checkpoint_number): 
+    get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
+
+    # Validator for the module names 
+    print(f"========== VALIDATOR FOR MODULE NAMES ==========")
+    v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
+        
+    # Currently, if this array is non empty, throw an error 
+    v_output_list = list(v_output) 
+    if v_output_list: 
+        print(v_output_list)
+        raise Exception("Validator failed.")
+    print("Passed") 
+
 # Decomposer analyzer loop. 
 # D first before A 
 # for has impl = False only.
@@ -53,22 +68,10 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
     passed = False 
 
     # Initial decomposer agent 
-    # Run these inside the bind mounted space 
+    print(f"========== INITIAL DECOMPOSER AGENT ==========")
+    run_decomposer(executor, checkpoint_number)
+
     while (not passed and iteration < threshold): 
-        print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
-        get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
-
-        # Validator for the module names 
-        print(f"========== [Iteration {iteration+1}] VALIDATOR FOR MODULE NAMES ==========")
-        v_output = module_name_validator(AGENT_WORKSPACE / "current_design.json", AGENT_WORKSPACE / "current_deps_graph.json")
-        
-        # Currently, if this array is non empty, throw an error 
-        v_output_list = list(v_output) 
-        if v_output_list: 
-            print(v_output_list)
-            raise Exception("Validator failed.")
-        print("Passed") 
-
         # Generate metrics from design and deps graph 
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
         write_metrics_from_design_and_deps_graph(
@@ -89,10 +92,13 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         if not analyzer_result_path.exists():
             analyzer_result_path.touch() 
 
-
         # If the analyzer return pass, set the passed flag to true 
         if pass_fail():  
             passed = True
+
+        # Else if it does not pass (here), run the decomposer agent 
+        print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
+        run_decomposer(executor, checkpoint_number)
 
         # Increment the iteration number 
         iteration += 1 
@@ -421,7 +427,7 @@ def modular_workflow_single(problem, n, logged_in = False):
         # as the agent_report would get overridden below 
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
 
-    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
+    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "human"]: 
         # Initial decomposer agent 
         # Run these inside the bind mounted space 
         decomposer_analyzer_loop(
