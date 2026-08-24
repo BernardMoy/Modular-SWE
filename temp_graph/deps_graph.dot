@@ -1,0 +1,38 @@
+digraph G {
+	graph [bb="0,0,180.65,180",
+		concentrate=true,
+		rankdir=BT,
+		start=1
+	];
+	node [fillcolor="#ffffff",
+		fontcolor="#000000",
+		fontname=Helvetica,
+		fontsize=10,
+		label="\N",
+		style=filled
+	];
+	csv_output	[fillcolor="#b65353",
+		fontcolor="#ffffff",
+		height=0.5,
+		pos="41.206,90",
+		width=1.1446];
+	dataset	[fillcolor="#80b34c",
+		height=0.5,
+		pos="131.21,90",
+		width=0.86664];
+	image_reader	[fillcolor="#53b6b6",
+		height=0.5,
+		pos="131.21,162",
+		width=1.3735];
+	dataset -> image_reader	[fillcolor="#80b34c",
+		pos="e,131.21,143.9 131.21,108.3 131.21,116.02 131.21,125.29 131.21,133.89"];
+	iris	[fillcolor="#7a569f",
+		fontcolor="#ffffff",
+		height=0.5,
+		pos="86.206,18",
+		width=0.75];
+	iris -> csv_output	[fillcolor="#7a569f",
+		pos="e,52.005,72.203 75.995,34.884 70.516,43.408 63.633,54.114 57.439,63.749"];
+	iris -> dataset	[fillcolor="#7a569f",
+		pos="e,120.72,72.693 96.418,34.884 101.98,43.531 108.98,54.425 115.24,64.167"];
+}

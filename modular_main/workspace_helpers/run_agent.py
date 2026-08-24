@@ -8,6 +8,7 @@ import argparse
 import asyncio
 import json 
 from opencode_ai import AsyncOpencode
+import readline
 
 # when the run_agent command is called, the agent summary and log will be written to the json below 
 AGENT_REPORT_JSON = "agent_report.json" 
@@ -61,7 +62,32 @@ Continue your task or ask another question in the format HUMAN_QUESTION: <questi
 """ 
                     # Re-assign the result variable 
                     result = await thread.run(new_prompt)
-                
+
+                elif response.strip().startswith("HUMAN_APPROVE:"): 
+                    # strip the prefix 
+                    question = response.removeprefix("HUMAN_APPROVE:").strip() 
+
+                    print(f"\nRequires human approval: \n{question}")
+
+                    # Obtain the human response from the input 
+                    human_response = input("\nType 'exit' to approve the agent and quit, or give feedback: ")
+
+                    # if human response == exit, quit 
+                    if human_response.strip() == "exit": 
+                        break 
+
+                    print("Response recorded.")
+
+                    # Call the agent in the same thread again to continue the conversation
+                    # with the human response added to the context 
+                    new_prompt = f"""The human has responded to your previous question: 
+{human_response}
+
+Continue your task.
+""" 
+                    # Re-assign the result variable 
+                    result = await thread.run(new_prompt)
+
                 else: 
                     break 
 

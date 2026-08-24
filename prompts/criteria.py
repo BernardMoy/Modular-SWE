@@ -1,4 +1,4 @@
-# The criteria for giving analyzer suggestions. These should be reasons FOR module to be split. AGAINST is considered by the decomposer. 
+# The criteria for giving analyzer suggestions. HERE specifies what the analyzer should FOCUS ON. 
 # Used by multiple analyzer agents. 
 ANALYZER_CRITERIA = """
 - Modules should only be split when they carry distinct responsibilities, has different reasons to change, or the complexity and lines of code grows such that it couples different responsibilites together. 

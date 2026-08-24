@@ -33,8 +33,8 @@ TR_LOOP_THRESHOLD = 2  # How many times the tester - test refactor coder loop ha
 
 # set the thresholds to infinite if human mode 
 if WORKFLOW_MODE == "human": 
-    DA_LOOP_THRESHOLD_BEFORE_IMPL = 555
-    DA_LOOP_THRESHOLD_AFTER_IMPL = 555 
+    DA_LOOP_THRESHOLD_BEFORE_IMPL =555
+    DA_LOOP_THRESHOLD_AFTER_IMPL =555 
 
 # Function to decide whether to pass or fail, given the analyzer output. 
 def pass_fail(): 
@@ -106,6 +106,11 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         if pass_fail():  
             passed = True
+
+        # if passed, return
+        if passed: 
+            return 
+        
 
         # Else if it does not pass (here), run the decomposer agent 
         print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
