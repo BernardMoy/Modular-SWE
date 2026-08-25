@@ -1,10 +1,10 @@
 import argparse 
 import os 
-from constants import IMPL_DIR_DICT, BASE_REFERENCE_DIR, ENTRYFILE_NAME
+from constants import IMPL_DIR_DICT, BASE_REFERENCE_DIR
 import subprocess 
 import shutil 
 from pathlib import Path 
-import json 
+import time 
 
 def main(): 
     parser = argparse.ArgumentParser() 
@@ -27,6 +27,8 @@ def main():
 
     # entry file path must have deps graph path (the path that calls pydeps) as the root
     # to prevent import errors 
+    # temp entrypoint file containing imports to all modules 
+    ENTRYFILE_NAME=f"temp_entrypoint_{str(time.time()).replace(".", "_")}.py"
     entryfile_path = deps_graph_path / ENTRYFILE_NAME
 
     # Create the output directory 
@@ -49,7 +51,8 @@ def main():
         "python", 
         "scripts/gen_deps_graph_entry.py", 
         implementation_path, 
-        deps_graph_path
+        deps_graph_path, 
+        ENTRYFILE_NAME
     ])
 
     # Obtain REAL_MODULES from the entry file (import A; import B) --> REAL_MODULES = (A,B)...

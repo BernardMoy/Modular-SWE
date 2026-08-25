@@ -95,7 +95,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             get_prompt_and_run_agent(executor, "analyzer_human", False)
-        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]: 
             get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False  
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -252,7 +252,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         if WORKFLOW_MODE == "human": 
             get_prompt_and_run_agent(executor, "analyzer_human", True)
-        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest"]: 
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]: 
             get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist 
@@ -358,7 +358,7 @@ def modular_workflow_single(problem, n, logged_in = False):
     
 
         # Generate the deps graph if the workflow mode is auto / human
-        if WORKFLOW_MODE in ["human", "auto", "autoTest", "autoNoMetric"]: 
+        if WORKFLOW_MODE in ["human", "auto", "autoTest", "autoNoMetric", "autoAggressive"]: 
             subprocess.run(
                 [
                     "python", 
@@ -443,7 +443,7 @@ def modular_workflow_single(problem, n, logged_in = False):
         # as the agent_report would get overridden below 
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
 
-    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "human"]: 
+    elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "human", "autoAggressive"]: 
         # Initial decomposer agent 
         # Run these inside the bind mounted space 
         decomposer_analyzer_loop(

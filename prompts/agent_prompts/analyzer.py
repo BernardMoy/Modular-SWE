@@ -22,7 +22,7 @@ Approach:
 - How frequently does a feature change 
 - Whether duplicated code, especially smaller snippets, would diverge in the future and should not be refactored now
 - Whether a sub-feature is unique to the app or is a generic, solved problem that stays the same 
-You should not make assumptions about these factors unless they are obvious. 
+{"You should not make assumptions about these factors unless they are obvious. " if WORKFLOW_MODE != "autoAggressive" else ""}
 
 Example 1: 
 Identified smell: backend.app.api_service combines API fetching, and json processing functions that are CORE and UNIQUE to the app. 
