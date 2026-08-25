@@ -4,6 +4,7 @@ from constants import IMPL_DIR_DICT, BASE_REFERENCE_DIR, ENTRYFILE_NAME
 import subprocess 
 import shutil 
 from pathlib import Path 
+import json 
 
 def main(): 
     parser = argparse.ArgumentParser() 
@@ -74,27 +75,65 @@ def main():
     # include missing, meaning module imports are still visualised in the graph even when they cannot be resolved
     print("[GRAPH 3/6] Generating dependency graph") 
 
-    # Generate SVG
-    subprocess.run(
-        [
-            *common_args,
+    # Special case: Pydeps only map dependencies - when there is only 1 module then write a graph with 1 module instead of empty graph 
+    if len(REAL_MODULES) == 1:
+        module = REAL_MODULES[0]
+        dot_path = output_path / "deps_graph.dot"
+
+        # Create dot file with the only module 
+        dot_content = rf"""digraph G {{
+            graph [bb="0,0,90,90",
+                concentrate=true,
+                rankdir=BT,
+                start=1
+            ];
+            node [fillcolor="#ffffff",
+                fontcolor="#000000",
+                fontname=Helvetica,
+                fontsize=10,
+                label="\N",
+                style=filled
+            ];
+            {module} [fillcolor="#305c86",
+                fontcolor="#ffffff",
+                height=0.5,
+                pos="45,18",
+                width=1.25];
+        }}"""
+
+        dot_path.write_text(dot_content)
+
+        # Generate the svg from the dot file 
+        subprocess.run([
+            "dot",
+            "-Tsvg",
+            str(dot_path),
             "-o",
             str(output_path / "deps_graph.svg"),
-        ],
-        check=True,
-    )
+        ], check=True)
 
-    # Generate DOT
-    subprocess.run(
-        [
-            *common_args,
-            "-T",
-            "dot",
-            "-o",
-            str(output_path / "deps_graph.dot"),
-        ],
-        check=True,
-    )
+    else: 
+        # Generate SVG
+        subprocess.run(
+            [
+                *common_args,
+                "-o",
+                str(output_path / "deps_graph.svg"),
+            ],
+            check=True,
+        )
+
+        # Generate DOT
+        subprocess.run(
+            [
+                *common_args,
+                "-T",
+                "dot",
+                "-o",
+                str(output_path / "deps_graph.dot"),
+            ],
+            check=True,
+        )
 
     # 4. Process the graph to generate the json format for the agent to read
     print("[GRAPH 4/6] Converting the dependency graphs to JSON")

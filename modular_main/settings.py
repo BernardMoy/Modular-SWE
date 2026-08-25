@@ -21,7 +21,7 @@ WORKFLOW_MODE: Literal[
     "autoTest"
     "auto", 
     "human"
-    ] = "human"
+    ] = "noDesign"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 
