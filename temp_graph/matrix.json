@@ -1,13 +1,148 @@
 {
-  "csv_output": [
+  "cli_adapter": [
     "iris"
   ],
-  "dataset": [
+  "contracts": [],
+  "csv_utils": [
+    "cli_adapter",
+    "dataset_csv",
+    "encoding_csv",
+    "encoding_workflow",
+    "identification_workflow",
+    "iris",
+    "normalization_csv",
+    "normalization_workflow",
+    "segmentation_csv",
+    "segmentation_workflow"
+  ],
+  "dataset": [],
+  "dataset_csv": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "segmentation_workflow"
+  ],
+  "encoding": [
+    "cli_adapter",
+    "encoding_workflow",
+    "identification_workflow",
     "iris"
+  ],
+  "encoding_contracts": [
+    "cli_adapter",
+    "contracts",
+    "encoding",
+    "encoding_workflow",
+    "identification_workflow",
+    "iris"
+  ],
+  "encoding_csv": [
+    "cli_adapter",
+    "encoding_workflow",
+    "identification_workflow",
+    "iris"
+  ],
+  "encoding_workflow": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris"
+  ],
+  "hamming": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "matching_workflow"
+  ],
+  "identification_contracts": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris"
+  ],
+  "identification_workflow": [
+    "cli_adapter",
+    "iris"
+  ],
+  "image_processing_contracts": [
+    "cli_adapter",
+    "contracts",
+    "dataset",
+    "encoding",
+    "encoding_workflow",
+    "identification_workflow",
+    "image_reader",
+    "iris",
+    "masking",
+    "normalization",
+    "normalization_workflow",
+    "segmentation",
+    "segmentation_workflow"
   ],
   "image_reader": [
+    "cli_adapter",
     "dataset",
+    "encoding_workflow",
+    "identification_workflow",
+    "iris",
+    "normalization_workflow",
+    "segmentation_workflow"
+  ],
+  "iris": [],
+  "masking": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "normalization_workflow"
+  ],
+  "matching_contracts": [
+    "cli_adapter",
+    "hamming",
+    "identification_workflow",
+    "iris",
+    "matching_workflow"
+  ],
+  "matching_workflow": [
+    "cli_adapter",
+    "identification_workflow",
     "iris"
   ],
-  "iris": []
+  "normalization": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "normalization_workflow"
+  ],
+  "normalization_csv": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "normalization_workflow"
+  ],
+  "normalization_workflow": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris"
+  ],
+  "overlay": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "segmentation_workflow"
+  ],
+  "segmentation": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "segmentation_workflow"
+  ],
+  "segmentation_csv": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris",
+    "segmentation_workflow"
+  ],
+  "segmentation_workflow": [
+    "cli_adapter",
+    "identification_workflow",
+    "iris"
+  ]
 }

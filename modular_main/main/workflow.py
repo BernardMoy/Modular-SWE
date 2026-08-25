@@ -475,10 +475,11 @@ def modular_workflow_single(problem, n, logged_in = False):
 
         # After implementation: 
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed 
-        current_analyzer_json = AGENT_WORKSPACE / "current_analyzer_result.json"
-        if current_analyzer_json.exists(): 
-            current_analyzer_json.unlink() 
-        current_analyzer_json.touch() 
+        # NOT necessary - all rejections are provided by humans. 
+        # current_analyzer_json = AGENT_WORKSPACE / "current_analyzer_result.json"
+        # if current_analyzer_json.exists(): 
+        #     current_analyzer_json.unlink() 
+        # current_analyzer_json.touch() 
 
         # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code) 
         # as the agent_report would get overridden below 

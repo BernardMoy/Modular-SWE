@@ -1,0 +1,53 @@
+{
+  "summary": {
+    "number_of_modules": {
+      "new_value": 29
+    },
+    "lines_of_code": {
+      "new_value": 1041
+    },
+    "number_of_methods_per_module": {
+      "new_value": 1.58
+    },
+    "number_of_public_methods_per_module": {
+      "new_value": 0.83
+    },
+    "cyclomatic_complexity_per_function": {
+      "new_value": 2.51
+    },
+    "duplicated_lines": {
+      "new_value": 0.005
+    },
+    "duplicates": [
+      {
+        "firstFile": "encoding/encoding_service.py (line 12-20)",
+        "secondFile": "normalization/normalization_service.py (line 15-22)",
+        "lines_duplicated": 9
+      }
+    ]
+  },
+  "smells": [
+    {
+      "Category": "Module level",
+      "Package": "checkpoint_6",
+      "Module": "command_handlers",
+      "Class": "",
+      "Smell": "High LCOM",
+      "Description": "The module 'command_handlers' has a high LCOM of 0.77. Only flag this as a problem if it combines distinct responsibilities."
+    },
+    {
+      "Category": "Design level",
+      "Package": "checkpoint_6.matching",
+      "Module": "matching_models",
+      "Class": "MatchRequest",
+      "Smell": "Access to protected members",
+      "Description": "Class 'MatchRequest' accesses non-public code elements __setattr__ from __init__"
+    },
+    {
+      "Category": "Design level",
+      "Module": "encoding.encoding_service",
+      "Smell": "Dependency on less stable modules",
+      "Description": "Module 'encoding.encoding_service' (instability: 0.714) is depending on module 'encoding.encoding_csv_writer' (instability: 0.75), which is less stable. Worth flagging if changes would ripple and become expensive, but can be ignored if the module being depended on is non-volatile or if it is intentional by design."
+    }
+  ]
+}
