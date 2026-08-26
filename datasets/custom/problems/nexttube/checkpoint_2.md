@@ -16,6 +16,7 @@ The website should now also feature displaying underground line statuses and sta
 Example:
 
 ```
+-----------------------------------------------------
 Piccadilly
 Part Closure
 Heathrow Terminal 4 <--> Hammersmith (Dist&Picc Line)
@@ -28,6 +29,9 @@ Severe Delays
 Arnos Grove --> Cockfosters
 
 [Reason]
+-----------------------------------------------------
+Central
+...
 ```
 
 Note that you do not need to strictly follow the order of route sections affected, it would be accepted as long as the displayed information is correct.
@@ -37,6 +41,15 @@ Note that you do not need to strictly follow the order of route sections affecte
 - Display a list of station disruptions above the boards.
 - Disruptions with type "Closure" should be colored in red, otherwise they should be colored in blue.
 
+Example:
+
+```
+Southwark: Closed - This station is closed due to planned engineering work.
+
+(Arrival boards below)
+...
+```
+
 ## Site hierarchy
 
 Remains unchanged.
@@ -45,8 +58,8 @@ Remains unchanged.
 
 You will be using the TfL Unified API which does not require an API key to use for the usage frequency that we need.
 
-Get statuses of all lines: https://api.tfl.gov.uk/Line/bakerloo,central,circle,district,hammersmith-city,jubilee,metropolitan,northern,piccadilly,victoria,waterloo-city/Status/2026-07-11/to/2026-07-12?detail=true
-(Replace the date with the actual date).
+1. Get statuses of all lines: https://api.tfl.gov.uk/Line/bakerloo,central,circle,district,hammersmith-city,jubilee,metropolitan,northern,piccadilly,victoria,waterloo-city/Status/2026-07-11/to/2026-07-12?detail=true
+   (Replace the date with the actual date).
 
 The meaning of "statusSeverity" is given here:
 0 = Special Service
@@ -279,7 +292,12 @@ This endpoint returns data in the following format:
 ]
 ```
 
-Get station disruptions: https://api.tfl.gov.uk/stopPoint/mode/tube/disruption
+Status severity number should always be preferred rather than directly using the strings such as "Minor Delays".
+If the status severity number is missing or does not match 0 to 20, that disruption should be ignored and discarded.
+Other than that, there are no strict requirements on how you should handle missing data fields, as long as the application doesnt crash
+when some fields are absent from the API, although this is rare.
+
+2. Get station disruptions: https://api.tfl.gov.uk/stopPoint/mode/tube/disruption
 
 This endpoint returns data in the following format:
 
@@ -317,6 +335,9 @@ This endpoint returns data in the following format:
   }
 ]
 ```
+
+stationAtcoCode is same as NaptanID, stationID. Use that to filter out the correct station.
+Again there are no strict requirements on how you should handle missing fields as long as the app does not crash.
 
 ## Tech stack
 

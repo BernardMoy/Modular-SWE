@@ -24,6 +24,7 @@ Add a dynamic map, showing the layout of each line with live train positions.
 - If multiple disruptions are affecting a line segment, the more severe one applies. You may assume the lower the "statusSeverity" number returned in the status API, the more severe the disruption is.
 
 - On the map, show train icons representing the real time location of the trains. This can be obtained in the "currentLocation" attribute of arrivals.
+- If the "currentLocation" attribute is missing or is empty (""), you can ignore those train entries.
 - The currentLocation string does not follow a specific format, but you are required to handle the cases below (which are simplified as it is difficult to determine which branch of the line the train is on). The train icon's location depend on how that string is structured:
   | currentLocation format | Train icon location on the map |
   |--------------------------------------------------------------------|----------------------------------------------------------------|
@@ -33,6 +34,8 @@ Add a dynamic map, showing the layout of each line with live train positions.
   | Between STATION1 and STATION2 | Halfway between the STATION1's node and STATION2's node |
 
 - The currentLocation string use station names (not id), which can differ from what is in our `data/tube-stations.json`. For simplicity ignore the differences and only consider exact match, case insensitive, after trimming.
+- Train entries on the live map should be deduplicated with their vehicle Ids, if the vehicle Id field is missing, is empty or is "000", then do not deduplicate them.
+- You can make any reasonable assumption on what to happen when multiple trains show up in the same location, as long as the app does not crash.
 
 ## Site hierarchy
 
@@ -47,6 +50,10 @@ You will be using the TfL Unified API which does not require an API key to use f
 Get statuses of all lines: https://api.tfl.gov.uk/Line/bakerloo,central,circle,district,hammersmith-city,jubilee,metropolitan,northern,piccadilly,victoria,waterloo-city/Status/2026-07-11/to/2026-07-12?detail=true
 (Replace the date with the actual date).
 Get all arrivals per line: https://api.tfl.gov.uk/Line/{lineId}/Arrivals/
+
+Based on previous implementations, we filtered out all arrivals with invalid directions and statuses with invalid statusSeverity.
+Therefore, these fields are guaranteed to be present.
+Other than that, you can make any reasonable assumptions to missing fields, as long as the app is robust and does not crash.
 
 ## Tech stack
 
