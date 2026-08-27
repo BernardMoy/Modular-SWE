@@ -36,8 +36,37 @@ if WORKFLOW_MODE == "human":
     DA_LOOP_THRESHOLD_BEFORE_IMPL =555
     DA_LOOP_THRESHOLD_AFTER_IMPL =555 
 
+# function to format code inside agent_workspace / implementation
+# by running prettier (ts, json) and black (Python) 
+def _format_code(): 
+    implementation_path = AGENT_WORKSPACE / "implementation"
+
+    # run prettier 
+    subprocess.run(
+        [
+            "npx",
+            "prettier",
+            "--write",
+            implementation_path,
+            "--ignore-path",
+            "/dev/null",
+        ],
+        check=True,
+    )
+
+    # run black 
+    subprocess.run(
+        [
+            "bash",
+            "-c",
+            f'find {implementation_path} -name "*.py" -print0 | xargs -0 black',
+        ],
+        check=True,
+    )
+
+
 # Function to decide whether to pass or fail, given the analyzer output. 
-def pass_fail(): 
+def _pass_fail(): 
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass 
     with open(AGENT_WORKSPACE / "current_analyzer_result.json", 'r') as f: 
         content = f.read().strip() 
@@ -51,7 +80,7 @@ def pass_fail():
     return False 
 
 # pipeline to run decomposer + validate 
-def run_decomposer(executor, checkpoint_number): 
+def _run_decomposer(executor, checkpoint_number): 
     get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
 
     # Validator for the module names 
@@ -74,13 +103,13 @@ def run_decomposer(executor, checkpoint_number):
 # Decomposer analyzer loop. 
 # D first before A 
 # for has impl = False only.
-def decomposer_analyzer_loop(executor, checkpoint_number, threshold): 
+def _decomposer_analyzer_loop(executor, checkpoint_number, threshold): 
     iteration = 0 
     passed = False 
 
     # Initial decomposer agent 
     print(f"========== INITIAL DECOMPOSER AGENT ==========")
-    run_decomposer(executor, checkpoint_number)
+    _run_decomposer(executor, checkpoint_number)
 
     while (not passed and iteration < threshold): 
         # Generate metrics from design and deps graph 
@@ -104,7 +133,7 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
             analyzer_result_path.touch() 
 
         # If the analyzer return pass, set the passed flag to true 
-        if pass_fail():  
+        if _pass_fail():  
             passed = True
 
         # if passed, return
@@ -114,13 +143,13 @@ def decomposer_analyzer_loop(executor, checkpoint_number, threshold):
 
         # Else if it does not pass (here), run the decomposer agent 
         print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
-        run_decomposer(executor, checkpoint_number)
+        _run_decomposer(executor, checkpoint_number)
 
         # Increment the iteration number 
         iteration += 1 
 
 # Test Refactor - Tester loop: Happens after implementation within the AR loop. 
-def tester_refactor_loop(executor, checkpoint_number, threshold): 
+def _tester_refactor_loop(executor, checkpoint_number, threshold): 
     iteration = 0 
     passed = False 
 
@@ -171,7 +200,7 @@ def tester_refactor_loop(executor, checkpoint_number, threshold):
 # For has impl = True only. 
 # Loop: 
 # Run tests and fix code --> Update metrics --> Analyzer --> 
-def analyzer_refactor_loop(executor, checkpoint_number, threshold): 
+def _analyzer_refactor_loop(executor, checkpoint_number, threshold): 
     # After coding: Run tests 
     def tester_agent(): 
         print(f"========== TESTER ==========")
@@ -264,7 +293,7 @@ def analyzer_refactor_loop(executor, checkpoint_number, threshold):
         # If the analyzer return pass, set the passed flag to true 
         # a_output_json = json.loads(a_output) 
         # print(json.dumps(a_output_json, indent=2))
-        if pass_fail():  
+        if _pass_fail():  
             passed = True
         
         # if passed, return
@@ -439,6 +468,9 @@ def modular_workflow_single(problem, n, logged_in = False):
         print(f"========== CODING ALL MODULES ==========")
         get_prompt_and_run_agent(executor, "no_design_coder", N) 
 
+        # format code 
+        _format_code() 
+
         # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code) 
         # as the agent_report would get overridden below 
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
@@ -446,7 +478,7 @@ def modular_workflow_single(problem, n, logged_in = False):
     elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "human", "autoAggressive"]: 
         # Initial decomposer agent 
         # Run these inside the bind mounted space 
-        decomposer_analyzer_loop(
+        _decomposer_analyzer_loop(
             executor=executor, 
             checkpoint_number=N, 
             threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL
@@ -473,6 +505,9 @@ def modular_workflow_single(problem, n, logged_in = False):
         # for the all at once mode, implement all modules       
         get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
 
+        # format code 
+        _format_code() 
+
         # After implementation: 
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed 
         # NOT necessary - all rejections are provided by humans. 
@@ -486,7 +521,7 @@ def modular_workflow_single(problem, n, logged_in = False):
         shutil.copy(AGENT_WORKSPACE / "agent_report.json", AGENT_WORKSPACE / "implementation_report.json")
 
         # Refactor - Analyzer loop 
-        analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
+        _analyzer_refactor_loop(executor, N, DA_LOOP_THRESHOLD_AFTER_IMPL)
 
                     
 

@@ -17,7 +17,7 @@ AGENT_REPORT_JSON = "agent_report.json"
 # Reads the agent workspace / analyzer result, remove all unresolved suggestions and quit 
 # So that the DA loop would not continue 
 def _remove_unresolved_suggestions(): 
-    analyzer_result = Path("agent_workspace/current_analyzer_result.json")
+    analyzer_result = Path("current_analyzer_result.json")
 
     with open(analyzer_result, 'r') as f:
         data = json.load(f)

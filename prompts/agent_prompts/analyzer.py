@@ -33,7 +33,7 @@ Identified smell: the function process_final_amount is complex, and it combines 
 Backed up by metrics: the function has a high cyclomatic complexity of 22, making it difficult to test in isolation. 
 Suggestion: Split the function into internal private helpers, concerning about price calculation and discount application. 
 
-4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}
+4. Based on the analysis, provide improvement suggestions at once that follow these criteria: {ANALYZER_CRITERIA}
 Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
 Leave the file unchanged if there are none. 
 Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 

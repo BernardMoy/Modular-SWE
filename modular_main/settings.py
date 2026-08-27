@@ -22,7 +22,7 @@ WORKFLOW_MODE: Literal[
     "autoAggressive",
     "auto", 
     "human"
-    ] = "human"
+    ] = "noDesign"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 
