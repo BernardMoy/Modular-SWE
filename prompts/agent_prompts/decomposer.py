@@ -58,7 +58,7 @@ Task:
 1. create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 
 (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
-(2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
+(2) If the module design changed from its previous implementation -> 'changed'. If the module is removed in the current design -> 'deleted'. Otherwise, 'keep'. 
 - The module_name field should follow pydeps conventions, stripping the .py extension for modules and specify the file path separated by dots (.) 
 {get_json_string("decomposer")}
 
