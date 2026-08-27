@@ -70,6 +70,10 @@ def main():
         "--max-bacon=0",
         "--reverse",
         "--only",
+        # Keep the temporary entrypoint in the graph.  It is the root of all
+        # imports; filtering it out makes pydeps emit an empty graph when the
+        # entrypoint is freshly generated (a stale entrypoint can mask this).
+        entryfile_path.stem,
         *REAL_MODULES,
     ]
 
