@@ -1,0 +1,201 @@
+Screen {
+    layout: vertical;
+    background: $background;
+    color: $foreground;
+}
+
+Label,
+Static,
+ListView,
+ListItem,
+Input,
+Select {
+    color: $foreground;
+}
+
+ListView,
+Input,
+Select {
+    background: $background;
+}
+
+ListItem.-highlight {
+    color: $background;
+}
+
+#stage {
+    height: 5;
+    border: round $primary;
+    background: $surface;
+    color: $foreground;
+    padding: 1 2;
+}
+
+#main-content {
+    height: 1fr;
+    layout: grid;
+    grid-size: 2 1;
+    grid-columns: 1fr 3fr;
+    grid-gutter: 1;
+    padding: 1;
+    background: $background;
+}
+
+.panel {
+    border: round $primary 60%;
+    background: $surface;
+    color: $foreground;
+    border-title-color: $foreground;
+    border-title-background: $surface;
+    border-title-style: bold;
+    padding: 1;
+}
+
+.panel:focus-within {
+    border: round $primary 60%;
+}
+
+#right-content {
+    layout: grid;
+    grid-size: 1 2;
+    grid-rows: 1fr 2fr;
+    grid-gutter: 1;
+}
+
+#file-list {
+    height: 1fr;
+    margin-top: 1;
+    background: $background;
+}
+
+#selected-file-content {
+    height: 1fr;
+    background: $surface;
+    color: $foreground;
+    border: none;
+    padding: 0;
+}
+
+#suggestions {
+    height: 1fr;
+    overflow: auto;
+    background: $surface;
+}
+
+.suggestion-header,
+.suggestion-row {
+    layout: grid;
+    grid-size: 4 1;
+    grid-columns: 2fr 2fr 4fr 3fr;
+    align: left middle;
+    height: auto;
+    padding: 0 1;
+}
+
+.suggestion-header {
+    color: $secondary;
+    text-style: bold;
+    background: $panel;
+    height: 1;
+}
+
+.suggestion-header > Label {
+    height: 1;
+    content-align: left middle;
+}
+
+.suggestion-row {
+    color: $foreground;
+    border-top: solid $panel;
+}
+
+.suggestion-row > Label {
+    height: auto;
+    content-align: left middle;
+}
+
+.suggestion-row > Select {
+    width: 1fr;
+    height: auto;
+    margin: 0;
+}
+
+.suggestion-row SelectCurrent {
+    border: none; 
+}
+
+
+.suggestion-row > Input {
+    width: 1fr;
+    height: 3;
+    margin: 0;
+}
+
+/* Flip the menu above the control when there isn't enough room below it. */
+.suggestion-row SelectOverlay {
+    constrain: none inflect;
+}
+
+.suggestion-row TextArea {
+    width: 1fr;
+    max-width: 100%;
+    height: 100%;
+    min-height: 3;
+    border: solid $panel;
+}
+
+.suggestion-row Input:focus {
+    border: tall $primary;
+}
+
+#submit-button {
+    height: 3;
+    align: right middle;
+}
+
+Button {
+    background: $panel;
+    color: $foreground;
+    border: tall $panel;
+}
+
+Button:hover {
+    background: $secondary;
+    color: $background;
+}
+
+Button:focus {
+    border: tall $primary;
+}
+
+Button.-primary {
+    background: $primary;
+    color: $background;
+}
+
+Button.-success {
+    background: $success;
+    color: white;
+    text-style: bold;
+}
+
+#submit {
+    background: $success;
+    color: white;
+    text-style: bold;
+}
+
+#submit:hover {
+    background: $secondary;
+    color: white;
+}
+
+Button.-warning {
+    background: $warning;
+    color: $background;
+}
+
+Button.-error {
+    background: $error;
+    color: $foreground;
+}

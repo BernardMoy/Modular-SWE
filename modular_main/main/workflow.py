@@ -574,7 +574,17 @@ def modular_workflow():
     parser.add_argument("problem_name", help="Name of the problem")
     parser.add_argument("checkpoint_number", help="Checkpoint number")
     parser.add_argument("checkpoint_number_end", help="Checkpoint number's end range value, inclusive. optional", nargs="?")
+    parser.add_argument(
+        "--ui",
+        action="store_true",  # default = False
+        help="Open the textual UI",
+    )
     args = parser.parse_args()
+
+    if args.ui:
+        from .ui import run_ui
+
+        run_ui(AGENT_WORKSPACE)
 
     start = args.checkpoint_number 
     end = args.checkpoint_number_end if args.checkpoint_number_end else start
@@ -590,4 +600,3 @@ def modular_workflow():
 if __name__ == "__main__": 
     # run the modular workflow 
     modular_workflow() 
-
