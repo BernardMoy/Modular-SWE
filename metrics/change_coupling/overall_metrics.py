@@ -178,6 +178,11 @@ def get_change_coupling(implementation_path_history):
 
     result = {} 
 
+    # score = the pair change proportion * how many times the pair is actually changed 
+    # FREQUENT coupled change is the problem 
+    score = 0 
+    total_pairs = 0 
+
     # for all pairs inside d_pair, calculate change coupling = Count that (A,B) changed together / Count that either A or B changed 
     for key, value in d_pair.items(): 
         a, b = key  
@@ -188,9 +193,15 @@ def get_change_coupling(implementation_path_history):
             )
 
         if number_either_changed > 0: 
-            result[key] = d_pair[key] / number_either_changed
+            prop = d_pair[key] / number_either_changed
+            result[key] = prop 
+            score += prop*d_pair[key]
+            total_pairs += d_pair[key]
 
     # Return pairs sorted by change coupling
-    return sorted(result.items(), key=lambda item: item[1], reverse=True)
+    return {
+        "score": score / total_pairs if total_pairs > 0 else 1, 
+        "pairs": sorted(result.items(), key=lambda item: item[1], reverse=True)
+    }
 
 
