@@ -1,6 +1,7 @@
 from ..json_helper import get_json_string
 
-def get_tester_prompt(checkpoint_number): 
+
+def get_tester_prompt(checkpoint_number):
     return f"""
 You are writing tests for the software.  
 

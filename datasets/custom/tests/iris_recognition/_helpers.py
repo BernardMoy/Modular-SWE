@@ -7,7 +7,6 @@ import struct
 import zlib
 from pathlib import Path
 
-
 DATASET_FIELDS = [
     "subject_id",
     "eye",
@@ -62,12 +61,7 @@ PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
 def _png_chunk(tag: bytes, payload: bytes) -> bytes:
     checksum = zlib.crc32(tag + payload) & 0xFFFFFFFF
-    return (
-        struct.pack("!I", len(payload))
-        + tag
-        + payload
-        + struct.pack("!I", checksum)
-    )
+    return struct.pack("!I", len(payload)) + tag + payload + struct.pack("!I", checksum)
 
 
 def write_grayscale_png(path: Path, pixels: list[list[int]]) -> None:
@@ -171,5 +165,7 @@ def build_normalized_pattern(path: Path) -> None:
 
 
 def build_mask_png(path: Path, *, value: int) -> None:
-    pixels = [[value for _ in range(NORMALIZED_WIDTH)] for _ in range(NORMALIZED_HEIGHT)]
+    pixels = [
+        [value for _ in range(NORMALIZED_WIDTH)] for _ in range(NORMALIZED_HEIGHT)
+    ]
     write_grayscale_png(path, pixels)

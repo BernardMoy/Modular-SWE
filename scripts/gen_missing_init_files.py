@@ -1,11 +1,13 @@
 """
 Given a directory, create an empty __init__.py in every subfolder if it does not exist.
-Otherwise pydeps wont recognise it 
+Otherwise pydeps wont recognise it
 """
+
 import argparse
 from pathlib import Path
 import os
 from constants import IGNORED_DIRS
+
 
 def gen_missing_init_files(directory):
     target_dir = Path(directory)

@@ -24,11 +24,23 @@ ListItem.-highlight {
 }
 
 #stage {
-    height: 5;
+    height: auto;
     border: round $primary;
     background: $surface;
     color: $foreground;
     padding: 1 2;
+}
+
+#stage-label {
+      width: 1fr;
+      height: auto;
+      text-wrap: wrap;
+  }
+
+#top-label {
+    width: 1fr; 
+    height: auto; 
+    color: #ffb8e4 
 }
 
 #main-content {
@@ -146,6 +158,10 @@ ListItem.-highlight {
 
 .suggestion-row Input:focus {
     border: tall $primary;
+}
+
+.human-text{
+    color: #ffdc42
 }
 
 #submit-button {

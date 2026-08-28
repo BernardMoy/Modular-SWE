@@ -133,7 +133,9 @@ def test_segment_rejects_dataset_csv_with_wrong_columns(
     tmp_path: Path, run_cli, isolated_workspace: Path
 ) -> None:
     (tmp_path / "empty-dataset").mkdir()
-    dataset_root = install_default_dataset(isolated_workspace, tmp_path / "empty-dataset")
+    dataset_root = install_default_dataset(
+        isolated_workspace, tmp_path / "empty-dataset"
+    )
     dataset_csv = dataset_root / "dataset.csv"
     write_csv(
         dataset_csv,

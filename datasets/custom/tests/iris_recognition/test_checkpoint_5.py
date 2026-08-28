@@ -6,7 +6,9 @@ from pathlib import Path
 from ._helpers import ENCODED_BYTE_LENGTH
 
 
-def _write_match_inputs(path: Path, *, code_byte: int, mask_byte: int) -> tuple[Path, Path]:
+def _write_match_inputs(
+    path: Path, *, code_byte: int, mask_byte: int
+) -> tuple[Path, Path]:
     code_path = path.with_suffix(".code.bin")
     mask_path = path.with_suffix(".mask.bin")
     code_path.parent.mkdir(parents=True, exist_ok=True)

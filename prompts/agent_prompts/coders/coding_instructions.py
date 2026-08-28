@@ -1,7 +1,11 @@
 def get_coding_instructions(checkpoint_number):
-    venv_text = """Use a virtual environment and ensure that a 'requirements.txt' is present with any dependencies
-you need to solve the problem.""" if checkpoint_number == 1 else """Keep using the same virtual environment you started with,
+    venv_text = (
+        """Use a virtual environment and ensure that a 'requirements.txt' is present with any dependencies
+you need to solve the problem."""
+        if checkpoint_number == 1
+        else """Keep using the same virtual environment you started with,
 update 'requirements.txt' with any new dependencies you need."""
+    )
 
     return f"""
 You are working on the following issue: checkpoint_{checkpoint_number}.md

@@ -8,38 +8,39 @@ from .agent_prompts.test_planner import get_test_planner_prompt
 from .agent_prompts.tester import get_tester_prompt
 from .agent_prompts.coders.test_refactor_coder import get_test_refactor_coder_prompt
 from .agent_prompts.analyzer_human import get_analyzer_human_prompt
-from .agent_prompts.black_box_test_writer import get_black_box_test_writer_prompt 
+from .agent_prompts.black_box_test_writer import get_black_box_test_writer_prompt
+
 
 def get_prompt(agent_name, *args):
-    # Given the agent name and a variable number of arguments. 
-    # Return the prompt for these agents 
-    # (You need to have the correct number of arguments).  
+    # Given the agent name and a variable number of arguments.
+    # Return the prompt for these agents
+    # (You need to have the correct number of arguments).
 
-    # For agent_name, the corresponding function to get its prompt is 
-    # get_[agent_name]_prompt. 
+    # For agent_name, the corresponding function to get its prompt is
+    # get_[agent_name]_prompt.
 
-    if agent_name == "analyzer": 
-        return get_analyzer_prompt(*args) 
-    elif agent_name == "decomposer": 
-        return get_decomposer_prompt(*args) 
-    elif agent_name == "modular_coder": 
-        return get_modular_coder_prompt(*args) 
-    elif agent_name == "all_at_once_coder": 
+    if agent_name == "analyzer":
+        return get_analyzer_prompt(*args)
+    elif agent_name == "decomposer":
+        return get_decomposer_prompt(*args)
+    elif agent_name == "modular_coder":
+        return get_modular_coder_prompt(*args)
+    elif agent_name == "all_at_once_coder":
         return get_all_at_once_coder_prompt(*args)
-    elif agent_name == "no_design_coder": 
+    elif agent_name == "no_design_coder":
         return get_no_design_coder_prompt(*args)
-    elif agent_name == "refactor_coder": 
-        return get_refactor_coder_prompt(*args) 
-    elif agent_name == "test_planner": 
-        return get_test_planner_prompt(*args) 
-    elif agent_name == "tester": 
+    elif agent_name == "refactor_coder":
+        return get_refactor_coder_prompt(*args)
+    elif agent_name == "test_planner":
+        return get_test_planner_prompt(*args)
+    elif agent_name == "tester":
         return get_tester_prompt(*args)
-    elif agent_name == "test_refactor_coder": 
+    elif agent_name == "test_refactor_coder":
         return get_test_refactor_coder_prompt(*args)
-    elif agent_name == "analyzer_human": 
+    elif agent_name == "analyzer_human":
         return get_analyzer_human_prompt(*args)
-    elif agent_name == "black_box_test_writer": 
+    elif agent_name == "black_box_test_writer":
         return get_black_box_test_writer_prompt(*args)
-    else: 
-        # none match, throw error 
+    else:
+        # none match, throw error
         raise Exception(f"Invalid agent name: {agent_name}")

@@ -1,57 +1,56 @@
 """
-These helper functions run independently in the bind mounted agent workspace: 
+These helper functions run independently in the bind mounted agent workspace:
 They should not depend on any modules outside of the agent workspace
 as they wont be available.
 """
+
 from openai_codex import AsyncCodex, Sandbox, ApprovalMode
 import argparse
 import asyncio
-import json 
+import json
 from opencode_ai import AsyncOpencode
-import readline  # needed for inputs to be able to backspace to previous line 
-from pathlib import Path 
+import readline  # needed for inputs to be able to backspace to previous line
+from pathlib import Path
 
-# when the run_agent command is called, the agent summary and log will be written to the json below 
-AGENT_REPORT_JSON = "agent_report.json" 
+# when the run_agent command is called, the agent summary and log will be written to the json below
+AGENT_REPORT_JSON = "agent_report.json"
 
-# Reads the agent workspace / analyzer result, remove all unresolved suggestions and quit 
-# So that the DA loop would not continue 
-def _remove_unresolved_suggestions(): 
+
+# Reads the agent workspace / analyzer result, remove all unresolved suggestions and quit
+# So that the DA loop would not continue
+def _remove_unresolved_suggestions():
     analyzer_result = Path("current_analyzer_result.json")
 
-    with open(analyzer_result, 'r') as f:
+    with open(analyzer_result, "r") as f:
         data = json.load(f)
 
-        data = [
-            entry
-            for entry in data
-            if entry.get("status") != "unresolved"
-        ]
+        data = [entry for entry in data if entry.get("status") != "unresolved"]
 
-        with open(analyzer_result, 'w') as f:
+        with open(analyzer_result, "w") as f:
             json.dump(data, f, indent=2)
 
-async def run_agent(agent, model, prompt): 
-    log = []
-    read_files = [] 
-    added_files = [] 
-    updated_files = [] 
-    deleted_files = [] 
 
-    # run codex agent 
-    if agent == "codex": 
-        async with AsyncCodex() as codex: 
+async def run_agent(agent, model, prompt):
+    log = []
+    read_files = []
+    added_files = []
+    updated_files = []
+    deleted_files = []
+
+    # run codex agent
+    if agent == "codex":
+        async with AsyncCodex() as codex:
             thread = await codex.thread_start(
-                model=model, 
-                sandbox=Sandbox.full_access, 
-                approval_mode=ApprovalMode.deny_all
+                model=model,
+                sandbox=Sandbox.full_access,
+                approval_mode=ApprovalMode.deny_all,
             )
 
-            result = await thread.run(prompt) 
+            result = await thread.run(prompt)
 
-            # Handle human questions asked by the agent 
-            # By re-assigning the variable 'result' 
-            while True: 
+            # Handle human questions asked by the agent
+            # By re-assigning the variable 'result'
+            while True:
                 response = result.final_response
 
                 # Identify questions asked by codex to humans: They are always in the form "HUMAN_QUESTION: <question>"
@@ -61,148 +60,171 @@ async def run_agent(agent, model, prompt):
 
                     print(f"\nQuestion: \n{question}")
 
-                    # Obtain the human response from the input 
+                    # Obtain the human response from the input
                     human_response = input("\nYour answer ('q' to quit): ")
 
-                    # if human response == q, quit 
-                    if human_response.strip() == "q": 
-                        break 
+                    # if human response == q, quit
+                    if human_response.strip() == "q":
+                        break
 
                     print("Response recorded.")
 
                     # Call the agent in the same thread again to continue the conversation
-                    # with the human response added to the context 
+                    # with the human response added to the context
                     new_prompt = f"""The human has responded to your previous question: 
 {human_response}
 
 Continue your task or ask another question in the format HUMAN_QUESTION: <question>. 
-""" 
-                    # Re-assign the result variable 
+"""
+                    # Re-assign the result variable
                     result = await thread.run(new_prompt)
 
-                elif response.strip().startswith("HUMAN_APPROVE:"): 
-                    # strip the prefix 
-                    question = response.removeprefix("HUMAN_APPROVE:").strip() 
+                elif response.strip().startswith("HUMAN_APPROVE:"):
+                    # strip the prefix
+                    question = response.removeprefix("HUMAN_APPROVE:").strip()
 
                     print(f"\nRequires human approval: \n{question}")
 
-                    # Obtain the human response from the input 
-                    human_response = input("\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: ")
+                    # Obtain the human response from the input
+                    human_response = input(
+                        "\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: "
+                    )
 
-                    # if human response == a, quit 
-                    if human_response.strip() == "a": 
-                        break 
+                    # if human response == a, quit
+                    if human_response.strip() == "a":
+                        break
 
-                    # if human response == q, remove suggestions and quit 
-                    elif human_response.strip() == "q": 
-                        _remove_unresolved_suggestions() 
-                        break 
+                    # if human response == q, remove suggestions and quit
+                    elif human_response.strip() == "q":
+                        _remove_unresolved_suggestions()
+                        break
 
-                    else: 
+                    else:
                         print("Response recorded.")
 
                     # Call the agent in the same thread again to continue the conversation
-                    # with the human response added to the context 
+                    # with the human response added to the context
                     new_prompt = f"""The human has provided feedback for the suggestions: 
 {human_response}
 
 Continue your task.
-""" 
-                    # Re-assign the result variable 
+"""
+                    # Re-assign the result variable
                     result = await thread.run(new_prompt)
 
-                else: 
-                    break 
+                else:
+                    break
 
-            # Print the agent's output to be captured later 
+            # Print the agent's output to be captured later
             print(result.final_response)
 
-            # Obtain the token usage from last and total 
-            last_dict = result.usage.last.model_dump() if hasattr(result.usage.last, "model_dump") else vars(result.usage.last)
-            total_dict = result.usage.total.model_dump() if hasattr(result.usage.total, "model_dump") else vars(result.usage.total)
+            # Obtain the token usage from last and total
+            last_dict = (
+                result.usage.last.model_dump()
+                if hasattr(result.usage.last, "model_dump")
+                else vars(result.usage.last)
+            )
+            total_dict = (
+                result.usage.total.model_dump()
+                if hasattr(result.usage.total, "model_dump")
+                else vars(result.usage.total)
+            )
 
             for item in result.items:
-                # Add the all fields metadata to the log array 
-                data = item.model_dump() if hasattr(item, "model_dump") else (
-                    vars(item) if hasattr(item, "__dict__") else {"raw": str(item)}
+                # Add the all fields metadata to the log array
+                data = (
+                    item.model_dump()
+                    if hasattr(item, "model_dump")
+                    else (
+                        vars(item) if hasattr(item, "__dict__") else {"raw": str(item)}
+                    )
                 )
                 log.append(data)
 
-                # For edits (add / update / delete) 
-                # this is indicated in the kind - type field inside changes 
-                # their type = fileChange if "changes" is present 
+                # For edits (add / update / delete)
+                # this is indicated in the kind - type field inside changes
+                # their type = fileChange if "changes" is present
 
-                # If there is a changes: key, then extract the path inside 
+                # If there is a changes: key, then extract the path inside
                 # To record a file edit
                 if data.get("changes") and data.get("type") == "fileChange":
-                    # add all the changed file paths to the edited files  
+                    # add all the changed file paths to the edited files
                     for change in data["changes"]:
-                        if not change.get("kind"): continue 
-                        if change["kind"].get("type") == "add": 
+                        if not change.get("kind"):
+                            continue
+                        if change["kind"].get("type") == "add":
                             added_files.append(change.get("path"))
-                        if change["kind"].get("type") == "update": 
+                        if change["kind"].get("type") == "update":
                             updated_files.append(change.get("path"))
-                        if change["kind"].get("type") == "delete": 
+                        if change["kind"].get("type") == "delete":
                             deleted_files.append(change.get("path"))
 
-                # For read: 
-                # there is a command key with type = "read" 
+                # For read:
+                # there is a command key with type = "read"
 
-                # For list a directory, 
+                # For list a directory,
                 # there is a command key with type = "search" (NOT SURE, CHECK!)
                 elif data.get("command_actions"):
-                    for command_action in data["command_actions"]: 
-                        if command_action["type"] == "read": 
-                            if "path" in command_action: 
+                    for command_action in data["command_actions"]:
+                        if command_action["type"] == "read":
+                            if "path" in command_action:
                                 read_files.append(command_action["path"])
 
-            # The list of added / updated / deleted files are in time order. 
+            # The list of added / updated / deleted files are in time order.
             summary = {
-                "added_files": added_files, 
-                "added_files_count": len(set(added_files)),  # unique only 
-                "updated_files": updated_files, 
-                "updated_files_count": len(set(updated_files)), 
-                "deleted_files": deleted_files, 
-                "deleted_files_count": len(set(deleted_files)), 
-                "changed_files_count": len(set(added_files + updated_files + deleted_files)), # unique across add / update / delete 
+                "added_files": added_files,
+                "added_files_count": len(set(added_files)),  # unique only
+                "updated_files": updated_files,
+                "updated_files_count": len(set(updated_files)),
+                "deleted_files": deleted_files,
+                "deleted_files_count": len(set(deleted_files)),
+                "changed_files_count": len(
+                    set(added_files + updated_files + deleted_files)
+                ),  # unique across add / update / delete
                 "files_read": read_files,
                 "files_read_count": len(set(read_files)),
             }
 
-            # clear the agent report json 
+            # clear the agent report json
             # Write the summary and log (full data) to the json
-            
-            # As in overall_metrics (under metrics/) the "log" attribute must be present
-            # so metrics can be analyzed from the coding session. 
-            with open(AGENT_REPORT_JSON, "w") as f:
-                json.dump({"summary": summary, "tokens": total_dict, "log": log}, f, indent=2, default=str)
 
-    # run opencode agent 
+            # As in overall_metrics (under metrics/) the "log" attribute must be present
+            # so metrics can be analyzed from the coding session.
+            with open(AGENT_REPORT_JSON, "w") as f:
+                json.dump(
+                    {"summary": summary, "tokens": total_dict, "log": log},
+                    f,
+                    indent=2,
+                    default=str,
+                )
+
+    # run opencode agent
     # https://github.com/anomalyco/opencode-sdk-python/blob/main/api.md
     # generate the base url by running `opencode serve` in a separate terminal
 
-    # It would hit timeout after the implementation is completed and i have no idea why. 
+    # It would hit timeout after the implementation is completed and i have no idea why.
     # See curl -N http://127.0.0.1:4096/event
-    # server heartbeat events remains, those causes the timeout to occur 
-    elif agent == "opencode": 
-        client = AsyncOpencode(base_url="http://127.0.0.1:4096")  
-        session = await client.session.create() 
+    # server heartbeat events remains, those causes the timeout to occur
+    elif agent == "opencode":
+        client = AsyncOpencode(base_url="http://127.0.0.1:4096")
+        session = await client.session.create()
 
-        # runs the chat 
+        # runs the chat
         result = await client.session.chat(
-            id=session.id, 
+            id=session.id,
             provider_id="opencode",  # free ones only (opencode Zen)
-            model_id=model,   # the offical docs example: opencode/gpt-5.1-codex (provider_id/model_id)
-            parts=[{"type": "text", "text": prompt}]
+            model_id=model,  # the offical docs example: opencode/gpt-5.1-codex (provider_id/model_id)
+            parts=[{"type": "text", "text": prompt}],
         )
 
-        print(result) 
+        print(result)
 
     # if the agent name does not match, throw an exception
-    else: 
+    else:
         raise Exception(f"Agent {agent} is invalid.")
 
-def main(): 
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("agent", help="The coding agent being used")
     parser.add_argument("model", help="LLM Model of the coding agent")
@@ -210,9 +232,10 @@ def main():
     args = parser.parse_args()
 
     # Runs the agent with a blocking operation
-    # So we can wait for the result to be ready then parse it 
+    # So we can wait for the result to be ready then parse it
     asyncio.run(run_agent(args.agent, args.model, args.prompt))
 
+
 # usage: run_agent.py [agent] [model] [prompt]
-if __name__ == "__main__": 
-    main() 
+if __name__ == "__main__":
+    main()

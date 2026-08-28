@@ -1,9 +1,9 @@
-
 from ..json_helper import get_json_string
-from ..criteria import ANALYZER_CRITERIA 
+from ..criteria import ANALYZER_CRITERIA
 
-def get_analyzer_human_prompt(has_implementation): 
-    
+
+def get_analyzer_human_prompt(has_implementation):
+
     return f"""
 You are a senior software code quality analyst that give refactoring suggestions. 
 Your job is to evaluate the following {'modular design including kept, changed or new modules' if not has_implementation else "implementation code"}.
@@ -78,36 +78,37 @@ Any further agent's output for clarification or follow-up questions from the hum
 After all feedback collected and the human has no more clarification questions, refine analyzer suggestions starting from step 4 based on the feedback.
 Change the "status" field to "rejected" inside `current_analyzer_result.json` if necessary. 
 """
-# Example: The 'writer' module originally depends on an unstable module 'workflow' that just imports its data type, causing an unstable dependency. Extracting a shared data models module helped 
 
 
-# Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema. 
-# Do not include any additional natural language descriptions in your response. 
+# Example: The 'writer' module originally depends on an unstable module 'workflow' that just imports its data type, causing an unstable dependency. Extracting a shared data models module helped
+
+
+# Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema.
+# Do not include any additional natural language descriptions in your response.
 # {get_json_string("analyzer_code_quality")}
 
 # (Example of human response: Don't split, as the api documentation hasn't changed in years, and the text processing is just to reformat some text and date display formats returned by the api, the existing module has high cohesion as the two functionalities are likely to change together.)
 
 # (Example of human response: No, because the url processing is a well-solved function that would never change, and it is too small to be extracted at this stage.)
 
-# Should the api_service be split by the fetching and text processing functionalities? 
+# Should the api_service be split by the fetching and text processing functionalities?
 
-# - Once all improvements are written to the file, directly print a summary of analyzer suggestions that were given, to end the conversation. 
+# - Once all improvements are written to the file, directly print a summary of analyzer suggestions that were given, to end the conversation.
 
-# Skip this step if there are no clarifications, such as refactoring decisions are backed up by clear antipatterns or involve little trade-offs: for example circular dependency. 
+# Skip this step if there are no clarifications, such as refactoring decisions are backed up by clear antipatterns or involve little trade-offs: for example circular dependency.
 
 # and print a natural language summary.
 
 
-# Human clarification is not required when there are clear evidence from that a refactoring is immediately necessary, for example: 
+# Human clarification is not required when there are clear evidence from that a refactoring is immediately necessary, for example:
 # - circular dependency
-# - extremely complex functions with long code that combines multiple responsibilities together 
+# - extremely complex functions with long code that combines multiple responsibilities together
 
 
-# Example 3: In implementation stage where metrics are available. Agent's internal thinking: 
+# Example 3: In implementation stage where metrics are available. Agent's internal thinking:
 # ---
-# The payments_processing module combines branching logic for payment provider and the payment status. Metrics show that the handle_payment() method has a cyclomatic complexity of 32 as a result of this. 
-# As the requirements specify that payments processing is the core subdomain of the app, this function would drastically reduce the maintainability, readability and testability of the app. 
+# The payments_processing module combines branching logic for payment provider and the payment status. Metrics show that the handle_payment() method has a cyclomatic complexity of 32 as a result of this.
+# As the requirements specify that payments processing is the core subdomain of the app, this function would drastically reduce the maintainability, readability and testability of the app.
 
-# Result: No human questions are asked, the suggestion is provided directly. 
+# Result: No human questions are asked, the suggestion is provided directly.
 # ---
-

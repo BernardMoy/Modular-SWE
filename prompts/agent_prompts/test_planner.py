@@ -1,6 +1,7 @@
 from ..json_helper import get_json_string
 
-def get_test_planner_prompt(checkpoint_number): 
+
+def get_test_planner_prompt(checkpoint_number):
     return f"""
 You are a designer of test suites before the implementation of an issue.
 

@@ -3,7 +3,12 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from ._helpers import DATASET_FIELDS, build_synthetic_iris_image, install_default_dataset, write_csv
+from ._helpers import (
+    DATASET_FIELDS,
+    build_synthetic_iris_image,
+    install_default_dataset,
+    write_csv,
+)
 
 
 def _build_gallery_source(
@@ -45,7 +50,9 @@ def test_identify_matches_the_only_gallery_subject(
     encoded_dir = tmp_path / "encoded"
     encoded_masks_dir = tmp_path / "encoded-masks"
 
-    segment_result = run_cli("segment", str(dataset_csv), "--output", str(segmentation_csv))
+    segment_result = run_cli(
+        "segment", str(dataset_csv), "--output", str(segmentation_csv)
+    )
     assert segment_result.returncode == 0, segment_result.stderr
     assert "Successful segmentation: 1" in segment_result.stdout.splitlines()
 
@@ -72,7 +79,9 @@ def test_identify_matches_the_only_gallery_subject(
     assert encode_result.returncode == 0, encode_result.stderr
     assert "Successfully encoded: 1" in encode_result.stdout.splitlines()
 
-    result = run_cli("identify", str(image_path), str(encoded_dir), str(encoded_masks_dir))
+    result = run_cli(
+        "identify", str(image_path), str(encoded_dir), str(encoded_masks_dir)
+    )
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""

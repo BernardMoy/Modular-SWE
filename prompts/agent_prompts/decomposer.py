@@ -1,16 +1,16 @@
 from ..json_helper import get_json_string
 from ..criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
-from modular_main.settings import WORKFLOW_MODE 
+from modular_main.settings import WORKFLOW_MODE
 
-# The implementation path is not needed. 
-# Reading the existing code is not the responsibility of this agent. 
+# The implementation path is not needed.
+# Reading the existing code is not the responsibility of this agent.
 
 """
 Input: new instruction, prev implementation (if checkpoint >1), current_design, current_deps_graph, current_analyzer_result
 Output: current_design, current_deps_graph, current_rejected_improvements
 """
 
-# Follows the 5 criteria for modular design. For the decomposer. 
+# Follows the 5 criteria for modular design. For the decomposer.
 MODULE_CODE_PRACTICES = """
 - The number of modules should be minimized. 
 - A module should only have a single responsibility, not to have multiple distinct reasons to change. 
@@ -20,8 +20,9 @@ MODULE_CODE_PRACTICES = """
 - There should be minimum dependency with other modules, following high cohesion low coupling. 
 """
 
-def get_decomposer_prompt(checkpoint_number): 
-    # Whether current_design and current_deps_graph exists 
+
+def get_decomposer_prompt(checkpoint_number):
+    # Whether current_design and current_deps_graph exists
     # hasPrevDesign = checkpoint_number > 1 or second_iteration
 
     return f"""

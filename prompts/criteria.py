@@ -1,20 +1,20 @@
-# The criteria for giving analyzer suggestions. HERE specifies what the analyzer should FOCUS ON. 
-# Used by multiple analyzer agents. 
+# The criteria for giving analyzer suggestions. HERE specifies what the analyzer should FOCUS ON.
+# Used by multiple analyzer agents.
 ANALYZER_CRITERIA = """
 - Modules should only be split when they carry distinct responsibilities, has different reasons to change, or the complexity and lines of code grows such that it couples different responsibilites together. 
 - Refactoring should be considered when there are significant duplication across modules, such that a likely change requires coordination. 
 - The problems should be evidenced in the design or code today, and does not only make sense when something hypothetically changes in the future as we do not know the future requirements.
 - Avoid previously suggested improvements again, to prevent running into loops. """
 
-# The criteria for decomposer to accept / reject analyzer suggestions 
-# Used by decomposer + refactor coder agents. 
-DECOMPOSER_SUGGESTIONS_CRITERIA="""
+# The criteria for decomposer to accept / reject analyzer suggestions
+# Used by decomposer + refactor coder agents.
+DECOMPOSER_SUGGESTIONS_CRITERIA = """
 - Whether the suggestions are splitting small modules, causes additional coupling, or make it more difficult to maintain the interface that outweigh the benefits. 
 - Whether the nature and complexity of the problem, and still having single responsibility justify the code without refactoring. 
 - Whether the suggestion conflict with issue requirements.
 """
 
-# used by both the tester and test writer (before impl) 
+# used by both the tester and test writer (before impl)
 TEST_WRITER_CRITERIA = """
 - The tests must be black box; only the behaviour of the CLI should be tested. Tests should never depend on the names of internal function signatures or actual datasets with a hard-coded path. 
 - Only test behaviour that can be explicitly inferred from the requirements.
