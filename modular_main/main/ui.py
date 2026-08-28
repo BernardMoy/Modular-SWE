@@ -14,6 +14,7 @@ from textual.widgets import Button, Footer, Header, TextArea, Label, ListItem, L
 from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
+from typing import Any
 
 # data
 lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
@@ -34,15 +35,24 @@ analyzer_suggestions_data = [
 
 
 StageCallback = Callable[[str], None]
+SettingsCallback = Callable[[dict[str, Any]], None]
 WorkflowRunner = Callable[[StageCallback], None]
 
 
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
     stage = reactive("Waiting for workflow", init=False)
+    settings = reactive({
+        "problem_type": "unknown", 
+        "problem_name": "unknown", 
+        "workflow_mode": "unknown", 
+        "agent": "none", 
+        "model": "none", 
+        "checkpoint": 0
+    }, init=False)
 
     # Register the theme
-    def on_mount(self) -> None:
+    def on_mount(self):
         self.theme = "textual-dark"
         if self.workflow is not None:
             self.call_after_refresh(self._start_workflow)
@@ -54,7 +64,7 @@ class TitleApp(App[None]):
         self,
         workspace: Path | None = None,
         workflow: WorkflowRunner | None = None,
-    ) -> None:
+    ):
         super().__init__(watch_css=True)
         self.workspace = workspace or Path(
             "agent_workspace"
@@ -63,36 +73,49 @@ class TitleApp(App[None]):
         self.design_impl_data = design_data
         self.analyzer_suggestions_data = analyzer_suggestions_data
 
-    def _start_workflow(self) -> None:
+    def _start_workflow(self):
         Thread(
             target=self._run_workflow,
             name="modular-workflow",
             daemon=True,
         ).start()
 
-    def _run_workflow(self) -> None:
-        """Run the blocking workflow outside Textual's UI thread."""
+    def _run_workflow(self):
+        # Run the blocking workflow outside Textual's UI thread.
         assert self.workflow is not None
         try:
-            self.workflow(self.update_stage)
+            self.workflow(self.update_stage, self.update_settings)
             self.update_stage("Workflow complete")
         except Exception as error:
-            self.update_stage(f"Failed: {error}")
-            raise
+            raise 
 
-    def update_stage(self, stage: str) -> None:
-        """Update the reactive stage from the workflow worker thread."""
+    # Setters and getters for reactive state values 
+    def update_stage(self, stage):
         self.call_from_thread(self._set_stage, stage)
 
-    def _set_stage(self, stage: str) -> None:
+    def _set_stage(self, stage):
         self.stage = stage
 
-    def watch_stage(self, stage: str) -> None:
+    def watch_stage(self, stage):
         self.query_one("#stage-label", Label).update(f"Stage: {stage}")
 
+    def update_settings(self, settings): 
+        self.call_from_thread(self._set_settings, settings)
+
+    def _set_settings(self, settings): 
+        self.settings = settings 
+
+    def watch_settings(self, settings): 
+        self.query_one("#settings-label", Label).update(
+            f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}."
+        )
+        
+
+
+    # Main compose function for the UI 
     def compose(self) -> ComposeResult:
         # Top part showing the mode and problem
-        yield Label("Problem: XXX. Problem type: XXX. Mode: XXX.", id="top-label")
+        yield Label("", id="settings-label")
 
         # the top bar showing time and command palette search
         yield Header(show_clock=True)
@@ -181,7 +204,7 @@ class TitleApp(App[None]):
 
     # Listener only to the design-list
     @on(ListView.Selected, "#design-list")
-    def on_list_view_selected(self, event: ListView.Selected) -> None:
+    def on_list_view_selected(self, event: ListView.Selected):
         # Obtain the key selected
         selected_key = str(event.item.query_one(Label).content)
 
@@ -197,6 +220,6 @@ class TitleApp(App[None]):
 def run_ui(
     workspace: Path | None = None,
     workflow: WorkflowRunner | None = None,
-) -> None:
+):
     """Run the UI and, when provided, the workflow alongside it."""
     TitleApp(workspace=workspace, workflow=workflow).run()

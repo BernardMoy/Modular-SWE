@@ -25,6 +25,7 @@ from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
 from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
+from typing import Any 
 
 # Constants for directory and file paths
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -39,11 +40,16 @@ PROBLEMS_DIR = (
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
 
 StageCallback = Callable[[str], None]
+SettingsCallback = Callable[[dict[str, Any]], None]
 
-
-def _report_stage(stage_callback: StageCallback | None, stage: str) -> None:
+def _report_stage(stage_callback, stage) -> None:
     if stage_callback is not None:
         stage_callback(stage)
+
+def _report_settings(settings_callback, settings): 
+    if settings_callback is not None: 
+        settings_callback(settings) 
+
 
 
 # Constants for the modular workflow
@@ -401,7 +407,8 @@ def modular_workflow_single(
     problem,
     n,
     logged_in=False,  # so it does not re-log in in multiple stages run
-    stage_callback: StageCallback | None = None,
+    stage_callback = None, 
+    settings_callback = None 
 ):
 
     # Obtain the problem name and checkpoint no
@@ -441,6 +448,16 @@ def modular_workflow_single(
     print(f"PROBLEM NAME: {PROBLEM}")
     print(f"CHECKPOINT: {N}")
     print("=" * 20)
+
+    # Mark the settings inside ui
+    _report_settings(settings_callback, {
+        "problem_type": PROBLEM_TYPE, 
+        "problem_name": PROBLEM, 
+        "workflow_mode": WORKFLOW_MODE, 
+        "agent": AGENT, 
+        "model": MODEL, 
+        "checkpoint": N
+    })
 
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
@@ -743,7 +760,8 @@ def modular_workflow():
 
     # callbacks are optional: Only present in the UI mode
     def run(
-        stage_callback: StageCallback | None = None,
+        stage_callback = None, 
+        settings_callback = None
     ):
         for n in range(start, end + 1):
             modular_workflow_single(
@@ -751,6 +769,7 @@ def modular_workflow():
                 n,
                 logged_in=n != start,
                 stage_callback=stage_callback,
+                settings_callback = settings_callback
             )
 
     if args.ui:
