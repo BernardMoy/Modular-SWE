@@ -9,10 +9,10 @@ from threading import Thread
 from typing import Callable
 
 from textual.app import App, ComposeResult
-from textual.message import Message
 from textual.containers import Container, Horizontal, Vertical
 from textual.widgets import Button, Footer, Header, TextArea, Label, ListItem, ListView
 from textual.widgets import Select
+from textual.reactive import reactive
 from textual import on
 
 # data
@@ -37,15 +37,10 @@ StageCallback = Callable[[str], None]
 WorkflowRunner = Callable[[StageCallback], None]
 
 
-class StageChanged(Message):
-    """A workflow stage update posted from the background thread."""
-
-    def __init__(self, stage: str) -> None:
-        super().__init__()
-        self.stage = stage
-
-
 class TitleApp(App[None]):
+    # Do not call the watcher while the widget tree is being composed.
+    stage = reactive("Waiting for workflow", init=False)
+
     # Register the theme
     def on_mount(self) -> None:
         self.theme = "textual-dark"
@@ -86,12 +81,14 @@ class TitleApp(App[None]):
             raise
 
     def update_stage(self, stage: str) -> None:
-        """Post a stage update safely from the workflow worker thread."""
-        self.post_message(StageChanged(stage))
+        """Update the reactive stage from the workflow worker thread."""
+        self.call_from_thread(self._set_stage, stage)
 
-    def on_stage_changed(self, message: StageChanged) -> None:
-        stage_label = self.query_one("#stage-label", Label)
-        stage_label.update(f"Stage: {message.stage}")
+    def _set_stage(self, stage: str) -> None:
+        self.stage = stage
+
+    def watch_stage(self, stage: str) -> None:
+        self.query_one("#stage-label", Label).update(f"Stage: {stage}")
 
     def compose(self) -> ComposeResult:
         # Top part showing the mode and problem
@@ -102,7 +99,7 @@ class TitleApp(App[None]):
 
         # The rectangle label above showing the current stage in the multi agent pipeline
         with Container(id="stage"):
-            yield Label("Stage: Waiting for workflow", id="stage-label")
+            yield Label(f"Stage: {self.stage}", id="stage-label")
 
         with Container(id="main-content"):
             # The left bar:
