@@ -4,6 +4,7 @@ https://textual.textualize.io/guide/design/
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from threading import Thread
 from typing import Callable
@@ -17,9 +18,9 @@ from textual import on
 from typing import Any
 
 # data
-lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
-design_data = {"module_1": "Content1 " + lorem, "module_2": "Content2 " + lorem}
-impl_data = {"file_1": "Content1 " + lorem, "package.file_2": "Content2 " + lorem}
+# lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
+# design_data = {"module_1": "Content1 " + lorem, "module_2": "Content2 " + lorem}
+# impl_data = {"file_1": "Content1 " + lorem, "package.file_2": "Content2 " + lorem}
 analyzer_suggestions_data = [
     {
         "module_name": "hmock_routing",
@@ -41,6 +42,8 @@ WorkflowRunner = Callable[[StageCallback], None]
 
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
+
+    # ============= STATES ===============
     stage = reactive("Waiting for workflow", init=False)
     settings = reactive({
         "problem_type": "unknown", 
@@ -50,6 +53,11 @@ class TitleApp(App[None]):
         "model": "none", 
         "checkpoint": 0
     }, init=False)
+    agent_response = reactive("", init=False)
+    design_or_impl = reactive({}, init=False)
+    analyzer_suggestions = reactive([], init=False)
+    # ====================================
+
 
     # Register the theme
     def on_mount(self):
@@ -70,7 +78,7 @@ class TitleApp(App[None]):
             "agent_workspace"
         )  # workspace is the agent workspace path
         self.workflow = workflow
-        self.design_impl_data = design_data
+        self.design_impl_data = self.design_or_impl
         self.analyzer_suggestions_data = analyzer_suggestions_data
 
     def _start_workflow(self):
@@ -84,12 +92,19 @@ class TitleApp(App[None]):
         # Run the blocking workflow outside Textual's UI thread.
         assert self.workflow is not None
         try:
-            self.workflow(self.update_stage, self.update_settings)
+            self.workflow(
+                self.update_stage,
+                self.update_settings,
+                self.update_design_or_impl,
+                self.update_agent_response,
+                self.update_analyzer_suggestions,
+            )
             self.update_stage("Workflow complete")
         except Exception as error:
             raise 
 
     # Setters and getters for reactive state values 
+    # stage 
     def update_stage(self, stage):
         self.call_from_thread(self._set_stage, stage)
 
@@ -99,6 +114,7 @@ class TitleApp(App[None]):
     def watch_stage(self, stage):
         self.query_one("#stage-label", Label).update(f"Stage: {stage}")
 
+    # settings 
     def update_settings(self, settings): 
         self.call_from_thread(self._set_settings, settings)
 
@@ -108,6 +124,42 @@ class TitleApp(App[None]):
     def watch_settings(self, settings): 
         self.query_one("#settings-label", Label).update(
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}."
+        )
+
+    # agent response 
+    def update_agent_response(self, response: str) -> None:
+        self.call_from_thread(self._set_agent_response, response)
+
+    def _set_agent_response(self, response: str) -> None:
+        self.agent_response = response
+
+    def watch_agent_response(self, response: str) -> None:
+        self.query_one("#agent-response", TextArea).load_text(response)
+
+    # design or impl / dict 
+    def update_design_or_impl(self, value: dict[str, Any]) -> None:
+        self.call_from_thread(self._set_design_or_impl, value)
+
+    def _set_design_or_impl(self, value: dict[str, Any]) -> None:
+        self.design_or_impl = dict(value)
+
+    def watch_design_or_impl(self, value: dict[str, Any]) -> None:
+        self.design_impl_data = dict(value)
+        design_list = self.query_one("#design-list", ListView)
+        design_list.clear()
+        for file_name in self.design_impl_data:
+            design_list.append(ListItem(Label(file_name)))
+
+    # analyzer suggestions 
+    def update_analyzer_suggestions(self, value: list[Any]) -> None:
+        self.call_from_thread(self._set_analyzer_suggestions, value)
+
+    def _set_analyzer_suggestions(self, value: list[Any]) -> None:
+        self.analyzer_suggestions = list(value)
+
+    def watch_analyzer_suggestions(self, value: list[Any]) -> None:
+        self.query_one("#analyzer-suggestions", TextArea).load_text(
+            json.dumps(value, indent=2, default=str)
         )
         
 
@@ -149,6 +201,7 @@ class TitleApp(App[None]):
                         show_cursor=False,
                         highlight_cursor_line=False,
                     )
+
 
                 # Right bottom: Suggestions or agent output
                 with Vertical(classes="panel") as suggestions_panel:
