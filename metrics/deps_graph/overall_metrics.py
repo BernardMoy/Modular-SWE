@@ -50,7 +50,7 @@ def get_deps_graph_metrics(implementation_path):
     }
     """
 
-    TEMP_FILE = Path(f"temp_graph_{time.time()}")
+    TEMP_FILE = Path(f"temp_graph_{str(time.time()).replace(".", "_")}")
 
     subprocess.run([
         "python", 
@@ -84,7 +84,7 @@ def get_deps_graph_metrics_reference(problem):
     }
     """
 
-    TEMP_FILE = Path(f"temp_graph_{time.time()}")
+    TEMP_FILE = Path(f"temp_graph_{str(time.time()).replace(".", "_")}")
 
     subprocess.run([
         "python scripts/references_deps_graph.py", 

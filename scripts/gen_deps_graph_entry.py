@@ -6,12 +6,11 @@ import argparse
 from pathlib import Path 
 import os 
 from constants import IGNORED_DIRS, INVALID_CHARS, BASE_REFERENCE_DIR, IMPL_DIR_DICT
-from constants import ENTRYFILE_NAME
 
-def write_entrypoint(implementation_path, deps_graph_path): 
+def write_entrypoint(implementation_path, deps_graph_path, entryfile_name): 
     target_dir = Path(deps_graph_path)
 
-    with open(target_dir / Path(ENTRYFILE_NAME), 'w') as f: 
+    with open(target_dir / Path(entryfile_name), 'w') as f: 
         # walk through the target directory
         for root, dirs, files in os.walk(target_dir):
             # skip the venv directory 
@@ -23,7 +22,7 @@ def write_entrypoint(implementation_path, deps_graph_path):
                     continue 
                 
                 # skip the entrypoint name file 
-                if pyfile == ENTRYFILE_NAME: 
+                if pyfile == entryfile_name: 
                     continue 
                 
                 pyfile_path = Path(root) / pyfile
@@ -66,9 +65,10 @@ def main():
     parser = argparse.ArgumentParser() 
     parser.add_argument("implementation_path", help="directory to the implementation")
     parser.add_argument("deps_graph_path", help="the path to generate dependency graph, different for reference problems.")
+    parser.add_argument("entryfile_name", help="Entryfile name for the temp file that imports all modules")
     args = parser.parse_args()
 
-    write_entrypoint(args.implementation_path, args.deps_graph_path)
+    write_entrypoint(args.implementation_path, args.deps_graph_path, args.entryfile_name)
 
 if __name__ == "__main__":
     main()

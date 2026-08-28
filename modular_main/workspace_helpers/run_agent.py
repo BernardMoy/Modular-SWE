@@ -8,10 +8,28 @@ import argparse
 import asyncio
 import json 
 from opencode_ai import AsyncOpencode
+import readline  # needed for inputs to be able to backspace to previous line 
+from pathlib import Path 
 
 # when the run_agent command is called, the agent summary and log will be written to the json below 
 AGENT_REPORT_JSON = "agent_report.json" 
 
+# Reads the agent workspace / analyzer result, remove all unresolved suggestions and quit 
+# So that the DA loop would not continue 
+def _remove_unresolved_suggestions(): 
+    analyzer_result = Path("current_analyzer_result.json")
+
+    with open(analyzer_result, 'r') as f:
+        data = json.load(f)
+
+        data = [
+            entry
+            for entry in data
+            if entry.get("status") != "unresolved"
+        ]
+
+        with open(analyzer_result, 'w') as f:
+            json.dump(data, f, indent=2)
 
 async def run_agent(agent, model, prompt): 
     log = []
@@ -37,17 +55,17 @@ async def run_agent(agent, model, prompt):
                 response = result.final_response
 
                 # Identify questions asked by codex to humans: They are always in the form "HUMAN_QUESTION: <question>"
-                if response.startswith("HUMAN_QUESTION:"):
+                if response.strip().startswith("HUMAN_QUESTION:"):
                     # Strip the prefix to get the question
                     question = response.removeprefix("HUMAN_QUESTION:").strip()
 
                     print(f"\nQuestion: \n{question}")
 
                     # Obtain the human response from the input 
-                    human_response = input("\nYour answer ('exit' to quit): ")
+                    human_response = input("\nYour answer ('q' to quit): ")
 
-                    # if human response == exit, quit 
-                    if human_response.strip() == "exit": 
+                    # if human response == q, quit 
+                    if human_response.strip() == "q": 
                         break 
 
                     print("Response recorded.")
@@ -61,7 +79,38 @@ Continue your task or ask another question in the format HUMAN_QUESTION: <questi
 """ 
                     # Re-assign the result variable 
                     result = await thread.run(new_prompt)
-                
+
+                elif response.strip().startswith("HUMAN_APPROVE:"): 
+                    # strip the prefix 
+                    question = response.removeprefix("HUMAN_APPROVE:").strip() 
+
+                    print(f"\nRequires human approval: \n{question}")
+
+                    # Obtain the human response from the input 
+                    human_response = input("\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: ")
+
+                    # if human response == a, quit 
+                    if human_response.strip() == "a": 
+                        break 
+
+                    # if human response == q, remove suggestions and quit 
+                    elif human_response.strip() == "q": 
+                        _remove_unresolved_suggestions() 
+                        break 
+
+                    else: 
+                        print("Response recorded.")
+
+                    # Call the agent in the same thread again to continue the conversation
+                    # with the human response added to the context 
+                    new_prompt = f"""The human has provided feedback for the suggestions: 
+{human_response}
+
+Continue your task.
+""" 
+                    # Re-assign the result variable 
+                    result = await thread.run(new_prompt)
+
                 else: 
                     break 
 

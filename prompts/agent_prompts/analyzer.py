@@ -22,7 +22,7 @@ Approach:
 - How frequently does a feature change 
 - Whether duplicated code, especially smaller snippets, would diverge in the future and should not be refactored now
 - Whether a sub-feature is unique to the app or is a generic, solved problem that stays the same 
-You should not make assumptions about these factors unless they are obvious. 
+{"You should not make assumptions about these factors unless they are obvious. " if WORKFLOW_MODE != "autoAggressive" else ""}
 
 Example 1: 
 Identified smell: backend.app.api_service combines API fetching, and json processing functions that are CORE and UNIQUE to the app. 
@@ -33,13 +33,13 @@ Identified smell: the function process_final_amount is complex, and it combines 
 Backed up by metrics: the function has a high cyclomatic complexity of 22, making it difficult to test in isolation. 
 Suggestion: Split the function into internal private helpers, concerning about price calculation and discount application. 
 
-4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}
+4. Based on the analysis, provide improvement suggestions at once that follow these criteria: {ANALYZER_CRITERIA}
 Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
 Leave the file unchanged if there are none. 
 Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
 {get_json_string("analyzer")}
 
-5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues.
+5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues. 
 """
 
 # Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema. 

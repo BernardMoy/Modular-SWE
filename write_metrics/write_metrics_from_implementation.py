@@ -35,7 +35,7 @@ def _get_smells_from_dpy_and_pylint(dpy_path, pylint_path):
     return smells 
 
 def _get_smells_from_deps_graph(implementation_path): 
-    TEMP_FILE = Path(f"temp_graph_{time.time()}")
+    TEMP_FILE = Path(f"temp_graph_{str(time.time()).replace(".", "_")}")
     
     subprocess.run([
         "python", 
@@ -55,8 +55,8 @@ def _get_smells_from_deps_graph(implementation_path):
 
 
 def write_metrics_from_implementation(implementation_path, current_metrics_path, prev_implementation_path = None): 
-    TEMP_METRICS_NEW_DIR = Path(f"metrics_new_{time.time()}")
-    TEMP_METRICS_OLD_DIR = Path(f"metrics_old_{time.time()}")
+    TEMP_METRICS_NEW_DIR = Path(f"metrics_new_{str(time.time()).replace(".", "_")}")
+    TEMP_METRICS_OLD_DIR = Path(f"metrics_old_{str(time.time()).replace(".", "_")}")
     
     # generate the metrics folder 
     subprocess.run(

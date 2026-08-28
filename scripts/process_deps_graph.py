@@ -54,6 +54,7 @@ def main():
         print(f"Dependency graph has {module_count} modules.")
     else: 
         print(f"WARNING: DEPENDENCY GRAPH IS EMPTY.")
+        input("Code paused, please fix it.")
 
     # Write as JSON 
     output = args.o

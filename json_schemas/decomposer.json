@@ -4,12 +4,12 @@
     "oneOf": [
       {
         "type": "object",
-        "description": "A keep module with a previous concrete implementation, only record the name, path and its responsibility.",
+        "description": "A keep or deleted module with previous concrete implementation.",
         "properties": {
           "type": {
             "type": "string",
-            "const": "keep",
-            "description": "'keep' type should be used only when there is a concrete implementation from the previous code, NOT TO BE USED when new modules are not updated from later designs."
+            "enum": ["keep", "deleted"],
+            "description": "'keep': The module has previous CONCRETE code implementation, that module is not changed in the new design. 'deleted': The module has previous CONCRETE code implementation, that module is not longer present in the current design. "
           },
           "module_name": {
             "description": "The name of the module that follows pydeps convention.",
@@ -20,17 +20,17 @@
             "type": "string"
           }
         },
-        "required": ["type", "module_name", "responsibility"],
+        "required": ["type", "module_name"],
         "additionalProperties": false
       },
       {
         "type": "object",
-        "description": "A new or changed module with more detailed designs.",
+        "description": "A new or changed module currently proposed, with more detailed designs.",
         "properties": {
           "type": {
             "type": "string",
             "enum": ["changed", "new"],
-            "description": "'changed' means that the module MUST HAVE a prior implementation and its design has changed from that implementation. 'new' means the module DOES NOT have a previous implementation or when a new module has been updated."
+            "description": "'changed': The module has previous CONCRETE code implementation, that module is changed in the current design. 'new': The module has NO previous CONCRETE code implementation, it is freshly proposed in the current design, even when it is updated in later iterations in revising the design."
           },
           "module_name": {
             "description": "The name of the module that follows pydeps convention.",

@@ -18,10 +18,11 @@ MODEL: Literal[
 WORKFLOW_MODE: Literal[
     "noDesign", 
     "autoNoMetric", 
-    "autoTest"
+    "autoTest",
+    "autoAggressive",
     "auto", 
     "human"
-    ] = "human"
+    ] = "autoAggressive"
 
 # Unused: 
 # allAtOnce: DA loop, then implement all modules at once following the design 

@@ -58,7 +58,7 @@ Task:
 1. create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 
 (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
-(2) Has the module design been changed from its previous implementation? YES -> 'changed'. NO -> 'keep'
+(2) If the module design changed from its previous implementation -> 'changed'. If the module is removed in the current design -> 'deleted'. Otherwise, 'keep'. 
 - The module_name field should follow pydeps conventions, stripping the .py extension for modules and specify the file path separated by dots (.) 
 {get_json_string("decomposer")}
 
@@ -70,4 +70,11 @@ Task:
 {get_json_string("dependency_graph")}
 
 3. update any improvements listed in `current_analyzer_result.json` if present: by changing the status field to {'"accepted"' if True else f'either "accepted" or "rejected" and provide a reason if rejected. '}
+4. Once all these steps are done, print a natural language summary in the form: 
+<Short summary, describing the objective of the problem requirements that are satisfied, or analyzer suggestions accepted.>
+
+Modules change: 
+- Added: <module_name> <its responsibility> <any other design decisions made>
+- Changed: ... 
+- Removed: ...
 """

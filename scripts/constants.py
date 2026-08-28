@@ -1,5 +1,6 @@
 import os
 from pathlib import Path 
+import time 
 
 # This assumes the convention that dist/ is the distributable (compiled code) 
 # and tests/ are pytest library
@@ -10,9 +11,6 @@ IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest
 # The imports wont resolve in the temp entrypoint 
 number_imports = [f".{x}" for x in range(10)]
 INVALID_CHARS = ["-"] + number_imports
-
-# temp entrypoint file containing imports to all modules 
-ENTRYFILE_NAME="temp_entrypoint_123456789.py"
 
 # The base directory for all implementations for reference modules 
 BASE_REFERENCE_DIR = "datasets/references/"

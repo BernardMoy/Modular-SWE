@@ -66,6 +66,8 @@ Data format:
 }
 ```
 
+All of these fields are guaranteed to be present.
+
 `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` environment variables should be supplied at runtime for the fetch to work.
 
 ## Tech stack

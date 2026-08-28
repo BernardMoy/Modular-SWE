@@ -20,7 +20,7 @@ def get_dpy_metrics(implementation_path):
     }
     """
 
-    TEMP_DIR = Path(f"temp_metrics_{time.time()}")
+    TEMP_DIR = Path(f"temp_metrics_{str(time.time()).replace(".", "_")}")
 
     CC_THRESHOLD = 10
     FAN_OUT_THRESHOLD = 3 

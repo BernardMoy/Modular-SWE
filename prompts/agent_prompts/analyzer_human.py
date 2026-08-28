@@ -57,14 +57,29 @@ Suggestion: Extract a helper module url_processor that contains the existing url
 Trade-offs: The metrics summary shows that the duplication increased by 2% in this checkpoint, extracting this helper function can bring the duplication down. However, this is a small function and changes to this would now ripple across more files, increase the number of modules, and make the workflow more difficult to understand. 
 Should the url_processor helper module be extracted even when it is small? 
 
-4. Based on the analysis, provide improvement suggestions that follow these criteria: {ANALYZER_CRITERIA}. 
-Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
-Leave the file unchanged if there are none. 
-Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
+4. Based on the analysis, provide improvement suggestions at once that follow these criteria: {ANALYZER_CRITERIA}. RULES:
+- Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
+- Leave the file unchanged if there are none. 
+- Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
+- The default "status" field is "unresolved". Except when explicitly rejected in a previous human question, then the status field should be set to "rejected". 
 {get_json_string("analyzer")}
 
-5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues.
+5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues. Refine the suggestions if that is the case.
+6. After all suggestions have been written, you should ask for human review by returning in the following format that MUST start with "HUMAN_APPROVE:": 
+HUMAN_APPROVE: 
+<short summary> 
+
+<N> suggestions were given: 
+- <suggestion_1>: <2-3 sentences describing what problem it addresses, and the decisions made, e.g. based on code / design observations, metrics, human opinions etc.>
+- <suggestion_2>: ...
+
+7. The human would decide whether or not to continue the conversation. 
+Any further agent's output for clarification or follow-up questions from the human must also start with "HUMAN_APPROVE:" so the human is continuously involved. 
+After all feedback collected and the human has no more clarification questions, refine analyzer suggestions starting from step 4 based on the feedback.
+Change the "status" field to "rejected" inside `current_analyzer_result.json` if necessary. 
 """
+# Example: The 'writer' module originally depends on an unstable module 'workflow' that just imports its data type, causing an unstable dependency. Extracting a shared data models module helped 
+
 
 # Second, return in the output ONLY the JSON string below for your software quality evaluation, using the following schema. 
 # Do not include any additional natural language descriptions in your response. 

@@ -22,7 +22,7 @@ def bfs(deps_graph_json):
 
     modules = []
 
-    # while there are unvisited modules,
+    # while there are unvisited modules, - this also handles the case where the graph is disconnected 
     # repeatedly find unvisited nodes whose dependencies are ALL visited
     # thats when we can implement that module and mark it as visited 
     while len(visited) != len(all_modules):
@@ -56,7 +56,7 @@ def bfs_get_modules_to_implement(deps_graph_json, design_json):
         types[module["module_name"]] = module["type"]
     
     for i, module_list in enumerate(bfs_modules): 
-        bfs_modules[i] = [x for x in module_list if types[x] in ["changed", "new"]]
+        bfs_modules[i] = [x for x in module_list if types[x] != 'keep']
     
     # remove all empty arrays after doing this 
     return [x for x in bfs_modules if len(x) > 0]
