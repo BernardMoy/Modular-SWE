@@ -11,7 +11,16 @@ from typing import Callable
 
 from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, Vertical
-from textual.widgets import Button, Footer, Header, TextArea, Label, ListItem, ListView
+from textual.widgets import (
+    Button,
+    Footer,
+    Header,
+    Label,
+    ListItem,
+    ListView,
+    RichLog,
+    TextArea,
+)
 from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
@@ -81,6 +90,9 @@ class TitleApp(App[None]):
     # Register the theme
     def on_mount(self):
         self.theme = "textual-dark"
+        self.query_one("#selected-file-content", RichLog).write(
+            "No files selected."
+        )
         if self.workflow is not None:
             self.call_after_refresh(self._start_workflow)
 
@@ -164,6 +176,8 @@ class TitleApp(App[None]):
 
     def watch_design_or_impl(self, value: dict[str, Any]) -> None:
         self.design_impl_data = dict(value)
+        files_panel = self.query_one("#files-panel", Vertical)
+        files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
         design_list = self.query_one("#design-list", ListView)
         design_list.clear()
         for file_name in self.design_impl_data:
@@ -197,8 +211,8 @@ class TitleApp(App[None]):
             # The left bar:
             # For design: It shows the list of modules (keep, changed, new) in 3 boxes
             # For implementation: It shows
-            with Vertical(classes="panel") as files_panel:
-                files_panel.border_title = "Modules"
+            with Vertical(id="files-panel", classes="panel") as files_panel:
+                files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
                 with ListView(
                     id="design-list", initial_index=None
                 ):  # Disable the initial selection highlighting
@@ -214,12 +228,10 @@ class TitleApp(App[None]):
                 # Right top: Display the selected file (formatted JSON) or code
                 with Vertical(classes="panel") as selected_panel:
                     selected_panel.border_title = "Selected file"
-                    yield TextArea(
-                        "No files selected.",  # default value, to be overridden
+                    yield RichLog(
                         id="selected-file-content",
-                        read_only=True,
-                        show_cursor=False,
-                        highlight_cursor_line=False,
+                        wrap=True,
+                        markup=False,
                     )
 
                 # Right bottom: Suggestions or agent output
@@ -281,12 +293,14 @@ class TitleApp(App[None]):
         selected_key = str(event.item.query_one(Label).content)
 
         # Obtain the processed content and set content
-        content = str(self.design_impl_data.get(selected_key, "Failed to render content."))
+        content = self.design_impl_data.get(
+            selected_key, "Failed to render content."
+        )
 
-        selected_content = self.query_one("#selected-file-content", TextArea)
-        selected_content.load_text(content)
+        selected_content = self.query_one("#selected-file-content", RichLog)
+        selected_content.clear()
+        selected_content.write(content)
         selected_content.scroll_home(animate=False, immediate=True)
-        selected_content.refresh(layout=True)
 
 
 def run_ui(

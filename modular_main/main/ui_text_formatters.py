@@ -9,9 +9,13 @@ workspace parameter is the Agent workspace path.
 from pathlib import Path
 import json
 import os
+from rich.text import Text
+
+# highlight the design public interface in a different color 
+PUBLIC_INTERFACE_STYLE = "bold #b8baff"
 
 
-def _format_public_interface(public_interface):
+def _format_public_interface(public_interface) -> Text:
     name = public_interface["name"]
     returns = public_interface.get("returns", "void")
 
@@ -27,14 +31,19 @@ def _format_public_interface(public_interface):
     precond = public_interface["preconditions"]
     postcond = public_interface["postconditions"]
 
-    return f"""- {function_sig}
-{public_interface["description"]}
+    formatted = Text()
+    formatted.append("- ")
+    formatted.append(function_sig, style=PUBLIC_INTERFACE_STYLE)
+    formatted.append("\n")
+    formatted.append(public_interface["description"])
+    formatted.append("\n\nPreconditions: ")
+    formatted.append("\n".join(precond) if precond else "None")
+    formatted.append("\nPostconditions:")
+    formatted.append("\n".join(postcond) if postcond else "None")
+    return formatted
 
-Preconditions: {'\n'+'\n'.join(precond) if len(precond) > 0 else "None"}
-Postconditions:{'\n'+'\n'.join(postcond) if len(postcond) > 0 else "None"}"""
 
-
-def get_formatted_design(workspace):
+def get_formatted_design(workspace) -> dict[str, Text]:
     # read from design file
     design_path = Path(workspace) / "current_design.json"
     with open(design_path, "r") as f:
@@ -47,9 +56,12 @@ def get_formatted_design(workspace):
         d = {}
         for entry in design_json:
             key = f"({entry["type"]}) {entry["module_name"]}"
-            value = f"{entry["responsibility"]}\n\n{'\n\n'.join(
-                [_format_public_interface(x) for x in entry["public_interface"]]
-            )}"
+            value = Text(entry["responsibility"])
+            value.append("\n\n")
+            for index, public_interface in enumerate(entry["public_interface"]):
+                if index:
+                    value.append("\n\n")
+                value.append(_format_public_interface(public_interface))
 
             d[key] = value
     return d
@@ -70,7 +82,7 @@ def get_formatted_implementation(workspace):
                 try:
                     code = open(py_file_path, "r").read()
                     rel_path = py_file_path.relative_to(impl_path)
-                    d[rel_path] = code
+                    d[rel_path] = Text(code)
                 except Exception as e:
                     continue
     return d
