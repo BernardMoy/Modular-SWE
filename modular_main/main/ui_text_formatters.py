@@ -125,7 +125,7 @@ def write_formatted_human_question_response(workspace, request_id, response):
     response_path = Path(workspace) / "human_response.json"
 
     # if the response is empty, change it to 'a' 
-    if not response: 
+    if not response.strip(): 
         response = "a" 
 
     with open(response_path, 'w') as f: 
@@ -160,11 +160,12 @@ def write_formatted_human_analyzer_approval(workspace, request_id, response_list
     # Extract all analyzer results with feedback present 
     human_responses = [] 
     for i, entry in enumerate(response_list): 
-        if entry.get("feedback", ""): 
+        feedback = entry.get("feedback", "").strip()
+        if feedback: 
             human_responses.append(str({
                 "modules": entry["modules"],
                 "description": entry["description"],
-                "feedback": entry["feedback"]
+                "feedback": feedback
             }))
     response_text = '\n'.join(human_responses) if human_responses else "a"  # return a if none has feedback 
 

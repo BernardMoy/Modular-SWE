@@ -117,6 +117,7 @@ class TitleApp(App[None]):
             and request_json.get("request_id")
             and request_json.get("request_id") != self.human_request.get("request_id")
         ):
+            # Assign to the human request reactive state 
             self.human_request = request_json
 
     # continuously poll the analyzer result file
@@ -189,11 +190,11 @@ class TitleApp(App[None]):
         # the analyzer submit button,
         # and the human questions submit button
         # if the changed setting is human mode.
-        human_mode = settings.get("workflow_mode") == "human"
-        for feedback in self.query("#suggestions TextArea"):
-            feedback.disabled = not human_mode
-        self.query_one("#analyzer-submit", Button).disabled = not human_mode
-        self.query_one("#human-submit", Button).disabled = not human_mode
+        # human_mode = settings.get("workflow_mode") == "human"
+        # for feedback in self.query("#suggestions TextArea"):
+        #     feedback.disabled = not human_mode
+        # self.query_one("#analyzer-submit", Button).disabled = not human_mode
+        # self.query_one("#human-submit", Button).disabled = not human_mode
 
     # agent response
     def update_agent_response(self, response: str) -> None:
@@ -269,21 +270,23 @@ class TitleApp(App[None]):
         # The runner calls this field "type"; accept "kind" as well.
         kind = request.get("kind", request.get("type", ""))
         if not request or not kind:
+            # Once human_request.json is deleted, the human request state change to {}, this part is activated 
+            # which shows the analyzer suggestions by default 
             suggestions_panel.display = True
             request_view.display = False
             return
 
         # Questions use the response panel; approvals leave suggestions visible.
-        suggestions_panel.display = kind != "question"
+        suggestions_panel.display = kind == "approval"
         request_view.display = kind == "question"
 
-        if kind != "question":
-            # A new approval request may arrive after the previous submit
-            # disabled this button.
-            self.query_one("#analyzer-submit", Button).disabled = (
-                self.settings.get("workflow_mode", "") != "human"
-            )
-            return
+        # kind is either question | approval
+        # If the kind is question, set human submit button disabled false 
+        if kind == "question": 
+            self.query_one("#human-submit", Button).disabled = False 
+
+        elif kind == "approval": 
+            self.query_one("#analyzer-submit", Button).disabled = False 
 
         # Replace the text with human question
         self.query_one("#human-question", Label).update(
@@ -295,9 +298,9 @@ class TitleApp(App[None]):
         response.read_only = False
 
         # Enable input and the submit button, which is disabled when the human submits 
-        response.disabled = False
-        self.query_one("#human-submit", Button).disabled = False
-        request_view.display = True
+        # response.disabled = False
+        # self.query_one("#human-submit", Button).disabled = False
+        # request_view.display = True
 
     def _make_suggestion_row(
             self, index: int, suggestion: dict[str, Any]
@@ -320,7 +323,8 @@ class TitleApp(App[None]):
                 str(suggestion.get("feedback", "")),
                 id=f"feedback-{index}",
                 classes="human-text",
-                disabled=(self.settings.get("workflow_mode", "")) != "human",
+                disabled=False, 
+                placeholder="Feedback..."
             ),
             classes="suggestion-row",
         )
@@ -390,8 +394,16 @@ class TitleApp(App[None]):
                         ):
                             yield self._make_suggestion_row(index, suggestion)
 
-                    # THe submit button for analyzer results 
                     with Horizontal(id="analyzer-submit-button"):
+                        # Keep the feedback field flexible and the submit
+                        # button pinned to the right of the same row.
+                        yield TextArea(
+                            id="analyzer-additional-feedback",
+                            classes="human-text",
+                            read_only=False,
+                            disabled=False,
+                            placeholder="Additional feedback...",
+                        )
                         yield Button(
                             "Submit",
                             variant="success",
@@ -411,6 +423,7 @@ class TitleApp(App[None]):
                         classes="human-text",
                         read_only=False,
                         disabled=False,
+                        placeholder="Human response..."
                     )
 
                     # The submit button for human clarification questions 
@@ -462,7 +475,6 @@ class TitleApp(App[None]):
 
         # Disable the human submit button, which is re-enabled later
         # inside the watch human response function
-        self.query_one("#human-response", TextArea).disabled = True
         self.query_one("#human-submit", Button).disabled = True
 
     # Listener when the analyzer submit (for human's approval on the analyzer plan) is pressed 
@@ -494,8 +506,6 @@ class TitleApp(App[None]):
             self.workspace, request_id, suggestions
         )
         self.query_one("#analyzer-submit", Button).disabled = True
-        for feedback in self.query("#suggestions TextArea"):
-            feedback.disabled = True
 
 def run_ui(
     workspace: Path | None = None,

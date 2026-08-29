@@ -165,8 +165,21 @@ ListItem.-highlight {
 }
 
 #analyzer-submit-button {
-    height: 3;
-    align: right middle;
+    width: 1fr;
+    height: 5;
+    align: right bottom;
+}
+
+#analyzer-additional-feedback {
+    width: 1fr;
+    height: 5;
+    min-height: 3;
+    border: solid $panel;
+}
+
+#analyzer-submit-button #analyzer-submit {
+    margin-left: 1;
+    margin-top: 1;
 }
 
 #human-response-view {
