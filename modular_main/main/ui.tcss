@@ -169,6 +169,32 @@ ListItem.-highlight {
     align: right middle;
 }
 
+#human-response-view {
+    display: none;
+    height: auto;
+    margin-top: 1;
+    overflow-y: auto;
+}
+
+#human-question {
+    width: 1fr;
+    height: auto;
+    text-wrap: wrap;
+}
+
+#human-response {
+    width: 1fr;
+    height: 1fr;
+    min-height: 5;
+    border: round $primary 60%;
+    background: $surface;
+}
+
+#human-submit-button {
+    height: 3;
+    align: right middle;
+}
+
 Button {
     background: $panel;
     color: $foreground;

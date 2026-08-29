@@ -4,6 +4,7 @@ https://textual.textualize.io/guide/design/
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from threading import Thread
 from typing import Callable
@@ -61,6 +62,7 @@ class TitleApp(App[None]):
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
     analyzer_suggestions = reactive([], init=False)  # Preserves analyzer result order.
+    human_request = reactive({}, init=False)  # the agent question to human
     # ====================================
 
     # Register the theme
@@ -69,6 +71,8 @@ class TitleApp(App[None]):
         self.query_one("#selected-file-content", RichLog).write(
             "No files selected."
         )
+        self.watch_human_request(self.human_request)
+        self.set_interval(0.1, self._poll_human_request)
         if self.workflow is not None:
             self.call_after_refresh(self._start_workflow)
 
@@ -94,6 +98,29 @@ class TitleApp(App[None]):
             name="modular-workflow",
             daemon=True,
         ).start()
+
+    # continuously 0.1s poll the human reuqest json file 
+    # if there are content then update the reactive state 
+    def _poll_human_request(self) -> None:
+        request_path = self.workspace / "human_request.json"
+        if not request_path.exists():
+            if self.human_request:
+                self.human_request = {}
+            return
+
+        try:
+            request_json = json.loads(request_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return
+
+        if (
+            isinstance(request_json, dict)
+            and request_json.get("request_id")
+            and request_json.get("request_id")
+            != self.human_request.get("request_id")
+        ):
+            self.human_request = request_json
+
 
     def _run_workflow(self):
         # Run the blocking workflow outside Textual's UI thread.
@@ -158,7 +185,11 @@ class TitleApp(App[None]):
         files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
         design_list = self.query_one("#design-list", ListView)
         design_list.clear()
-        for file_name in self.design_impl_data:
+        sorted_keys = sorted(
+            self.design_impl_data,
+            key=_sort_design_modules,
+        )
+        for file_name in sorted_keys:
             design_list.append(ListItem(Label(file_name)))
 
     # analyzer suggestions
@@ -183,7 +214,7 @@ class TitleApp(App[None]):
             ),
             Label(str(suggestion.get("module_name", "Unknown"))),
             Label(str(suggestion.get("description", "Unknown"))),
-            TextArea(id=f"feedback-{index}", classes="human-text"),
+            TextArea(id=f"feedback-{index}", classes="human-text", disabled=(self.settings.get("workflow_mode", "")) != "human"),
             classes="suggestion-row",
         )
 
@@ -200,6 +231,29 @@ class TitleApp(App[None]):
                 for index, suggestion in enumerate(value)
             ]
         )
+
+    def watch_human_request(self, request: dict[str, Any]) -> None:
+        suggestions_panel = self.query_one("#suggestions-panel", Vertical)
+        request_view = self.query_one("#human-response-view", Vertical)
+
+        # if request is present: Toggle the request view and hide the suggestions view 
+        suggestions_panel.display = not bool(request)
+        request_view.display = bool(request)
+
+        if not request:
+            return
+
+        # Replace the text with human question 
+        self.query_one("#human-question", Label).update(
+            str(request.get("question", ""))
+        )
+
+        response = self.query_one("#human-response", TextArea)
+        response.load_text("")
+        response.read_only = False
+        response.disabled = False
+        self.query_one("#human-submit", Button).disabled = False
+        request_view.display = True
 
     # Main compose function for the UI
     def compose(self) -> ComposeResult:
@@ -232,7 +286,7 @@ class TitleApp(App[None]):
             with Vertical(id="right-content"):
 
                 # Right top: Display the selected file (formatted JSON) or code
-                with Vertical(classes="panel") as selected_panel:
+                with Vertical(id="selected-file-panel", classes="panel") as selected_panel:
                     selected_panel.border_title = "Selected file"
                     yield RichLog(
                         id="selected-file-content",
@@ -240,8 +294,8 @@ class TitleApp(App[None]):
                         markup=False,
                     )
 
-                # Right bottom: Suggestions or agent output
-                with Vertical(classes="panel") as suggestions_panel:
+                # Right bottom: Suggestions 
+                with Vertical(id="suggestions-panel", classes="panel") as suggestions_panel:
                     suggestions_panel.border_title = "Analyzer suggestions"
 
                     # Suggestions
@@ -261,10 +315,23 @@ class TitleApp(App[None]):
 
                     # The submit button: Only available in the human mode
                     # Else, it is disabled
-                    with Horizontal(id="submit-button"):
+                    with Horizontal(id="analyzer-submit-button"):
                         yield Button(
-                            "Submit", variant="success", id="submit", disabled=False
+                            "Submit", variant="success", id="analyzer-submit", disabled=(self.settings.get("workflow_mode", "")) != "human"
                         )
+
+                # Right bottom: Human questions 
+                with Vertical(id="human-response-view", classes="panel") as response_panel:
+                    response_panel.border_title = "Human question"
+                    yield Label("", id="human-question")
+                    yield TextArea(
+                        id="human-response",
+                        classes="human-text",
+                        read_only=False,
+                        disabled=False,
+                    )
+                    with Horizontal(id="human-submit-button"):
+                        yield Button("Submit", variant="success", id="human-submit",disabled=(self.settings.get("workflow_mode", "")) != "human")
 
         # Footer showing q quit
         yield Footer()
@@ -274,6 +341,9 @@ class TitleApp(App[None]):
     def on_list_view_selected(self, event: ListView.Selected):
         # Obtain the key selected
         selected_key = str(event.item.query_one(Label).content)
+
+        selected_panel = self.query_one("#selected-file-panel", Vertical)
+        selected_panel.border_title = selected_key
 
         # Obtain the processed content and set content
         content = self.design_impl_data.get(
@@ -285,6 +355,24 @@ class TitleApp(App[None]):
         selected_content.write(content)
         selected_content.scroll_home(animate=False, immediate=True)
 
+        
+    @on(Button.Pressed, "#human-submit")
+    def on_human_submit(self) -> None:
+        request_id = self.human_request.get("request_id")
+        if not request_id:
+            return
+
+        response = self.query_one("#human-response", TextArea).text
+        response_path = self.workspace / "human_response.json"
+        temporary_path = response_path.with_name(f".{response_path.name}.tmp")
+        temporary_path.write_text(
+            json.dumps({"request_id": request_id, "response": response}),
+            encoding="utf-8",
+        )
+        temporary_path.replace(response_path)
+
+        self.query_one("#human-response", TextArea).disabled = True
+        self.query_one("#human-submit", Button).disabled = True
 
 def run_ui(
     workspace: Path | None = None,

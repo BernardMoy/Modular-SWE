@@ -8,12 +8,50 @@ from openai_codex import AsyncCodex, Sandbox, ApprovalMode
 import argparse
 import asyncio
 import json
-from opencode_ai import AsyncOpencode
-import readline  # needed for inputs to be able to backspace to previous line
+import uuid
 from pathlib import Path
+from opencode_ai import AsyncOpencode
 
 # when the run_agent command is called, the agent summary and log will be written to the json below
 AGENT_REPORT_JSON = "agent_report.json"
+HUMAN_REQUEST_JSON = "human_request.json"
+HUMAN_RESPONSE_JSON = "human_response.json"
+
+
+async def _wait_for_human_response(kind: str, question: str) -> str:
+    request_path = Path(HUMAN_REQUEST_JSON)
+    response_path = Path(HUMAN_RESPONSE_JSON)
+    request_id = uuid.uuid4().hex
+
+    response_path.unlink(missing_ok=True)
+
+    # Write the human question / approval to the human request.json
+    with open(HUMAN_REQUEST_JSON, 'w') as f: 
+        f.write(
+            json.dump(
+                {"request_id": request_id, "type": kind, "question": question}, f, indent=2
+            )
+        )
+
+    try:
+        # Continuously poll response path JSON for a human response.
+        while True:
+            if response_path.exists():
+                try:
+                    response = json.loads(response_path.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    response = None
+
+                if (
+                    isinstance(response, dict)
+                    and response.get("request_id") == request_id
+                ):
+                    return str(response.get("response", ""))
+
+            await asyncio.sleep(0.1)
+    finally:
+        request_path.unlink(missing_ok=True)
+        response_path.unlink(missing_ok=True)
 
 
 # Reads the agent workspace / analyzer result, remove all unresolved suggestions and quit
@@ -58,10 +96,9 @@ async def run_agent(agent, model, prompt):
                     # Strip the prefix to get the question
                     question = response.removeprefix("HUMAN_QUESTION:").strip()
 
-                    print(f"\nQuestion: \n{question}")
-
-                    # Obtain the human response from the input
-                    human_response = input("\nYour answer ('q' to quit): ")
+                    human_response = await _wait_for_human_response(
+                        "question", question
+                    )
 
                     # if human response == q, quit
                     if human_response.strip() == "q":
@@ -83,11 +120,8 @@ Continue your task or ask another question in the format HUMAN_QUESTION: <questi
                     # strip the prefix
                     question = response.removeprefix("HUMAN_APPROVE:").strip()
 
-                    print(f"\nRequires human approval: \n{question}")
-
-                    # Obtain the human response from the input
-                    human_response = input(
-                        "\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: "
+                    human_response = await _wait_for_human_response(
+                        "approval", question
                     )
 
                     # if human response == a, quit

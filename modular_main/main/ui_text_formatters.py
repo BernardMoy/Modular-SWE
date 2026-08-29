@@ -67,9 +67,9 @@ def get_formatted_design(workspace) -> dict[str, Text]:
         d = {}
         for entry in design_json:
             key = f"({entry["type"]}) {entry["module_name"]}"
-            value = Text(entry["responsibility"])
+            value = Text(entry.get("responsibility", ""))
             value.append("\n\n")
-            for index, public_interface in enumerate(entry["public_interface"]):
+            for index, public_interface in enumerate(entry.get("public_interface", [])):
                 if index:
                     value.append("\n\n")
                 value.append(_format_public_interface(public_interface))
