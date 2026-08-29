@@ -143,7 +143,7 @@ class TitleApp(App[None]):
             return
 
         self._analyzer_result_mtime = mtime
-        self.analyzer_suggestions = suggestions
+        self._set_analyzer_suggestions(suggestions)
 
     def _run_workflow(self):
         # Run the blocking workflow outside Textual's UI thread.
@@ -229,12 +229,27 @@ class TitleApp(App[None]):
     def update_analyzer_suggestions(self, value: list[Any]) -> None:
         self.call_from_thread(self._set_analyzer_suggestions, value)
 
+    @staticmethod
+    def _normalize_analyzer_suggestion(suggestion: dict[str, Any]) -> dict[str, str]:
+        return {
+            "status": str(suggestion.get("status", "unresolved")),
+            "modules": str(
+                suggestion.get("modules", suggestion.get("module_name", "Unknown"))
+            ),
+            "description": str(suggestion.get("description", "")),
+            "feedback": str(suggestion.get("feedback", "")),
+        }
+
     def _set_analyzer_suggestions(self, value: list[Any]) -> None:
-        self.analyzer_suggestions = list(value)
+        self.analyzer_suggestions = [
+            self._normalize_analyzer_suggestion(suggestion) for suggestion in value
+        ]
 
     async def watch_analyzer_suggestions(self, value: list[Any]) -> None:
         # Replace the table rows when a new analyzer result is available
-        self.analyzer_suggestions_data = list(value)
+        self.analyzer_suggestions_data = [
+            self._normalize_analyzer_suggestion(suggestion) for suggestion in value
+        ]
         suggestions = self.query_one("#suggestions", Vertical)
 
         # Delete the table rows and re-create them
@@ -242,7 +257,7 @@ class TitleApp(App[None]):
         await suggestions.mount(
             *[
                 self._make_suggestion_row(index, suggestion)
-                for index, suggestion in enumerate(value)
+                for index, suggestion in enumerate(self.analyzer_suggestions_data)
             ]
         )
 
@@ -263,6 +278,11 @@ class TitleApp(App[None]):
         request_view.display = kind == "question"
 
         if kind != "question":
+            # A new approval request may arrive after the previous submit
+            # disabled this button.
+            self.query_one("#analyzer-submit", Button).disabled = (
+                self.settings.get("workflow_mode", "") != "human"
+            )
             return
 
         # Replace the text with human question
@@ -294,9 +314,10 @@ class TitleApp(App[None]):
                 allow_blank=False,
                 id=f"status-{index}",
             ),
-            Label(str(suggestion.get("module_name", "Unknown"))),
+            Label(str(suggestion.get("modules", "Unknown"))),
             Label(str(suggestion.get("description", "Unknown"))),
             TextArea(
+                str(suggestion.get("feedback", "")),
                 id=f"feedback-{index}",
                 classes="human-text",
                 disabled=(self.settings.get("workflow_mode", "")) != "human",
@@ -448,7 +469,33 @@ class TitleApp(App[None]):
     # Write the result to human_response.json also, after the formatting 
     @on(Button.Pressed, "#analyzer-submit")
     def on_analyzer_submit(self) -> None:
-        pass 
+        request_id = self.human_request.get("request_id")
+        if not request_id:
+            return
+
+        suggestions = []
+
+        # Iterate the index, find the values defined in the tables, 
+        # then append to the suggestions list which is written back to analyzer result 
+        # This depends on the index: Cant sort the displayed order. to be fixed. 
+        for index, suggestion in enumerate(self.analyzer_suggestions_data):
+            status = self.query_one(f"#status-{index}", Select).value
+            feedback = self.query_one(f"#feedback-{index}", TextArea).text
+            suggestions.append(
+                {
+                    "status": str(status),
+                    "modules": str(suggestion.get("modules", "Unknown")),  # unchanged 
+                    "description": str(suggestion.get("description", "")),  # unchanged 
+                    "feedback": feedback,
+                }
+            )
+
+        write_formatted_human_analyzer_approval(
+            self.workspace, request_id, suggestions
+        )
+        self.query_one("#analyzer-submit", Button).disabled = True
+        for feedback in self.query("#suggestions TextArea"):
+            feedback.disabled = True
 
 def run_ui(
     workspace: Path | None = None,
