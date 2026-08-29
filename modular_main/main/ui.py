@@ -25,6 +25,8 @@ from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
 from typing import Any
+from .ui_text_formatters import get_formatted_analyzer_suggestions
+from .ui_text_formatters import get_formatted_analyzer_suggestions
 
 # sort module keys. 
 # module keys bundle the type (new) together because this follows the same convention of implementation
@@ -91,6 +93,7 @@ class TitleApp(App[None]):
         self.workflow = workflow
         self.design_impl_data = self.design_or_impl
         self.analyzer_suggestions_data = self.analyzer_suggestions
+        self._analyzer_result_mtime = None
 
     def _start_workflow(self):
         Thread(
@@ -102,6 +105,7 @@ class TitleApp(App[None]):
     # continuously 0.1s poll the human reuqest json file 
     # if there are content then update the reactive state 
     def _poll_human_request(self) -> None:
+        self._poll_analyzer_result()
         request_path = self.workspace / "human_request.json"
         if not request_path.exists():
             if self.human_request:
@@ -120,6 +124,27 @@ class TitleApp(App[None]):
             != self.human_request.get("request_id")
         ):
             self.human_request = request_json
+
+    # continuously poll the analyzer result file 
+    # this is required (but not the design) 
+    # because the analyzer is a blocking operation in the human mode 
+    # while the agent is waiting for human input. 
+    def _poll_analyzer_result(self) -> None:
+        analyzer_path = self.workspace / "current_analyzer_result.json"
+        if not analyzer_path.exists():
+            return
+
+        try:
+            mtime = analyzer_path.stat().st_mtime_ns
+            if mtime == self._analyzer_result_mtime:
+                return
+            suggestions = get_formatted_analyzer_suggestions(self.workspace)
+        except (OSError, json.JSONDecodeError, KeyError):
+            # The agent may still be writing the JSON file.
+            return
+
+        self._analyzer_result_mtime = mtime
+        self.analyzer_suggestions = suggestions
 
 
     def _run_workflow(self):
@@ -161,6 +186,16 @@ class TitleApp(App[None]):
         self.query_one("#settings-label", Label).update(
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
+
+        # Enable the analyzer table feedback column, 
+        # the analyzer submit button, 
+        # and the human questions submit button
+        # if the changed setting is human mode. 
+        human_mode = settings.get("workflow_mode") == "human"
+        for feedback in self.query("#suggestions TextArea"):
+            feedback.disabled = not human_mode
+        self.query_one("#analyzer-submit", Button).disabled = not human_mode
+        self.query_one("#human-submit", Button).disabled = not human_mode
 
     # agent response
     def update_agent_response(self, response: str) -> None:
@@ -232,15 +267,23 @@ class TitleApp(App[None]):
             ]
         )
 
+    # the request is the json format of dict given in human_request.json 
     def watch_human_request(self, request: dict[str, Any]) -> None:
         suggestions_panel = self.query_one("#suggestions-panel", Vertical)
         request_view = self.query_one("#human-response-view", Vertical)
 
-        # if request is present: Toggle the request view and hide the suggestions view 
-        suggestions_panel.display = not bool(request)
-        request_view.display = bool(request)
+        # The runner calls this field "type"; accept "kind" as well.
+        kind = request.get("kind", request.get("type", ""))
+        if not request or not kind:
+            suggestions_panel.display = True
+            request_view.display = False
+            return
 
-        if not request:
+        # Questions use the response panel; approvals leave suggestions visible.
+        suggestions_panel.display = kind != "question"
+        request_view.display = kind == "question"
+
+        if kind != "question":
             return
 
         # Replace the text with human question 

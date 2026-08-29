@@ -17,7 +17,9 @@ AGENT_REPORT_JSON = "agent_report.json"
 HUMAN_REQUEST_JSON = "human_request.json"
 HUMAN_RESPONSE_JSON = "human_response.json"
 
-
+# Write request to human request json
+# suspense the code
+# and continuously poll respomse from human response json 
 async def _wait_for_human_response(kind: str, question: str) -> str:
     request_path = Path(HUMAN_REQUEST_JSON)
     response_path = Path(HUMAN_RESPONSE_JSON)
@@ -96,6 +98,7 @@ async def run_agent(agent, model, prompt):
                     # Strip the prefix to get the question
                     question = response.removeprefix("HUMAN_QUESTION:").strip()
 
+                    # in this stage set the human response json to have kind = QUESTION 
                     human_response = await _wait_for_human_response(
                         "question", question
                     )
@@ -120,6 +123,7 @@ Continue your task or ask another question in the format HUMAN_QUESTION: <questi
                     # strip the prefix
                     question = response.removeprefix("HUMAN_APPROVE:").strip()
 
+                    # in this stage set human response json to have kind = APPROVAL 
                     human_response = await _wait_for_human_response(
                         "approval", question
                     )

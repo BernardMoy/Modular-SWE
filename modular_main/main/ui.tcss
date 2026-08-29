@@ -164,7 +164,7 @@ ListItem.-highlight {
     color: #ffdc42
 }
 
-#submit-button {
+#analyzer-submit-button {
     height: 3;
     align: right middle;
 }
