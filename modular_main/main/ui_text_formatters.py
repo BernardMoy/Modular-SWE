@@ -14,6 +14,17 @@ from rich.text import Text
 # highlight the design public interface in a different color 
 PUBLIC_INTERFACE_STYLE = "bold #b8baff"
 
+# Files (ignored) that are not displayed on the impl 
+IGNORED_DIRS = {
+    ".venv",
+    "__pycache__",
+    ".git",
+    "dist",
+    "node_modules",
+    ".pytest_cache"
+}
+
+
 
 def _format_public_interface(public_interface) -> Text:
     name = public_interface["name"]
@@ -74,14 +85,15 @@ def get_formatted_implementation(workspace):
 
     # Add all the old files to the dictionary
     for root, dirs, files in os.walk(impl_path):
+        dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
         for f in files:
-            if f.endswith(".py"):
-                py_file_path = Path(root) / f
+                file_path = Path(root) / f
 
                 # open the file
                 try:
-                    code = open(py_file_path, "r").read()
-                    rel_path = py_file_path.relative_to(impl_path)
+                    code = open(file_path, "r").read()
+                    rel_path = str(file_path.relative_to(impl_path))  # keys need to be a string 
+                    # Keep UI keys renderable and consistent with design keys.
                     d[rel_path] = Text(code)
                 except Exception as e:
                     continue

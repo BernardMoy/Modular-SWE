@@ -136,6 +136,12 @@ def _pass_fail():
     return False
 
 
+# pipeline to run any agent that involve a response: 
+# Display the response on the screen 
+def _run_agent_with_response(executor, agent_response_callback = None): 
+    pass 
+
+
 # pipeline to run decomposer + validate
 def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
     get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
@@ -158,6 +164,10 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
     _report_design_or_impl(
         design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
     )
+
+# pipeline to run analyzer + write analyzer suggestions 
+def _run_analyzer(executor, analyzer_suggestions_callback = None): 
+    pass 
 
 
 # Decomposer analyzer loop.
@@ -224,6 +234,7 @@ def _tester_refactor_loop(
     checkpoint_number,
     threshold,
     stage_callback: StageCallback | None = None,
+    design_or_impl_callback: DesignOrImplCallback | None = None 
 ):
     iteration = 0
     passed = False
@@ -281,6 +292,12 @@ def _tester_refactor_loop(
             )
             get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
 
+            # format code
+            _format_code()
+
+            # reflect the updated code in the UI 
+            _report_design_or_impl(design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE))
+
         iteration += 1
 
 
@@ -294,6 +311,7 @@ def _analyzer_refactor_loop(
     checkpoint_number,
     threshold,
     stage_callback: StageCallback | None = None,
+    design_or_impl_callback: DesignOrImplCallback | None = None
 ):
     # After coding: Run tests
     def tester_agent():
@@ -420,6 +438,12 @@ def _analyzer_refactor_loop(
         print(f"========== [Iteration {iteration+1}] REFACTOR CODER AGENT ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Refactor coder agent")
         get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+
+        # format code
+        _format_code()
+
+        # reflect the updated code in the UI 
+        _report_design_or_impl(design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE))
 
         # Increment the iteration number
         iteration += 1
@@ -649,6 +673,10 @@ def modular_workflow_single(
         # format code
         _format_code()
 
+        _report_design_or_impl(
+            design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+        )
+
         # Create a snapshot of the agent report at this point (We want to know the agent's log when IMPLEMENTING the code)
         # as the agent_report would get overridden below
         shutil.copy(
@@ -701,6 +729,12 @@ def modular_workflow_single(
         # format code
         _format_code()
 
+        # reflect the code in the ui 
+        _report_design_or_impl(
+            design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+        )
+        
+
         # After implementation:
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed
         # NOT necessary - all rejections are provided by humans.
@@ -722,6 +756,7 @@ def modular_workflow_single(
             N,
             DA_LOOP_THRESHOLD_AFTER_IMPL,
             stage_callback=stage_callback,
+            design_or_impl_callback=design_or_impl_callback
         )
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
