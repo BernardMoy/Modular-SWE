@@ -100,6 +100,8 @@ def get_formatted_implementation(workspace):
     return d
 
 
+# Obtain analyzer suggestions formatted to a list
+# order matters for the modification from users later 
 def get_formatted_analyzer_suggestions(workspace):
     analyzer_path = Path(workspace) / "current_analyzer_result.json"
 

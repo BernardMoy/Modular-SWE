@@ -4,7 +4,6 @@ https://textual.textualize.io/guide/design/
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from threading import Thread
 from typing import Callable
@@ -47,18 +46,18 @@ def _sort_design_modules(name):
 # lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
 # design_data = {"module_1": "Content1 " + lorem, "module_2": "Content2 " + lorem}
 # impl_data = {"file_1": "Content1 " + lorem, "package.file_2": "Content2 " + lorem}
-analyzer_suggestions_data = [
-    {
-        "module_name": "hmock_routing",
-        "description": "Keep hmock_routing focused on route shape matching by extracting the full behavior expectation check into hmock_conditions or a small matcher function owned by the condition layer. hmock_routing should produce candidate route matches with path parameters and delegate condition evaluation through a narrow boolean API, so route parsing remains independently testable and future condition syntax changes do not require edits in routing.",
-        "status": "accepted",
-    },
-    {
-        "module_name": "hmock_template_renderer",
-        "description": "Extract block-boundary traversal from hmock_template_renderer into one private helper API, such as collect_block(tokens, start, stop_tags) returning the nested body tokens, stop tag, and next index. Use that helper from both if and range rendering instead of maintaining separate depth-scanning logic in _find_matching_end, _collect_block, and _skip_if_tail. Keep expression evaluation, range variable binding, and output concatenation in hmock_template_renderer so the refactor removes duplicate traversal rules without creating a new renderer abstraction or leaking token internals outside the template package.",
-        "status": "unresolved",
-    },
-]
+# analyzer_suggestions_data = [
+#     {
+#         "module_name": "hmock_routing",
+#         "description": "Keep hmock_routing focused on route shape matching by extracting the full behavior expectation check into hmock_conditions or a small matcher function owned by the condition layer. hmock_routing should produce candidate route matches with path parameters and delegate condition evaluation through a narrow boolean API, so route parsing remains independently testable and future condition syntax changes do not require edits in routing.",
+#         "status": "accepted",
+#     },
+#     {
+#         "module_name": "hmock_template_renderer",
+#         "description": "Extract block-boundary traversal from hmock_template_renderer into one private helper API, such as collect_block(tokens, start, stop_tags) returning the nested body tokens, stop tag, and next index. Use that helper from both if and range rendering instead of maintaining separate depth-scanning logic in _find_matching_end, _collect_block, and _skip_if_tail. Keep expression evaluation, range variable binding, and output concatenation in hmock_template_renderer so the refactor removes duplicate traversal rules without creating a new renderer abstraction or leaking token internals outside the template package.",
+#         "status": "unresolved",
+#     },
+# ]
 
 
 StageCallback = Callable[[str], None]
@@ -84,7 +83,7 @@ class TitleApp(App[None]):
     )
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
-    analyzer_suggestions = reactive([], init=False)
+    analyzer_suggestions = reactive([], init=False) # thi is a list, the order follows the original order inside the json 
     # ====================================
 
     # Register the theme
@@ -110,7 +109,7 @@ class TitleApp(App[None]):
         )  # workspace is the agent workspace path
         self.workflow = workflow
         self.design_impl_data = self.design_or_impl
-        self.analyzer_suggestions_data = analyzer_suggestions_data
+        self.analyzer_suggestions_data = self.analyzer_suggestions
 
     def _start_workflow(self):
         Thread(
@@ -154,7 +153,7 @@ class TitleApp(App[None]):
 
     def watch_settings(self, settings):
         self.query_one("#settings-label", Label).update(
-            f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}."
+            f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
 
     # agent response
@@ -190,9 +189,37 @@ class TitleApp(App[None]):
     def _set_analyzer_suggestions(self, value: list[Any]) -> None:
         self.analyzer_suggestions = list(value)
 
-    def watch_analyzer_suggestions(self, value: list[Any]) -> None:
-        self.query_one("#analyzer-suggestions", TextArea).load_text(
-            json.dumps(value, indent=2, default=str)
+    def _make_suggestion_row(self, index: int, suggestion: dict[str, Any]) -> Horizontal:
+        statuses = ("unresolved", "accepted", "rejected")
+        selected_status = suggestion.get("status", "unresolved")
+        if selected_status not in statuses:
+            selected_status = "unresolved"
+
+        return Horizontal(
+            Select(
+                [(status, status) for status in statuses],
+                value=selected_status,
+                allow_blank=False,
+                id=f"status-{index}",
+            ),
+            Label(str(suggestion.get("module_name", "Unknown"))),
+            Label(str(suggestion.get("description", "Unknown"))),
+            TextArea(id=f"feedback-{index}", classes="human-text"),
+            classes="suggestion-row",
+        )
+
+    async def watch_analyzer_suggestions(self, value: list[Any]) -> None:
+        # Replace the table rows when a new analyzer result is available
+        self.analyzer_suggestions_data = list(value)
+        suggestions = self.query_one("#suggestions", Vertical)
+
+        # Delete the table rows and re-create them 
+        await suggestions.remove_children()
+        await suggestions.mount(
+            *[
+                self._make_suggestion_row(index, suggestion)
+                for index, suggestion in enumerate(value)
+            ]
         )
 
     # Main compose function for the UI
@@ -251,30 +278,7 @@ class TitleApp(App[None]):
                         for index, suggestion in enumerate(
                             self.analyzer_suggestions_data
                         ):
-                            with Horizontal(classes="suggestion-row"):
-                                # Status dropdown
-                                statuses = ("unresolved", "accepted", "rejected")
-                                selected_status = suggestion.get("status", "unresolved")
-                                if selected_status not in statuses:
-                                    selected_status = "unresolved"
-                                yield Select(
-                                    [(status, status) for status in statuses],
-                                    value=selected_status,
-                                    allow_blank=False,  # default to unresolved
-                                    id=f"status-{index}",
-                                )
-
-                                yield Label(
-                                    str(suggestion.get("module_name", "Unknown"))
-                                )
-                                yield Label(
-                                    str(suggestion.get("description", "Unknown"))
-                                )
-
-                                # Multi line user input for feedback
-                                yield TextArea(
-                                    id=f"feedback-{index}", classes="human-text"
-                                )
+                            yield self._make_suggestion_row(index, suggestion)
 
                     # The submit button: Only available in the human mode
                     # Else, it is disabled

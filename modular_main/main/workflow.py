@@ -26,7 +26,7 @@ from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
 from typing import Any
-from .ui_text_formatters import get_formatted_design, get_formatted_implementation
+from .ui_text_formatters import get_formatted_design, get_formatted_implementation, get_formatted_analyzer_suggestions
 
 # Constants for directory and file paths
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -179,6 +179,7 @@ def _decomposer_analyzer_loop(
     threshold,
     stage_callback=None,
     design_or_impl_callback=None,
+    analyzer_suggestions_callback = None 
 ):
     iteration = 0
     passed = False
@@ -205,6 +206,9 @@ def _decomposer_analyzer_loop(
             get_prompt_and_run_agent(executor, "analyzer_human", False)
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
             get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False
+
+            # Reflect the analyzer suggestions 
+            _report_analyzer_suggestions(analyzer_suggestions_callback, get_formatted_analyzer_suggestions(AGENT_WORKSPACE))
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -311,7 +315,8 @@ def _analyzer_refactor_loop(
     checkpoint_number,
     threshold,
     stage_callback: StageCallback | None = None,
-    design_or_impl_callback: DesignOrImplCallback | None = None
+    design_or_impl_callback: DesignOrImplCallback | None = None, 
+    analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None = None 
 ):
     # After coding: Run tests
     def tester_agent():
@@ -417,6 +422,9 @@ def _analyzer_refactor_loop(
             get_prompt_and_run_agent(executor, "analyzer_human", True)
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
             get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
+
+            # Reflect the analyzer suggestions 
+            _report_analyzer_suggestions(analyzer_suggestions_callback, get_formatted_analyzer_suggestions(AGENT_WORKSPACE))
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -699,6 +707,7 @@ def modular_workflow_single(
             threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL,
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
+            analyzer_suggestions_callback=analyzer_suggestions_callback
         )
 
         # Run the BFS
@@ -756,7 +765,8 @@ def modular_workflow_single(
             N,
             DA_LOOP_THRESHOLD_AFTER_IMPL,
             stage_callback=stage_callback,
-            design_or_impl_callback=design_or_impl_callback
+            design_or_impl_callback=design_or_impl_callback, 
+            analyzer_suggestions_callback=analyzer_suggestions_callback
         )
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
