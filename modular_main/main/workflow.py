@@ -25,7 +25,7 @@ from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
 from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
-from typing import Any 
+from typing import Any
 from .ui_text_formatters import get_formatted_design, get_formatted_implementation
 
 # Constants for directory and file paths
@@ -46,13 +46,16 @@ AgentResponseCallback = Callable[[str], None]
 DesignOrImplCallback = Callable[[dict[str, Any]], None]
 AnalyzerSuggestionsCallback = Callable[[list[Any]], None]
 
+
 def _report_stage(stage_callback, stage) -> None:
     if stage_callback is not None:
         stage_callback(stage)
 
-def _report_settings(settings_callback, settings): 
-    if settings_callback is not None: 
-        settings_callback(settings) 
+
+def _report_settings(settings_callback, settings):
+    if settings_callback is not None:
+        settings_callback(settings)
+
 
 def _report_agent_response(
     agent_response_callback: AgentResponseCallback | None,
@@ -61,6 +64,7 @@ def _report_agent_response(
     if agent_response_callback is not None:
         agent_response_callback(agent_response)
 
+
 def _report_design_or_impl(
     design_or_impl_callback: DesignOrImplCallback | None,
     design_or_impl: dict[str, Any],
@@ -68,13 +72,13 @@ def _report_design_or_impl(
     if design_or_impl_callback is not None:
         design_or_impl_callback(design_or_impl)
 
+
 def _report_analyzer_suggestions(
     analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None,
     analyzer_suggestions: list[Any],
 ) -> None:
     if analyzer_suggestions_callback is not None:
         analyzer_suggestions_callback(analyzer_suggestions)
-
 
 
 # Constants for the modular workflow
@@ -133,7 +137,7 @@ def _pass_fail():
 
 
 # pipeline to run decomposer + validate
-def _run_decomposer(executor, checkpoint_number, design_or_impl_callback = None):
+def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
     get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
 
     # Validator for the module names
@@ -150,8 +154,10 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback = None)
         raise Exception("Validator failed.")
     print("Passed")
 
-    # Reflect in the UI the updated current design 
-    _report_design_or_impl(design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE))
+    # Reflect in the UI the updated current design
+    _report_design_or_impl(
+        design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
+    )
 
 
 # Decomposer analyzer loop.
@@ -161,8 +167,8 @@ def _decomposer_analyzer_loop(
     executor,
     checkpoint_number,
     threshold,
-    stage_callback = None,
-    design_or_impl_callback = None
+    stage_callback=None,
+    design_or_impl_callback=None,
 ):
     iteration = 0
     passed = False
@@ -430,11 +436,11 @@ def modular_workflow_single(
     problem,
     n,
     logged_in=False,  # so it does not re-log in in multiple stages run
-    stage_callback = None, 
-    settings_callback = None, 
-    design_or_impl_callback = None,
-    agent_response_callback = None,
-    analyzer_suggestions_callback = None,
+    stage_callback=None,
+    settings_callback=None,
+    design_or_impl_callback=None,
+    agent_response_callback=None,
+    analyzer_suggestions_callback=None,
 ):
 
     # Obtain the problem name and checkpoint no
@@ -476,14 +482,17 @@ def modular_workflow_single(
     print("=" * 20)
 
     # Mark the settings inside ui
-    _report_settings(settings_callback, {
-        "problem_type": PROBLEM_TYPE, 
-        "problem_name": PROBLEM, 
-        "workflow_mode": WORKFLOW_MODE, 
-        "agent": AGENT, 
-        "model": MODEL, 
-        "checkpoint": N
-    })
+    _report_settings(
+        settings_callback,
+        {
+            "problem_type": PROBLEM_TYPE,
+            "problem_name": PROBLEM,
+            "workflow_mode": WORKFLOW_MODE,
+            "agent": AGENT,
+            "model": MODEL,
+            "checkpoint": N,
+        },
+    )
 
     # Step 1: Create the agent workspace and test storage
     print("[MAIN 1/8] Creating agent workspace")
@@ -661,7 +670,7 @@ def modular_workflow_single(
             checkpoint_number=N,
             threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL,
             stage_callback=stage_callback,
-            design_or_impl_callback=design_or_impl_callback
+            design_or_impl_callback=design_or_impl_callback,
         )
 
         # Run the BFS
@@ -787,11 +796,11 @@ def modular_workflow():
 
     # callbacks are optional: Only present in the UI mode
     def run(
-        stage_callback = None, 
-        settings_callback = None, 
-        design_or_impl_callback = None,
-        agent_response_callback = None,
-        analyzer_suggestions_callback = None,
+        stage_callback=None,
+        settings_callback=None,
+        design_or_impl_callback=None,
+        agent_response_callback=None,
+        analyzer_suggestions_callback=None,
     ):
         for n in range(start, end + 1):
             modular_workflow_single(
@@ -799,7 +808,7 @@ def modular_workflow():
                 n,
                 logged_in=n != start,
                 stage_callback=stage_callback,
-                settings_callback = settings_callback, 
+                settings_callback=settings_callback,
                 design_or_impl_callback=design_or_impl_callback,
                 agent_response_callback=agent_response_callback,
                 analyzer_suggestions_callback=analyzer_suggestions_callback,

@@ -17,6 +17,23 @@ from textual.reactive import reactive
 from textual import on
 from typing import Any
 
+# sort module keys. 
+# module keys bundle the type (new) together because this follows the same convention of implementation
+# order: deleted -> new -> changed -> keep 
+def _sort_design_modules(name): 
+    order = {
+        "deleted": 0, 
+        "new": 1, 
+        "changed": 2, 
+        "keep": 3
+    }
+    for key in order.keys(): 
+        if name.startswith(f"({key})"): 
+            return order[key] 
+
+    # unrecognised come last 
+    return 4 
+
 # data
 # lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
 # design_data = {"module_1": "Content1 " + lorem, "module_2": "Content2 " + lorem}
@@ -45,19 +62,21 @@ class TitleApp(App[None]):
 
     # ============= STATES ===============
     stage = reactive("Waiting for workflow", init=False)
-    settings = reactive({
-        "problem_type": "unknown", 
-        "problem_name": "unknown", 
-        "workflow_mode": "unknown", 
-        "agent": "none", 
-        "model": "none", 
-        "checkpoint": 0
-    }, init=False)
+    settings = reactive(
+        {
+            "problem_type": "unknown",
+            "problem_name": "unknown",
+            "workflow_mode": "unknown",
+            "agent": "none",
+            "model": "none",
+            "checkpoint": 0,
+        },
+        init=False,
+    )
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
     analyzer_suggestions = reactive([], init=False)
     # ====================================
-
 
     # Register the theme
     def on_mount(self):
@@ -101,10 +120,10 @@ class TitleApp(App[None]):
             )
             self.update_stage("Workflow complete")
         except Exception as error:
-            raise 
+            raise
 
-    # Setters and getters for reactive state values 
-    # stage 
+    # Setters and getters for reactive state values
+    # stage
     def update_stage(self, stage):
         self.call_from_thread(self._set_stage, stage)
 
@@ -114,19 +133,19 @@ class TitleApp(App[None]):
     def watch_stage(self, stage):
         self.query_one("#stage-label", Label).update(f"Stage: {stage}")
 
-    # settings 
-    def update_settings(self, settings): 
+    # settings
+    def update_settings(self, settings):
         self.call_from_thread(self._set_settings, settings)
 
-    def _set_settings(self, settings): 
-        self.settings = settings 
+    def _set_settings(self, settings):
+        self.settings = settings
 
-    def watch_settings(self, settings): 
+    def watch_settings(self, settings):
         self.query_one("#settings-label", Label).update(
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}."
         )
 
-    # agent response 
+    # agent response
     def update_agent_response(self, response: str) -> None:
         self.call_from_thread(self._set_agent_response, response)
 
@@ -136,7 +155,7 @@ class TitleApp(App[None]):
     def watch_agent_response(self, response: str) -> None:
         self.query_one("#agent-response", TextArea).load_text(response)
 
-    # design or impl / dict 
+    # design or impl / dict
     def update_design_or_impl(self, value: dict[str, Any]) -> None:
         self.call_from_thread(self._set_design_or_impl, value)
 
@@ -150,7 +169,7 @@ class TitleApp(App[None]):
         for file_name in self.design_impl_data:
             design_list.append(ListItem(Label(file_name)))
 
-    # analyzer suggestions 
+    # analyzer suggestions
     def update_analyzer_suggestions(self, value: list[Any]) -> None:
         self.call_from_thread(self._set_analyzer_suggestions, value)
 
@@ -161,10 +180,8 @@ class TitleApp(App[None]):
         self.query_one("#analyzer-suggestions", TextArea).load_text(
             json.dumps(value, indent=2, default=str)
         )
-        
 
-
-    # Main compose function for the UI 
+    # Main compose function for the UI
     def compose(self) -> ComposeResult:
         # Top part showing the mode and problem
         yield Label("", id="settings-label")
@@ -185,7 +202,10 @@ class TitleApp(App[None]):
                 with ListView(
                     id="design-list", initial_index=None
                 ):  # Disable the initial selection highlighting
-                    for file_name in self.design_impl_data.keys():
+
+                    # Display the keys sorted: See sort function
+                    sorted_keys = sorted(self.design_impl_data.keys(), key=lambda x: _sort_design_modules(x))
+                    for file_name in sorted_keys:
                         yield ListItem(Label(file_name))
 
             # The right part
@@ -201,7 +221,6 @@ class TitleApp(App[None]):
                         show_cursor=False,
                         highlight_cursor_line=False,
                     )
-
 
                 # Right bottom: Suggestions or agent output
                 with Vertical(classes="panel") as suggestions_panel:
@@ -255,14 +274,14 @@ class TitleApp(App[None]):
         # Footer showing q quit
         yield Footer()
 
-    # Listener only to the design-list
+    # Listener only to the design-list (LEFT list) 
     @on(ListView.Selected, "#design-list")
     def on_list_view_selected(self, event: ListView.Selected):
         # Obtain the key selected
         selected_key = str(event.item.query_one(Label).content)
 
         # Obtain the processed content and set content
-        content = str(self.design_impl_data[selected_key])
+        content = str(self.design_impl_data.get(selected_key, "Failed to render content."))
 
         selected_content = self.query_one("#selected-file-content", TextArea)
         selected_content.load_text(content)

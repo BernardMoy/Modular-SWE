@@ -37,7 +37,7 @@ ListItem.-highlight {
       text-wrap: wrap;
   }
 
-#top-label {
+#settings-label {
     width: 1fr; 
     height: auto; 
     color: #ffb8e4 
