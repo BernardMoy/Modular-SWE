@@ -113,10 +113,11 @@ def get_formatted_analyzer_suggestions(workspace):
         # { module_name, description, status }
 
         l = []
-        for entry in analyzer_json:
+        for i, entry in enumerate(analyzer_json): 
             description = entry["smell"] + "\n\n" + entry["improvement_instruction"]
             l.append(
                 {
+                    "index": i,   # store the original index inside the json file: For modification. This way the DISPLAYED analyzer suggestions can be sorted. 
                     "module_name": entry["module_name"],
                     "description": description,
                     "status": entry["status"],

@@ -28,7 +28,7 @@ ListItem.-highlight {
     border: round $primary;
     background: $surface;
     color: $foreground;
-    padding: 1 2;
+    padding: 0 2;
 }
 
 #stage-label {

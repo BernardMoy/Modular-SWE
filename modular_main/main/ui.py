@@ -42,29 +42,6 @@ def _sort_design_modules(name):
     # unrecognised come last 
     return 4 
 
-# data
-# lorem = """Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
-# design_data = {"module_1": "Content1 " + lorem, "module_2": "Content2 " + lorem}
-# impl_data = {"file_1": "Content1 " + lorem, "package.file_2": "Content2 " + lorem}
-# analyzer_suggestions_data = [
-#     {
-#         "module_name": "hmock_routing",
-#         "description": "Keep hmock_routing focused on route shape matching by extracting the full behavior expectation check into hmock_conditions or a small matcher function owned by the condition layer. hmock_routing should produce candidate route matches with path parameters and delegate condition evaluation through a narrow boolean API, so route parsing remains independently testable and future condition syntax changes do not require edits in routing.",
-#         "status": "accepted",
-#     },
-#     {
-#         "module_name": "hmock_template_renderer",
-#         "description": "Extract block-boundary traversal from hmock_template_renderer into one private helper API, such as collect_block(tokens, start, stop_tags) returning the nested body tokens, stop tag, and next index. Use that helper from both if and range rendering instead of maintaining separate depth-scanning logic in _find_matching_end, _collect_block, and _skip_if_tail. Keep expression evaluation, range variable binding, and output concatenation in hmock_template_renderer so the refactor removes duplicate traversal rules without creating a new renderer abstraction or leaking token internals outside the template package.",
-#         "status": "unresolved",
-#     },
-# ]
-
-
-StageCallback = Callable[[str], None]
-SettingsCallback = Callable[[dict[str, Any]], None]
-WorkflowRunner = Callable[[StageCallback], None]
-
-
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
 
@@ -83,7 +60,7 @@ class TitleApp(App[None]):
     )
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
-    analyzer_suggestions = reactive([], init=False) # thi is a list, the order follows the original order inside the json 
+    analyzer_suggestions = reactive([], init=False)  # Preserves analyzer result order.
     # ====================================
 
     # Register the theme
@@ -101,7 +78,7 @@ class TitleApp(App[None]):
     def __init__(
         self,
         workspace: Path | None = None,
-        workflow: WorkflowRunner | None = None,
+        workflow: Callable[..., None] | None = None,
     ):
         super().__init__(watch_css=True)
         self.workspace = workspace or Path(
@@ -133,25 +110,27 @@ class TitleApp(App[None]):
         except Exception as error:
             raise
 
-    # Setters and getters for reactive state values
+    # Reactive state updates follow the same pattern:
+    # update_* (thread boundary) -> _set_* (reactive state) -> watch_* (UI).
+
     # stage
-    def update_stage(self, stage):
+    def update_stage(self, stage: str) -> None:
         self.call_from_thread(self._set_stage, stage)
 
-    def _set_stage(self, stage):
+    def _set_stage(self, stage: str) -> None:
         self.stage = stage
 
-    def watch_stage(self, stage):
+    def watch_stage(self, stage: str) -> None:
         self.query_one("#stage-label", Label).update(f"Stage: {stage}")
 
     # settings
-    def update_settings(self, settings):
+    def update_settings(self, settings: dict[str, Any]) -> None:
         self.call_from_thread(self._set_settings, settings)
 
-    def _set_settings(self, settings):
+    def _set_settings(self, settings: dict[str, Any]) -> None:
         self.settings = settings
 
-    def watch_settings(self, settings):
+    def watch_settings(self, settings: dict[str, Any]) -> None:
         self.query_one("#settings-label", Label).update(
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
@@ -166,7 +145,7 @@ class TitleApp(App[None]):
     def watch_agent_response(self, response: str) -> None:
         self.query_one("#agent-response", TextArea).load_text(response)
 
-    # design or impl / dict
+    # design or implementation
     def update_design_or_impl(self, value: dict[str, Any]) -> None:
         self.call_from_thread(self._set_design_or_impl, value)
 
@@ -309,7 +288,7 @@ class TitleApp(App[None]):
 
 def run_ui(
     workspace: Path | None = None,
-    workflow: WorkflowRunner | None = None,
+    workflow: Callable[..., None] | None = None,
 ):
     """Run the UI and, when provided, the workflow alongside it."""
     TitleApp(workspace=workspace, workflow=workflow).run()
