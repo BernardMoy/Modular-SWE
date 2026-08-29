@@ -25,25 +25,21 @@ from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
 from typing import Any
-from .ui_text_formatters import get_formatted_analyzer_suggestions
-from .ui_text_formatters import get_formatted_analyzer_suggestions
+from .ui_text_formatters import get_formatted_analyzer_suggestions, write_formatted_human_analyzer_approval, write_formatted_human_question_response
 
-# sort module keys. 
+
+# sort module keys.
 # module keys bundle the type (new) together because this follows the same convention of implementation
-# order: deleted -> new -> changed -> keep 
-def _sort_design_modules(name): 
-    order = {
-        "deleted": 0, 
-        "new": 1, 
-        "changed": 2, 
-        "keep": 3
-    }
-    for key in order.keys(): 
-        if name.startswith(f"({key})"): 
-            return order[key] 
+# order: deleted -> new -> changed -> keep
+def _sort_design_modules(name):
+    order = {"deleted": 0, "new": 1, "changed": 2, "keep": 3}
+    for key in order.keys():
+        if name.startswith(f"({key})"):
+            return order[key]
 
-    # unrecognised come last 
-    return 4 
+    # unrecognised come last
+    return 4
+
 
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
@@ -70,9 +66,7 @@ class TitleApp(App[None]):
     # Register the theme
     def on_mount(self):
         self.theme = "textual-dark"
-        self.query_one("#selected-file-content", RichLog).write(
-            "No files selected."
-        )
+        self.query_one("#selected-file-content", RichLog).write("No files selected.")
         self.watch_human_request(self.human_request)
         self.set_interval(0.1, self._poll_human_request)
         if self.workflow is not None:
@@ -102,9 +96,10 @@ class TitleApp(App[None]):
             daemon=True,
         ).start()
 
-    # continuously 0.1s poll the human reuqest json file 
-    # if there are content then update the reactive state 
+    # continuously 0.1s poll the human reuqest json file
+    # if there are content then update the reactive state
     def _poll_human_request(self) -> None:
+        # when human request is continuously being polled, it also polls analyzer result 
         self._poll_analyzer_result()
         request_path = self.workspace / "human_request.json"
         if not request_path.exists():
@@ -120,18 +115,22 @@ class TitleApp(App[None]):
         if (
             isinstance(request_json, dict)
             and request_json.get("request_id")
-            and request_json.get("request_id")
-            != self.human_request.get("request_id")
+            and request_json.get("request_id") != self.human_request.get("request_id")
         ):
             self.human_request = request_json
 
-    # continuously poll the analyzer result file 
-    # this is required (but not the design) 
-    # because the analyzer is a blocking operation in the human mode 
-    # while the agent is waiting for human input. 
+    # continuously poll the analyzer result file
+    # this is required (but not the design)
+    # because the analyzer is a blocking operation in the human mode
+    # while the agent is waiting for human input.
     def _poll_analyzer_result(self) -> None:
         analyzer_path = self.workspace / "current_analyzer_result.json"
+
+        # if the analyzer file not exist, set none 
         if not analyzer_path.exists():
+            self._analyzer_result_mtime = None
+            if self.analyzer_suggestions:
+                self.analyzer_suggestions = []
             return
 
         try:
@@ -145,7 +144,6 @@ class TitleApp(App[None]):
 
         self._analyzer_result_mtime = mtime
         self.analyzer_suggestions = suggestions
-
 
     def _run_workflow(self):
         # Run the blocking workflow outside Textual's UI thread.
@@ -187,10 +185,10 @@ class TitleApp(App[None]):
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
 
-        # Enable the analyzer table feedback column, 
-        # the analyzer submit button, 
+        # Enable the analyzer table feedback column,
+        # the analyzer submit button,
         # and the human questions submit button
-        # if the changed setting is human mode. 
+        # if the changed setting is human mode.
         human_mode = settings.get("workflow_mode") == "human"
         for feedback in self.query("#suggestions TextArea"):
             feedback.disabled = not human_mode
@@ -234,31 +232,12 @@ class TitleApp(App[None]):
     def _set_analyzer_suggestions(self, value: list[Any]) -> None:
         self.analyzer_suggestions = list(value)
 
-    def _make_suggestion_row(self, index: int, suggestion: dict[str, Any]) -> Horizontal:
-        statuses = ("unresolved", "accepted", "rejected")
-        selected_status = suggestion.get("status", "unresolved")
-        if selected_status not in statuses:
-            selected_status = "unresolved"
-
-        return Horizontal(
-            Select(
-                [(status, status) for status in statuses],
-                value=selected_status,
-                allow_blank=False,
-                id=f"status-{index}",
-            ),
-            Label(str(suggestion.get("module_name", "Unknown"))),
-            Label(str(suggestion.get("description", "Unknown"))),
-            TextArea(id=f"feedback-{index}", classes="human-text", disabled=(self.settings.get("workflow_mode", "")) != "human"),
-            classes="suggestion-row",
-        )
-
     async def watch_analyzer_suggestions(self, value: list[Any]) -> None:
         # Replace the table rows when a new analyzer result is available
         self.analyzer_suggestions_data = list(value)
         suggestions = self.query_one("#suggestions", Vertical)
 
-        # Delete the table rows and re-create them 
+        # Delete the table rows and re-create them
         await suggestions.remove_children()
         await suggestions.mount(
             *[
@@ -267,7 +246,7 @@ class TitleApp(App[None]):
             ]
         )
 
-    # the request is the json format of dict given in human_request.json 
+    # the request is the json format of dict given in human_request.json
     def watch_human_request(self, request: dict[str, Any]) -> None:
         suggestions_panel = self.query_one("#suggestions-panel", Vertical)
         request_view = self.query_one("#human-response-view", Vertical)
@@ -286,7 +265,7 @@ class TitleApp(App[None]):
         if kind != "question":
             return
 
-        # Replace the text with human question 
+        # Replace the text with human question
         self.query_one("#human-question", Label).update(
             str(request.get("question", ""))
         )
@@ -294,9 +273,36 @@ class TitleApp(App[None]):
         response = self.query_one("#human-response", TextArea)
         response.load_text("")
         response.read_only = False
+
+        # Enable input and the submit button, which is disabled when the human submits 
         response.disabled = False
         self.query_one("#human-submit", Button).disabled = False
         request_view.display = True
+
+    def _make_suggestion_row(
+            self, index: int, suggestion: dict[str, Any]
+        ) -> Horizontal:
+        statuses = ("unresolved", "accepted", "rejected")
+        selected_status = suggestion.get("status", "unresolved")
+        if selected_status not in statuses:
+            selected_status = "unresolved"
+
+        return Horizontal(
+            Select(
+                [(status, status) for status in statuses],
+                value=selected_status,
+                allow_blank=False,
+                id=f"status-{index}",
+            ),
+            Label(str(suggestion.get("module_name", "Unknown"))),
+            Label(str(suggestion.get("description", "Unknown"))),
+            TextArea(
+                id=f"feedback-{index}",
+                classes="human-text",
+                disabled=(self.settings.get("workflow_mode", "")) != "human",
+            ),
+            classes="suggestion-row",
+        )
 
     # Main compose function for the UI
     def compose(self) -> ComposeResult:
@@ -321,7 +327,10 @@ class TitleApp(App[None]):
                 ):  # Disable the initial selection highlighting
 
                     # Display the keys sorted: See sort function
-                    sorted_keys = sorted(self.design_impl_data.keys(), key=lambda x: _sort_design_modules(x))
+                    sorted_keys = sorted(
+                        self.design_impl_data.keys(),
+                        key=lambda x: _sort_design_modules(x),
+                    )
                     for file_name in sorted_keys:
                         yield ListItem(Label(file_name))
 
@@ -329,7 +338,9 @@ class TitleApp(App[None]):
             with Vertical(id="right-content"):
 
                 # Right top: Display the selected file (formatted JSON) or code
-                with Vertical(id="selected-file-panel", classes="panel") as selected_panel:
+                with Vertical(
+                    id="selected-file-panel", classes="panel"
+                ) as selected_panel:
                     selected_panel.border_title = "Selected file"
                     yield RichLog(
                         id="selected-file-content",
@@ -337,8 +348,10 @@ class TitleApp(App[None]):
                         markup=False,
                     )
 
-                # Right bottom: Suggestions 
-                with Vertical(id="suggestions-panel", classes="panel") as suggestions_panel:
+                # Right bottom: Suggestions
+                with Vertical(
+                    id="suggestions-panel", classes="panel"
+                ) as suggestions_panel:
                     suggestions_panel.border_title = "Analyzer suggestions"
 
                     # Suggestions
@@ -356,15 +369,20 @@ class TitleApp(App[None]):
                         ):
                             yield self._make_suggestion_row(index, suggestion)
 
-                    # The submit button: Only available in the human mode
-                    # Else, it is disabled
+                    # THe submit button for analyzer results 
                     with Horizontal(id="analyzer-submit-button"):
                         yield Button(
-                            "Submit", variant="success", id="analyzer-submit", disabled=(self.settings.get("workflow_mode", "")) != "human"
+                            "Submit",
+                            variant="success",
+                            id="analyzer-submit",
+                            disabled=(self.settings.get("workflow_mode", ""))
+                            != "human",
                         )
 
-                # Right bottom: Human questions 
-                with Vertical(id="human-response-view", classes="panel") as response_panel:
+                # Right bottom: Human questions
+                with Vertical(
+                    id="human-response-view", classes="panel"
+                ) as response_panel:
                     response_panel.border_title = "Human question"
                     yield Label("", id="human-question")
                     yield TextArea(
@@ -373,13 +391,21 @@ class TitleApp(App[None]):
                         read_only=False,
                         disabled=False,
                     )
+
+                    # The submit button for human clarification questions 
                     with Horizontal(id="human-submit-button"):
-                        yield Button("Submit", variant="success", id="human-submit",disabled=(self.settings.get("workflow_mode", "")) != "human")
+                        yield Button(
+                            "Submit",
+                            variant="success",
+                            id="human-submit",
+                            disabled=(self.settings.get("workflow_mode", ""))
+                            != "human",
+                        )
 
         # Footer showing q quit
         yield Footer()
 
-    # Listener only to the design-list (LEFT list) 
+    # Listener only to the design-list (LEFT list)
     @on(ListView.Selected, "#design-list")
     def on_list_view_selected(self, event: ListView.Selected):
         # Obtain the key selected
@@ -389,33 +415,40 @@ class TitleApp(App[None]):
         selected_panel.border_title = selected_key
 
         # Obtain the processed content and set content
-        content = self.design_impl_data.get(
-            selected_key, "Failed to render content."
-        )
+        content = self.design_impl_data.get(selected_key, "Failed to render content.")
 
         selected_content = self.query_one("#selected-file-content", RichLog)
         selected_content.clear()
         selected_content.write(content)
         selected_content.scroll_home(animate=False, immediate=True)
 
-        
+    # Listener when the human submit (for clarification questions) is pressed
+    # Write the result to human_response.json which gets captured inside run_agent.py
     @on(Button.Pressed, "#human-submit")
     def on_human_submit(self) -> None:
         request_id = self.human_request.get("request_id")
         if not request_id:
             return
 
+        # Obtain the response text 
         response = self.query_one("#human-response", TextArea).text
-        response_path = self.workspace / "human_response.json"
-        temporary_path = response_path.with_name(f".{response_path.name}.tmp")
-        temporary_path.write_text(
-            json.dumps({"request_id": request_id, "response": response}),
-            encoding="utf-8",
-        )
-        temporary_path.replace(response_path)
 
+        write_formatted_human_question_response(
+            self.workspace, 
+            request_id, 
+            response
+        )
+
+        # Disable the human submit button, which is re-enabled later
+        # inside the watch human response function
         self.query_one("#human-response", TextArea).disabled = True
         self.query_one("#human-submit", Button).disabled = True
+
+    # Listener when the analyzer submit (for human's approval on the analyzer plan) is pressed 
+    # Write the result to human_response.json also, after the formatting 
+    @on(Button.Pressed, "#analyzer-submit")
+    def on_analyzer_submit(self) -> None:
+        pass 
 
 def run_ui(
     workspace: Path | None = None,

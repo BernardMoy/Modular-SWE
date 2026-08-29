@@ -26,7 +26,11 @@ from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
 from typing import Any
-from .ui_text_formatters import get_formatted_design, get_formatted_implementation, get_formatted_analyzer_suggestions
+from .ui_text_formatters import (
+    get_formatted_design,
+    get_formatted_implementation,
+    get_formatted_analyzer_suggestions,
+)
 
 # Constants for directory and file paths
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -136,10 +140,10 @@ def _pass_fail():
     return False
 
 
-# pipeline to run any agent that involve a response: 
-# Display the response on the screen 
-def _run_agent_with_response(executor, agent_response_callback = None): 
-    pass 
+# pipeline to run any agent that involve a response:
+# Display the response on the screen
+def _run_agent_with_response(executor, agent_response_callback=None):
+    pass
 
 
 # pipeline to run decomposer + validate
@@ -165,9 +169,10 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
         design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
     )
 
-# pipeline to run analyzer + write analyzer suggestions 
-def _run_analyzer(executor, analyzer_suggestions_callback = None): 
-    pass 
+
+# pipeline to run analyzer + write analyzer suggestions
+def _run_analyzer(executor, analyzer_suggestions_callback=None):
+    pass
 
 
 # Decomposer analyzer loop.
@@ -207,7 +212,7 @@ def _decomposer_analyzer_loop(
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
             get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False
 
-            # Reflect the analyzer suggestions 
+            # Reflect the analyzer suggestions
             _report_analyzer_suggestions(
                 analyzer_suggestions_callback,
                 get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
@@ -241,7 +246,7 @@ def _tester_refactor_loop(
     checkpoint_number,
     threshold,
     stage_callback: StageCallback | None = None,
-    design_or_impl_callback: DesignOrImplCallback | None = None 
+    design_or_impl_callback: DesignOrImplCallback | None = None,
 ):
     iteration = 0
     passed = False
@@ -302,8 +307,10 @@ def _tester_refactor_loop(
             # format code
             _format_code()
 
-            # reflect the updated code in the UI 
-            _report_design_or_impl(design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE))
+            # reflect the updated code in the UI
+            _report_design_or_impl(
+                design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+            )
 
         iteration += 1
 
@@ -318,7 +325,7 @@ def _analyzer_refactor_loop(
     checkpoint_number,
     threshold,
     stage_callback: StageCallback | None = None,
-    design_or_impl_callback: DesignOrImplCallback | None = None, 
+    design_or_impl_callback: DesignOrImplCallback | None = None,
     analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None = None,
 ):
     # After coding: Run tests
@@ -426,7 +433,7 @@ def _analyzer_refactor_loop(
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
             get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
 
-            # Reflect the analyzer suggestions 
+            # Reflect the analyzer suggestions
             _report_analyzer_suggestions(
                 analyzer_suggestions_callback,
                 get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
@@ -456,8 +463,10 @@ def _analyzer_refactor_loop(
         # format code
         _format_code()
 
-        # reflect the updated code in the UI 
-        _report_design_or_impl(design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE))
+        # reflect the updated code in the UI
+        _report_design_or_impl(
+            design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+        )
 
         # Increment the iteration number
         iteration += 1
@@ -744,11 +753,10 @@ def modular_workflow_single(
         # format code
         _format_code()
 
-        # reflect the code in the ui 
+        # reflect the code in the ui
         _report_design_or_impl(
             design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
         )
-        
 
         # After implementation:
         # clear all items inside the current_analyzer_result so the modifications here are not the design level ones we have previously addressed
@@ -771,7 +779,7 @@ def modular_workflow_single(
             N,
             DA_LOOP_THRESHOLD_AFTER_IMPL,
             stage_callback=stage_callback,
-            design_or_impl_callback=design_or_impl_callback, 
+            design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
         )
 

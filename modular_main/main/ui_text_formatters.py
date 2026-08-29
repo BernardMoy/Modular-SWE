@@ -11,19 +11,11 @@ import json
 import os
 from rich.text import Text
 
-# highlight the design public interface in a different color 
+# highlight the design public interface in a different color
 PUBLIC_INTERFACE_STYLE = "bold #b8baff"
 
-# Files (ignored) that are not displayed on the impl 
-IGNORED_DIRS = {
-    ".venv",
-    "__pycache__",
-    ".git",
-    "dist",
-    "node_modules",
-    ".pytest_cache"
-}
-
+# Files (ignored) that are not displayed on the impl
+IGNORED_DIRS = {".venv", "__pycache__", ".git", "dist", "node_modules", ".pytest_cache"}
 
 
 def _format_public_interface(public_interface) -> Text:
@@ -87,21 +79,23 @@ def get_formatted_implementation(workspace):
     for root, dirs, files in os.walk(impl_path):
         dirs[:] = [d for d in dirs if d not in IGNORED_DIRS]
         for f in files:
-                file_path = Path(root) / f
+            file_path = Path(root) / f
 
-                # open the file
-                try:
-                    code = open(file_path, "r").read()
-                    rel_path = str(file_path.relative_to(impl_path))  # keys need to be a string 
-                    # Keep UI keys renderable and consistent with design keys.
-                    d[rel_path] = Text(code)
-                except Exception as e:
-                    continue
+            # open the file
+            try:
+                code = open(file_path, "r").read()
+                rel_path = str(
+                    file_path.relative_to(impl_path)
+                )  # keys need to be a string
+                # Keep UI keys renderable and consistent with design keys.
+                d[rel_path] = Text(code)
+            except Exception as e:
+                continue
     return d
 
 
 # Obtain analyzer suggestions formatted to a list
-# order matters for the modification from users later 
+# order matters for the modification from users later
 def get_formatted_analyzer_suggestions(workspace):
     analyzer_path = Path(workspace) / "current_analyzer_result.json"
 
@@ -113,17 +107,34 @@ def get_formatted_analyzer_suggestions(workspace):
         # { module_name, description, status }
 
         l = []
-        for i, entry in enumerate(analyzer_json): 
+        for i, entry in enumerate(analyzer_json):
             description = entry["smell"] + "\n\n" + entry["improvement_instruction"]
             l.append(
                 {
-                    "index": i,   # store the original index inside the json file: For modification. This way the DISPLAYED analyzer suggestions can be sorted. 
+                    "index": i,  # store the original index inside the json file: For modification. This way the DISPLAYED analyzer suggestions can be sorted.
                     "module_name": entry["module_name"],
                     "description": description,
                     "status": entry["status"],
                 }
             )
     return l
+
+# Function to process the human question and write it to the human response 
+def write_formatted_human_question_response(workspace, request_id, response): 
+    response_path = Path(workspace) / "human_response.json"
+
+    with open(response_path, 'w') as f: 
+        json.dump({
+            "request_id": request_id, 
+            "response": response
+        }, f, indent=2)
+
+    
+
+# Function to process the table of analyzer results and write it to human response 
+# and also update the analyzer result.json to reflect the changes 
+def write_formatted_human_analyzer_approval(workspace): 
+    pass 
 
 
 if __name__ == "__main__":
