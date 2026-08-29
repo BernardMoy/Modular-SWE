@@ -164,6 +164,21 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
         raise Exception("Validator failed.")
     print("Passed")
 
+    # Write the current deps graph SVG 
+    deps_graph_json_path = AGENT_WORKSPACE / "current_deps_graph.json"
+    if deps_graph_json_path.exists(): 
+        subprocess.run(
+            [
+                "python", 
+                "scripts/deps_graph_json_to_svg.py", 
+                deps_graph_json_path, 
+                "-o", 
+                AGENT_WORKSPACE / "current_deps_graph.svg"
+            ],
+            capture_output=True,
+            text=True,
+        )
+
     # Reflect in the UI the updated current design
     _report_design_or_impl(
         design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
