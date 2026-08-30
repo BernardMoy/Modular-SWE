@@ -32,6 +32,14 @@ from .ui_text_formatters import (
     get_formatted_analyzer_suggestions,
 )
 
+# Stop the background running agent subprocess
+# Only triggered when ui is enabled 
+def stop_run_agent_processes() -> None:
+    subprocess.run(
+        ["pkill", "-f", "workspace_helpers.run_agent"],
+        check=False,
+    )
+
 # Constants for directory and file paths
 AGENT_WORKSPACE = Path("agent_workspace")
 AGENT_TEST_STORAGE = Path(
@@ -891,7 +899,11 @@ def modular_workflow():
     if args.ui:
         from .ui import run_ui
 
-        run_ui(AGENT_WORKSPACE, workflow=run)
+        run_ui(
+            AGENT_WORKSPACE,
+            workflow=run,
+            on_quit=stop_run_agent_processes,
+        )
     else:
         run()
 

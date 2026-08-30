@@ -73,21 +73,32 @@ class TitleApp(App[None]):
             self.call_after_refresh(self._start_workflow)
 
     CSS_PATH = "ui.tcss"
-    BINDINGS = [("q", "quit", "Quit")]
+    BINDINGS = [
+        ("q", "quit", "Quit"),
+        ("ctrl+q", "quit_workflow", "Stop workflow and quit"),
+    ]
 
     def __init__(
         self,
         workspace: Path | None = None,
         workflow: Callable[..., None] | None = None,
+        on_quit: Callable[[], None] | None = None,
     ):
         super().__init__(watch_css=True)
         self.workspace = workspace or Path(
             "agent_workspace"
         )  # workspace is the agent workspace path
         self.workflow = workflow
+        self.on_quit = on_quit
         self.design_impl_data = self.design_or_impl
         self.analyzer_suggestions_data = self.analyzer_suggestions
         self._analyzer_result_mtime = None
+
+    def action_quit_workflow(self) -> None:
+        """Stop the external agent process, then close the UI."""
+        if self.on_quit is not None:
+            self.on_quit()
+        self.exit()
 
     def _start_workflow(self):
         Thread(
@@ -526,6 +537,7 @@ class TitleApp(App[None]):
 def run_ui(
     workspace: Path | None = None,
     workflow: Callable[..., None] | None = None,
+    on_quit: Callable[[], None] | None = None,
 ):
     """Run the UI and, when provided, the workflow alongside it."""
-    TitleApp(workspace=workspace, workflow=workflow).run()
+    TitleApp(workspace=workspace, workflow=workflow, on_quit=on_quit).run()
