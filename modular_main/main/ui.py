@@ -201,7 +201,7 @@ class TitleApp(App[None]):
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
 
-        # Change the left bottom part to display the correct item 
+        # Change the left bottom part to display the correct item
         checkpoint = settings.get("checkpoint", 0)
 
         self.query_one("#requirements-list", ListView).clear()
@@ -230,14 +230,14 @@ class TitleApp(App[None]):
         self.design_impl_data = dict(value)
         files_panel = self.query_one("#files-panel", Vertical)
         files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
-        design_list = self.query_one("#design-list", ListView)
-        design_list.clear()
+        design_impl_list = self.query_one("#design-impl-list", ListView)
+        design_impl_list.clear()
         sorted_keys = sorted(
             self.design_impl_data,
             key=_sort_design_modules,
         )
         for file_name in sorted_keys:
-            design_list.append(ListItem(Label(file_name)))
+            design_impl_list.append(ListItem(Label(file_name)))
 
     # analyzer suggestions
     def update_analyzer_suggestions(self, value: list[Any]) -> None:
@@ -365,7 +365,7 @@ class TitleApp(App[None]):
                 with Vertical(id="files-panel", classes="panel") as files_panel:
                     files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
                     with ListView(
-                        id="design-list", initial_index=None
+                        id="design-impl-list", initial_index=None
                     ):  # Disable the initial selection highlighting
 
                         # Display the keys sorted: See sort function
@@ -377,7 +377,9 @@ class TitleApp(App[None]):
                             yield ListItem(Label(file_name))
 
                 # Left bottom: Deps graph section
-                with Vertical(id="deps-graph-panel", classes="panel") as deps_graph_panel:
+                with Vertical(
+                    id="deps-graph-panel", classes="panel"
+                ) as deps_graph_panel:
                     deps_graph_panel.border_title = f"Dependency graphs"
                     with ListView(
                         id="deps-graph-list", initial_index=None
@@ -389,12 +391,14 @@ class TitleApp(App[None]):
                             key=lambda x: _sort_design_modules(x),
                         )
 
-                        # For simplicity: Hard code the current original dependency graphs 
+                        # For simplicity: Hard code the current original dependency graphs
                         yield ListItem(Label("Current graph"))
                         yield ListItem(Label("Original graph"))
 
                 # Left bottom: Requirements document section
-                with Vertical(id="requirements-panel", classes="panel") as requirements_panel:
+                with Vertical(
+                    id="requirements-panel", classes="panel"
+                ) as requirements_panel:
                     requirements_panel.border_title = f"Requirements document"
                     with ListView(
                         id="requirements-list", initial_index=None
@@ -487,9 +491,22 @@ class TitleApp(App[None]):
         # Footer showing q quit
         yield Footer()
 
-    # Listener only to the design-list (LEFT list)
-    @on(ListView.Selected, "#design-list")
+    # The three left-side lists share one selection. Selecting an item in one
+    # list clears the selection in the other two.
+    @on(ListView.Selected)
     def on_list_view_selected(self, event: ListView.Selected):
+        list_ids = ("design-impl-list", "deps-graph-list", "requirements-list")
+        selected_list_id = event.list_view.id
+        if selected_list_id not in list_ids:
+            return
+
+        for list_id in list_ids:
+            if list_id != selected_list_id:
+                self.query_one(f"#{list_id}", ListView).index = None
+
+    # Display the selected module in the right-side selected-file panel.
+    @on(ListView.Selected, "#design-impl-list")
+    def on_design_list_selected(self, event: ListView.Selected):
         # Obtain the key selected
         selected_key = str(event.item.query_one(Label).content)
 
