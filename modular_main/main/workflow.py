@@ -868,7 +868,7 @@ def modular_workflow_single(
             for i, layer in enumerate(modules_array): 
                 _report_stage(
                     stage_callback,
-                    f"Modular coder agent ({len(modules_array_flattened)} modules) - Layer {i+1} of {len(modules_array)} ({modules_array})",
+                    f"Modular coder agent ({len(modules_array_flattened)} modules) - Layer {i+1} of {len(modules_array)} ({layer})",
                 )
                 output = get_prompt_and_run_agent(
                     executor, "modular_coder", N, layer

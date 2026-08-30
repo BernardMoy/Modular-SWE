@@ -33,6 +33,40 @@ Screen {
     dock: right;
 }
 
+#workflow-error-modal {
+    align: center middle;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.workflow-error-dialog {
+    width: 90%;
+    height: 80%;
+    max-width: 140;
+    max-height: 45;
+}
+
+#workflow-error-title {
+    height: 2;
+    content-align: center middle;
+    color: $error;
+    text-style: bold;
+}
+
+#workflow-error-content {
+    width: 1fr;
+    height: 1fr;
+}
+
+#workflow-error-controls {
+    height: 3;
+    align: right middle;
+}
+
+#workflow-error-controls Button {
+    min-width: 10;
+    margin-left: 1;
+}
+
 Label,
 Static,
 ListView,

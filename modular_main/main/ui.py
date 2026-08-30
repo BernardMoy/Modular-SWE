@@ -5,6 +5,7 @@ https://textual.textualize.io/guide/design/
 from __future__ import annotations
 
 import json
+import traceback
 from io import BytesIO
 from pathlib import Path
 from threading import Thread
@@ -52,7 +53,7 @@ def _sort_design_modules(name):
 
 
 class AgentResponseModal(ModalScreen[None]):
-    """Modal window for displaying the latest agent response."""
+    # Modal window for displaying the latest agent response
 
     def __init__(self, response: str = "") -> None:
         super().__init__(id="agent-response-modal")
@@ -82,11 +83,45 @@ class AgentResponseModal(ModalScreen[None]):
             event.stop()
 
 
+class WorkflowErrorModal(ModalScreen[None]):
+    # Modal window for displaying a workflow failure.
+
+    def __init__(self, error: str) -> None:
+        super().__init__(id="workflow-error-modal")
+        self.error = error
+
+    def compose(self) -> ComposeResult:
+        with Vertical(classes="panel workflow-error-dialog"):
+            yield Label("Workflow error", id="workflow-error-title")
+            yield TextArea(
+                self.error,
+                id="workflow-error-content",
+                read_only=True,
+            )
+            with Horizontal(id="workflow-error-controls"):
+                yield Button("Close", id="workflow-error-close")
+                yield Button("Quit", id="workflow-error-quit", variant="error")
+
+    @on(Button.Pressed, "#workflow-error-close")
+    def close(self) -> None:
+        self.dismiss()
+
+    @on(Button.Pressed, "#workflow-error-quit")
+    def quit(self) -> None:
+        self.app.exit(return_code=1)
+
+    def on_key(self, event) -> None:
+        if event.key == "escape":
+            self.dismiss()
+            event.stop()
+
+
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
 
     # ============= STATES ===============
     stage = reactive("Waiting for workflow", init=False)
+    workflow_error = reactive("", init=False)
     settings = reactive(
         {
             "problem_type": "unknown",
@@ -145,7 +180,7 @@ class TitleApp(App[None]):
         self._deps_graph_fit_size = None
 
     def action_quit_workflow(self) -> None:
-        """Stop the external agent process, then close the UI."""
+        # Stop the external agent process, then close the UI.
         if self.on_quit is not None:
             self.on_quit()
         self.exit()
@@ -221,8 +256,15 @@ class TitleApp(App[None]):
                 self.update_deps_graph,
             )
             self.update_stage("Workflow complete")
-        except Exception as error:
-            raise
+        except Exception:
+            error_text = traceback.format_exc()
+            self.call_from_thread(self._handle_workflow_error, error_text)
+
+    def _handle_workflow_error(self, error: str) -> None:
+        # Handle error to show it on the UI 
+        self.workflow_error = error
+        self._set_stage("Workflow failed")
+        self.push_screen(WorkflowErrorModal(error))
 
     # Reactive state updates follow the same pattern:
     # update_* (thread boundary) -> _set_* (reactive state) -> watch_* (UI).
@@ -335,7 +377,7 @@ class TitleApp(App[None]):
         self._apply_deps_graph_zoom()
 
     def _apply_deps_graph_zoom(self) -> None:
-        """Apply the selected zoom while preserving the image aspect ratio."""
+        # Apply the selected zoom while preserving the image aspect ratio.
         image_widget = self.query_one("#deps-graph-image", TerminalImage)
         if self._deps_graph_base_image is None:
             image_widget.image = None
@@ -807,5 +849,5 @@ def run_ui(
     workflow: Callable[..., None] | None = None,
     on_quit: Callable[[], None] | None = None,
 ):
-    """Run the UI and, when provided, the workflow alongside it."""
+    # Run the UI and, when provided, the workflow alongside it.
     TitleApp(workspace=workspace, workflow=workflow, on_quit=on_quit).run()
