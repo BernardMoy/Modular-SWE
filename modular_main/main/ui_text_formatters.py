@@ -46,7 +46,7 @@ def _format_public_interface(public_interface) -> Text:
     formatted.append(public_interface["description"])
     formatted.append("\n\nPreconditions: ")
     formatted.append("\n".join(precond) if precond else "None")
-    formatted.append("\nPostconditions:")
+    formatted.append("\nPostconditions: ")
     formatted.append("\n".join(postcond) if postcond else "None")
     return formatted
 

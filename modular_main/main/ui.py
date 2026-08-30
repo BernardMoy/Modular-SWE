@@ -687,6 +687,8 @@ class TitleApp(App[None]):
     @on(ListView.Selected, "#deps-graph-list")
     def on_deps_graph_list_selected(self, event: ListView.Selected):
         selected_label = str(event.item.query_one(Label).content)
+        deps_graph_preview_panel = self.query_one("#deps-graph-preview-panel", Vertical)
+        deps_graph_preview_panel.border_title = selected_label
 
         # Obtain the graph path (svg) from the selected label 
         if selected_label:

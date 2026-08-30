@@ -54,6 +54,7 @@ PROBLEMS_DIR = (
     else Path("datasets/slopCodeBench/scb-problems")
 )
 WORKSPACE_HELPERS = Path("modular_main/workspace_helpers")
+SETTINGS_PATH = Path("modular_main/settings.py")
 
 StageCallback = Callable[[str], None]
 SettingsCallback = Callable[[dict[str, Any]], None]
@@ -166,12 +167,6 @@ def _pass_fail():
 
     # if there are any unresolved issues, then fail
     return False
-
-
-# pipeline to run any agent that involve a response:
-# Display the response on the screen
-def _run_agent_with_response(executor, agent_response_callback=None):
-    pass
 
 
 # pipeline to run decomposer + validate
@@ -626,6 +621,9 @@ def modular_workflow_single(
     print("[MAIN 2/8] Copying helper functions to agent workspace")
     _report_stage(stage_callback, "Copying helper functions to agent workspace")
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
+
+    # Also copy settings.py, as run_agent needs it whether UI is enabled 
+    shutil.copy(SETTINGS_PATH, AGENT_WORKSPACE)
 
     # Step 3: Copy the required files to the agent workspace
     print("[MAIN 3/8] Copying files to agent workspace")

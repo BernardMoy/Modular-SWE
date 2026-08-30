@@ -16,7 +16,7 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
     "noDesign", "autoNoMetric", "autoTest", "autoAggressive", "auto", "human"
-] = "auto"
+] = "human"
 
 # Unused:
 # allAtOnce: DA loop, then implement all modules at once following the design
@@ -24,7 +24,7 @@ WORKFLOW_MODE: Literal[
 # byModule: BFS and one prompt per module. Modules in the same layer are coded in parallel
 
 # Problem type: Either "custom" or "scb"
-PROBLEM_TYPE: Literal["custom", "scb"] = "scb"
+PROBLEM_TYPE: Literal["custom", "scb"] = "custom"
 
 # Whether or not UI is enabled 
-UI_ENABLED = True 
+UI_ENABLED = True
