@@ -272,8 +272,9 @@ class TitleApp(App[None]):
         if not request or not kind:
             # Once human_request.json is deleted, the human request state change to {}, this part is activated 
             # which shows the analyzer suggestions by default 
-            suggestions_panel.display = True
-            request_view.display = False
+            suggestions_panel.display = True  # show analyzer + disable button (Will be enabled later with Q) 
+            self.query_one("#analyzer-submit", Button).disabled = True
+            request_view.display = False  # Hide human
             return
 
         # Questions use the response panel; approvals leave suggestions visible.
@@ -502,9 +503,24 @@ class TitleApp(App[None]):
                 }
             )
 
+        # Obtain the additional feedback field 
+        additional_feedback = self.query_one(
+            "#analyzer-additional-feedback", TextArea
+        ).text
+
         write_formatted_human_analyzer_approval(
-            self.workspace, request_id, suggestions
+            self.workspace,
+            request_id,
+            suggestions,
+            additional_feedback,
         )
+
+        # Clear the analyzer additional feedback + feedback-{index} text fields 
+        self.query_one("#analyzer-additional-feedback", TextArea).load_text("")
+        for index in range(len(self.analyzer_suggestions_data)):
+            feedback = self.query_one(f"#feedback-{index}", TextArea)
+            feedback.load_text("")
+
         self.query_one("#analyzer-submit", Button).disabled = True
 
 def run_ui(

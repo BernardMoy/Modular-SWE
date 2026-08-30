@@ -138,13 +138,29 @@ def write_formatted_human_question_response(workspace, request_id, response):
 
 # Function to process the table of analyzer results and write it to human response 
 # and also update the analyzer result.json to reflect the changes 
-def write_formatted_human_analyzer_approval(workspace, request_id, response_list):
-    """Persist table edits and release the runner's approval request."""
+def write_formatted_human_analyzer_approval(workspace, request_id, response_list, additional_feedback):
+    """
+    Write a single string to the human reply in the format
+    
+    Modules: ...
+    Description: ...
+    Feedback: ...
+
+    Modules: ...
+    Description: ...
+    Feedback: ...
+
+    Additional feedback: ...
+    """
+
     workspace = Path(workspace)
     analyzer_path = workspace / "current_analyzer_result.json"
 
-    with open(analyzer_path, "r") as f:
-        analyzer_json = json.load(f)
+    if analyzer_path.exists(): 
+        with open(analyzer_path, "r") as f:
+            analyzer_json = json.load(f)
+    else: 
+        analyzer_json = [] 
 
     # 1: Iterate the response list, AND DEPENDING ON THE INDEX (THE LITERAL ORDER, NOT THE INDEX FIELD FOR NOW) 
     # update its status. 
@@ -162,12 +178,15 @@ def write_formatted_human_analyzer_approval(workspace, request_id, response_list
     for i, entry in enumerate(response_list): 
         feedback = entry.get("feedback", "").strip()
         if feedback: 
-            human_responses.append(str({
-                "modules": entry["modules"],
-                "description": entry["description"],
-                "feedback": feedback
-            }))
-    response_text = '\n'.join(human_responses) if human_responses else "a"  # return a if none has feedback 
+            human_responses.append(f"""Modules: {entry["modules"]}
+Description: {entry["description"]}
+Feedback: {entry["feedback"]}""")
+
+    # append the additional feedback if it is present, else leave human responses empty 
+    if additional_feedback.strip(): 
+        human_responses.append(f"Additional feedback: {additional_feedback}")
+
+    response_text = '\n\n'.join(human_responses) if human_responses else "a"  # return a if none has feedback 
 
     with open(workspace / "human_response.json", "w") as f:
         json.dump({"request_id": request_id, "response": response_text}, f, indent=2)

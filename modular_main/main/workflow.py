@@ -173,7 +173,7 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
                 "scripts/deps_graph_json_to_svg.py", 
                 deps_graph_json_path, 
                 "-o", 
-                AGENT_WORKSPACE / "current_deps_graph.svg"
+                AGENT_WORKSPACE / "current_deps_graph"
             ],
             capture_output=True,
             text=True,
