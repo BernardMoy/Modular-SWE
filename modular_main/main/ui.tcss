@@ -70,8 +70,16 @@ ListItem.-highlight {
 #right-content {
     layout: grid;
     grid-size: 1 2;
-    grid-rows: 1fr 2fr;
+    grid-rows: 3fr 1fr;
     grid-gutter: 1;
+}
+
+#right-content.right-bottom-focused {
+    grid-rows: 1fr 3fr;
+}
+
+#right-content.right-top-focused {
+    grid-rows: 3fr 1fr;
 }
 
 #left-content {

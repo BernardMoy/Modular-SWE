@@ -27,6 +27,7 @@ from textual.widgets import (
 from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
+from textual.events import DescendantFocus
 from textual_image.widget import Image as TerminalImage
 from typing import Any
 from .ui_text_formatters import (
@@ -331,6 +332,21 @@ class TitleApp(App[None]):
             (width, height), PILImage.Resampling.LANCZOS
         )
 
+    def _set_right_content_focus(self, panel: str) -> None:
+        right_content = self.query_one("#right-content", Vertical)
+        right_content.remove_class("right-top-focused", "right-bottom-focused")
+        right_content.add_class(f"{panel}-focused")
+
+    @on(DescendantFocus)
+    def on_right_content_descendant_focus(self, event: DescendantFocus) -> None:
+        for widget in event.widget.ancestors_with_self:
+            if widget.has_class("right-top"):
+                self._set_right_content_focus("right-top")
+                return
+            if widget.has_class("right-bottom"):
+                self._set_right_content_focus("right-bottom")
+                return
+
     @on(Button.Pressed, "#deps-graph-zoom-in")
     def on_deps_graph_zoom_in(self) -> None:
         self._deps_graph_zoom = min(self._deps_graph_zoom * 1.25, 4.0)
@@ -398,11 +414,13 @@ class TitleApp(App[None]):
             )
             self.query_one("#analyzer-submit", Button).disabled = True
             request_view.display = False  # Hide human
+            self._set_right_content_focus("right-bottom")
             return
 
         # Questions use the response panel; approvals leave suggestions visible.
         suggestions_panel.display = kind == "approval"
         request_view.display = kind == "question"
+        self._set_right_content_focus("right-bottom")
 
         # kind is either question | approval
         # If the kind is question, set human submit button disabled false
@@ -522,7 +540,7 @@ class TitleApp(App[None]):
 
                 # Right top: Display the selected file (formatted JSON) or code
                 with Vertical(
-                    id="selected-file-panel", classes="panel"
+                    id="selected-file-panel", classes="panel right-top"
                 ) as selected_panel:
                     selected_panel.border_title = "Selected file"
                     yield RichLog(
@@ -534,7 +552,7 @@ class TitleApp(App[None]):
 
                 # Right top: SVG
                 with Vertical(
-                    id="deps-graph-preview-panel", classes="panel"
+                    id="deps-graph-preview-panel", classes="panel right-top"
                 ) as deps_graph_preview_panel:
                     deps_graph_preview_panel.border_title = "Dependency graph"
                     deps_graph_preview_panel.display = False # Turn off display initially 
@@ -547,7 +565,7 @@ class TitleApp(App[None]):
 
                 # Right bottom: Suggestions
                 with Vertical(
-                    id="suggestions-panel", classes="panel"
+                    id="suggestions-panel", classes="panel right-bottom"
                 ) as suggestions_panel:
                     suggestions_panel.border_title = "Analyzer suggestions"
 
@@ -585,7 +603,7 @@ class TitleApp(App[None]):
 
                 # Right bottom: Human questions
                 with Vertical(
-                    id="human-response-view", classes="panel"
+                    id="human-response-view", classes="panel right-bottom"
                 ) as response_panel:
                     response_panel.border_title = "Human question"
                     yield Label("", id="human-question")
@@ -642,6 +660,7 @@ class TitleApp(App[None]):
         # Turn on display for the selected file and turn off for deps graph 
         self.query_one("#selected-file-panel", Vertical).display = True 
         self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+        self._set_right_content_focus("right-top")
 
     # Display the selected requirements document.
     @on(ListView.Selected, "#requirements-list")
@@ -661,6 +680,7 @@ class TitleApp(App[None]):
         # Turn on display for the selected file and turn off for deps graph 
         self.query_one("#selected-file-panel", Vertical).display = True 
         self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+        self._set_right_content_focus("right-top")
 
 
     # Display the selected dependency graph.
@@ -676,6 +696,7 @@ class TitleApp(App[None]):
             # Turn on display for deps grpah and turn off for selected file 
             self.query_one("#selected-file-panel", Vertical).display = False
             self.query_one("#deps-graph-preview-panel", Vertical).display = True
+            self._set_right_content_focus("right-top")
             
 
     # Listener when the human submit (for clarification questions) is pressed
