@@ -267,7 +267,7 @@ def _decomposer_analyzer_loop(
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Analyzer agent")
         if WORKFLOW_MODE == "human":
             output = get_prompt_and_run_agent(executor, "analyzer_human", False)
-        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive", "autoByLayer"]:
             output = get_prompt_and_run_agent(
                 executor, "analyzer", False
             )  # has impl = False
@@ -517,7 +517,7 @@ def _analyzer_refactor_loop(
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Analyzer agent")
         if WORKFLOW_MODE == "human":
             output = get_prompt_and_run_agent(executor, "analyzer_human", True)
-        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
+        elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive", "autoByLayer"]:
             output = get_prompt_and_run_agent(
                 executor, "analyzer", True
             )  # has impl = True
@@ -698,6 +698,7 @@ def modular_workflow_single(
             "autoTest",
             "autoNoMetric",
             "autoAggressive",
+            "autoByLayer"
         ]:
             subprocess.run(
                 [
@@ -829,6 +830,7 @@ def modular_workflow_single(
         "autoTest",
         "human",
         "autoAggressive",
+        "autoByLayer"
     ]:
         # Initial decomposer agent
         # Run these inside the bind mounted space
@@ -861,16 +863,30 @@ def modular_workflow_single(
         ]
         print(f"Updating {len(modules_array_flattened)} modules.")
 
-        # for the all at once mode, implement all modules
-        _report_stage(
-            stage_callback,
-            f"Modular coder agent ({len(modules_array_flattened)} modules)",
-        )
-        output = get_prompt_and_run_agent(
-            executor, "modular_coder", N, modules_array_flattened
-        )
-        # reflect in the UI the agent output
-        _report_agent_response(agent_response_callback, output)
+        # for the auto by layer mode, implement modules by layer 
+        if WORKFLOW_MODE == "autoByLayer": 
+            for i, layer in enumerate(modules_array): 
+                _report_stage(
+                    stage_callback,
+                    f"Modular coder agent ({len(modules_array_flattened)} modules) - Layer {i+1} of {len(modules_array)} ({modules_array})",
+                )
+                output = get_prompt_and_run_agent(
+                    executor, "modular_coder", N, layer
+                )
+                # reflect in the UI the agent output
+                _report_agent_response(agent_response_callback, output)
+        else: 
+            # for the all at once mode, implement all modules
+            _report_stage(
+                stage_callback,
+                f"Modular coder agent ({len(modules_array_flattened)} modules)",
+            )
+            output = get_prompt_and_run_agent(
+                executor, "modular_coder", N, modules_array_flattened
+            )
+            # reflect in the UI the agent output
+            _report_agent_response(agent_response_callback, output)
+
         # format code
         _format_code()
 
@@ -933,24 +949,25 @@ def modular_workflow_single(
     else:
         raise Exception(f"Missing implementation for checkpoint {N}.")
 
-    # scb only: run tests
-    if PROBLEM_TYPE == "scb":
-        print(f"========== [MAIN 8/8] RUNNING SCB TESTS ==========")
-        _report_stage(stage_callback, "Running SCB tests")
-        entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
+    # scb only: run tests 
+    # DISABLED currently because it takes too long. Do this in the evaluation instead! 
+    # if PROBLEM_TYPE == "scb":
+    #     print(f"========== [MAIN 8/8] RUNNING SCB TESTS ==========")
+    #     _report_stage(stage_callback, "Running SCB tests")
+    #     entrypoint = IMPLEMENTATION_DEST / f"{ENTRY_FILE_NAME}.py"
 
-        # Run tests for all previous checkpoints from 1 to N: all of them should still pass
-        for test_no in range(N, 0, -1):
-            print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
-            test_results = pytest_scb(
-                problem_name=PROBLEM,
-                entrypoint_path=entrypoint,
-                checkpoint_number_to_test_against=test_no,
-            )
-            print(test_results)
-            _report_stage(
-                stage_callback, f"Test for checkpoint {test_no}:\n{(test_results)}"
-            )
+    #     # Run tests for all previous checkpoints from 1 to N: all of them should still pass
+    #     for test_no in range(N, 0, -1):
+    #         print(f"========== TEST FOR CHECKPOINT {test_no} ==========")
+    #         test_results = pytest_scb(
+    #             problem_name=PROBLEM,
+    #             entrypoint_path=entrypoint,
+    #             checkpoint_number_to_test_against=test_no,
+    #         )
+    #         print(test_results)
+    #         _report_stage(
+    #             stage_callback, f"Test for checkpoint {test_no}:\n{(test_results)}"
+    #         )
 
 
 # usage: python -m modular_main.main <problem_name> <checkpoint_number> <checkpoint_number_end>

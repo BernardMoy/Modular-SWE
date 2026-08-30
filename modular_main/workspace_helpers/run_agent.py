@@ -76,6 +76,8 @@ async def _wait_for_human_response(kind: str, question: str) -> str:
 # So that the DA loop would not continue
 def _remove_unresolved_suggestions():
     analyzer_result = Path("current_analyzer_result.json")
+    if not analyzer_result.exists(): 
+        return 
 
     with open(analyzer_result, "r") as f:
         data = json.load(f)

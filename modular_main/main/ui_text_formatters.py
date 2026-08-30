@@ -105,24 +105,25 @@ def get_formatted_analyzer_suggestions(workspace):
     analyzer_path = Path(workspace) / "current_analyzer_result.json"
 
     # read from analyzer
-    with open(analyzer_path, "r") as f:
-        analyzer_json = json.load(f)
+    l = []
+    if analyzer_path.exists(): 
+        with open(analyzer_path, "r") as f:
+            analyzer_json = json.load(f)
 
-        # For each design json:
-        # { module_name, description, status }
+            # For each design json:
+            # { module_name, description, status }
 
-        l = []
-        for i, entry in enumerate(analyzer_json):
-            description = entry["smell"] + "\n\n" + entry["improvement_instruction"]
-            l.append(
-                {
-                    # "index": i,
-                    "modules": entry["module_name"],
-                    "description": description,
-                    "status": entry["status"],
-                    "feedback": entry.get("feedback", ""),
-                }
-            )
+            for i, entry in enumerate(analyzer_json):
+                description = entry["smell"] + "\n\n" + entry["improvement_instruction"]
+                l.append(
+                    {
+                        # "index": i,
+                        "modules": entry["module_name"],
+                        "description": description,
+                        "status": entry["status"],
+                        "feedback": entry.get("feedback", ""),
+                    }
+                )
     return l
 
 

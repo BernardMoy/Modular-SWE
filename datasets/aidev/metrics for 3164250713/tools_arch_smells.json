@@ -1,8 +1,0 @@
-[
-    {
-        "Project": "tools",
-        "Package": "tools",
-        "Smell": "Feature concentration",
-        "Description": "The component realizes more than one architectural concern/feature. Independent sets of related modules within this component are: [analyze]; [base; chat; consensus; listmodels; models; tracer]; [codereview]; [debug]; [planner]; [precommit]; [refactor]; [testgen]; [thinkdeep]. LCC (Lack of Component Cohesion) = 0.64"
-    }
-]
