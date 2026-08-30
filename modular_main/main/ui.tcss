@@ -85,6 +85,7 @@ ListItem.-highlight {
 
 #deps-graph-preview-panel {
     height: 2fr;
+    overflow: auto;
 }
 
 #deps-graph-panel,
@@ -93,9 +94,18 @@ ListItem.-highlight {
 }
 
 #deps-graph-image {
-    width: 1fr;
-    height: 1fr;
-    overflow: hidden;
+    width: auto;
+    height: auto;
+}
+
+#deps-graph-controls {
+    height: 3;
+    align: right middle;
+}
+
+#deps-graph-controls Button {
+    min-width: 5;
+    margin-left: 1;
 }
 
 #file-list {

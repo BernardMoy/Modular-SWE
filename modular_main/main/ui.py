@@ -105,6 +105,9 @@ class TitleApp(App[None]):
         self.deps_graph_data = self.deps_graph
         self.analyzer_suggestions_data = self.analyzer_suggestions
         self._analyzer_result_mtime = None
+        self._deps_graph_base_image = None
+        self._deps_graph_zoom = 1.0
+        self._deps_graph_fit_size = None
 
     def action_quit_workflow(self) -> None:
         """Stop the external agent process, then close the UI."""
@@ -279,6 +282,7 @@ class TitleApp(App[None]):
         image_widget = self.query_one("#deps-graph-image", TerminalImage)
         if graph_path is None:
             image_widget.image = None
+            self._deps_graph_base_image = None
             return
 
         try:
@@ -288,7 +292,59 @@ class TitleApp(App[None]):
             # The workflow may still be writing the SVG.
             return
 
-        image_widget.image = image
+        self._deps_graph_base_image = image
+        self._deps_graph_fit_size = None
+        self._apply_deps_graph_zoom()
+
+    def _apply_deps_graph_zoom(self) -> None:
+        """Apply the selected zoom while preserving the image aspect ratio."""
+        image_widget = self.query_one("#deps-graph-image", TerminalImage)
+        if self._deps_graph_base_image is None:
+            image_widget.image = None
+            return
+
+        base_image = self._deps_graph_base_image
+        if self._deps_graph_zoom == 1.0:
+            image_widget.styles.width = "auto"
+            image_widget.styles.height = "auto"
+            image_widget.image = base_image
+            if image_widget.size.width and image_widget.size.height:
+                self._deps_graph_fit_size = (
+                    image_widget.size.width,
+                    image_widget.size.height,
+                )
+            return
+
+        if self._deps_graph_fit_size is None:
+            self._deps_graph_fit_size = (
+                max(1, image_widget.size.width),
+                max(1, image_widget.size.height),
+            )
+
+        fit_width, fit_height = self._deps_graph_fit_size
+        image_widget.styles.width = max(1, round(fit_width * self._deps_graph_zoom))
+        image_widget.styles.height = max(1, round(fit_height * self._deps_graph_zoom))
+
+        width = max(1, round(base_image.width * self._deps_graph_zoom))
+        height = max(1, round(base_image.height * self._deps_graph_zoom))
+        image_widget.image = base_image.resize(
+            (width, height), PILImage.Resampling.LANCZOS
+        )
+
+    @on(Button.Pressed, "#deps-graph-zoom-in")
+    def on_deps_graph_zoom_in(self) -> None:
+        self._deps_graph_zoom = min(self._deps_graph_zoom * 1.25, 4.0)
+        self._apply_deps_graph_zoom()
+
+    @on(Button.Pressed, "#deps-graph-zoom-out")
+    def on_deps_graph_zoom_out(self) -> None:
+        self._deps_graph_zoom = max(self._deps_graph_zoom / 1.25, 0.25)
+        self._apply_deps_graph_zoom()
+
+    @on(Button.Pressed, "#deps-graph-zoom-reset")
+    def on_deps_graph_zoom_reset(self) -> None:
+        self._deps_graph_zoom = 1.0
+        self._apply_deps_graph_zoom()
 
 
     # analyzer suggestions
@@ -481,6 +537,10 @@ class TitleApp(App[None]):
                     id="deps-graph-preview-panel", classes="panel"
                 ) as deps_graph_preview_panel:
                     deps_graph_preview_panel.border_title = "Dependency graph"
+                    with Horizontal(id="deps-graph-controls"):
+                        yield Button("-", id="deps-graph-zoom-out")
+                        yield Button("Reset", id="deps-graph-zoom-reset")
+                        yield Button("+", id="deps-graph-zoom-in")
                     yield TerminalImage(id="deps-graph-image")
 
                 # Right bottom: Suggestions
