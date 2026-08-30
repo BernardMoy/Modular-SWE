@@ -32,13 +32,15 @@ from .ui_text_formatters import (
     get_formatted_analyzer_suggestions,
 )
 
+
 # Stop the background running agent subprocess
-# Only triggered when ui is enabled 
+# Only triggered when ui is enabled
 def stop_run_agent_processes() -> None:
     subprocess.run(
         ["pkill", "-f", "workspace_helpers.run_agent"],
         check=False,
     )
+
 
 # Constants for directory and file paths
 AGENT_WORKSPACE = Path("agent_workspace")
@@ -172,16 +174,16 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
         raise Exception("Validator failed.")
     print("Passed")
 
-    # Write the current deps graph SVG 
+    # Write the current deps graph SVG
     deps_graph_json_path = AGENT_WORKSPACE / "current_deps_graph.json"
-    if deps_graph_json_path.exists(): 
+    if deps_graph_json_path.exists():
         subprocess.run(
             [
-                "python", 
-                "scripts/deps_graph_json_to_svg.py", 
-                deps_graph_json_path, 
-                "-o", 
-                AGENT_WORKSPACE / "current_deps_graph"
+                "python",
+                "scripts/deps_graph_json_to_svg.py",
+                deps_graph_json_path,
+                "-o",
+                AGENT_WORKSPACE / "current_deps_graph",
             ],
             capture_output=True,
             text=True,

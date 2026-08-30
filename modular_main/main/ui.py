@@ -25,7 +25,11 @@ from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
 from typing import Any
-from .ui_text_formatters import get_formatted_analyzer_suggestions, write_formatted_human_analyzer_approval, write_formatted_human_question_response
+from .ui_text_formatters import (
+    get_formatted_analyzer_suggestions,
+    write_formatted_human_analyzer_approval,
+    write_formatted_human_question_response,
+)
 
 
 # sort module keys.
@@ -110,7 +114,7 @@ class TitleApp(App[None]):
     # continuously 0.1s poll the human reuqest json file
     # if there are content then update the reactive state
     def _poll_human_request(self) -> None:
-        # when human request is continuously being polled, it also polls analyzer result 
+        # when human request is continuously being polled, it also polls analyzer result
         self._poll_analyzer_result()
         request_path = self.workspace / "human_request.json"
         if not request_path.exists():
@@ -128,7 +132,7 @@ class TitleApp(App[None]):
             and request_json.get("request_id")
             and request_json.get("request_id") != self.human_request.get("request_id")
         ):
-            # Assign to the human request reactive state 
+            # Assign to the human request reactive state
             self.human_request = request_json
 
     # continuously poll the analyzer result file
@@ -138,7 +142,7 @@ class TitleApp(App[None]):
     def _poll_analyzer_result(self) -> None:
         analyzer_path = self.workspace / "current_analyzer_result.json"
 
-        # if the analyzer file not exist, set none 
+        # if the analyzer file not exist, set none
         if not analyzer_path.exists():
             self._analyzer_result_mtime = None
             if self.analyzer_suggestions:
@@ -197,15 +201,13 @@ class TitleApp(App[None]):
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
 
-        # Enable the analyzer table feedback column,
-        # the analyzer submit button,
-        # and the human questions submit button
-        # if the changed setting is human mode.
-        # human_mode = settings.get("workflow_mode") == "human"
-        # for feedback in self.query("#suggestions TextArea"):
-        #     feedback.disabled = not human_mode
-        # self.query_one("#analyzer-submit", Button).disabled = not human_mode
-        # self.query_one("#human-submit", Button).disabled = not human_mode
+        # Change the left bottom part to display the correct item 
+        checkpoint = settings.get("checkpoint", 0)
+
+        self.query_one("#requirements-list", ListView).clear()
+        self.query_one("#requirements-list", ListView).append(
+            ListItem(Label(f"checkpoint_{checkpoint}.md"))
+        )
 
     # agent response
     def update_agent_response(self, response: str) -> None:
@@ -281,9 +283,11 @@ class TitleApp(App[None]):
         # The runner calls this field "type"; accept "kind" as well.
         kind = request.get("kind", request.get("type", ""))
         if not request or not kind:
-            # Once human_request.json is deleted, the human request state change to {}, this part is activated 
-            # which shows the analyzer suggestions by default 
-            suggestions_panel.display = True  # show analyzer + disable button (Will be enabled later with Q) 
+            # Once human_request.json is deleted, the human request state change to {}, this part is activated
+            # which shows the analyzer suggestions by default
+            suggestions_panel.display = (
+                True  # show analyzer + disable button (Will be enabled later with Q)
+            )
             self.query_one("#analyzer-submit", Button).disabled = True
             request_view.display = False  # Hide human
             return
@@ -293,12 +297,12 @@ class TitleApp(App[None]):
         request_view.display = kind == "question"
 
         # kind is either question | approval
-        # If the kind is question, set human submit button disabled false 
-        if kind == "question": 
-            self.query_one("#human-submit", Button).disabled = False 
+        # If the kind is question, set human submit button disabled false
+        if kind == "question":
+            self.query_one("#human-submit", Button).disabled = False
 
-        elif kind == "approval": 
-            self.query_one("#analyzer-submit", Button).disabled = False 
+        elif kind == "approval":
+            self.query_one("#analyzer-submit", Button).disabled = False
 
         # Replace the text with human question
         self.query_one("#human-question", Label).update(
@@ -309,14 +313,14 @@ class TitleApp(App[None]):
         response.load_text("")
         response.read_only = False
 
-        # Enable input and the submit button, which is disabled when the human submits 
+        # Enable input and the submit button, which is disabled when the human submits
         # response.disabled = False
         # self.query_one("#human-submit", Button).disabled = False
         # request_view.display = True
 
     def _make_suggestion_row(
-            self, index: int, suggestion: dict[str, Any]
-        ) -> Horizontal:
+        self, index: int, suggestion: dict[str, Any]
+    ) -> Horizontal:
         statuses = ("unresolved", "accepted", "rejected")
         selected_status = suggestion.get("status", "unresolved")
         if selected_status not in statuses:
@@ -335,8 +339,8 @@ class TitleApp(App[None]):
                 str(suggestion.get("feedback", "")),
                 id=f"feedback-{index}",
                 classes="human-text",
-                disabled=False, 
-                placeholder="Feedback..."
+                disabled=False,
+                placeholder="Feedback...",
             ),
             classes="suggestion-row",
         )
@@ -355,21 +359,52 @@ class TitleApp(App[None]):
 
         with Container(id="main-content"):
             # The left bar:
-            # For design: It shows the list of modules (keep, changed, new) in 3 boxes
-            # For implementation: It shows
-            with Vertical(id="files-panel", classes="panel") as files_panel:
-                files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
-                with ListView(
-                    id="design-list", initial_index=None
-                ):  # Disable the initial selection highlighting
+            with Vertical(id="left-content"):
+                # Left top:
+                # For design and impl: Show module names
+                with Vertical(id="files-panel", classes="panel") as files_panel:
+                    files_panel.border_title = f"Modules ({len(self.design_impl_data)})"
+                    with ListView(
+                        id="design-list", initial_index=None
+                    ):  # Disable the initial selection highlighting
 
-                    # Display the keys sorted: See sort function
-                    sorted_keys = sorted(
-                        self.design_impl_data.keys(),
-                        key=lambda x: _sort_design_modules(x),
-                    )
-                    for file_name in sorted_keys:
-                        yield ListItem(Label(file_name))
+                        # Display the keys sorted: See sort function
+                        sorted_keys = sorted(
+                            self.design_impl_data.keys(),
+                            key=lambda x: _sort_design_modules(x),
+                        )
+                        for file_name in sorted_keys:
+                            yield ListItem(Label(file_name))
+
+                # Left bottom: Deps graph section
+                with Vertical(id="deps-graph-panel", classes="panel") as deps_graph_panel:
+                    deps_graph_panel.border_title = f"Dependency graphs"
+                    with ListView(
+                        id="deps-graph-list", initial_index=None
+                    ):  # Disable the initial selection highlighting
+
+                        # Display the keys sorted: See sort function
+                        sorted_keys = sorted(
+                            self.design_impl_data.keys(),
+                            key=lambda x: _sort_design_modules(x),
+                        )
+
+                        # For simplicity: Hard code the current original dependency graphs 
+                        yield ListItem(Label("Current graph"))
+                        yield ListItem(Label("Original graph"))
+
+                # Left bottom: Requirements document section
+                with Vertical(id="requirements-panel", classes="panel") as requirements_panel:
+                    requirements_panel.border_title = f"Requirements document"
+                    with ListView(
+                        id="requirements-list", initial_index=None
+                    ):  # Disable the initial selection highlighting
+
+                        # Display the keys sorted: See sort function
+                        sorted_keys = sorted(
+                            self.design_impl_data.keys(),
+                            key=lambda x: _sort_design_modules(x),
+                        )
 
             # The right part
             with Vertical(id="right-content"):
@@ -383,6 +418,7 @@ class TitleApp(App[None]):
                         id="selected-file-content",
                         wrap=True,
                         markup=False,
+                        auto_scroll=False,
                     )
 
                 # Right bottom: Suggestions
@@ -435,10 +471,10 @@ class TitleApp(App[None]):
                         classes="human-text",
                         read_only=False,
                         disabled=False,
-                        placeholder="Human response..."
+                        placeholder="Human response...",
                     )
 
-                    # The submit button for human clarification questions 
+                    # The submit button for human clarification questions
                     with Horizontal(id="human-submit-button"):
                         yield Button(
                             "Submit",
@@ -465,7 +501,7 @@ class TitleApp(App[None]):
 
         selected_content = self.query_one("#selected-file-content", RichLog)
         selected_content.clear()
-        selected_content.write(content)
+        selected_content.write(content, scroll_end=False)
         selected_content.scroll_home(animate=False, immediate=True)
 
     # Listener when the human submit (for clarification questions) is pressed
@@ -476,21 +512,17 @@ class TitleApp(App[None]):
         if not request_id:
             return
 
-        # Obtain the response text 
+        # Obtain the response text
         response = self.query_one("#human-response", TextArea).text
 
-        write_formatted_human_question_response(
-            self.workspace, 
-            request_id, 
-            response
-        )
+        write_formatted_human_question_response(self.workspace, request_id, response)
 
         # Disable the human submit button, which is re-enabled later
         # inside the watch human response function
         self.query_one("#human-submit", Button).disabled = True
 
-    # Listener when the analyzer submit (for human's approval on the analyzer plan) is pressed 
-    # Write the result to human_response.json also, after the formatting 
+    # Listener when the analyzer submit (for human's approval on the analyzer plan) is pressed
+    # Write the result to human_response.json also, after the formatting
     @on(Button.Pressed, "#analyzer-submit")
     def on_analyzer_submit(self) -> None:
         request_id = self.human_request.get("request_id")
@@ -499,22 +531,22 @@ class TitleApp(App[None]):
 
         suggestions = []
 
-        # Iterate the index, find the values defined in the tables, 
-        # then append to the suggestions list which is written back to analyzer result 
-        # This depends on the index: Cant sort the displayed order. to be fixed. 
+        # Iterate the index, find the values defined in the tables,
+        # then append to the suggestions list which is written back to analyzer result
+        # This depends on the index: Cant sort the displayed order. to be fixed.
         for index, suggestion in enumerate(self.analyzer_suggestions_data):
             status = self.query_one(f"#status-{index}", Select).value
             feedback = self.query_one(f"#feedback-{index}", TextArea).text
             suggestions.append(
                 {
                     "status": str(status),
-                    "modules": str(suggestion.get("modules", "Unknown")),  # unchanged 
-                    "description": str(suggestion.get("description", "")),  # unchanged 
+                    "modules": str(suggestion.get("modules", "Unknown")),  # unchanged
+                    "description": str(suggestion.get("description", "")),  # unchanged
                     "feedback": feedback,
                 }
             )
 
-        # Obtain the additional feedback field 
+        # Obtain the additional feedback field
         additional_feedback = self.query_one(
             "#analyzer-additional-feedback", TextArea
         ).text
@@ -526,13 +558,14 @@ class TitleApp(App[None]):
             additional_feedback,
         )
 
-        # Clear the analyzer additional feedback + feedback-{index} text fields 
+        # Clear the analyzer additional feedback + feedback-{index} text fields
         self.query_one("#analyzer-additional-feedback", TextArea).load_text("")
         for index in range(len(self.analyzer_suggestions_data)):
             feedback = self.query_one(f"#feedback-{index}", TextArea)
             feedback.load_text("")
 
         self.query_one("#analyzer-submit", Button).disabled = True
+
 
 def run_ui(
     workspace: Path | None = None,

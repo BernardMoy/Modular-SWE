@@ -74,6 +74,20 @@ ListItem.-highlight {
     grid-gutter: 1;
 }
 
+#left-content {
+    height: 1fr;
+    layout: vertical;
+}
+
+#files-panel {
+    height: 3fr;
+}
+
+#deps-graph-panel,
+#requirements-panel {
+    height: 1fr;
+}
+
 #file-list {
     height: 1fr;
     margin-top: 1;

@@ -15,7 +15,7 @@ from opencode_ai import AsyncOpencode
 # when the run_agent command is called, the agent summary and log will be written to the json below
 AGENT_REPORT_JSON = "agent_report.json"
 
-# Format of human request (From agent): 
+# Format of human request (From agent):
 """{
     request_id: 
     type: question | approval
@@ -24,7 +24,7 @@ AGENT_REPORT_JSON = "agent_report.json"
 """
 HUMAN_REQUEST_JSON = "human_request.json"
 
-# Format of human response (From human): 
+# Format of human response (From human):
 """{
     request_id: 
     response: 
