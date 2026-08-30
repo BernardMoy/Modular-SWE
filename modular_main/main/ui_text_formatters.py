@@ -8,7 +8,7 @@ workspace parameter is the Agent workspace path.
 
 FOLLOW CONVENTION: THE DICT HERE {KEY, VALUE}
 MEANS THE KEYS (EXACT) ARE DISPLAYED ON THE LEFT PANEL
-VALUES ON THE RIGHT 
+VALUES ON THE RIGHT
 """
 
 from pathlib import Path

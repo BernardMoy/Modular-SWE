@@ -26,5 +26,5 @@ WORKFLOW_MODE: Literal[
 # Problem type: Either "custom" or "scb"
 PROBLEM_TYPE: Literal["custom", "scb"] = "custom"
 
-# Whether or not UI is enabled 
-UI_ENABLED = True
+# Whether or not UI is enabled
+UI_ENABLED = False

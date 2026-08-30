@@ -3,6 +3,7 @@ import subprocess
 
 venv = Path(".venv")
 codex_auth = Path.home() / ".codex" / "auth.json"
+from .settings import UI_ENABLED
 
 
 class BwrapExecutor:
@@ -74,8 +75,11 @@ class BwrapExecutor:
             # The first option is currently used for its simplicity.
             # Capture the output of the LLM through stdout
             result = subprocess.run(
-                cmd, check=True, text=True
-            )  # capture_output=True is ignored - it blocks agent ask questions
+                cmd,
+                check=True,
+                text=True,
+                capture_output=UI_ENABLED,  # if UI enabled, then capture output to display on screen. Else, it requires input() so cant capture.
+            )
             return result.stdout
 
         except subprocess.CalledProcessError as e:

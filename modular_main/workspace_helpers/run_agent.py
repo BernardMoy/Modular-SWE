@@ -114,19 +114,19 @@ async def run_agent(agent, model, prompt):
                     # Strip the prefix to get the question
                     question = response.removeprefix("HUMAN_QUESTION:").strip()
 
-                    # Call wait for human response (Through writing json and continuously poll) 
-                    # for the communication channel in UI mode 
-                    # Else use a simple input() 
+                    # Call wait for human response (Through writing json and continuously poll)
+                    # for the communication channel in UI mode
+                    # Else use a simple input()
 
                     # Currently 'a' and 'q' are still special characters used in the UI mode, but that actually shouldnt be the case
-                    # Instead of hardcoding a and q, introduce some special states in the json files in the communication channels. 
-                    # Not important, to be done later 
+                    # Instead of hardcoding a and q, introduce some special states in the json files in the communication channels.
+                    # Not important, to be done later
 
-                    if UI_ENABLED: 
+                    if UI_ENABLED:
                         human_response = await _wait_for_human_response(
                             "question", question
                         )
-                    else: 
+                    else:
                         print(f"\nQuestion: \n{question}")
                         human_response = input("\nYour answer ('q' to quit): ")
 
@@ -150,18 +150,19 @@ Continue your task or ask another question in the format HUMAN_QUESTION: <questi
                     # strip the prefix
                     question = response.removeprefix("HUMAN_APPROVE:").strip()
 
-                    if UI_ENABLED: 
+                    if UI_ENABLED:
                         # in this stage set human response json to have kind = APPROVAL
                         human_response = await _wait_for_human_response(
                             "approval", question
                         )
 
-                    else: 
+                    else:
                         print(f"\nRequires human approval: \n{question}")
 
-                        # Obtain the human response from the input 
-                        human_response = input("\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: ")
-
+                        # Obtain the human response from the input
+                        human_response = input(
+                            "\nType 'a' to approve all agent suggestions, 'q' to discard them and quit, or give feedback: "
+                        )
 
                     # if human response == a, quit
                     if human_response.strip() == "a":

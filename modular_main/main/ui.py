@@ -14,6 +14,7 @@ import cairosvg
 from PIL import Image as PILImage
 from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, Vertical
+from textual.screen import ModalScreen
 from textual.widgets import (
     Button,
     Footer,
@@ -50,6 +51,37 @@ def _sort_design_modules(name):
     return 4
 
 
+class AgentResponseModal(ModalScreen[None]):
+    """Modal window for displaying the latest agent response."""
+
+    def __init__(self, response: str = "") -> None:
+        super().__init__(id="agent-response-modal")
+        self.response = response
+
+    def compose(self) -> ComposeResult:
+        with Vertical(classes="panel agent-response-dialog"):
+            yield Label("Agent response", id="agent-response-title")
+            yield TextArea(
+                self.response,
+                id="agent-response-content",
+                read_only=True,
+            )
+            yield Button("Close", id="agent-response-close")
+
+    def update_response(self, response: str) -> None:
+        self.response = response
+        self.query_one("#agent-response-content", TextArea).load_text(response)
+
+    @on(Button.Pressed, "#agent-response-close")
+    def close(self) -> None:
+        self.dismiss()
+
+    def on_key(self, event) -> None:
+        if event.key == "escape":
+            self.dismiss()
+            event.stop()
+
+
 class TitleApp(App[None]):
     # Do not call the watcher while the widget tree is being composed.
 
@@ -69,7 +101,7 @@ class TitleApp(App[None]):
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
     requirements = reactive({}, init=False)
-    deps_graph = reactive({}, init=False) 
+    deps_graph = reactive({}, init=False)
     analyzer_suggestions = reactive([], init=False)  # Preserves analyzer result order.
     human_request = reactive({}, init=False)  # the agent question to human
     # ====================================
@@ -87,6 +119,7 @@ class TitleApp(App[None]):
     BINDINGS = [
         ("q", "quit", "Quit"),
         ("ctrl+q", "quit_workflow", "Stop workflow and quit"),
+        ("r", "show_agent_response", "Show agent response"),
     ]
 
     def __init__(
@@ -146,7 +179,6 @@ class TitleApp(App[None]):
         ):
             # Assign to the human request reactive state
             self.human_request = request_json
-
 
     # continuously poll the analyzer result file
     # this is required (but not the design)
@@ -238,7 +270,11 @@ class TitleApp(App[None]):
         self.agent_response = response
 
     def watch_agent_response(self, response: str) -> None:
-        self.query_one("#agent-response", TextArea).load_text(response)
+        if isinstance(self.screen, AgentResponseModal):
+            self.screen.update_response(response)
+
+    def action_show_agent_response(self) -> None:
+        self.push_screen(AgentResponseModal(self.agent_response))
 
     # design or implementation
     def update_design_or_impl(self, value: dict[str, Any]) -> None:
@@ -361,7 +397,6 @@ class TitleApp(App[None]):
     def on_deps_graph_zoom_reset(self) -> None:
         self._deps_graph_zoom = 1.0
         self._apply_deps_graph_zoom()
-
 
     # analyzer suggestions
     def update_analyzer_suggestions(self, value: list[Any]) -> None:
@@ -555,7 +590,9 @@ class TitleApp(App[None]):
                     id="deps-graph-preview-panel", classes="panel right-top"
                 ) as deps_graph_preview_panel:
                     deps_graph_preview_panel.border_title = "Dependency graph"
-                    deps_graph_preview_panel.display = False # Turn off display initially 
+                    deps_graph_preview_panel.display = (
+                        False  # Turn off display initially
+                    )
 
                     with Horizontal(id="deps-graph-controls"):
                         yield Button("-", id="deps-graph-zoom-out")
@@ -598,7 +635,7 @@ class TitleApp(App[None]):
                             "Submit",
                             variant="success",
                             id="analyzer-submit",
-                            disabled=True # disabled initially 
+                            disabled=True,  # disabled initially
                         )
 
                 # Right bottom: Human questions
@@ -621,7 +658,7 @@ class TitleApp(App[None]):
                             "Submit",
                             variant="success",
                             id="human-submit",
-                            disabled=True 
+                            disabled=True,
                         )
 
         # Footer showing q quit
@@ -657,9 +694,9 @@ class TitleApp(App[None]):
         selected_content.write(content, scroll_end=False)
         selected_content.scroll_home(animate=False, immediate=True)
 
-        # Turn on display for the selected file and turn off for deps graph 
-        self.query_one("#selected-file-panel", Vertical).display = True 
-        self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+        # Turn on display for the selected file and turn off for deps graph
+        self.query_one("#selected-file-panel", Vertical).display = True
+        self.query_one("#deps-graph-preview-panel", Vertical).display = False
         self._set_right_content_focus("right-top")
 
     # Display the selected requirements document.
@@ -677,11 +714,10 @@ class TitleApp(App[None]):
         )
         selected_content.scroll_home(animate=False, immediate=True)
 
-        # Turn on display for the selected file and turn off for deps graph 
-        self.query_one("#selected-file-panel", Vertical).display = True 
-        self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+        # Turn on display for the selected file and turn off for deps graph
+        self.query_one("#selected-file-panel", Vertical).display = True
+        self.query_one("#deps-graph-preview-panel", Vertical).display = False
         self._set_right_content_focus("right-top")
-
 
     # Display the selected dependency graph.
     @on(ListView.Selected, "#deps-graph-list")
@@ -690,16 +726,15 @@ class TitleApp(App[None]):
         deps_graph_preview_panel = self.query_one("#deps-graph-preview-panel", Vertical)
         deps_graph_preview_panel.border_title = selected_label
 
-        # Obtain the graph path (svg) from the selected label 
+        # Obtain the graph path (svg) from the selected label
         if selected_label:
             graph_path = self.deps_graph_data.get(selected_label)
-            self._render_deps_graph(graph_path) 
+            self._render_deps_graph(graph_path)
 
-            # Turn on display for deps grpah and turn off for selected file 
+            # Turn on display for deps grpah and turn off for selected file
             self.query_one("#selected-file-panel", Vertical).display = False
             self.query_one("#deps-graph-preview-panel", Vertical).display = True
             self._set_right_content_focus("right-top")
-            
 
     # Listener when the human submit (for clarification questions) is pressed
     # Write the result to human_response.json which gets captured inside run_agent.py

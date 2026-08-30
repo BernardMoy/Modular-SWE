@@ -4,6 +4,35 @@ Screen {
     color: $foreground;
 }
 
+#agent-response-modal {
+    align: center middle;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.agent-response-dialog {
+    width: 80%;
+    height: 80%;
+    max-width: 120;
+    max-height: 40;
+}
+
+#agent-response-title {
+    height: 2;
+    content-align: center middle;
+    text-style: bold;
+}
+
+#agent-response-content {
+    width: 1fr;
+    height: 1fr;
+}
+
+#agent-response-close {
+    width: 12;
+    margin: 1 0 0 0;
+    dock: right;
+}
+
 Label,
 Static,
 ListView,

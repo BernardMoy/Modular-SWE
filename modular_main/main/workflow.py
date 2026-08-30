@@ -175,8 +175,12 @@ def _run_decomposer(
     checkpoint_number,
     design_or_impl_callback=None,
     deps_graph_callback=None,
+    agent_response_callback=None,
 ):
-    get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
+    output = get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
+
+    # reflect in the UI the agent output
+    _report_agent_response(agent_response_callback, output)
 
     # Validator for the module names
     print(f"========== VALIDATOR FOR MODULE NAMES ==========")
@@ -231,6 +235,7 @@ def _decomposer_analyzer_loop(
     stage_callback=None,
     design_or_impl_callback=None,
     analyzer_suggestions_callback=None,
+    agent_response_callback=None,
     deps_graph_callback=None,
 ):
     iteration = 0
@@ -242,8 +247,9 @@ def _decomposer_analyzer_loop(
     _run_decomposer(
         executor,
         checkpoint_number,
-        design_or_impl_callback,
-        deps_graph_callback,
+        design_or_impl_callback=design_or_impl_callback,
+        deps_graph_callback=deps_graph_callback,
+        agent_response_callback=agent_response_callback,
     )
 
     while not passed and iteration < threshold:
@@ -260,15 +266,20 @@ def _decomposer_analyzer_loop(
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Analyzer agent")
         if WORKFLOW_MODE == "human":
-            get_prompt_and_run_agent(executor, "analyzer_human", False)
+            output = get_prompt_and_run_agent(executor, "analyzer_human", False)
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
-            get_prompt_and_run_agent(executor, "analyzer", False)  # has impl = False
+            output = get_prompt_and_run_agent(
+                executor, "analyzer", False
+            )  # has impl = False
 
-            # Reflect the analyzer suggestions
-            _report_analyzer_suggestions(
-                analyzer_suggestions_callback,
-                get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
-            )
+        # Reflect the analyzer suggestions
+        _report_analyzer_suggestions(
+            analyzer_suggestions_callback,
+            get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
+        )
+
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -289,8 +300,9 @@ def _decomposer_analyzer_loop(
         _run_decomposer(
             executor,
             checkpoint_number,
-            design_or_impl_callback,
-            deps_graph_callback,
+            design_or_impl_callback=design_or_impl_callback,
+            deps_graph_callback=deps_graph_callback,
+            agent_response_callback=agent_response_callback,
         )
 
         # Increment the iteration number
@@ -304,6 +316,7 @@ def _tester_refactor_loop(
     threshold,
     stage_callback: StageCallback | None = None,
     design_or_impl_callback: DesignOrImplCallback | None = None,
+    agent_response_callback: AgentResponseCallback | None = None,
 ):
     iteration = 0
     passed = False
@@ -322,7 +335,9 @@ def _tester_refactor_loop(
         _report_stage(
             stage_callback, f"(Iteration {iteration+1}) Writing and running tests"
         )
-        get_prompt_and_run_agent(executor, "tester", checkpoint_number)
+        output = get_prompt_and_run_agent(executor, "tester", checkpoint_number)
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # Move the blueprint and tests outside the agent workspace.
         # This is so the test content and function signatures dont get leaked to the coders
@@ -359,7 +374,11 @@ def _tester_refactor_loop(
             _report_stage(
                 stage_callback, f"(Iteration {iteration+1}) Test refactor agent"
             )
-            get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
+            output = get_prompt_and_run_agent(
+                executor, "test_refactor_coder", checkpoint_number
+            )
+            # reflect in the UI the agent output
+            _report_agent_response(agent_response_callback, output)
 
             # format code
             _format_code()
@@ -385,6 +404,7 @@ def _analyzer_refactor_loop(
     design_or_impl_callback: DesignOrImplCallback | None = None,
     analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None = None,
     deps_graph_callback: DepsGraphCallback | None = None,
+    agent_response_callback=None,
 ):
     # After coding: Run tests
     def tester_agent():
@@ -395,7 +415,11 @@ def _analyzer_refactor_loop(
         if (AGENT_TEST_STORAGE / "tests").exists():
             shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE)
 
-        get_prompt_and_run_agent(executor, "test_refactor_coder", checkpoint_number)
+        output = get_prompt_and_run_agent(
+            executor, "test_refactor_coder", checkpoint_number
+        )
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # Move tests back to the external storage
         if (AGENT_WORKSPACE / "tests").exists():
@@ -492,15 +516,20 @@ def _analyzer_refactor_loop(
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Analyzer agent")
         if WORKFLOW_MODE == "human":
-            get_prompt_and_run_agent(executor, "analyzer_human", True)
+            output = get_prompt_and_run_agent(executor, "analyzer_human", True)
         elif WORKFLOW_MODE in ["auto", "autoNoMetric", "autoTest", "autoAggressive"]:
-            get_prompt_and_run_agent(executor, "analyzer", True)  # has impl = True
+            output = get_prompt_and_run_agent(
+                executor, "analyzer", True
+            )  # has impl = True
 
-            # Reflect the analyzer suggestions
-            _report_analyzer_suggestions(
-                analyzer_suggestions_callback,
-                get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
-            )
+        # Reflect the analyzer suggestions
+        _report_analyzer_suggestions(
+            analyzer_suggestions_callback,
+            get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
+        )
+
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
         analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
@@ -521,7 +550,10 @@ def _analyzer_refactor_loop(
         # if not passed, then call the refactor agent
         print(f"========== [Iteration {iteration+1}] REFACTOR CODER AGENT ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Refactor coder agent")
-        get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+        output = get_prompt_and_run_agent(executor, "refactor_coder", checkpoint_number)
+
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # format code
         _format_code()
@@ -622,7 +654,7 @@ def modular_workflow_single(
     _report_stage(stage_callback, "Copying helper functions to agent workspace")
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
 
-    # Also copy settings.py, as run_agent needs it whether UI is enabled 
+    # Also copy settings.py, as run_agent needs it whether UI is enabled
     shutil.copy(SETTINGS_PATH, AGENT_WORKSPACE)
 
     # Step 3: Copy the required files to the agent workspace
@@ -743,7 +775,9 @@ def modular_workflow_single(
     if WORKFLOW_MODE == "autoTest":
         print(f"========== WRITING TESTS BEFORE IMPL ==========")
         _report_stage(stage_callback, "Writing tests before implementation")
-        get_prompt_and_run_agent(executor, "black_box_test_writer", N)
+        output = get_prompt_and_run_agent(executor, "black_box_test_writer", N)
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
 
         # Move the test suites outside the agent workspace so not to leak it
         shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
@@ -772,8 +806,9 @@ def modular_workflow_single(
     if WORKFLOW_MODE == "noDesign":
         print(f"========== CODING ALL MODULES ==========")
         _report_stage(stage_callback, "Coding all modules")
-        get_prompt_and_run_agent(executor, "no_design_coder", N)
-
+        output = get_prompt_and_run_agent(executor, "no_design_coder", N)
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
         # format code
         _format_code()
 
@@ -805,6 +840,7 @@ def modular_workflow_single(
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
             deps_graph_callback=deps_graph_callback,
+            agent_response_callback=agent_response_callback,
         )
 
         # Run the BFS
@@ -830,8 +866,11 @@ def modular_workflow_single(
             stage_callback,
             f"Modular coder agent ({len(modules_array_flattened)} modules)",
         )
-        get_prompt_and_run_agent(executor, "modular_coder", N, modules_array_flattened)
-
+        output = get_prompt_and_run_agent(
+            executor, "modular_coder", N, modules_array_flattened
+        )
+        # reflect in the UI the agent output
+        _report_agent_response(agent_response_callback, output)
         # format code
         _format_code()
 
@@ -864,6 +903,7 @@ def modular_workflow_single(
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
             deps_graph_callback=deps_graph_callback,
+            agent_response_callback=agent_response_callback,
         )
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
