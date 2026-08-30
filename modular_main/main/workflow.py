@@ -21,7 +21,7 @@ from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from write_metrics.write_metrics_from_implementation import (
     write_metrics_from_implementation,
 )
-from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE
+from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE, UI_ENABLED
 from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
@@ -926,11 +926,11 @@ def modular_workflow():
         help="Checkpoint number's end range value, inclusive. optional",
         nargs="?",
     )
-    parser.add_argument(
-        "--ui",
-        action="store_true",  # default = False
-        help="Open the textual UI",
-    )
+    # parser.add_argument(
+    #     "--ui",
+    #     action="store_true",  # default = False
+    #     help="Open the textual UI",
+    # )
     args = parser.parse_args()
 
     start = args.checkpoint_number
@@ -962,7 +962,7 @@ def modular_workflow():
                 deps_graph_callback=deps_graph_callback,
             )
 
-    if args.ui:
+    if UI_ENABLED:
         from .ui import run_ui
 
         run_ui(
