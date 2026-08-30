@@ -109,6 +109,7 @@ class TitleApp(App[None]):
     # Register the theme
     def on_mount(self):
         self.theme = "textual-dark"
+        self._set_agent_response("")
         self.query_one("#selected-file-content", RichLog).write("No files selected.")
         self.watch_human_request(self.human_request)
         self.set_interval(0.1, self._poll_human_request)
@@ -466,9 +467,11 @@ class TitleApp(App[None]):
             self.query_one("#analyzer-submit", Button).disabled = False
 
         # Replace the text with human question
-        self.query_one("#human-question", Label).update(
-            str(request.get("question", ""))
-        )
+        question = str(request.get("question", ""))
+        self.query_one("#human-question", Label).update(question)
+
+        # Replace the AGENT RESPONSE with the human question as well 
+        self._set_agent_response(question)
 
         response = self.query_one("#human-response", TextArea)
         response.load_text("")
