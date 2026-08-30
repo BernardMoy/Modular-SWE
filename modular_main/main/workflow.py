@@ -30,6 +30,7 @@ from .ui_text_formatters import (
     get_formatted_design,
     get_formatted_implementation,
     get_formatted_analyzer_suggestions,
+    get_formatted_deps_graph,
 )
 
 
@@ -60,6 +61,7 @@ AgentResponseCallback = Callable[[str], None]
 DesignOrImplCallback = Callable[[dict[str, Any]], None]
 AnalyzerSuggestionsCallback = Callable[[list[Any]], None]
 RequirementsCallback = Callable[[dict[str, Any]], None]
+DepsGraphCallback = Callable[[dict[str, Any]], None]
 
 
 def _report_stage(stage_callback, stage) -> None:
@@ -102,6 +104,13 @@ def _report_requirements(
 ) -> None:
     if requirements_callback is not None:
         requirements_callback(requirements)
+
+
+def _report_deps_graph(
+    deps_graph_callback: DepsGraphCallback | None, deps_graph: dict[str, Any]
+) -> None:
+    if deps_graph_callback is not None:
+        deps_graph_callback(deps_graph)
 
 
 # Constants for the modular workflow
@@ -166,7 +175,12 @@ def _run_agent_with_response(executor, agent_response_callback=None):
 
 
 # pipeline to run decomposer + validate
-def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
+def _run_decomposer(
+    executor,
+    checkpoint_number,
+    design_or_impl_callback=None,
+    deps_graph_callback=None,
+):
     get_prompt_and_run_agent(executor, "decomposer", checkpoint_number)
 
     # Validator for the module names
@@ -203,6 +217,9 @@ def _run_decomposer(executor, checkpoint_number, design_or_impl_callback=None):
         design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
     )
 
+    # Reflect in UI the updated deps graph
+    _report_deps_graph(deps_graph_callback, get_formatted_deps_graph(AGENT_WORKSPACE))
+
 
 # pipeline to run analyzer + write analyzer suggestions
 def _run_analyzer(executor, analyzer_suggestions_callback=None):
@@ -219,6 +236,7 @@ def _decomposer_analyzer_loop(
     stage_callback=None,
     design_or_impl_callback=None,
     analyzer_suggestions_callback=None,
+    deps_graph_callback=None,
 ):
     iteration = 0
     passed = False
@@ -226,7 +244,12 @@ def _decomposer_analyzer_loop(
     # Initial decomposer agent
     print(f"========== INITIAL DECOMPOSER AGENT ==========")
     _report_stage(stage_callback, "Initial decomposer agent")
-    _run_decomposer(executor, checkpoint_number, design_or_impl_callback)
+    _run_decomposer(
+        executor,
+        checkpoint_number,
+        design_or_impl_callback,
+        deps_graph_callback,
+    )
 
     while not passed and iteration < threshold:
         # Generate metrics from design and deps graph
@@ -268,7 +291,12 @@ def _decomposer_analyzer_loop(
         # Else if it does not pass (here), run the decomposer agent
         print(f"========== [Iteration {iteration+1}] DECOMPOSER AGENT ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Decomposer agent")
-        _run_decomposer(executor, checkpoint_number, design_or_impl_callback)
+        _run_decomposer(
+            executor,
+            checkpoint_number,
+            design_or_impl_callback,
+            deps_graph_callback,
+        )
 
         # Increment the iteration number
         iteration += 1
@@ -361,6 +389,7 @@ def _analyzer_refactor_loop(
     stage_callback: StageCallback | None = None,
     design_or_impl_callback: DesignOrImplCallback | None = None,
     analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None = None,
+    deps_graph_callback: DepsGraphCallback | None = None,
 ):
     # After coding: Run tests
     def tester_agent():
@@ -414,6 +443,11 @@ def _analyzer_refactor_loop(
             AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg",
             AGENT_WORKSPACE / "current_deps_graph.svg",
         )  # Generate a new svg file
+
+        # Reflect new deps graph in the UI
+        _report_deps_graph(
+            deps_graph_callback, get_formatted_deps_graph(AGENT_WORKSPACE)
+        )
 
         shutil.copy(
             AGENT_WORKSPACE / "deps_graphs" / "matrix.json",
@@ -523,6 +557,7 @@ def modular_workflow_single(
     agent_response_callback=None,
     analyzer_suggestions_callback=None,
     requirements_callback=None,
+    deps_graph_callback=None,
 ):
 
     # Obtain the problem name and checkpoint no
@@ -607,9 +642,9 @@ def modular_workflow_single(
             f.write("\n## Entrypoint file")
             f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE_NAME}.py`")
 
-    # Reflect the requirements document in the UI 
+    # Reflect the requirements document in the UI
     requirements_path = AGENT_WORKSPACE / f"checkpoint_{N}.md"
-    with open(requirements_path, 'r') as f: 
+    with open(requirements_path, "r") as f:
         _report_requirements(
             requirements_callback,
             {requirements_path.name: f.read()},
@@ -672,6 +707,11 @@ def modular_workflow_single(
 
             # Remove the temp deps_graph/ directory
             shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+
+        # After the orignal deps graph generated, reflect it in the UI
+        _report_deps_graph(
+            deps_graph_callback, get_formatted_deps_graph(AGENT_WORKSPACE)
+        )
 
     # copy the rubrics md file (Not used, for LLM to analyze code using 5 aspects only)
     # shutil.copy("prompts/agent_prompts/rubrics.md", AGENT_WORKSPACE / "rubrics.md")
@@ -766,6 +806,7 @@ def modular_workflow_single(
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
+            deps_graph_callback=deps_graph_callback,
         )
 
         # Run the BFS
@@ -824,6 +865,7 @@ def modular_workflow_single(
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
+            deps_graph_callback=deps_graph_callback,
         )
 
     print(f"========== [MAIN 7/8] MOVING SOLUTION BACK ==========")
@@ -904,6 +946,7 @@ def modular_workflow():
         agent_response_callback=None,
         analyzer_suggestions_callback=None,
         requirements_callback=None,
+        deps_graph_callback=None,
     ):
         for n in range(start, end + 1):
             modular_workflow_single(
@@ -916,6 +959,7 @@ def modular_workflow():
                 agent_response_callback=agent_response_callback,
                 analyzer_suggestions_callback=analyzer_suggestions_callback,
                 requirements_callback=requirements_callback,
+                deps_graph_callback=deps_graph_callback,
             )
 
     if args.ui:

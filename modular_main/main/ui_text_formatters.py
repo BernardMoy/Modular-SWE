@@ -4,6 +4,11 @@ Into a more human readable format
 Used to display in the UI
 
 workspace parameter is the Agent workspace path.
+
+
+FOLLOW CONVENTION: THE DICT HERE {KEY, VALUE}
+MEANS THE KEYS (EXACT) ARE DISPLAYED ON THE LEFT PANEL
+VALUES ON THE RIGHT 
 """
 
 from pathlib import Path
@@ -119,6 +124,20 @@ def get_formatted_analyzer_suggestions(workspace):
                 }
             )
     return l
+
+
+# Obtain deps graph formatted into dict with keys "Current graph" and "Original graph"
+def get_formatted_deps_graph(workspace):
+    current = Path(workspace) / "current_deps_graph.svg"
+    original = Path(workspace) / "original_deps_graph.svg"
+
+    result = {}
+    if current.exists():
+        result["Current graph"] = current
+    if original.exists():
+        result["Original graph"] = original
+
+    return result
 
 
 # Function to process the human question and write it to the human response

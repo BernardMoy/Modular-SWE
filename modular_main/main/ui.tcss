@@ -83,9 +83,19 @@ ListItem.-highlight {
     height: 3fr;
 }
 
+#deps-graph-preview-panel {
+    height: 2fr;
+}
+
 #deps-graph-panel,
 #requirements-panel {
     height: 1fr;
+}
+
+#deps-graph-image {
+    width: 1fr;
+    height: 1fr;
+    overflow: hidden;
 }
 
 #file-list {

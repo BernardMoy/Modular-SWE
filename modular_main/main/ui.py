@@ -5,10 +5,13 @@ https://textual.textualize.io/guide/design/
 from __future__ import annotations
 
 import json
+from io import BytesIO
 from pathlib import Path
 from threading import Thread
 from typing import Callable
 
+import cairosvg
+from PIL import Image as PILImage
 from textual.app import App, ComposeResult
 from textual.containers import Container, Horizontal, Vertical
 from textual.widgets import (
@@ -24,6 +27,7 @@ from textual.widgets import (
 from textual.widgets import Select
 from textual.reactive import reactive
 from textual import on
+from textual_image.widget import Image as TerminalImage
 from typing import Any
 from .ui_text_formatters import (
     get_formatted_analyzer_suggestions,
@@ -64,6 +68,7 @@ class TitleApp(App[None]):
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
     requirements = reactive({}, init=False)
+    deps_graph = reactive({}, init=False) 
     analyzer_suggestions = reactive([], init=False)  # Preserves analyzer result order.
     human_request = reactive({}, init=False)  # the agent question to human
     # ====================================
@@ -97,6 +102,7 @@ class TitleApp(App[None]):
         self.on_quit = on_quit
         self.design_impl_data = self.design_or_impl
         self.requirements_data = self.requirements
+        self.deps_graph_data = self.deps_graph
         self.analyzer_suggestions_data = self.analyzer_suggestions
         self._analyzer_result_mtime = None
 
@@ -137,6 +143,7 @@ class TitleApp(App[None]):
             # Assign to the human request reactive state
             self.human_request = request_json
 
+
     # continuously poll the analyzer result file
     # this is required (but not the design)
     # because the analyzer is a blocking operation in the human mode
@@ -174,6 +181,7 @@ class TitleApp(App[None]):
                 self.update_agent_response,
                 self.update_analyzer_suggestions,
                 self.update_requirements,
+                self.update_deps_graph,
             )
             self.update_stage("Workflow complete")
         except Exception as error:
@@ -203,7 +211,6 @@ class TitleApp(App[None]):
         self.query_one("#settings-label", Label).update(
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
-
 
     # requirements
     def update_requirements(self, value: dict[str, Any]) -> None:
@@ -248,6 +255,41 @@ class TitleApp(App[None]):
         )
         for file_name in sorted_keys:
             design_impl_list.append(ListItem(Label(file_name)))
+
+    # dependency graphs
+    def update_deps_graph(self, value: dict[str, Any]) -> None:
+        self.call_from_thread(self._set_deps_graph, value)
+
+    def _set_deps_graph(self, value: dict[str, Any]) -> None:
+        self.deps_graph = dict(value)
+
+    def watch_deps_graph(self, value: dict[str, Any]) -> None:
+        self.deps_graph_data = dict(value)
+
+        graph_list = self.query_one("#deps-graph-list", ListView)
+        graph_list.clear()
+
+        for graph_name in self.deps_graph_data:
+            graph_list.append(ListItem(Label(graph_name)))
+
+        self._render_deps_graph(self.deps_graph_data.get("Current graph"))
+
+    # Render a dependency graph image from its path
+    def _render_deps_graph(self, graph_path: str | Path | None) -> None:
+        image_widget = self.query_one("#deps-graph-image", TerminalImage)
+        if graph_path is None:
+            image_widget.image = None
+            return
+
+        try:
+            png_data = cairosvg.svg2png(url=str(graph_path))
+            image = PILImage.open(BytesIO(png_data)).copy()
+        except (OSError, ValueError, cairosvg.CairoError):
+            # The workflow may still be writing the SVG.
+            return
+
+        image_widget.image = image
+
 
     # analyzer suggestions
     def update_analyzer_suggestions(self, value: list[Any]) -> None:
@@ -397,13 +439,12 @@ class TitleApp(App[None]):
 
                         # Display the keys sorted: See sort function
                         sorted_keys = sorted(
-                            self.design_impl_data.keys(),
+                            self.deps_graph_data.keys(),
                             key=lambda x: _sort_design_modules(x),
                         )
 
-                        # For simplicity: Hard code the current original dependency graphs
-                        yield ListItem(Label("Current graph"))
-                        yield ListItem(Label("Original graph"))
+                        for file_name in sorted_keys:
+                            yield ListItem(Label(file_name))
 
                 # Left bottom: Requirements document section
                 with Vertical(
@@ -434,6 +475,13 @@ class TitleApp(App[None]):
                         markup=False,
                         auto_scroll=False,
                     )
+
+                # Right top: SVG
+                with Vertical(
+                    id="deps-graph-preview-panel", classes="panel"
+                ) as deps_graph_preview_panel:
+                    deps_graph_preview_panel.border_title = "Dependency graph"
+                    yield TerminalImage(id="deps-graph-image")
 
                 # Right bottom: Suggestions
                 with Vertical(
@@ -545,6 +593,16 @@ class TitleApp(App[None]):
             scroll_end=False,
         )
         selected_content.scroll_home(animate=False, immediate=True)
+
+    # Display the selected dependency graph.
+    @on(ListView.Selected, "#deps-graph-list")
+    def on_deps_graph_list_selected(self, event: ListView.Selected):
+        selected_label = str(event.item.query_one(Label).content)
+
+        # Obtain the graph path (svg) from the selected label 
+        if selected_label:
+            graph_path = self.deps_graph_data.get(selected_label)
+            self._render_deps_graph(graph_path) 
 
     # Listener when the human submit (for clarification questions) is pressed
     # Write the result to human_response.json which gets captured inside run_agent.py
