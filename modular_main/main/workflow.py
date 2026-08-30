@@ -59,6 +59,7 @@ SettingsCallback = Callable[[dict[str, Any]], None]
 AgentResponseCallback = Callable[[str], None]
 DesignOrImplCallback = Callable[[dict[str, Any]], None]
 AnalyzerSuggestionsCallback = Callable[[list[Any]], None]
+RequirementsCallback = Callable[[dict[str, Any]], None]
 
 
 def _report_stage(stage_callback, stage) -> None:
@@ -93,6 +94,14 @@ def _report_analyzer_suggestions(
 ) -> None:
     if analyzer_suggestions_callback is not None:
         analyzer_suggestions_callback(analyzer_suggestions)
+
+
+def _report_requirements(
+    requirements_callback: RequirementsCallback | None,
+    requirements: dict[str, Any],
+) -> None:
+    if requirements_callback is not None:
+        requirements_callback(requirements)
 
 
 # Constants for the modular workflow
@@ -513,6 +522,7 @@ def modular_workflow_single(
     design_or_impl_callback=None,
     agent_response_callback=None,
     analyzer_suggestions_callback=None,
+    requirements_callback=None,
 ):
 
     # Obtain the problem name and checkpoint no
@@ -596,6 +606,14 @@ def modular_workflow_single(
         with open(AGENT_WORKSPACE / f"checkpoint_{N}.md", "a") as f:
             f.write("\n## Entrypoint file")
             f.write(f"\nThe entrypoint file must be named `{ENTRY_FILE_NAME}.py`")
+
+    # Reflect the requirements document in the UI 
+    requirements_path = AGENT_WORKSPACE / f"checkpoint_{N}.md"
+    with open(requirements_path, 'r') as f: 
+        _report_requirements(
+            requirements_callback,
+            {requirements_path.name: f.read()},
+        )
 
     # if N>1, also copy the previous implementation, metrics (?) and deps graph
     if N > 1:
@@ -885,6 +903,7 @@ def modular_workflow():
         design_or_impl_callback=None,
         agent_response_callback=None,
         analyzer_suggestions_callback=None,
+        requirements_callback=None,
     ):
         for n in range(start, end + 1):
             modular_workflow_single(
@@ -896,6 +915,7 @@ def modular_workflow():
                 design_or_impl_callback=design_or_impl_callback,
                 agent_response_callback=agent_response_callback,
                 analyzer_suggestions_callback=analyzer_suggestions_callback,
+                requirements_callback=requirements_callback,
             )
 
     if args.ui:

@@ -63,6 +63,7 @@ class TitleApp(App[None]):
     )
     agent_response = reactive("", init=False)
     design_or_impl = reactive({}, init=False)
+    requirements = reactive({}, init=False)
     analyzer_suggestions = reactive([], init=False)  # Preserves analyzer result order.
     human_request = reactive({}, init=False)  # the agent question to human
     # ====================================
@@ -95,6 +96,7 @@ class TitleApp(App[None]):
         self.workflow = workflow
         self.on_quit = on_quit
         self.design_impl_data = self.design_or_impl
+        self.requirements_data = self.requirements
         self.analyzer_suggestions_data = self.analyzer_suggestions
         self._analyzer_result_mtime = None
 
@@ -171,6 +173,7 @@ class TitleApp(App[None]):
                 self.update_design_or_impl,
                 self.update_agent_response,
                 self.update_analyzer_suggestions,
+                self.update_requirements,
             )
             self.update_stage("Workflow complete")
         except Exception as error:
@@ -201,13 +204,20 @@ class TitleApp(App[None]):
             f"Problem: {settings.get("problem_name", "unknown")} (checkpoint {settings.get("checkpoint", 0)}) ({settings.get("problem_type", "unknown")}). Agent: {settings.get("agent", "unknown")}. Model: {settings.get("model", "unknown")}. Mode: {settings.get("workflow_mode", "unknown")}."
         )
 
-        # Change the left bottom part to display the correct item
-        checkpoint = settings.get("checkpoint", 0)
 
-        self.query_one("#requirements-list", ListView).clear()
-        self.query_one("#requirements-list", ListView).append(
-            ListItem(Label(f"checkpoint_{checkpoint}.md"))
-        )
+    # requirements
+    def update_requirements(self, value: dict[str, Any]) -> None:
+        self.call_from_thread(self._set_requirements, value)
+
+    def _set_requirements(self, value: dict[str, Any]) -> None:
+        self.requirements = dict(value)
+
+    def watch_requirements(self, value: dict[str, Any]) -> None:
+        self.requirements_data = dict(value)
+        requirements_list = self.query_one("#requirements-list", ListView)
+        requirements_list.clear()
+        for file_name in self.requirements_data:
+            requirements_list.append(ListItem(Label(file_name)))
 
     # agent response
     def update_agent_response(self, response: str) -> None:
@@ -519,6 +529,21 @@ class TitleApp(App[None]):
         selected_content = self.query_one("#selected-file-content", RichLog)
         selected_content.clear()
         selected_content.write(content, scroll_end=False)
+        selected_content.scroll_home(animate=False, immediate=True)
+
+    # Display the selected requirements document.
+    @on(ListView.Selected, "#requirements-list")
+    def on_requirements_list_selected(self, event: ListView.Selected):
+        selected_key = str(event.item.query_one(Label).content)
+        selected_panel = self.query_one("#selected-file-panel", Vertical)
+        selected_panel.border_title = selected_key
+
+        selected_content = self.query_one("#selected-file-content", RichLog)
+        selected_content.clear()
+        selected_content.write(
+            self.requirements_data.get(selected_key, "Failed to render content."),
+            scroll_end=False,
+        )
         selected_content.scroll_home(animate=False, immediate=True)
 
     # Listener when the human submit (for clarification questions) is pressed
