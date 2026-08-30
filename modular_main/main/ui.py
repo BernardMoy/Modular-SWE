@@ -537,6 +537,8 @@ class TitleApp(App[None]):
                     id="deps-graph-preview-panel", classes="panel"
                 ) as deps_graph_preview_panel:
                     deps_graph_preview_panel.border_title = "Dependency graph"
+                    deps_graph_preview_panel.display = False # Turn off display initially 
+
                     with Horizontal(id="deps-graph-controls"):
                         yield Button("-", id="deps-graph-zoom-out")
                         yield Button("Reset", id="deps-graph-zoom-reset")
@@ -578,8 +580,7 @@ class TitleApp(App[None]):
                             "Submit",
                             variant="success",
                             id="analyzer-submit",
-                            disabled=(self.settings.get("workflow_mode", ""))
-                            != "human",
+                            disabled=True # disabled initially 
                         )
 
                 # Right bottom: Human questions
@@ -602,8 +603,7 @@ class TitleApp(App[None]):
                             "Submit",
                             variant="success",
                             id="human-submit",
-                            disabled=(self.settings.get("workflow_mode", ""))
-                            != "human",
+                            disabled=True 
                         )
 
         # Footer showing q quit
@@ -639,6 +639,10 @@ class TitleApp(App[None]):
         selected_content.write(content, scroll_end=False)
         selected_content.scroll_home(animate=False, immediate=True)
 
+        # Turn on display for the selected file and turn off for deps graph 
+        self.query_one("#selected-file-panel", Vertical).display = True 
+        self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+
     # Display the selected requirements document.
     @on(ListView.Selected, "#requirements-list")
     def on_requirements_list_selected(self, event: ListView.Selected):
@@ -654,6 +658,11 @@ class TitleApp(App[None]):
         )
         selected_content.scroll_home(animate=False, immediate=True)
 
+        # Turn on display for the selected file and turn off for deps graph 
+        self.query_one("#selected-file-panel", Vertical).display = True 
+        self.query_one("#deps-graph-preview-panel", Vertical).display = False 
+
+
     # Display the selected dependency graph.
     @on(ListView.Selected, "#deps-graph-list")
     def on_deps_graph_list_selected(self, event: ListView.Selected):
@@ -663,6 +672,11 @@ class TitleApp(App[None]):
         if selected_label:
             graph_path = self.deps_graph_data.get(selected_label)
             self._render_deps_graph(graph_path) 
+
+            # Turn on display for deps grpah and turn off for selected file 
+            self.query_one("#selected-file-panel", Vertical).display = False
+            self.query_one("#deps-graph-preview-panel", Vertical).display = True
+            
 
     # Listener when the human submit (for clarification questions) is pressed
     # Write the result to human_response.json which gets captured inside run_agent.py
