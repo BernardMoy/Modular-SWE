@@ -15,8 +15,8 @@ MODEL: Literal[
 # auto: D-A loop analyzer makes suggestions automatically using the agent's thinking; no human is involved.
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
-    "noDesign", "autoNoMetric", "autoTest", "autoAggressive", "auto", "human", "autoByLayer"
-] = "noDesign"
+    "noDesign", "autoNoMetric", "auto", "human", "autoByLayer"  # USED ONLY [4] noDesign, auto, autoNoMetric, autoByLayer   #  "autoTest", "autoAggressive", 
+] = "autoByLayer"
 
 # Unused:
 # allAtOnce: DA loop, then implement all modules at once following the design
