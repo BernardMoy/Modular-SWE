@@ -33,7 +33,7 @@ Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
-If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, prioritise reusing existing modules instead of creating a new module where possible.
+If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, or code is present in the previous implementation, prioritise reusing existing modules instead of creating a new module where possible.
 If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, {"implement the changes in the design" if True else f"consider accepting or rejecting them based on: {DECOMPOSER_SUGGESTIONS_CRITERIA}"}. 
 
 Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}

@@ -193,7 +193,7 @@ def _run_decomposer(
     v_output_list = list(v_output)
     if v_output_list:
         print(v_output_list)
-        raise Exception("Validator failed.")
+        raise Exception(f"Validator failed: \n{v_output_list}")
     print("Passed")
 
     # Write the current deps graph SVG

@@ -16,7 +16,7 @@ Dependency graph: `current_deps_graph.json`{', which is modified from `original_
 In the design stage, do not assume anything about code that has not been written. 
 
 Approach: 
-1. Observe the {'code implementation' if has_implementation else 'design'}{", and state antipatterns or maintainability issues that you have discovered" if WORKFLOW_MODE != "autoNoMetric" else ""}
+1. Observe the {'code implementation' if has_implementation else 'design'}{f", and state antipatterns or maintainability issues that you have discovered following {ANALYZER_CRITERIA}" if WORKFLOW_MODE != "autoNoMetric" else ""}
 2. {"If metrics has been provided in `current_metrics.json`, use them to support the antipatterns you found. These metrics may have false positives and their job is to help discover issues, not to be eliminated completely. " if WORKFLOW_MODE != "autoNoMetric" else "Discover any antipatterns or maintainability issues that you have discovered."}
 3. For every potential issue, before writing the suggestion to the {'design' if not has_implementation else 'code'}, clarify any contextual information that would potentially affect whether or not the refactoring is necessary, such as: 
 - How frequently does a feature change 
@@ -33,10 +33,10 @@ Identified smell: the function process_final_amount is complex, and it combines 
 Backed up by metrics: the function has a high cyclomatic complexity of 22, making it difficult to test in isolation. 
 Suggestion: Split the function into internal private helpers, concerning about price calculation and discount application. 
 
-4. Based on the analysis, provide improvement suggestions at once that follow these criteria: {ANALYZER_CRITERIA}
-Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
-Leave the file unchanged if there are none. 
-Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
+4. Based on the analysis, provide improvement suggestions at once. RULES:
+- Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
+- Leave the file unchanged if there are none. 
+- Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
 {get_json_string("analyzer")}
 
 5. After all suggestions are given, simulate implementing all of them at once to ensure this would not create new design issues. 

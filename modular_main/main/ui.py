@@ -303,7 +303,7 @@ class TitleApp(App[None]):
         requirements_list = self.query_one("#requirements-list", ListView)
         requirements_list.clear()
         for file_name in self.requirements_data:
-            requirements_list.append(ListItem(Label(file_name)))
+            requirements_list.append(ListItem(Label(file_name, markup=False)))
 
     # agent response
     def update_agent_response(self, response: str) -> None:
@@ -337,7 +337,7 @@ class TitleApp(App[None]):
             key=_sort_design_modules,
         )
         for file_name in sorted_keys:
-            design_impl_list.append(ListItem(Label(file_name)))
+            design_impl_list.append(ListItem(Label(file_name, markup=False)))
 
     # dependency graphs
     def update_deps_graph(self, value: dict[str, Any]) -> None:
@@ -353,7 +353,7 @@ class TitleApp(App[None]):
         graph_list.clear()
 
         for graph_name in self.deps_graph_data:
-            graph_list.append(ListItem(Label(graph_name)))
+            graph_list.append(ListItem(Label(graph_name, markup=False)))
 
         self._render_deps_graph(self.deps_graph_data.get("Current graph"))
 
@@ -539,8 +539,8 @@ class TitleApp(App[None]):
                 allow_blank=False,
                 id=f"status-{index}",
             ),
-            Label(str(suggestion.get("modules", "Unknown"))),
-            Label(str(suggestion.get("description", "Unknown"))),
+            Label(str(suggestion.get("modules", "Unknown")), markup=False),
+            Label(str(suggestion.get("description", "Unknown")), markup=False),
             TextArea(
                 str(suggestion.get("feedback", "")),
                 id=f"feedback-{index}",
@@ -554,14 +554,14 @@ class TitleApp(App[None]):
     # Main compose function for the UI
     def compose(self) -> ComposeResult:
         # Top part showing the mode and problem
-        yield Label("", id="settings-label")
+        yield Label("", id="settings-label", markup=False)
 
         # the top bar showing time and command palette search
         yield Header(show_clock=True)
 
         # The rectangle label above showing the current stage in the multi agent pipeline
         with Container(id="stage"):
-            yield Label(f"Stage: {self.stage}", id="stage-label")
+            yield Label(f"Stage: {self.stage}", id="stage-label", markup=False)
 
         with Container(id="main-content"):
             # The left bar:
@@ -580,7 +580,7 @@ class TitleApp(App[None]):
                             key=lambda x: _sort_design_modules(x),
                         )
                         for file_name in sorted_keys:
-                            yield ListItem(Label(file_name))
+                            yield ListItem(Label(file_name, markup=False))
 
                 # Left bottom: Deps graph section
                 with Vertical(
@@ -598,7 +598,7 @@ class TitleApp(App[None]):
                         )
 
                         for file_name in sorted_keys:
-                            yield ListItem(Label(file_name))
+                            yield ListItem(Label(file_name, markup=False))
 
                 # Left bottom: Requirements document section
                 with Vertical(
@@ -688,7 +688,7 @@ class TitleApp(App[None]):
                     id="human-response-view", classes="panel right-bottom"
                 ) as response_panel:
                     response_panel.border_title = "Human question"
-                    yield Label("", id="human-question")
+                    yield Label("", id="human-question", markup=False)
                     yield TextArea(
                         id="human-response",
                         classes="human-text",

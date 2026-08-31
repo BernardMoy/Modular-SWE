@@ -22,7 +22,7 @@ RULES:
 - Ask exactly one human question at a time. 
 
 Approach: 
-1. Observe the {'code implementation' if has_implementation else 'design'}, and state antipatterns or maintainability issues that you have discovered
+1. Observe the {'code implementation' if has_implementation else 'design'}, and state antipatterns or maintainability issues that you have discovered, following {ANALYZER_CRITERIA}. 
 2. If metrics has been provided in `current_metrics.json`, use them to support the antipatterns you found. These metrics may have false positives and their job is to help discover issues, not to be eliminated completely. 
 3. For every potential issue, before writing the suggestion to the {'design' if not has_implementation else 'code'}, determine if there are any contextual information that cannot be determined solely from the code, dependency graph and the issue. You MUST NOT guess the following information: 
 - How frequently does a feature change 
@@ -57,7 +57,7 @@ Suggestion: Extract a helper module url_processor that contains the existing url
 Trade-offs: The metrics summary shows that the duplication increased by 2% in this checkpoint, extracting this helper function can bring the duplication down. However, this is a small function and changes to this would now ripple across more files, increase the number of modules, and make the workflow more difficult to understand. 
 Should the url_processor helper module be extracted even when it is small? 
 
-4. Based on the analysis, provide improvement suggestions at once that follow these criteria: {ANALYZER_CRITERIA}. RULES:
+4. Based on the analysis, provide improvement suggestions at once. RULES:
 - Add (do NOT delete) to `current_analyzer_result.json`, showing improvement suggestions only to modules that require refactoring, using the following schema. 
 - Leave the file unchanged if there are none. 
 - Minimize the ambiguity when implementing them later by including a detailed improvement instruction. 
