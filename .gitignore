@@ -23,7 +23,9 @@ agent_workspace copy
 agent_workspace_*
 
 # temp files
+.agents
 .claude
+.codex
 .pytest_cache
 
 # pycache 

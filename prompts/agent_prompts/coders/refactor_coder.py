@@ -1,9 +1,9 @@
-
 from ...criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
 
+
 # This assumes the coding instructions already are met - hence they are not provided here again
-# As no major refactoring involving those parts (import styles, venv) should be involved. 
-def get_refactor_coder_prompt(checkpoint_number): 
+# As no major refactoring involving those parts (import styles, venv) should be involved.
+def get_refactor_coder_prompt(checkpoint_number):
     return f"""
 You are a senior software engineer that specialises in modular software design.
 

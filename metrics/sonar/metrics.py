@@ -1,6 +1,6 @@
 """
-UNUSED, TOO COMPLEX TO SET UP (DOCKER) 
-TEST: 
+UNUSED, TOO COMPLEX TO SET UP (DOCKER)
+TEST:
 
 python -m deterministic.write_metrics.duplicated_lines_density datasets/slopCodeBench/scb-problems/circuit_eval/implementations_noDesign/checkpoint_8
 """
@@ -12,19 +12,23 @@ import os
 import argparse
 from dotenv import load_dotenv
 
-load_dotenv() 
+load_dotenv()
 
 SONAR_HOST = "http://localhost:9000"
 SONAR_TOKEN = os.environ.get("SONAR_TOKEN")
 PROJECT_KEY = "metrics"
 
+
 def sonar_analysis(implementation_path):
     abs_path = os.path.abspath(implementation_path)
     subprocess.run(
         [
-            "docker", "run", "--rm",
+            "docker",
+            "run",
+            "--rm",
             "--network=host",
-            "-v", f"{abs_path}:/usr/src",
+            "-v",
+            f"{abs_path}:/usr/src",
             "sonarsource/sonar-scanner-cli",
             f"-Dsonar.projectKey={PROJECT_KEY}",
             "-Dsonar.sources=.",
@@ -34,6 +38,7 @@ def sonar_analysis(implementation_path):
         ],
         check=True,
     )
+
 
 def sonar_duplicated_density():
     response = requests.get(
@@ -55,23 +60,25 @@ def sonar_duplicated_density():
 
     return float(measures[0]["value"])
 
-def get_duplicated_lines_density(implementation_path): 
-    sonar_analysis(implementation_path) 
-    density = sonar_duplicated_density() 
-    return density 
+
+def get_duplicated_lines_density(implementation_path):
+    sonar_analysis(implementation_path)
+    density = sonar_duplicated_density()
+    return density
+
 
 # usage: duplicated_lines_density [implementation folder path]
-# results are printed 
-def main(): 
+# results are printed
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("implementation_path", help="Path to the impl folder")
     args = parser.parse_args()
 
-    density = get_duplicated_lines_density(args.implementation_path) 
+    density = get_duplicated_lines_density(args.implementation_path)
 
-    # print the result 
+    # print the result
     print(density)
-   
 
-if __name__ == "__main__": 
-    main() 
+
+if __name__ == "__main__":
+    main()

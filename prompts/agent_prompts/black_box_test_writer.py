@@ -1,6 +1,7 @@
 from ..criteria import TEST_WRITER_CRITERIA
 
-def get_black_box_test_writer_prompt(checkpoint_number): 
+
+def get_black_box_test_writer_prompt(checkpoint_number):
     return f"""
 You are a designer of test suites before the implementation as part of test-driven-development for the following issue. 
 

@@ -68,7 +68,14 @@ def cli_python(
     python_exe = venv_dir / bin_dir / ("python.exe" if os.name == "nt" else "python")
 
     subprocess.run(
-        [str(python_exe), "-m", "pip", "install", "-r", str(implementation_dir / "requirements.txt")],
+        [
+            str(python_exe),
+            "-m",
+            "pip",
+            "install",
+            "-r",
+            str(implementation_dir / "requirements.txt"),
+        ],
         check=True,
         cwd=str(implementation_dir),
     )

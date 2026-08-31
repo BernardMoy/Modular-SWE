@@ -117,7 +117,9 @@ def test_normalize_rejects_segmentation_csv_with_wrong_columns(
     tmp_path: Path, run_cli, isolated_workspace: Path
 ) -> None:
     (tmp_path / "empty-dataset").mkdir()
-    dataset_root = install_default_dataset(isolated_workspace, tmp_path / "empty-dataset")
+    dataset_root = install_default_dataset(
+        isolated_workspace, tmp_path / "empty-dataset"
+    )
     segmentation_csv = dataset_root / "segmentation.csv"
     write_csv(
         segmentation_csv,
@@ -192,4 +194,7 @@ def test_normalize_one_reports_failure_for_unreadable_image(
         "Status: failed",
         f"Reason: {result.stdout.splitlines()[-1].removeprefix('Reason: ')}",
     ]
-    assert result.stdout.splitlines()[-1].removeprefix("Reason: ") in ALLOWED_NORMALIZE_ISSUES
+    assert (
+        result.stdout.splitlines()[-1].removeprefix("Reason: ")
+        in ALLOWED_NORMALIZE_ISSUES
+    )

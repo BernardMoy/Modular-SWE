@@ -1,6 +1,7 @@
 from ...criteria import TEST_WRITER_CRITERIA
 
-def get_test_refactor_coder_prompt(checkpoint_number): 
+
+def get_test_refactor_coder_prompt(checkpoint_number):
     return f"""
 Your job is to verify and fix the code implementations based on tests. 
 
@@ -15,6 +16,7 @@ ONLY when you discovered that a majority of tests failed because of test configu
 OTHERWISE, never modify the tests to suit the behaviour of the implementation. 
 """
 
-# A list of pass and failed test names derived from the requirements, and their differing behaviour is given in `current_test_results.json`. 
-# Your task is to perform refactoring on the implementation code to fix the failed tests, while preserving the behaviour of passed tests. 
-# Focus on the functionality and avoid performing large refactoring on how the code is implemented. 
+
+# A list of pass and failed test names derived from the requirements, and their differing behaviour is given in `current_test_results.json`.
+# Your task is to perform refactoring on the implementation code to fix the failed tests, while preserving the behaviour of passed tests.
+# Focus on the functionality and avoid performing large refactoring on how the code is implemented.

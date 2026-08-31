@@ -1,16 +1,16 @@
 from ..json_helper import get_json_string
 from ..criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
-from modular_main.settings import WORKFLOW_MODE 
+from modular_main.settings import WORKFLOW_MODE
 
-# The implementation path is not needed. 
-# Reading the existing code is not the responsibility of this agent. 
+# The implementation path is not needed.
+# Reading the existing code is not the responsibility of this agent.
 
 """
 Input: new instruction, prev implementation (if checkpoint >1), current_design, current_deps_graph, current_analyzer_result
 Output: current_design, current_deps_graph, current_rejected_improvements
 """
 
-# Follows the 5 criteria for modular design. For the decomposer. 
+# Follows the 5 criteria for modular design. For the decomposer.
 MODULE_CODE_PRACTICES = """
 - The number of modules should be minimized. 
 - A module should only have a single responsibility, not to have multiple distinct reasons to change. 
@@ -20,8 +20,9 @@ MODULE_CODE_PRACTICES = """
 - There should be minimum dependency with other modules, following high cohesion low coupling. 
 """
 
-def get_decomposer_prompt(checkpoint_number): 
-    # Whether current_design and current_deps_graph exists 
+
+def get_decomposer_prompt(checkpoint_number):
+    # Whether current_design and current_deps_graph exists
     # hasPrevDesign = checkpoint_number > 1 or second_iteration
 
     return f"""
@@ -32,7 +33,7 @@ Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
-If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, prioritise reusing existing modules instead of creating a new module where possible.
+If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, or code is present in the previous implementation, prioritise reusing existing modules instead of creating a new module where possible.
 If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, {"implement the changes in the design" if True else f"consider accepting or rejecting them based on: {DECOMPOSER_SUGGESTIONS_CRITERIA}"}. 
 
 Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}

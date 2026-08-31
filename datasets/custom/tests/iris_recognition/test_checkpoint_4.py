@@ -32,9 +32,7 @@ def _build_encoded_inputs(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
 
 # Verifies that `encode` prints the required summary, writes code and mask bin
 # files in dataset structure, and records anomalies for failed inputs.
-def test_encode_writes_requested_outputs_and_summary(
-    tmp_path: Path, run_cli
-) -> None:
+def test_encode_writes_requested_outputs_and_summary(tmp_path: Path, run_cli) -> None:
     normalized_dir, masks_dir, _, _ = _build_encoded_inputs(tmp_path)
     output_dir = tmp_path / "encoded"
     output_masks_dir = tmp_path / "encoded-masks"
@@ -137,4 +135,6 @@ def test_encode_one_reports_failure_for_unreadable_mask(
         "Status: failed",
         f"Reason: {result.stdout.splitlines()[-1].removeprefix('Reason: ')}",
     ]
-    assert result.stdout.splitlines()[-1].removeprefix("Reason: ") in ALLOWED_ENCODE_ISSUES
+    assert (
+        result.stdout.splitlines()[-1].removeprefix("Reason: ") in ALLOWED_ENCODE_ISSUES
+    )

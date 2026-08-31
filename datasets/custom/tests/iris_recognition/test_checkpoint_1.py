@@ -7,7 +7,6 @@ import struct
 import zlib
 from pathlib import Path
 
-
 PNG_1X1 = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a5W0AAAAASUVORK5CYII="
 )
@@ -123,14 +122,16 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
     assert result.stderr == ""
     output_lines = result.stdout.splitlines()
     assert output_lines[0] == f"Dataset root: {dataset_root}"
-    assert "Subjects found: 7" in output_lines  # Count all subjects that simply present 
-    assert "- Both eyes present: 1" in output_lines  # 001 only - note that both must have valid entries 
-    assert "- Left eyes only: 1" in output_lines # alpha
-    assert "- Right eyes only: 1" in output_lines # 003 
+    assert "Subjects found: 7" in output_lines  # Count all subjects that simply present
+    assert (
+        "- Both eyes present: 1" in output_lines
+    )  # 001 only - note that both must have valid entries
+    assert "- Left eyes only: 1" in output_lines  # alpha
+    assert "- Right eyes only: 1" in output_lines  # 003
     assert "- Neither eye present: 4" in output_lines  # 004, 005, 006, 007
     assert "Total valid images:" in output_lines
     assert "- Left: 3" in output_lines  # 001 001 alpha
-    assert "- Right: 2" in output_lines  # 001 003 
+    assert "- Right: 2" in output_lines  # 001 003
     assert "Anomalies found: 5" in output_lines
 
     dataset_rows = _read_csv(output_csv)
@@ -184,8 +185,18 @@ def test_scan_prints_expected_summary_and_writes_csv_outputs(
 
     anomaly_rows = _read_csv(anomalies_csv)
     assert len(anomaly_rows) == 5
-    assert {"subject_id": "004", "eye": "", "image_path": "", "issue": "missing_both_eyes"} in anomaly_rows
-    assert {"subject_id": "005", "eye": "", "image_path": "", "issue": "missing_both_eyes"} in anomaly_rows
+    assert {
+        "subject_id": "004",
+        "eye": "",
+        "image_path": "",
+        "issue": "missing_both_eyes",
+    } in anomaly_rows
+    assert {
+        "subject_id": "005",
+        "eye": "",
+        "image_path": "",
+        "issue": "missing_both_eyes",
+    } in anomaly_rows
     assert {
         "subject_id": "006",
         "eye": "L",
@@ -223,7 +234,9 @@ def test_scan_ignores_non_image_files_when_output_is_not_requested(
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
     output_lines = result.stdout.splitlines()
-    assert "Total valid images:" in output_lines  # numbers same as previous test, see above 
+    assert (
+        "Total valid images:" in output_lines
+    )  # numbers same as previous test, see above
     assert "- Left: 3" in output_lines
     assert "- Right: 2" in output_lines
     assert "Anomalies found: 5" in output_lines
@@ -240,20 +253,24 @@ def test_inspect_lists_images_for_existing_subject(
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
-    assert result.stdout == "\n".join(
-        [
-            "Subject: 001",
-            "",
-            "Left eye:",
-            "Images: 2",
-            "- S1001L01.png",
-            "- S1001L02.jpg",
-            "",
-            "Right eye:",
-            "Images: 1",
-            "- S1001R01.jpeg",
-        ]
-    ) + "\n"
+    assert (
+        result.stdout
+        == "\n".join(
+            [
+                "Subject: 001",
+                "",
+                "Left eye:",
+                "Images: 2",
+                "- S1001L01.png",
+                "- S1001L02.jpg",
+                "",
+                "Right eye:",
+                "Images: 1",
+                "- S1001R01.jpeg",
+            ]
+        )
+        + "\n"
+    )
 
 
 # Verifies that `inspect` accepts non-numeric subject IDs and reports a missing
@@ -270,18 +287,22 @@ def test_inspect_marks_absent_eyes_and_accepts_string_subject_ids(
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
-    assert result.stdout == "\n".join(
-        [
-            "Subject: alpha",
-            "",
-            "Left eye:",
-            "Images: 1",
-            "- alpha-L-01.png",
-            "",
-            "Right eye:",
-            "absent",
-        ]
-    ) + "\n"
+    assert (
+        result.stdout
+        == "\n".join(
+            [
+                "Subject: alpha",
+                "",
+                "Left eye:",
+                "Images: 1",
+                "- alpha-L-01.png",
+                "",
+                "Right eye:",
+                "absent",
+            ]
+        )
+        + "\n"
+    )
 
 
 # Verifies that `inspect` treats existing-but-empty eye folders the same as
@@ -292,21 +313,27 @@ def test_inspect_treats_empty_eye_folders_as_absent(
     dataset_root = _build_dataset(tmp_path / "dataset")
     _install_default_dataset(isolated_workspace, dataset_root)
 
-    result = run_cli("inspect", "005")  # 005 has an empty L and empty R folders --> absent 
+    result = run_cli(
+        "inspect", "005"
+    )  # 005 has an empty L and empty R folders --> absent
 
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
-    assert result.stdout == "\n".join(
-        [
-            "Subject: 005",
-            "",
-            "Left eye:",
-            "absent",
-            "",
-            "Right eye:",
-            "absent",
-        ]
-    ) + "\n"
+    assert (
+        result.stdout
+        == "\n".join(
+            [
+                "Subject: 005",
+                "",
+                "Left eye:",
+                "absent",
+                "",
+                "Right eye:",
+                "absent",
+            ]
+        )
+        + "\n"
+    )
 
 
 # Verifies that `inspect` prints the required message for an unknown subject ID.

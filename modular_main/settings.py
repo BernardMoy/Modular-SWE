@@ -1,33 +1,30 @@
-from typing import Literal 
+from typing import Literal
 
-# For the coding agent: Codex / Claude Code 
+# For the coding agent: Codex / Claude Code
 AGENT: Literal["codex", "opencode"] = "codex"
 MODEL: Literal[
-                "gpt-5.4", 
-                "gpt-5.6-luna",
-                
-                "Nemotron 3 Ultra Free", 
-                "Big Pickle", 
-                "DeepSeek V4 Flash Free"
-               ] = "gpt-5.6-luna"
+    "gpt-5.4",
+    "gpt-5.6-luna",
+    "Nemotron 3 Ultra Free",
+    "Big Pickle",
+    "DeepSeek V4 Flash Free",
+] = "gpt-5.6-luna"
 
-# For the modular workflow. 
-# noDesign: Directly implement all modules at once (reference) 
-# auto: D-A loop analyzer makes suggestions automatically using the agent's thinking; no human is involved. 
-# human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics. 
+# For the modular workflow.
+# noDesign: Directly implement all modules at once (reference)
+# auto: D-A loop analyzer makes suggestions automatically using the agent's thinking; no human is involved.
+# human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
-    "noDesign", 
-    "autoNoMetric", 
-    "autoTest",
-    "autoAggressive",
-    "auto", 
-    "human"
-    ] = "autoAggressive"
+    "noDesign", "autoNoMetric", "auto", "human", "autoByLayer"  # USED ONLY [4] noDesign, auto, autoNoMetric, autoByLayer   #  "autoTest", "autoAggressive", 
+] = "autoByLayer"
 
-# Unused: 
-# allAtOnce: DA loop, then implement all modules at once following the design 
-# byLayer: BFS, then code modules in the same layer within the same prompt 
+# Unused:
+# allAtOnce: DA loop, then implement all modules at once following the design
+# byLayer: BFS, then code modules in the same layer within the same prompt
 # byModule: BFS and one prompt per module. Modules in the same layer are coded in parallel
 
-# Problem type: Either "custom" or "scb" 
-PROBLEM_TYPE: Literal["custom", "scb"] = "custom"
+# Problem type: Either "custom" or "scb"
+PROBLEM_TYPE: Literal["custom", "scb"] = "scb"
+
+# Whether or not UI is enabled
+UI_ENABLED = False
