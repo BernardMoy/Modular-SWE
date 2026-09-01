@@ -22,18 +22,26 @@ def linear_interpolation(arr, N):
 
 
 # Given an array in the form of [{metrics}, {metrics}] coorresponding to the eval metrics columns,
-# linearly interpolate all metrics
+# linearly interpolate all metrics into [{m}, {m}, ...] of length N 
 def linear_interpolation_metrics(metrics_arr, N):
     result = defaultdict(list)
 
-    for key, value in metrics_arr.items():
-        if key in ["implementation_path", "has_cycles"]:
-            continue
-
-        result[key].append(value)
+    for metrics in metrics_arr:
+        for key, value in metrics.items():
+            # SKIP these two fields 
+            if key in ["implementation_path", "has_cycles"]:
+                continue
+            result[key].append(value)
 
     # for all the value arrays inside result, linear interpolate them
     for key, value in result.items():
         result[key] = linear_interpolation(value, N)
 
-    return result
+    # re-assign interpolated values using result[key][i]
+    new_metrics_arr = [
+        {key: result[key][i] for key in result} for i in range(N)
+    ]
+
+    # implementation path (containing version numbers), and has_cycles, cannot be interpolated. 
+
+    return new_metrics_arr

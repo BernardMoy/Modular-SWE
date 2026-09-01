@@ -931,6 +931,7 @@ def modular_workflow_single(
             N,
             DA_LOOP_THRESHOLD_AFTER_IMPL,
             AGENT_WORKSPACE,
+            AGENT_TEST_STORAGE,
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,

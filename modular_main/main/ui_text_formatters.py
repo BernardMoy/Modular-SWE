@@ -108,7 +108,8 @@ def get_formatted_analyzer_suggestions(workspace):
     l = []
     if analyzer_path.exists(): 
         with open(analyzer_path, "r") as f:
-            analyzer_json = json.load(f)
+            content = f.read().strip()
+            analyzer_json = json.loads(content) if content else []
 
             # For each design json:
             # { module_name, description, status }
@@ -177,7 +178,8 @@ def write_formatted_human_analyzer_approval(
 
     if analyzer_path.exists():
         with open(analyzer_path, "r") as f:
-            analyzer_json = json.load(f)
+            content = f.read().strip()
+            analyzer_json = json.loads(content) if content else []
     else:
         analyzer_json = []
 

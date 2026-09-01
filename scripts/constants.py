@@ -31,6 +31,18 @@ def _get_reference_versions(problem):
     problem_dir = Path(BASE_REFERENCE_DIR) / problem
     return [entry.name for entry in os.scandir(problem_dir) if entry.is_dir()]
 
+# Mapping from problem name to the src directory. 
+# We only want to evaluate the src directory, not the entire repo 
+SRC_DIR_DICT = {
+    "flask": "src", 
+    "click": "src", 
+    "cli": "httpie/cli", 
+    "fastapi": "fastapi", 
+    "python-dotenv": "src", 
+    "tqdm": "tqdm", 
+    "uvicorn": "uvicorn", 
+    "requests": "requests"
+}
 
 # The IMPLEMENTATION DIRECTORY (i.e. src) must be provided
 # THIS is the directory you want to analyze metrics (LOC...) on

@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from collections import defaultdict
+import subprocess 
 
 # Files not considered in the module count and the add / change / deleted modules count.
 EXCLUDED = {".venv", "__pycache__", ".git", "node_modules", ".pytest_cache"}
@@ -98,6 +99,52 @@ def get_deleted_files(implementation_path_old, implementation_path_new):
 
     return list(s)
 
+# Given two implementations, get the number of deleted and added lines (git diff) 
+def get_added_deleted_lines(old_dir: str, new_dir: str) -> tuple[int, int]:
+    # no index: The impl does not have to be git directories 
+    result = subprocess.run(
+        [
+            "git",
+            "diff",
+            "--no-index",
+            "--numstat",
+            old_dir,
+            new_dir,
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+    added = 0
+    deleted = 0
+
+    for line in result.stdout.splitlines():
+        parts = line.split("\t")
+
+        if len(parts) < 3:
+            continue
+
+        added_str, deleted_str = parts[:2]
+
+        if added_str.isdigit():
+            added += int(added_str)
+
+        if deleted_str.isdigit():
+            deleted += int(deleted_str)
+
+    # Also return the old LOC for proportion
+    old_loc = 0
+
+    for path in Path(old_dir).rglob("*.py"):
+        if path.is_file():
+            with path.open("r", encoding="utf-8", errors="ignore") as f:
+                old_loc += sum(1 for _ in f)
+
+    return {
+        "added": added, 
+        "deleted": deleted, 
+        "old_loc": old_loc
+    }
 
 # Return the total number of files.
 # Used for getting the change proportion
