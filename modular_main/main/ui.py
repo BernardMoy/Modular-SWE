@@ -165,9 +165,9 @@ class TitleApp(App[None]):
         on_quit: Callable[[], None] | None = None,
     ):
         super().__init__(watch_css=True)
-        self.workspace = workspace or Path(
-            "agent_workspace"
-        )  # workspace is the agent workspace path
+        if not workspace: 
+            raise Exception("Empty agent workspace provided to the UI")
+        self.workspace = workspace  # workspace is the agent workspace path
         self.workflow = workflow
         self.on_quit = on_quit
         self.design_impl_data = self.design_or_impl

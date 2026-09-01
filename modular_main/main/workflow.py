@@ -44,7 +44,7 @@ def stop_run_agent_processes() -> None:
 
 
 # Constants for directory and file paths
-AGENT_WORKSPACE = Path("agent_workspace")
+SUFFIX = f"{WORKFLOW_MODE}_{AGENT}_{MODEL}"  # used by both agent workspace and implementation dest 
 AGENT_TEST_STORAGE = Path(
     "agent_test_storage"
 )  # temp storage for tests, not visible in agent workspace
@@ -127,8 +127,8 @@ if WORKFLOW_MODE == "human":
 
 # function to format code inside agent_workspace / implementation
 # by running prettier (ts, json) and black (Python)
-def _format_code():
-    implementation_path = AGENT_WORKSPACE / "implementation"
+def _format_code(agent_workspace):
+    implementation_path = agent_workspace / "implementation"
 
     # run prettier
     subprocess.run(
@@ -155,9 +155,9 @@ def _format_code():
 
 
 # Function to decide whether to pass or fail, given the analyzer output.
-def _pass_fail():
+def _pass_fail(agent_workspace):
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass
-    with open(AGENT_WORKSPACE / "current_analyzer_result.json", "r") as f:
+    with open(agent_workspace / "current_analyzer_result.json", "r") as f:
         content = f.read().strip()
         # if the content is empty, then set the result to []. Else, load json
         # this wont raise an error if the file is empty
@@ -173,6 +173,7 @@ def _pass_fail():
 def _run_decomposer(
     executor,
     checkpoint_number,
+    agent_workspace,
     design_or_impl_callback=None,
     deps_graph_callback=None,
     agent_response_callback=None,
@@ -185,8 +186,8 @@ def _run_decomposer(
     # Validator for the module names
     print(f"========== VALIDATOR FOR MODULE NAMES ==========")
     v_output = module_name_validator(
-        AGENT_WORKSPACE / "current_design.json",
-        AGENT_WORKSPACE / "current_deps_graph.json",
+        agent_workspace / "current_design.json",
+        agent_workspace / "current_deps_graph.json",
     )
 
     # Currently, if this array is non empty, throw an error
@@ -197,7 +198,7 @@ def _run_decomposer(
     print("Passed")
 
     # Write the current deps graph SVG
-    deps_graph_json_path = AGENT_WORKSPACE / "current_deps_graph.json"
+    deps_graph_json_path = agent_workspace / "current_deps_graph.json"
     if deps_graph_json_path.exists():
         subprocess.run(
             [
@@ -205,7 +206,7 @@ def _run_decomposer(
                 "scripts/deps_graph_json_to_svg.py",
                 deps_graph_json_path,
                 "-o",
-                AGENT_WORKSPACE / "current_deps_graph",
+                agent_workspace / "current_deps_graph",
             ],
             capture_output=True,
             text=True,
@@ -213,11 +214,11 @@ def _run_decomposer(
 
     # Reflect in the UI the updated current design
     _report_design_or_impl(
-        design_or_impl_callback, get_formatted_design(AGENT_WORKSPACE)
+        design_or_impl_callback, get_formatted_design(agent_workspace)
     )
 
     # Reflect in UI the updated deps graph
-    _report_deps_graph(deps_graph_callback, get_formatted_deps_graph(AGENT_WORKSPACE))
+    _report_deps_graph(deps_graph_callback, get_formatted_deps_graph(agent_workspace))
 
 
 # pipeline to run analyzer + write analyzer suggestions
@@ -232,6 +233,7 @@ def _decomposer_analyzer_loop(
     executor,
     checkpoint_number,
     threshold,
+    agent_workspace,
     stage_callback=None,
     design_or_impl_callback=None,
     analyzer_suggestions_callback=None,
@@ -247,6 +249,7 @@ def _decomposer_analyzer_loop(
     _run_decomposer(
         executor,
         checkpoint_number,
+        agent_workspace,
         design_or_impl_callback=design_or_impl_callback,
         deps_graph_callback=deps_graph_callback,
         agent_response_callback=agent_response_callback,
@@ -257,9 +260,9 @@ def _decomposer_analyzer_loop(
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
         _report_stage(stage_callback, f"(Iteration {iteration+1}) Generate metrics")
         write_metrics_from_design_and_deps_graph(
-            AGENT_WORKSPACE / "current_design.json",
-            AGENT_WORKSPACE / "current_deps_graph.json",
-            AGENT_WORKSPACE / "current_metrics.json",
+            agent_workspace / "current_design.json",
+            agent_workspace / "current_deps_graph.json",
+            agent_workspace / "current_metrics.json",
         )
 
         # Analyzer agent
@@ -275,19 +278,19 @@ def _decomposer_analyzer_loop(
         # Reflect the analyzer suggestions
         _report_analyzer_suggestions(
             analyzer_suggestions_callback,
-            get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
+            get_formatted_analyzer_suggestions(agent_workspace),
         )
 
         # reflect in the UI the agent output
         _report_agent_response(agent_response_callback, output)
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
-        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
+        analyzer_result_path = agent_workspace / "current_analyzer_result.json"
         if not analyzer_result_path.exists():
             analyzer_result_path.touch()
 
         # If the analyzer return pass, set the passed flag to true
-        if _pass_fail():
+        if _pass_fail(agent_workspace):
             passed = True
 
         # if passed, return
@@ -300,6 +303,7 @@ def _decomposer_analyzer_loop(
         _run_decomposer(
             executor,
             checkpoint_number,
+            agent_workspace,
             design_or_impl_callback=design_or_impl_callback,
             deps_graph_callback=deps_graph_callback,
             agent_response_callback=agent_response_callback,
@@ -314,6 +318,8 @@ def _tester_refactor_loop(
     executor,
     checkpoint_number,
     threshold,
+    agent_workspace,
+    agent_test_storage, 
     stage_callback: StageCallback | None = None,
     design_or_impl_callback: DesignOrImplCallback | None = None,
     agent_response_callback: AgentResponseCallback | None = None,
@@ -323,10 +329,10 @@ def _tester_refactor_loop(
 
     while not passed and iteration < threshold:
         # Move the blueprint and tests folder into the agent workspace
-        if (AGENT_TEST_STORAGE / "test_blueprint.json").exists():
-            shutil.move(AGENT_TEST_STORAGE / "test_blueprint.json", AGENT_WORKSPACE)
-        if (AGENT_TEST_STORAGE / "tests").exists():
-            shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE)
+        if (agent_test_storage / "test_blueprint.json").exists():
+            shutil.move(agent_test_storage / "test_blueprint.json", agent_workspace)
+        if (agent_test_storage / "tests").exists():
+            shutil.move(agent_test_storage / "tests", agent_workspace)
 
         # Call the tester agent
         print(
@@ -341,18 +347,18 @@ def _tester_refactor_loop(
 
         # Move the blueprint and tests outside the agent workspace.
         # This is so the test content and function signatures dont get leaked to the coders
-        if (AGENT_WORKSPACE / "test_blueprint.json").exists():
-            shutil.move(AGENT_WORKSPACE / "test_blueprint.json", AGENT_TEST_STORAGE)
-        if (AGENT_WORKSPACE / "tests").exists():
-            shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
+        if (agent_workspace / "test_blueprint.json").exists():
+            shutil.move(agent_workspace / "test_blueprint.json", agent_test_storage)
+        if (agent_workspace / "tests").exists():
+            shutil.move(agent_workspace / "tests", agent_test_storage)
 
         # Remove the report - it describes the test intention that cant be leaked to coders
-        (AGENT_WORKSPACE / "agent_report.json").unlink()
+        (agent_workspace / "agent_report.json").unlink()
 
         # Check the written current_test_results.json to discover if there are any failed tests
         print(f"========== ANALYZING TEST RESULTS ==========")
         _report_stage(stage_callback, "Analyzing test results")
-        with open(AGENT_WORKSPACE / "current_test_results.json", "r") as f:
+        with open(agent_workspace / "current_test_results.json", "r") as f:
             test_results_json = json.load(f)
 
             passed_tests = len([x for x in test_results_json if x["result"] == "pass"])
@@ -381,11 +387,11 @@ def _tester_refactor_loop(
             _report_agent_response(agent_response_callback, output)
 
             # format code
-            _format_code()
+            _format_code(agent_workspace)
 
             # reflect the updated code in the UI
             _report_design_or_impl(
-                design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+                design_or_impl_callback, get_formatted_implementation(agent_workspace)
             )
 
         iteration += 1
@@ -400,6 +406,8 @@ def _analyzer_refactor_loop(
     executor,
     checkpoint_number,
     threshold,
+    agent_workspace,
+    agent_test_storage, 
     stage_callback: StageCallback | None = None,
     design_or_impl_callback: DesignOrImplCallback | None = None,
     analyzer_suggestions_callback: AnalyzerSuggestionsCallback | None = None,
@@ -407,13 +415,13 @@ def _analyzer_refactor_loop(
     agent_response_callback=None,
 ):
     # After coding: Run tests
-    def tester_agent():
+    def tester_agent(agent_workspace):
         print(f"========== TESTER ==========")
         _report_stage(stage_callback, "Tester")
 
         # Move tests from the storage to the workspace
-        if (AGENT_TEST_STORAGE / "tests").exists():
-            shutil.move(AGENT_TEST_STORAGE / "tests", AGENT_WORKSPACE)
+        if (agent_test_storage / "tests").exists():
+            shutil.move(agent_test_storage / "tests", agent_workspace)
 
         output = get_prompt_and_run_agent(
             executor, "test_refactor_coder", checkpoint_number
@@ -422,19 +430,19 @@ def _analyzer_refactor_loop(
         _report_agent_response(agent_response_callback, output)
 
         # Move tests back to the external storage
-        if (AGENT_WORKSPACE / "tests").exists():
-            shutil.move(AGENT_WORKSPACE / "tests", AGENT_TEST_STORAGE)
+        if (agent_workspace / "tests").exists():
+            shutil.move(agent_workspace / "tests", agent_test_storage)
 
         # Remove the report - it describes the test intention that cant be leaked to coders
-        (AGENT_WORKSPACE / "agent_report.json").unlink()
+        (agent_workspace / "agent_report.json").unlink()
 
         # Remove the pytest cache path - it also exposes the test intention
-        pytest_cache = AGENT_WORKSPACE / ".pytest_cache"
+        pytest_cache = agent_workspace / ".pytest_cache"
         if pytest_cache.exists():
             shutil.rmtree(pytest_cache)
 
     # update current_metrics.json using the implementation
-    def update_metrics():
+    def update_metrics(agent_workspace):
         # Update the dependency graph
         print(
             f"========== [Iteration {iteration+1}] UPDATE DEPENDENCY GRAPH =========="
@@ -446,40 +454,40 @@ def _analyzer_refactor_loop(
             [
                 "python",
                 "scripts/deps_graph.py",
-                AGENT_WORKSPACE / "implementation",
-                AGENT_WORKSPACE / "deps_graphs",
+                agent_workspace / "implementation",
+                agent_workspace / "deps_graphs",
             ],
             check=True,
         )
 
         # Extract only the json and svg, and also the visibility matrix json and png
         shutil.copy(
-            AGENT_WORKSPACE / "deps_graphs" / "deps_graph.json",
-            AGENT_WORKSPACE / "current_deps_graph.json",
+            agent_workspace / "deps_graphs" / "deps_graph.json",
+            agent_workspace / "current_deps_graph.json",
         )  # Replace the current deps graph json
 
         shutil.copy(
-            AGENT_WORKSPACE / "deps_graphs" / "deps_graph.svg",
-            AGENT_WORKSPACE / "current_deps_graph.svg",
+            agent_workspace / "deps_graphs" / "deps_graph.svg",
+            agent_workspace / "current_deps_graph.svg",
         )  # Generate a new svg file
 
         # Reflect new deps graph in the UI
         _report_deps_graph(
-            deps_graph_callback, get_formatted_deps_graph(AGENT_WORKSPACE)
+            deps_graph_callback, get_formatted_deps_graph(agent_workspace)
         )
 
         shutil.copy(
-            AGENT_WORKSPACE / "deps_graphs" / "matrix.json",
-            AGENT_WORKSPACE / "matrix.json",
+            agent_workspace / "deps_graphs" / "matrix.json",
+            agent_workspace / "matrix.json",
         )
 
         shutil.copy(
-            AGENT_WORKSPACE / "deps_graphs" / "matrix.png",
-            AGENT_WORKSPACE / "matrix.png",
+            agent_workspace / "deps_graphs" / "matrix.png",
+            agent_workspace / "matrix.png",
         )
 
         # Remove the temp deps_graph/ directory
-        shutil.rmtree(AGENT_WORKSPACE / "deps_graphs")
+        shutil.rmtree(agent_workspace / "deps_graphs")
 
         # Generate metrics using the actual implementation
         print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
@@ -489,11 +497,11 @@ def _analyzer_refactor_loop(
 
         # Write metrics from implementation - include the previous implementation if it exists
         write_metrics_from_implementation(
-            implementation_path=AGENT_WORKSPACE / "implementation",
-            current_metrics_path=AGENT_WORKSPACE / "current_metrics.json",
+            implementation_path=agent_workspace / "implementation",
+            current_metrics_path=agent_workspace / "current_metrics.json",
             prev_implementation_path=(
-                AGENT_WORKSPACE / "previous_implementation"
-                if (AGENT_WORKSPACE / "previous_implementation").exists()
+                agent_workspace / "previous_implementation"
+                if (agent_workspace / "previous_implementation").exists()
                 else None
             ),
         )
@@ -506,11 +514,11 @@ def _analyzer_refactor_loop(
     while not passed and iteration < threshold:
         # run tests
         if WORKFLOW_MODE == "autoTest":
-            tester_agent()
+            tester_agent(agent_workspace)
 
         # write metrics from impl if workflow is not nometric
         if WORKFLOW_MODE != "autoNoMetric":
-            update_metrics()
+            update_metrics(agent_workspace)
 
         # Analyzer agent
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")
@@ -525,14 +533,14 @@ def _analyzer_refactor_loop(
         # Reflect the analyzer suggestions
         _report_analyzer_suggestions(
             analyzer_suggestions_callback,
-            get_formatted_analyzer_suggestions(AGENT_WORKSPACE),
+            get_formatted_analyzer_suggestions(agent_workspace),
         )
 
         # reflect in the UI the agent output
         _report_agent_response(agent_response_callback, output)
 
         # After the analyzer runs, make the current_analyzer_result.json if it does not exist
-        analyzer_result_path = AGENT_WORKSPACE / "current_analyzer_result.json"
+        analyzer_result_path = agent_workspace / "current_analyzer_result.json"
 
         if not analyzer_result_path.exists():
             analyzer_result_path.touch()
@@ -540,7 +548,7 @@ def _analyzer_refactor_loop(
         # If the analyzer return pass, set the passed flag to true
         # a_output_json = json.loads(a_output)
         # print(json.dumps(a_output_json, indent=2))
-        if _pass_fail():
+        if _pass_fail(agent_workspace):
             passed = True
 
         # if passed, return
@@ -556,11 +564,11 @@ def _analyzer_refactor_loop(
         _report_agent_response(agent_response_callback, output)
 
         # format code
-        _format_code()
+        _format_code(agent_workspace)
 
         # reflect the updated code in the UI
         _report_design_or_impl(
-            design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
+            design_or_impl_callback, get_formatted_implementation(agent_workspace)
         )
 
         # Increment the iteration number
@@ -569,7 +577,7 @@ def _analyzer_refactor_loop(
     # Once the loop ends because it hits the threshold, invoke the update metrics function again to show the latest changes to the metrics
     # this is unaffected by the workflow mode - for developer see only, not for agents to see.
     if iteration == threshold:
-        update_metrics()
+        update_metrics(agent_workspace)
 
 
 # main entrypoint of the modular workflow
@@ -591,6 +599,10 @@ def modular_workflow_single(
     PROBLEM = problem
     N = n
 
+    # Modify the agent workspace names so the code can run concurrently 
+    AGENT_WORKSPACE = Path(f"agent_workspace_{PROBLEM}_{N}_{SUFFIX}")
+    AGENT_TEST_STORAGE = Path(f"agent_test_storage_{PROBLEM}_{N}_{SUFFIX}")
+
     # For scb problems only: if the problem name is not in the list of entry files,
     # raise an exception
     if PROBLEM_TYPE == "scb" and PROBLEM not in ENTRY_FILES:
@@ -604,10 +616,10 @@ def modular_workflow_single(
     if not PROBLEM_DIR.exists():
         raise Exception(f"Invalid problem: {PROBLEM}")
     PROBLEM_IMPL_DIR = (
-        PROBLEM_DIR / f"implementations_{WORKFLOW_MODE}_{AGENT}_{MODEL}"
+        PROBLEM_DIR / f"implementations_{SUFFIX}"
     )  # Previous implementation depend on the workflow mode
     REPORT_DIR = (
-        PROBLEM_DIR / f"report_{WORKFLOW_MODE}_{AGENT}_{MODEL}"
+        PROBLEM_DIR / f"report_{SUFFIX}"
     )  # agent reports
     PREV_IMPL = PROBLEM_IMPL_DIR / f"checkpoint_{N-1}"
     PROBLEM_INSTRUCTIONS = PROBLEM_DIR / f"checkpoint_{N}.md"
@@ -645,9 +657,11 @@ def modular_workflow_single(
         shutil.rmtree(AGENT_WORKSPACE)  # rmdir -r
     AGENT_WORKSPACE.mkdir(exist_ok=True)  # mkdir -p
 
-    if AGENT_TEST_STORAGE.exists():
-        shutil.rmtree(AGENT_TEST_STORAGE)
-    AGENT_TEST_STORAGE.mkdir(exist_ok=True)
+    # activate agent test storage in autoTest mode only 
+    if WORKFLOW_MODE == "autoTest": 
+        if AGENT_TEST_STORAGE.exists():
+            shutil.rmtree(AGENT_TEST_STORAGE)
+        AGENT_TEST_STORAGE.mkdir(exist_ok=True)
 
     # Step 2: Copy the workspace_helpers folder to the agent workspace
     print("[MAIN 2/8] Copying helper functions to agent workspace")
@@ -811,7 +825,7 @@ def modular_workflow_single(
         # reflect in the UI the agent output
         _report_agent_response(agent_response_callback, output)
         # format code
-        _format_code()
+        _format_code(AGENT_WORKSPACE)
 
         _report_design_or_impl(
             design_or_impl_callback, get_formatted_implementation(AGENT_WORKSPACE)
@@ -838,6 +852,7 @@ def modular_workflow_single(
             executor=executor,
             checkpoint_number=N,
             threshold=DA_LOOP_THRESHOLD_BEFORE_IMPL,
+            agent_workspace=AGENT_WORKSPACE,
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
@@ -888,7 +903,7 @@ def modular_workflow_single(
             _report_agent_response(agent_response_callback, output)
 
         # format code
-        _format_code()
+        _format_code(AGENT_WORKSPACE)
 
         # reflect the code in the ui
         _report_design_or_impl(
@@ -915,6 +930,7 @@ def modular_workflow_single(
             executor,
             N,
             DA_LOOP_THRESHOLD_AFTER_IMPL,
+            AGENT_WORKSPACE,
             stage_callback=stage_callback,
             design_or_impl_callback=design_or_impl_callback,
             analyzer_suggestions_callback=analyzer_suggestions_callback,
@@ -1021,7 +1037,7 @@ def modular_workflow():
         from .ui import run_ui
 
         run_ui(
-            AGENT_WORKSPACE,
+            AGENT_WORKSPACE = Path(f"agent_workspace"),  # UI does not support concurrently running for now due to lack of <i> state 
             workflow=run,
             on_quit=stop_run_agent_processes,
         )
