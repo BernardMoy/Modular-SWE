@@ -5,7 +5,6 @@ import os
 from reusables.version_sorting import version_key
 from scripts.constants import SRC_DIR_DICT 
 from write_metrics.write_eval_metrics import get_eval_metrics
-from reusables.interpolation import linear_interpolation_metrics
 
 REFERENCES_DIR = Path("datasets/references")
 
@@ -44,11 +43,8 @@ def get_references_metrics_json():
                 get_eval_metrics(dir) 
             )
 
-        # linear interpolate the metrics to 8 checkpoints 
-        data_problem_interpolated = linear_interpolation_metrics(data_problem, 8)
-
-        # Append to the dict at the end 
-        data_dict[str(problem)] = data_problem_interpolated
+        # Do the linear interpolation in the plot 
+        data_dict[str(problem)] = data_problem
 
     return data_dict
 

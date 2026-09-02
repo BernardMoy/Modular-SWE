@@ -66,6 +66,7 @@ def get_duplicates(implementation_path):
             "--ignore",
             "**/__pycache__/**,**/.venv/**",
             "--silent",
+            "--skip-comments", 
         ],
         capture_output=True,
         text=True,

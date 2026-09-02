@@ -1,0 +1,8 @@
+[
+    {
+        "Project": "previous_implementation",
+        "Package": "previous_implementation",
+        "Smell": "Feature concentration",
+        "Description": "The component realizes more than one architectural concern/feature. Independent sets of related modules within this component are: [grading_workflow; result_contracts]; [annotations]; [rules]; [command_options]; [sheeteval]; [workbook]; [report_formatting]; [reporting]; [formula_engine]; [output_files]; [cli]. LCC (Lack of Component Cohesion) = 0.92"
+    }
+]

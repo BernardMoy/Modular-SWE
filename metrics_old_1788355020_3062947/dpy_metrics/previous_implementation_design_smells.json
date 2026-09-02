@@ -1,0 +1,42 @@
+[
+    {
+        "Project": "previous_implementation",
+        "Package": "previous_implementation",
+        "Module": "annotations",
+        "Smell": "Deficient encapsulation",
+        "Class": "RuleSpec",
+        "Line no": "19",
+        "File": "/home/bernardmoy/modular-SWE/agent_workspace_sheeteval_5_autoTest_codex_gpt-5.6-luna/previous_implementation/annotations.py",
+        "Description": "Class 'RuleSpec' accesses non-public code elements __setattr__ from __post_init__"
+    },
+    {
+        "Project": "previous_implementation",
+        "Package": "previous_implementation",
+        "Module": "rules",
+        "Smell": "Deficient encapsulation",
+        "Class": "RuleContext",
+        "Line no": "21",
+        "File": "/home/bernardmoy/modular-SWE/agent_workspace_sheeteval_5_autoTest_codex_gpt-5.6-luna/previous_implementation/rules.py",
+        "Description": "Class 'RuleContext' accesses non-public code elements __setattr__ from __post_init__"
+    },
+    {
+        "Project": "previous_implementation",
+        "Package": "previous_implementation",
+        "Module": "reporting",
+        "Smell": "Deficient encapsulation",
+        "Class": "reporting",
+        "Line no": "16",
+        "File": "/home/bernardmoy/modular-SWE/agent_workspace_sheeteval_5_autoTest_codex_gpt-5.6-luna/previous_implementation/reporting.py",
+        "Description": "Module 'reporting' accesses non-public code elements _number from render_score"
+    },
+    {
+        "Project": "previous_implementation",
+        "Package": "previous_implementation",
+        "Module": "output_files",
+        "Smell": "Deficient encapsulation",
+        "Class": "output_files",
+        "Line no": "9",
+        "File": "/home/bernardmoy/modular-SWE/agent_workspace_sheeteval_5_autoTest_codex_gpt-5.6-luna/previous_implementation/output_files.py",
+        "Description": "Module 'output_files' accesses non-public code elements _number from write_score_file"
+    }
+]

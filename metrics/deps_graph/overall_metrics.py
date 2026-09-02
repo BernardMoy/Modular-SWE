@@ -51,6 +51,13 @@ def get_impact_size(deps_graph):
         )  # the average number of modules affected by the change = len(value)
     return impact_size
 
+# sum of fan in = sum of fan out  / number of modules 
+def get_average_degree(deps_graph, n): 
+    s = 0 
+    for key, value in deps_graph.items(): 
+        s += len(value) 
+    
+    return s / n if n > 0 else 0 
 
 def get_deps_graph_metrics(implementation_path):
     """
@@ -59,6 +66,7 @@ def get_deps_graph_metrics(implementation_path):
         "has_cycles": False,
         "propagation_cost": 0,
         "impact_size": 0,
+        "average_degree": 0, 
     }
     """
 
@@ -71,11 +79,14 @@ def get_deps_graph_metrics(implementation_path):
 
     shutil.rmtree(TEMP_FILE)
 
+    n = get_n(graph)
+
     return {
-        "number_of_modules": get_n(graph),
+        "number_of_modules": n,
         "has_cycles": len(check_circular_dependency(graph)) > 0,
         "propagation_cost": get_propagation_cost(graph),
         "impact_size": get_impact_size(graph),
+        "average_degree": get_average_degree(graph, n), 
     }
 
 
@@ -88,6 +99,7 @@ def get_deps_graph_metrics_reference(problem):
         "has_cycles": False,
         "propagation_cost": 0,
         "impact_size": 0,
+        "average_degree": 0, 
     }
     """
 
@@ -99,12 +111,13 @@ def get_deps_graph_metrics_reference(problem):
         graph = json.load(f)
 
     shutil.rmtree(TEMP_FILE)
-
+    n = get_n(graph)
     return {
-        "number_of_modules": get_n(graph),
+        "number_of_modules": n,
         "has_cycles": len(check_circular_dependency(graph)) > 0,
         "propagation_cost": get_propagation_cost(graph),
         "impact_size": get_impact_size(graph),
+        "average_degree": get_average_degree(graph, n), 
     }
 
 

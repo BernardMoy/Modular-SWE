@@ -490,21 +490,25 @@ def _analyzer_refactor_loop(
         shutil.rmtree(agent_workspace / "deps_graphs")
 
         # Generate metrics using the actual implementation
-        print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
-        _report_stage(
-            stage_callback, f"(Iteration {iteration+1}) Generate implementation metrics"
-        )
+        # THIS step is skipped for no metric mode to prevent goodhart law 
+        if WORKFLOW_MODE != "autoNoMetric":            
+            print(f"========== [Iteration {iteration+1}] GENERATE METRICS ==========")
+            _report_stage(
+                stage_callback, f"(Iteration {iteration+1}) Generate implementation metrics"
+            )
 
-        # Write metrics from implementation - include the previous implementation if it exists
-        write_metrics_from_implementation(
-            implementation_path=agent_workspace / "implementation",
-            current_metrics_path=agent_workspace / "current_metrics.json",
-            prev_implementation_path=(
-                agent_workspace / "previous_implementation"
-                if (agent_workspace / "previous_implementation").exists()
-                else None
-            ),
-        )
+            # Write metrics from implementation - include the previous implementation if it exists
+            write_metrics_from_implementation(
+                implementation_path=agent_workspace / "implementation",
+                current_metrics_path=agent_workspace / "current_metrics.json",
+                prev_implementation_path=(
+                    agent_workspace / "previous_implementation"
+                    if (agent_workspace / "previous_implementation").exists()
+                    else None
+                ),
+            )
+        
+
 
     iteration = 0
     passed = False
@@ -517,8 +521,7 @@ def _analyzer_refactor_loop(
             tester_agent(agent_workspace)
 
         # write metrics from impl if workflow is not nometric
-        if WORKFLOW_MODE != "autoNoMetric":
-            update_metrics(agent_workspace)
+        update_metrics(agent_workspace)
 
         # Analyzer agent
         print(f"========== [Iteration {iteration+1}] ANALYZER AGENT ==========")

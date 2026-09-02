@@ -80,7 +80,8 @@ def _remove_unresolved_suggestions():
         return 
 
     with open(analyzer_result, "r") as f:
-        data = json.load(f)
+        content = f.read().strip()
+        data = json.loads(content) if content else []
 
         data = [entry for entry in data if entry.get("status") != "unresolved"]
 
