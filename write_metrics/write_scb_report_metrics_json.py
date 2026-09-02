@@ -28,7 +28,8 @@ def get_scb_metrics_json():
     """
     {
         "problem": {
-            "impl_dir_name": [{} {} ] one for each checkpoint
+            "impl_dir_name": [{} {} ]  one for each checkpoint
+            keys are "total" and "non-cached"
         }
     }
     """
@@ -44,23 +45,35 @@ def get_scb_metrics_json():
         for impl_name in os.listdir(problem_path):
             impl_path = problem_path / impl_name
 
-            # skip if not starting with implementations_ or not dir
-            if not os.path.isdir(impl_path) or not impl_name.startswith(
-                "implementations_"
-            ):
+            # skip if not starting with report_ or not dir
+            if not os.path.isdir(impl_path) or not impl_name.startswith("report_"):
                 continue
 
             # Iterate over all the checkpoints
-            impl_checkpoints_paths = sorted(
+            report_checkpoints_paths = sorted(
                 [os.path.join(impl_path, n) for n in os.listdir(impl_path)]
             )
 
-            eval_metrics = []
-            for p in impl_checkpoints_paths:
-                eval_metrics.append(get_eval_metrics(p))
 
-            data_problem[impl_name] = eval_metrics
+            # Read the report paths
+            report_metrics = []
+            for checkpoint_path in report_checkpoints_paths:
+                # open each report path and get the data
+                with open(checkpoint_path, "r") as f:
+                    tokens_data = json.load(f)
+
+                    report_metrics.append(
+                        {
+                            "total": tokens_data["tokens"]["total_tokens"],
+                            "non_cached": tokens_data["tokens"]["input_tokens"]
+                            - tokens_data["tokens"]["cached_input_tokens"]
+                            + tokens_data["tokens"]["output_tokens"],
+                        }
+                    )
+
+            data_problem[impl_name] = report_metrics
         data_dict[problem] = data_problem
+            
 
     return data_dict
 

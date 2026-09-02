@@ -30,11 +30,11 @@ def get_eval_metrics(implementation_path):
         "weighted_mi": 0,
         "propagation_cost": 0,
         "impact_size": 0,
-        "average_degree": 0, 
+        "average_degree": 0,
         "has_cycles": 0,
         "number_of_modules": 0,
         "number_of_functions": 0,
-        "number_of_functions_per_module": 0, 
+        "number_of_functions_per_module": 0,
         "nopm_per_class": 0,
         "class_max_nopm": 0,
         "duplicated_lines": 0,
@@ -69,7 +69,11 @@ def get_eval_metrics(implementation_path):
     result["has_cycles"] = deps_graph_metrics["has_cycles"]
     result["number_of_modules"] = radon_metrics["number_of_py_files"]
     result["number_of_functions"] = dpy_metrics["number_of_functions"]
-    result["number_of_functions_per_module"] = dpy_metrics["number_of_functions"] / radon_metrics["number_of_py_files"] if radon_metrics["number_of_py_files"] > 0 else 0
+    result["number_of_functions_per_module"] = (
+        dpy_metrics["number_of_functions"] / radon_metrics["number_of_py_files"]
+        if radon_metrics["number_of_py_files"] > 0
+        else 0
+    )
     result["nopm_per_class"] = dpy_metrics["nopm_per_class"]
     result["class_max_nopm"] = dpy_metrics["class_max_nopm"]
 
