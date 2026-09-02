@@ -24,12 +24,17 @@ PROBLEMS = [
 ]  # , "circuit_eval", "mocked_http", "recli", "sheeteval", "sith", "eve_industry", "metric_transform_lang"]
 
 
-def get_scb_metrics_json():
+def get_scb_report_metrics_json():
     """
     {
         "problem": {
-            "impl_dir_name": [{} {} ]  one for each checkpoint
-            keys are "total" and "non-cached"
+            "impl_dir_name": [
+                {
+                    "total": 0, 
+                    "non-cached": 0
+                }, 
+                {} 
+            ]  one for each checkpoint
         }
     }
     """
@@ -86,7 +91,7 @@ def main():
     args = parser.parse_args()
 
     with open(args.output_dir, "w") as f:
-        data = get_scb_metrics_json()
+        data = get_scb_report_metrics_json()
         json.dump(data, f, indent=2, default=str)
 
 

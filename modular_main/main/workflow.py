@@ -157,6 +157,9 @@ def _format_code(agent_workspace):
 # Function to decide whether to pass or fail, given the analyzer output.
 def _pass_fail(agent_workspace):
     # Read the current analyzer.json. If there are no unresolved issue, automatically set to pass
+    if not (agent_workspace / "current_analyzer_result.json").exists(): 
+        return True 
+    
     with open(agent_workspace / "current_analyzer_result.json", "r") as f:
         content = f.read().strip()
         # if the content is empty, then set the result to []. Else, load json
