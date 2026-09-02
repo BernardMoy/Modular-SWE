@@ -21,6 +21,10 @@ agent_workspace
 agent_test_storage
 agent_workspace copy
 agent_workspace_*
+agent_test_storage_* 
+
+metrics_old_* 
+metrics_new_*
 
 # temp files
 .agents
