@@ -1041,7 +1041,7 @@ def modular_workflow():
         from .ui import run_ui
 
         run_ui(
-            AGENT_WORKSPACE = Path(f"agent_workspace"),  # UI does not support concurrently running for now due to lack of <i> state 
+            workspace = Path(f"agent_workspace"),  # UI does not support concurrently running for now due to lack of <i> state 
             workflow=run,
             on_quit=stop_run_agent_processes,
         )
