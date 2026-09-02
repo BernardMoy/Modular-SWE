@@ -8,7 +8,7 @@ MODEL: Literal[
     "Nemotron 3 Ultra Free",
     "Big Pickle",
     "DeepSeek V4 Flash Free",
-] = "gpt-5.6-luna"
+] = "gpt-5.4-mini"
 
 # For the modular workflow.
 # noDesign: Directly implement all modules at once (reference)
@@ -16,7 +16,7 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
     "noDesign", "autoNoMetric", "auto", "human", "autoByLayer", "autoTest"  # USED ONLY [4] noDesign, auto, autoNoMetric, autoByLayer   # "autoAggressive", 
-] = "autoTest"
+] = "auto"
 
 # Unused:
 # allAtOnce: DA loop, then implement all modules at once following the design
