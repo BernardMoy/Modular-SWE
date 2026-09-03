@@ -22,9 +22,8 @@ from scripts.pytest_scb import pytest_scb
 # For simplicity, the keys used are simply the implementation folders
 SCB_DIR = Path("datasets/slopCodeBench/scb-problems")
 PROBLEMS = [
-    "code_search"
-]  # , "circuit_eval", "mocked_http", "recli", "sheeteval", "sith", "eve_industry", "metric_transform_lang"]
-
+    "code_search", "circuit_eval", "mocked_http", "recli", "sheeteval", "sith"
+    ]
 
 def get_scb_test_metrics_json():
     """

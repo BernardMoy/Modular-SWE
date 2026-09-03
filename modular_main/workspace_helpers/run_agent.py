@@ -4,7 +4,7 @@ They should not depend on any modules outside of the agent workspace
 as they wont be available.
 """
 
-from openai_codex import AsyncCodex, Sandbox, ApprovalMode
+from openai_codex import AsyncCodex, Sandbox, ApprovalMode, CodexConfig
 import argparse
 import asyncio
 import json
@@ -98,7 +98,11 @@ async def run_agent(agent, model, prompt):
 
     # run codex agent
     if agent == "codex":
-        async with AsyncCodex() as codex:
+        async with AsyncCodex(
+            config=CodexConfig(
+                codex_bin="/home/bernardmoy/.nvm/versions/node/v24.18.0/bin/codex"
+            )
+        ) as codex:
             thread = await codex.thread_start(
                 model=model,
                 sandbox=Sandbox.full_access,
