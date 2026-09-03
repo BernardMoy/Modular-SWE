@@ -58,7 +58,7 @@ def bfs_get_modules_to_implement(deps_graph_json, design_json):
         types[module["module_name"]] = module["type"]
 
     for i, module_list in enumerate(bfs_modules):
-        bfs_modules[i] = [x for x in module_list if types[x] != "keep"]
+        bfs_modules[i] = [x for x in module_list if types.get(x, "keep") != "keep"]
 
     # remove all empty arrays after doing this
     return [x for x in bfs_modules if len(x) > 0]

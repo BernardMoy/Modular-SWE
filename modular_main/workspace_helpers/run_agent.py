@@ -99,9 +99,7 @@ async def run_agent(agent, model, prompt):
     # run codex agent
     if agent == "codex":
         async with AsyncCodex(
-            config=CodexConfig(
-                codex_bin="/home/bernardmoy/.nvm/versions/node/v24.18.0/bin/codex"
-            )
+
         ) as codex:
             thread = await codex.thread_start(
                 model=model,
