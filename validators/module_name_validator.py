@@ -32,7 +32,7 @@ def module_name_validator(design_path, deps_graph_path):
 
     # For each item in the design json extract the module name
     for item in design_json:
-        if item["module_name"] not in all_modules and item["type"] != "deleted":
+        if item["module_name"] not in all_modules and item["type"] != "deleted" and not item["module_name"].endswith("__init__"):
             result.append(
                 {
                     "Module": item["module_name"],

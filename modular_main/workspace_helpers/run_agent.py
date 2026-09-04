@@ -98,9 +98,16 @@ async def run_agent(agent, model, prompt):
 
     # run codex agent
     if agent == "codex":
-        async with AsyncCodex(
+        catalog = Path("models.json")
 
-        ) as codex:
+        config = CodexConfig(
+            config_overrides=(
+                'model_catalog_json="/agent_workspace/models.json"',
+            )
+        )
+
+        async with AsyncCodex(config=config) as codex:
+        
             thread = await codex.thread_start(
                 model=model,
                 sandbox=Sandbox.full_access,

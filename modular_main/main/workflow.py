@@ -21,7 +21,7 @@ from metrics.deps_graph.bfs import bfs_get_modules_to_implement
 from write_metrics.write_metrics_from_implementation import (
     write_metrics_from_implementation,
 )
-from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE, UI_ENABLED
+from ..settings import WORKFLOW_MODE, AGENT, MODEL, PROBLEM_TYPE, UI_ENABLED, SIGN_IN_METHOD
 from ..entry_files import ENTRY_FILES
 from scripts.pytest_scb import pytest_scb
 from json_schemas.formatters.design_formatter import get_design_summary
@@ -32,7 +32,11 @@ from .ui_text_formatters import (
     get_formatted_analyzer_suggestions,
     get_formatted_deps_graph,
 )
+from dotenv import load_dotenv
+import os 
 
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Stop the background running agent subprocess
 # Only triggered when ui is enabled
@@ -673,6 +677,7 @@ def modular_workflow_single(
     print("[MAIN 2/8] Copying helper functions to agent workspace")
     _report_stage(stage_callback, "Copying helper functions to agent workspace")
     shutil.copytree(WORKSPACE_HELPERS, AGENT_WORKSPACE / "workspace_helpers")
+    shutil.copy("models.json", AGENT_WORKSPACE)
 
     # Also copy settings.py, as run_agent needs it whether UI is enabled
     shutil.copy(SETTINGS_PATH, AGENT_WORKSPACE)
@@ -770,17 +775,21 @@ def modular_workflow_single(
     # Step 4: Sign in to the agent
     print("[MAIN 4/8] Coding agent sign in")
     if not logged_in:
-        login = CodexLogin()
-        link = login.auth_url
-        print(link)
+        if SIGN_IN_METHOD == "chatgpt": 
+            login = CodexLogin()
+            link = login.auth_url
+            print(link)
 
-        _report_stage(stage_callback, f"Coding agent sign in (Double click)\n{link}")
+            _report_stage(stage_callback, f"Coding agent sign in (Double click)\n{link}")
 
-        # Note that it is currently very difficult to add multi line / url /
-        # Dynamic {url && ELEMENTS} type to the UI
+            # Note that it is currently very difficult to add multi line / url /
+            # Dynamic {url && ELEMENTS} type to the UI
 
-        # suspense and wait for login results
-        login.wait()
+            # suspense and wait for login results
+            login.wait()
+
+        elif SIGN_IN_METHOD == "api": 
+            login = CodexLogin(method=SIGN_IN_METHOD, api_key=openai_api_key)
 
     # Step 5: Volume mount
     print("[MAIN 5/8] Agent workspace volume mount")

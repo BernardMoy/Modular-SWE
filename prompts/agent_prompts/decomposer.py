@@ -33,7 +33,7 @@ Project root: agent_workspace
 Issue path: checkpoint_{checkpoint_number}.md
 {f"The issue is built on top of previous_implementation/." if checkpoint_number > 1 else ""}
 
-If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, or code is present in the previous implementation, prioritise reusing existing modules instead of creating a new module where possible.
+If a design is provided in `current_design.json` with the dependency graph in `current_deps_graph.json`, or code is present in the previous implementation, prioritise extending on existing modules instead of creating a new module where possible.
 If a list of improvement suggestions for the current design is provided in `current_analyzer_result.json`, {"implement the changes in the design" if True else f"consider accepting or rejecting them based on: {DECOMPOSER_SUGGESTIONS_CRITERIA}"}. 
 
 Propose a modular design that achieves the goal specified in the issue when integrated together. Follow the design principles: {MODULE_CODE_PRACTICES}
@@ -58,8 +58,10 @@ About whether or not it is complex after the code implementation and how the pri
 Task: 
 1. create or overwrite the JSON object in `current_design.json` by including all modules in your design using the following schema. Rules:
 - Follow strictly the decision tree below to decide the 'type' field of the module: 
-(1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
-(2) If the module design changed from its previous implementation -> 'changed'. If the module is removed in the current design -> 'deleted'. Otherwise, 'keep'. 
+(1) Was this module labelled "changed" in the `current_design.json`? YES: If it is removed in the current design -> "deleted", else "changed". NO: Go to step (2)
+(2) Does the module have a previous, concrete implementation in the previous_implementation/ code? YES -> Go to step (3). NO -> "new" 
+(3) If the current module is removed -> "deleted". If the current module design is different from that code implementation -> "changed". If the design is kept the same as that code implementation -> "keep".
+
 - The module_name field should follow pydeps conventions, stripping the .py extension for modules and specify the file path separated by dots (.) 
 {get_json_string("decomposer")}
 
@@ -79,3 +81,13 @@ Modules change:
 - Changed: ... 
 - Removed: ...
 """
+
+
+# (1) Does the module have a previous, concrete implementation in the previous_implementation/ code apart from the design? YES -> GOTO (2). NO -> 'new'
+# (2) Is the module labelled "changed" in the `current_design.json`? YES -> GOTO (3). NO -> GOTO (4). 
+# (3) Is the module being removed in the current design? YES -> "deleted". NO -> "changed"
+# (4) Is the module being removed in the current design? YES -> "deleted". NO -> "keep" 
+# (1) Does the module have a previous, concrete implementation in the code apart from the design? YES -> GOTO (2). NO -> 'new'
+# (2) If the module design is changed from its PREVIOUS CONCRETE IMPLEMENTATION -> 'changed'. A module that is labelled as 'changed' which is not affected in the current review stage should stay 'changed'. 
+# If the module is removed in the current design -> 'deleted'. 
+# If the module is kept exactly the same as the previous concrete implementation-> 'keep'. 

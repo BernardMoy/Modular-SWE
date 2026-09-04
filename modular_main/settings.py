@@ -3,7 +3,8 @@ from typing import Literal
 # For the coding agent: Codex / Claude Code
 AGENT: Literal["codex", "opencode"] = "codex"
 MODEL: Literal[
-    "gpt-5.4-mini",
+    "gpt-5.4-nano",
+    "gpt-5.4-mini", 
     "gpt-5.6-luna",
     "Nemotron 3 Ultra Free",
     "Big Pickle",
@@ -28,3 +29,8 @@ PROBLEM_TYPE: Literal["custom", "scb"] = "scb"
 
 # Whether or not UI is enabled
 UI_ENABLED = False
+
+# Sign in method: either "api" or "chatgpt"
+# api means use openai api key - access models such as gpt 5.4 nano 
+# chatgpt only supports the models visible under /models when running codex in the terminal 
+SIGN_IN_METHOD: Literal["api", "chatgpt"] = "chatgpt" 
