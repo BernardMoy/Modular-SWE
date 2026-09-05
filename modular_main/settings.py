@@ -17,7 +17,7 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
     "noDesign", "autoNoMetric", "auto", "human", "autoByLayer", "autoTest"  # USED ONLY [4] noDesign, auto, autoNoMetric, autoByLayer   # "autoAggressive", 
-] = "auto"
+] = "autoTest"
 
 # Unused:
 # allAtOnce: DA loop, then implement all modules at once following the design
