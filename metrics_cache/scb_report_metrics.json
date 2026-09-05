@@ -30,6 +30,18 @@
       {
         "total": 267243,
         "non_cached": 50411
+      },
+      {
+        "total": 544296,
+        "non_cached": 110376
+      },
+      {
+        "total": 2353497,
+        "non_cached": 208473
+      },
+      {
+        "total": 1519194,
+        "non_cached": 112218
       }
     ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
@@ -76,6 +88,34 @@
         "non_cached": 28509
       }
     ],
+    "report_noDesign_codex_gpt-5.4-nano": [
+      {
+        "total": 158227,
+        "non_cached": 26131
+      },
+      {
+        "total": 426000,
+        "non_cached": 33424
+      },
+      {
+        "total": 1219112,
+        "non_cached": 77992
+      },
+      {
+        "total": 6820688,
+        "non_cached": 175696
+      },
+      {
+        "total": 2062912,
+        "non_cached": 80576
+      }
+    ],
+    "report_auto_codex_gpt-5.4-nano": [
+      {
+        "total": 1459472,
+        "non_cached": 61200
+      }
+    ],
     "report_noDesign_codex_gpt-5.6-luna": [
       {
         "total": 242427,
@@ -108,16 +148,38 @@
         "non_cached": 40880
       },
       {
-        "total": 633672,
-        "non_cached": 55624
+        "total": 1050895,
+        "non_cached": 99343
       },
       {
-        "total": 253892,
-        "non_cached": 37316
+        "total": 840500,
+        "non_cached": 86068
       },
       {
-        "total": 518365,
-        "non_cached": 50141
+        "total": 1153691,
+        "non_cached": 106267
+      }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 395259,
+        "non_cached": 27515
+      },
+      {
+        "total": 271890,
+        "non_cached": 18706
+      },
+      {
+        "total": 296269,
+        "non_cached": 17357
+      },
+      {
+        "total": 188320,
+        "non_cached": 17952
+      },
+      {
+        "total": 629798,
+        "non_cached": 53414
       }
     ]
   },
@@ -172,6 +234,22 @@
       {
         "total": 2947310,
         "non_cached": 157678
+      },
+      {
+        "total": 3268742,
+        "non_cached": 179078
+      },
+      {
+        "total": 2772377,
+        "non_cached": 170137
+      },
+      {
+        "total": 624681,
+        "non_cached": 45993
+      },
+      {
+        "total": 339012,
+        "non_cached": 23748
       }
     ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
@@ -370,6 +448,398 @@
       {
         "total": 744885,
         "non_cached": 90037
+      },
+      {
+        "total": 457354,
+        "non_cached": 30090
+      },
+      {
+        "total": 346761,
+        "non_cached": 21129
+      },
+      {
+        "total": 434027,
+        "non_cached": 62187
+      },
+      {
+        "total": 320526,
+        "non_cached": 23694
+      },
+      {
+        "total": 375476,
+        "non_cached": 34484
+      }
+    ]
+  },
+  "etl_pipeline": {
+    "report_noDesign_codex_gpt-5.4-mini": [
+      {
+        "total": 197710,
+        "non_cached": 14926
+      },
+      {
+        "total": 307972,
+        "non_cached": 30212
+      },
+      {
+        "total": 232644,
+        "non_cached": 24260
+      },
+      {
+        "total": 330422,
+        "non_cached": 31030
+      },
+      {
+        "total": 597820,
+        "non_cached": 75452
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 204068,
+        "non_cached": 16164
+      },
+      {
+        "total": 342981,
+        "non_cached": 24005
+      },
+      {
+        "total": 256576,
+        "non_cached": 53696
+      },
+      {
+        "total": 342853,
+        "non_cached": 68037
+      },
+      {
+        "total": 439255,
+        "non_cached": 45399
+      }
+    ],
+    "report_autoNoMetric_codex_gpt-5.6-luna": [
+      {
+        "total": 513177,
+        "non_cached": 101529
+      },
+      {
+        "total": 1019052,
+        "non_cached": 64044
+      },
+      {
+        "total": 1518139,
+        "non_cached": 69563
+      },
+      {
+        "total": 1635086,
+        "non_cached": 86542
+      },
+      {
+        "total": 2176483,
+        "non_cached": 96355
+      }
+    ],
+    "report_autoTest_codex_gpt-5.6-luna": [
+      {
+        "total": 563167,
+        "non_cached": 35167
+      },
+      {
+        "total": 705871,
+        "non_cached": 65359
+      },
+      {
+        "total": 1074076,
+        "non_cached": 57372
+      },
+      {
+        "total": 1578337,
+        "non_cached": 121953
+      },
+      {
+        "total": 1027637,
+        "non_cached": 103989
+      }
+    ],
+    "report_noDesign_codex_gpt-5.6-luna": [
+      {
+        "total": 515161,
+        "non_cached": 68697
+      },
+      {
+        "total": 660256,
+        "non_cached": 40224
+      },
+      {
+        "total": 593443,
+        "non_cached": 51491
+      },
+      {
+        "total": 893868,
+        "non_cached": 74668
+      },
+      {
+        "total": 694673,
+        "non_cached": 38801
+      }
+    ],
+    "report_auto_codex_gpt-5.6-luna": [
+      {
+        "total": 370601,
+        "non_cached": 35241
+      },
+      {
+        "total": 770650,
+        "non_cached": 74202
+      },
+      {
+        "total": 873667,
+        "non_cached": 55747
+      },
+      {
+        "total": 1606666,
+        "non_cached": 108298
+      },
+      {
+        "total": 1340858,
+        "non_cached": 71354
+      }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 171896,
+        "non_cached": 10232
+      },
+      {
+        "total": 206789,
+        "non_cached": 17349
+      },
+      {
+        "total": 474162,
+        "non_cached": 34994
+      }
+    ]
+  },
+  "meshctl": {
+    "report_noDesign_codex_gpt-5.4-mini": [
+      {
+        "total": 366525,
+        "non_cached": 39741
+      },
+      {
+        "total": 311963,
+        "non_cached": 31131
+      },
+      {
+        "total": 243343,
+        "non_cached": 56463
+      },
+      {
+        "total": 375335,
+        "non_cached": 40359
+      },
+      {
+        "total": 300286,
+        "non_cached": 19838
+      },
+      {
+        "total": 293007,
+        "non_cached": 32143
+      },
+      {
+        "total": 399732,
+        "non_cached": 25844
+      },
+      {
+        "total": 364481,
+        "non_cached": 49089
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 223719,
+        "non_cached": 14183
+      },
+      {
+        "total": 301556,
+        "non_cached": 35060
+      },
+      {
+        "total": 242659,
+        "non_cached": 21347
+      },
+      {
+        "total": 231004,
+        "non_cached": 15836
+      },
+      {
+        "total": 256550,
+        "non_cached": 25510
+      },
+      {
+        "total": 374067,
+        "non_cached": 25267
+      },
+      {
+        "total": 290583,
+        "non_cached": 53271
+      },
+      {
+        "total": 369509,
+        "non_cached": 32101
+      }
+    ],
+    "report_autoNoMetric_codex_gpt-5.6-luna": [
+      {
+        "total": 735884,
+        "non_cached": 50316
+      },
+      {
+        "total": 1403669,
+        "non_cached": 75157
+      },
+      {
+        "total": 1343899,
+        "non_cached": 110619
+      },
+      {
+        "total": 1644279,
+        "non_cached": 122999
+      },
+      {
+        "total": 1476580,
+        "non_cached": 73060
+      },
+      {
+        "total": 3306767,
+        "non_cached": 245519
+      },
+      {
+        "total": 2104206,
+        "non_cached": 178062
+      },
+      {
+        "total": 2497506,
+        "non_cached": 138338
+      }
+    ],
+    "report_autoTest_codex_gpt-5.6-luna": [
+      {
+        "total": 646687,
+        "non_cached": 81183
+      },
+      {
+        "total": 1080128,
+        "non_cached": 58944
+      },
+      {
+        "total": 1556074,
+        "non_cached": 97642
+      },
+      {
+        "total": 1393397,
+        "non_cached": 65909
+      },
+      {
+        "total": 1944208,
+        "non_cached": 123024
+      },
+      {
+        "total": 1987112,
+        "non_cached": 87208
+      },
+      {
+        "total": 1234924,
+        "non_cached": 89580
+      },
+      {
+        "total": 1701933,
+        "non_cached": 121645
+      }
+    ],
+    "report_noDesign_codex_gpt-5.6-luna": [
+      {
+        "total": 334478,
+        "non_cached": 63246
+      },
+      {
+        "total": 806810,
+        "non_cached": 85146
+      },
+      {
+        "total": 855689,
+        "non_cached": 85257
+      },
+      {
+        "total": 736553,
+        "non_cached": 81705
+      },
+      {
+        "total": 890750,
+        "non_cached": 104318
+      },
+      {
+        "total": 1075038,
+        "non_cached": 120414
+      },
+      {
+        "total": 1046868,
+        "non_cached": 50644
+      },
+      {
+        "total": 1059118,
+        "non_cached": 95918
+      }
+    ],
+    "report_auto_codex_gpt-5.6-luna": [
+      {
+        "total": 606617,
+        "non_cached": 44441
+      },
+      {
+        "total": 1262949,
+        "non_cached": 98917
+      },
+      {
+        "total": 1380213,
+        "non_cached": 68725
+      },
+      {
+        "total": 1772225,
+        "non_cached": 85825
+      },
+      {
+        "total": 2517047,
+        "non_cached": 98871
+      },
+      {
+        "total": 1834273,
+        "non_cached": 105889
+      },
+      {
+        "total": 2935209,
+        "non_cached": 120617
+      },
+      {
+        "total": 3089295,
+        "non_cached": 121487
+      }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 185456,
+        "non_cached": 42736
+      },
+      {
+        "total": 430938,
+        "non_cached": 37082
+      },
+      {
+        "total": 328582,
+        "non_cached": 31366
+      },
+      {
+        "total": 388767,
+        "non_cached": 31391
       }
     ]
   },
@@ -402,6 +872,44 @@
       {
         "total": 2478706,
         "non_cached": 134258
+      },
+      {
+        "total": 4129243,
+        "non_cached": 281307
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 401757,
+        "non_cached": 27229
+      },
+      {
+        "total": 263614,
+        "non_cached": 34238
+      },
+      {
+        "total": 246637,
+        "non_cached": 12397
+      },
+      {
+        "total": 356123,
+        "non_cached": 28955
+      },
+      {
+        "total": 345995,
+        "non_cached": 26123
+      },
+      {
+        "total": 330076,
+        "non_cached": 24412
+      },
+      {
+        "total": 246589,
+        "non_cached": 18621
+      },
+      {
+        "total": 342456,
+        "non_cached": 32312
       }
     ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
@@ -573,9 +1081,99 @@
         "total": 624033,
         "non_cached": 62369
       }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 241141,
+        "non_cached": 18293
+      },
+      {
+        "total": 329328,
+        "non_cached": 26352
+      },
+      {
+        "total": 322154,
+        "non_cached": 31082
+      },
+      {
+        "total": 304791,
+        "non_cached": 32151
+      },
+      {
+        "total": 464747,
+        "non_cached": 35435
+      }
     ]
   },
   "recli": {
+    "report_noDesign_codex_gpt-5.4-mini": [
+      {
+        "total": 271809,
+        "non_cached": 20673
+      },
+      {
+        "total": 334289,
+        "non_cached": 60497
+      },
+      {
+        "total": 529839,
+        "non_cached": 43439
+      },
+      {
+        "total": 311771,
+        "non_cached": 59995
+      },
+      {
+        "total": 212837,
+        "non_cached": 16741
+      },
+      {
+        "total": 264949,
+        "non_cached": 26229
+      },
+      {
+        "total": 286799,
+        "non_cached": 27471
+      },
+      {
+        "total": 359117,
+        "non_cached": 23245
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 365245,
+        "non_cached": 22589
+      },
+      {
+        "total": 277287,
+        "non_cached": 21543
+      },
+      {
+        "total": 356488,
+        "non_cached": 18952
+      },
+      {
+        "total": 408691,
+        "non_cached": 24947
+      },
+      {
+        "total": 289999,
+        "non_cached": 18255
+      },
+      {
+        "total": 236631,
+        "non_cached": 18391
+      },
+      {
+        "total": 259876,
+        "non_cached": 19620
+      },
+      {
+        "total": 326058,
+        "non_cached": 18858
+      }
+    ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
       {
         "total": 314265,
@@ -745,9 +1343,103 @@
         "total": 559441,
         "non_cached": 55377
       }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 305063,
+        "non_cached": 15783
+      },
+      {
+        "total": 354935,
+        "non_cached": 45687
+      },
+      {
+        "total": 384407,
+        "non_cached": 30999
+      },
+      {
+        "total": 283328,
+        "non_cached": 24000
+      },
+      {
+        "total": 390548,
+        "non_cached": 24340
+      },
+      {
+        "total": 265261,
+        "non_cached": 15149
+      },
+      {
+        "total": 296683,
+        "non_cached": 15723
+      },
+      {
+        "total": 268484,
+        "non_cached": 20420
+      }
     ]
   },
   "sheeteval": {
+    "report_noDesign_codex_gpt-5.4-mini": [
+      {
+        "total": 346470,
+        "non_cached": 19174
+      },
+      {
+        "total": 215449,
+        "non_cached": 17817
+      },
+      {
+        "total": 200213,
+        "non_cached": 28309
+      },
+      {
+        "total": 345501,
+        "non_cached": 24989
+      },
+      {
+        "total": 525836,
+        "non_cached": 25868
+      },
+      {
+        "total": 585109,
+        "non_cached": 45333
+      },
+      {
+        "total": 395214,
+        "non_cached": 23758
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 332952,
+        "non_cached": 24344
+      },
+      {
+        "total": 219423,
+        "non_cached": 20255
+      },
+      {
+        "total": 458916,
+        "non_cached": 39844
+      },
+      {
+        "total": 407165,
+        "non_cached": 28669
+      },
+      {
+        "total": 370323,
+        "non_cached": 32403
+      },
+      {
+        "total": 225272,
+        "non_cached": 22520
+      },
+      {
+        "total": 328547,
+        "non_cached": 46051
+      }
+    ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
       {
         "total": 295780,
@@ -867,6 +1559,28 @@
         "total": 742221,
         "non_cached": 56397
       }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 488908,
+        "non_cached": 44492
+      },
+      {
+        "total": 353005,
+        "non_cached": 50157
+      },
+      {
+        "total": 276666,
+        "non_cached": 31802
+      },
+      {
+        "total": 370391,
+        "non_cached": 36055
+      },
+      {
+        "total": 405762,
+        "non_cached": 22530
+      }
     ]
   },
   "sith": {
@@ -886,6 +1600,40 @@
       {
         "total": 2475294,
         "non_cached": 153886
+      },
+      {
+        "total": 3232495,
+        "non_cached": 165615
+      },
+      {
+        "total": 3243414,
+        "non_cached": 230038
+      }
+    ],
+    "report_auto_codex_gpt-5.4-mini": [
+      {
+        "total": 2429961,
+        "non_cached": 151049
+      },
+      {
+        "total": 3307092,
+        "non_cached": 172884
+      },
+      {
+        "total": 3389111,
+        "non_cached": 195767
+      },
+      {
+        "total": 631598,
+        "non_cached": 78382
+      },
+      {
+        "total": 259998,
+        "non_cached": 24350
+      },
+      {
+        "total": 326567,
+        "non_cached": 31271
       }
     ],
     "report_autoNoMetric_codex_gpt-5.6-luna": [
@@ -990,6 +1738,28 @@
       {
         "total": 1883444,
         "non_cached": 89908
+      }
+    ],
+    "report_autoTest_codex_gpt-5.4-mini": [
+      {
+        "total": 297776,
+        "non_cached": 22960
+      },
+      {
+        "total": 323868,
+        "non_cached": 23964
+      },
+      {
+        "total": 355110,
+        "non_cached": 28070
+      },
+      {
+        "total": 238560,
+        "non_cached": 23520
+      },
+      {
+        "total": 291141,
+        "non_cached": 23109
       }
     ]
   }

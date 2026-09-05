@@ -20,7 +20,7 @@ from write_metrics.write_eval_metrics import get_eval_metrics
 # For simplicity, the keys used are simply the implementation folders
 SCB_DIR = Path("datasets/slopCodeBench/scb-problems")
 PROBLEMS = [
-    "code_search", "circuit_eval", "mocked_http", "recli", "sheeteval", "sith"
+    "code_search", "circuit_eval", "etl_pipeline", "meshctl", "mocked_http", "recli", "sheeteval", "sith"
     ]
 
 
