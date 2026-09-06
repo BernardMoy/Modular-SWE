@@ -8,6 +8,7 @@
 datasets/aidev
 datasets/swe-bench-pro
 datasets/references
+datasets/references_backup
 datasets/slopCodeBench
 datasets/**/implementations_*/
 datasets/**/report_*/
