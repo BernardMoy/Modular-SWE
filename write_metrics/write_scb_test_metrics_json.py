@@ -22,7 +22,7 @@ from scripts.pytest_scb import pytest_scb
 # For simplicity, the keys used are simply the implementation folders
 SCB_DIR = Path("datasets/slopCodeBench/scb-problems")
 PROBLEMS = [
-    "sheeteval", "sith"
+     "code_search", "circuit_eval", "etl_pipeline", "meshctl", "mocked_http", "recli", "sheeteval", "sith"
     ]
 
 
