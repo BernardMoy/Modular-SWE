@@ -41,7 +41,7 @@ Output:
 HUMAN_QUESTION: 
 Smell: The module backend.app.api_service handles API fetching and text processing together. 
 Suggestion: Split the api_service module into fetch_api and api_processing modules that preserves existing functionalities, and the api_service module calls them sequentially. 
-Trade-offs: This would increase the number of modules by 1, and adds an interface and an extra file to navigate especially that it only involves text and date reformatting.  
+Trade-offs: This would increase the number of modules by 1, and adds an interface and an extra file to navigate especially that it only involves simple and small text and date reformatting.  
 How often does the API and processing change, so I can decide whether or not to split the api_service module? 
 
 Example 2 (Implementation stage): 
