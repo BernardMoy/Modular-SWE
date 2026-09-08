@@ -76,7 +76,7 @@ HUMAN_APPROVE:
 7. The human would decide whether or not to continue the conversation. 
 Any further agent's output for clarification or follow-up questions from the human must also start with "HUMAN_APPROVE:" so the human is continuously involved. 
 After all feedback collected and the human has no more clarification questions, refine analyzer suggestions starting from step 4 based on the feedback.
-Change the "status" field to "rejected" inside `current_analyzer_result.json` if necessary. 
+For any suggestions rejected, create an entry in `current_analyzer_result.json` and change the "status" field to "rejected" if necessary. 
 """
 
 

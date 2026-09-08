@@ -1052,8 +1052,13 @@ def modular_workflow():
     if UI_ENABLED:
         from .ui import run_ui
 
+        # Pass the same agent workspace format - but only the start index: UI mode currently support running one checkpoint at a time only 
+
+        agent_workspace = Path(
+            f"agent_workspace_{args.problem_name}_{start}_{SUFFIX}"
+        )
         run_ui(
-            workspace = Path(f"agent_workspace"),  # UI does not support concurrently running for now due to lack of <i> state 
+            workspace=agent_workspace,
             workflow=run,
             on_quit=stop_run_agent_processes,
         )

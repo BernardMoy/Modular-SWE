@@ -9,7 +9,7 @@ MODEL: Literal[
     "Nemotron 3 Ultra Free",
     "Big Pickle",
     "DeepSeek V4 Flash Free",
-] = "gpt-5.4-mini"
+] = "gpt-5.6-luna"
 
 # For the modular workflow.
 # noDesign: Directly implement all modules at once (reference)
@@ -17,7 +17,7 @@ MODEL: Literal[
 # human: D-A loop analyzer would ask human questions if it encounters ambiguity / contextual uncertainty / contrasting metrics.
 WORKFLOW_MODE: Literal[
     "noDesign", "autoNoMetric", "auto", "human", "autoByLayer", "autoTest"  # USED ONLY [4] noDesign, auto, autoNoMetric, autoByLayer   # "autoAggressive", 
-] = "autoNoMetric"
+] = "human"
 
 # Unused:
 # allAtOnce: DA loop, then implement all modules at once following the design
@@ -25,10 +25,10 @@ WORKFLOW_MODE: Literal[
 # byModule: BFS and one prompt per module. Modules in the same layer are coded in parallel
 
 # Problem type: Either "custom" or "scb"
-PROBLEM_TYPE: Literal["custom", "scb"] = "scb"
+PROBLEM_TYPE: Literal["custom", "scb"] = "custom"
 
 # Whether or not UI is enabled
-UI_ENABLED = False
+UI_ENABLED = True
 
 # Sign in method: either "api" or "chatgpt"
 # api means use openai api key - access models such as gpt 5.4 nano 
