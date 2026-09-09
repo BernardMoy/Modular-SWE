@@ -206,12 +206,14 @@ def _run_decomposer(
 
     # Write the current deps graph SVG
     deps_graph_json_path = agent_workspace / "current_deps_graph.json"
+    design_json_path = agent_workspace / "current_design.json"
     if deps_graph_json_path.exists():
         subprocess.run(
             [
                 "python",
                 "scripts/deps_graph_json_to_svg.py",
                 deps_graph_json_path,
+                design_json_path, 
                 "-o",
                 agent_workspace / "current_deps_graph",
             ],
