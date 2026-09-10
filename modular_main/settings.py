@@ -39,4 +39,4 @@ SIGN_IN_METHOD: Literal["api", "chatgpt"] = "chatgpt"
 # 1. Show current design viewing and current deps graph 
 # 2. Answer human question 
 # 3. Show analyzer suggestions, and how you would modify it 
-DEMO_MODE = False 
+DEMO_MODE = True
