@@ -64,6 +64,11 @@ def get_formatted_design(workspace) -> dict[str, Text]:
         d = {}
         for entry in design_json:
             key = f"({entry["type"]}) {entry["module_name"]}"
+            # If the type != "keep", display its public interface design 
+
+
+            # ELSE display the CODE (TO DO) 
+            
             value = Text(entry.get("responsibility", ""))
             value.append("\n\n")
             for index, public_interface in enumerate(entry.get("public_interface", [])):

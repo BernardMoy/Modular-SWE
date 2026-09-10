@@ -116,7 +116,7 @@ class WorkflowErrorModal(ModalScreen[None]):
             event.stop()
 
 
-class TitleApp(App[None]):
+class App(App[None]):
     # Do not call the watcher while the widget tree is being composed.
 
     # ============= STATES ===============
@@ -850,4 +850,4 @@ def run_ui(
     on_quit: Callable[[], None] | None = None,
 ):
     # Run the UI and, when provided, the workflow alongside it.
-    TitleApp(workspace=workspace, workflow=workflow, on_quit=on_quit).run()
+    App(workspace=workspace, workflow=workflow, on_quit=on_quit).run()

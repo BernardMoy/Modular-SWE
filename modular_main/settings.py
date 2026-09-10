@@ -34,3 +34,9 @@ UI_ENABLED = True
 # api means use openai api key - access models such as gpt 5.4 nano 
 # chatgpt only supports the models visible under /models when running codex in the terminal 
 SIGN_IN_METHOD: Literal["api", "chatgpt"] = "chatgpt" 
+
+# If demo is true, then the UI would flow deterministically: 
+# 1. Show current design viewing and current deps graph 
+# 2. Answer human question 
+# 3. Show analyzer suggestions, and how you would modify it 
+DEMO_MODE = False 
