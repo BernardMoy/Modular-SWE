@@ -1,6 +1,8 @@
 from ..criteria import TEST_WRITER_CRITERIA
 
-
+# This the TDD "Test planner" agent used in the report
+# As opposed to test_planner (file), this only writes black box tests for CLI problems prior to implementation
+# Whereas that one is used for PLANNING tests by writing a test blueprint, for non-CLI problems. 
 def get_black_box_test_writer_prompt(checkpoint_number):
     return f"""
 You are a designer of test suites before the implementation as part of test-driven-development for the following issue. 

@@ -1,3 +1,28 @@
+## To be done: Expected to be finished by 19 Sept
+
+# A Multi-Agent LLM Framework for Maintaining Code Quality in Iterative Software Development
+
+Motivation
+
+Objectives
+
+Contributions
+
+# Repo Structure
+
+# Begin Workflow
+
+# Repository Structure
+
+# Report
+
+The project report is located in ...
+The presentation slides are located in...
+
+NOTE: The "test planner agent" mentioned in the report actually refers to the "black box test writer" agent under prompts/,
+and the "tester agent" in the report refers to the "test refactor coder" under prompts/coders.
+(The test planner under prompts/ and test writer under prompts/ are for non-CLI custom problems which are not mentioned in the report on how to test them)
+
 # Activate venv
 
 ```

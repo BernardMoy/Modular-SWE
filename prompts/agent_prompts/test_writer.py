@@ -1,7 +1,8 @@
 from ..json_helper import get_json_string
 
-
-def get_tester_prompt(checkpoint_number):
+# Writer for NON black box tests: custom problems / non CLI problems. 
+# Takes in a blueprint and an implementation, then write tests based on the BLUEPRINT 
+def get_test_writer_prompt(checkpoint_number):
     return f"""
 You are writing tests for the software.  
 

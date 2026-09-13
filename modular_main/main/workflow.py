@@ -341,7 +341,7 @@ def _decomposer_analyzer_loop(
 
 
 # Test Refactor - Tester loop: Happens after implementation within the AR loop.
-def _tester_refactor_loop(
+def _test_refactor_loop(
     executor,
     checkpoint_number,
     threshold,
@@ -368,7 +368,7 @@ def _tester_refactor_loop(
         _report_stage(
             stage_callback, f"(Iteration {iteration+1}) Writing and running tests"
         )
-        output = get_prompt_and_run_agent(executor, "tester", checkpoint_number)
+        output = get_prompt_and_run_agent(executor, "test_writer", checkpoint_number)
         # reflect in the UI the agent output
         _report_agent_response(agent_response_callback, output)
 
@@ -442,9 +442,9 @@ def _analyzer_refactor_loop(
     agent_response_callback=None,
 ):
     # After coding: Run tests
-    def tester_agent(agent_workspace):
-        print(f"========== TESTER ==========")
-        _report_stage(stage_callback, "Tester")
+    def test_refactor_coder_agent(agent_workspace):
+        print(f"========== TEST REFACTOR CODER ==========")
+        _report_stage(stage_callback, "Test refactor coder")
 
         # Move tests from the storage to the workspace
         if (agent_test_storage / "tests").exists():
@@ -544,7 +544,7 @@ def _analyzer_refactor_loop(
     while not passed and iteration < threshold:
         # run tests
         if WORKFLOW_MODE == "autoTest":
-            tester_agent(agent_workspace)
+            test_refactor_coder_agent(agent_workspace)
 
         # write metrics from impl if workflow is not nometric
         update_metrics(agent_workspace)

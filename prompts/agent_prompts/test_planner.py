@@ -1,6 +1,7 @@
 from ..json_helper import get_json_string
 
-
+# Test planner agent for writing test blueprint json for custom / non CLI implementations 
+# This is NOT the test planner used in the report: See black_box_test_writer
 def get_test_planner_prompt(checkpoint_number):
     return f"""
 You are a designer of test suites before the implementation of an issue.

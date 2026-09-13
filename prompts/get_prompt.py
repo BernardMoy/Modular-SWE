@@ -5,7 +5,7 @@ from .agent_prompts.coders.all_at_once_coder import get_all_at_once_coder_prompt
 from .agent_prompts.coders.no_design_coder import get_no_design_coder_prompt
 from .agent_prompts.coders.refactor_coder import get_refactor_coder_prompt
 from .agent_prompts.test_planner import get_test_planner_prompt
-from .agent_prompts.tester import get_tester_prompt
+from .agent_prompts.test_writer import get_test_writer_prompt
 from .agent_prompts.coders.test_refactor_coder import get_test_refactor_coder_prompt
 from .agent_prompts.analyzer_human import get_analyzer_human_prompt
 from .agent_prompts.black_box_test_writer import get_black_box_test_writer_prompt
@@ -33,8 +33,8 @@ def get_prompt(agent_name, *args):
         return get_refactor_coder_prompt(*args)
     elif agent_name == "test_planner":
         return get_test_planner_prompt(*args)
-    elif agent_name == "tester":
-        return get_tester_prompt(*args)
+    elif agent_name == "test_writer":
+        return get_test_writer_prompt(*args)
     elif agent_name == "test_refactor_coder":
         return get_test_refactor_coder_prompt(*args)
     elif agent_name == "analyzer_human":
