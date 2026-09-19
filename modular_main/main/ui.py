@@ -1,4 +1,8 @@
 """
+A UI wrapper of the modular main workflow, using Textual UI. 
+The design styles are given in ui.tcss
+
+Designs guide:
 https://textual.textualize.io/guide/design/
 """
 

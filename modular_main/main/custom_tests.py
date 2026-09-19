@@ -1,3 +1,9 @@
+"""
+UNUSED test script
+To measure the agent's effort (tokens, activity logs) used to fix broken tests
+Under the codebase generated all at once and the codebase generated using the multi-agent workflow. 
+"""
+
 from pathlib import Path
 import subprocess
 import shutil

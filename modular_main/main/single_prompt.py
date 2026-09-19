@@ -1,3 +1,8 @@
+"""
+UNUSED test script to test whether calling the agent works
+and whether it can successfully ask a human for input 
+"""
+
 PROMPT = """I am testing a software engineering workflow. When asking human questions, start with the format "HUMAN_QUESTION: <Question>"
 
 Write a function that sorts a list of integers using merge sort. 

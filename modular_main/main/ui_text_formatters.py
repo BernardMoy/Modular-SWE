@@ -1,14 +1,13 @@
 """
 Format raw json files etc.
 Into a more human readable format
-Used to display in the UI
+Used to display in the UI.
 
-workspace parameter is the Agent workspace path.
+The 'workspace' parameter is the Agent workspace path.
 
-
-FOLLOW CONVENTION: THE DICT HERE {KEY, VALUE}
-MEANS THE KEYS (EXACT) ARE DISPLAYED ON THE LEFT PANEL
-VALUES ON THE RIGHT
+All dictionaries returned here in the form of {key, value} pairs 
+mean that the keys (exact names) are displayed on the left panel 
+with the values (exact) displayed on the right. 
 """
 
 from pathlib import Path

@@ -1,192 +1,132 @@
-## To be done: Expected to be finished by 19 Sept
-
 # A Multi-Agent LLM Framework for Maintaining Code Quality in Iterative Software Development
 
-Motivation
+> The project report (pdf) is available [here](Bernard_Moy_Final_Report.pdf).
 
-Objectives
+![Teaser Diagram](modular-swe.png)
 
-Contributions
+## Description
+
+With the use of AI coding agents becoming more common in software development,
+many have raised concerns about the quality of agent-generated code.
+Studies found that they tend to prioritise immediate correctness instead of long term maintainability,
+causing the boost in development velocity to gradually vanish over time as technical debt accumulates.
+
+As a result, this project designed a Python-based, multi-agent framework featuring human-in-the-loop,
+consisting of specialised LLM agents collaborating across two feedback loop, namely between the decomposer and analyser, and the coder and analyser agents.
+The decomposer agent is responsible for high-level and low-level software design, where the analyser would then critic the design and provide suggestions following a set of guidelines and quality metrics.
+The correctness and the code quality metrics when the agent extends code written by themselves, are evaluated against the direct-coding and the multi-agent modes, and against human-written popular GitHub repositories.
+
+## Contributions
+
+This project presents the following main contributions:
+
+- Architecture of the multi-agent framework, that can either run automaticallt or feature human-in-the-loop ([workflow.py](modular_main/main/workflow.py)).
+- Selected the [SlopCodeBench](https://arxiv.org/pdf/2603.24755) benchmark for evaluation of correctness and the iterative code quality, under the [datasets](datasets/) folder that is excluded from the Git repository.
+- Studied the effects of featuring human-in-the-loop using two specialised problems, with their problem checkpoint structures closely resembling that of SlopCodeBench. The problem descriptions are available under the [datasets](datasets/) folder, with the agent implementations available soon.
+- Evaluated against direct coding, multi agent, multi agent but without implementation-level metrics (ablation study), and a test-driven development framework modification, under [this notebook](cached_evaluation.ipynb).
 
 # Repo Structure
 
-# Begin Workflow
-
-# Repository Structure
-
-# Report
-
-The project report is located in ...
-The presentation slides are located in...
-
-NOTE: The "test planner agent" mentioned in the report actually refers to the "black box test writer" agent under prompts/,
-and the "tester agent" in the report refers to the "test refactor coder" under prompts/coders.
-(The test planner under prompts/ and test writer under prompts/ are for non-CLI custom problems which are not mentioned in the report on how to test them)
-
-# Activate venv
-
-```
-source .venv/bin/activate
-```
-
-## Run DPy
-
-```
-./DPy analyze \
-  -i datasets/slopCodeBench/scb-problems/cfgpipe/implementations/checkpoint_1 \
-  -o datasets/slopCodeBench/scb-problems/cfgpipe/dpy_results/checkpoint_1
-```
-
-## Run pylint
-
-Experimental. Checks for duplicate code and protected access respectively.
-
-```
-pylint datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/ \
-  --ignore=.venv --recursive=y --disable=all --enable=R0801,W0212
-```
-
-For checking dup lines only:
-
-```
-pylint datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/ \
-  --ignore=.venv --recursive=y --disable=all --enable=R0801 --min-similarity-lines=4 \
-  >datasets/slopCodeBench/scb-problems/cfgpipe/pylint_results/checkpoint_1
-```
-
-## Run pydeps
-
-Can specify output = png | svg or .dot
-Use --reverse to show edges A --> B mean A imports B
-
-```
-mkdir -p datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs
-
-pydeps datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/launch.py \
-  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.svg \
-  --noshow --max-bacon=0
-
-pydeps datasets/slopCodeBench/scb-problems/dag_execution/implementations/checkpoint_1/launch.py \
-  -T dot --noshow --max-bacon=0 \
-  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.dot
-```
-
-Run the following python script to convert the dot to a JSON format
-
-```
-python process_deps_graph.py \
-  datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.dot \
-  -o datasets/slopCodeBench/scb-problems/dag_execution/deps_graphs/checkpoint_1.json
-```
-
-Edges point from the imported module unless the `--reverse` tag is set:
-an edge from module A -> B means B imports A.
-A module with many outgoing edges is likely a god module.
-
-## Run deterministic
-
-Run inside the agent workspace docker container.
-Call the python scripts as modules.
-
-```
-python -m validators.module_name_validator current_design.json current_deps_graph.json
-```
-
-## Run SCB tests
-
-Specify the implementation path in the `--entrypoint` flag.
-
-Or use the solutions/ folder to ensure all tests passes there.
-
-```
-uv run pytest scb-problems-sols-tests/dag_execution/tests/test_checkpoint_1.py \
-    --entrypoint "python scb-problems-sols-tests/dag_execution/solutions/checkpoint_1/launch.py" \
-    --checkpoint checkpoint_1
-```
-
-When doing this make sure the launch file is actually named launch.py.
-
-## Docker container, and run agent
-
-BEFORE DOING THIS, RUN `pip freeze > requirements.txt` TO UPDATE IT
-
-Build the docker container using
+```text
+modular-SWE
+├── datasets/  # Custom problems, SlopCodeBench problems (gitignored) and reference GitHub implementations (gitignored)
+├── Bernard_Moy_Final_Report.pdf  # Project report pdf
+├── Bernard_Moy_Project_Presentation.pdf  # Project presentation pdf
+├── cached_evaluation.ipynb  # Evaluation of code quality metrics, using cached values generated with agent implementations
+├── evaluation.ipynb  # Evaluation of a single problem. It runs from scratch by reading implementations under datasets/ (which is currently gitignored) and can take up to 30 minutes to generate the results.
+├── prompt_generators.ipynb  # Generate full prompts of agents for copy/paste
+├── slopCodeBench.ipynb  # SlopCodeBench dataset discovery
+├── json_schemas/
+│   ├── formatters/
+│   │   └── design_formatter.py  # UNUSED: Generate a summary of the design proposed by the decomposer agent
+│   ├── analyzer.json  # The schema used as part of the analyser prompt
+│   ├── analyzer_code_quality.json  # UNUSED: A schema to prompt the analyzer agent to output a quantifiable code quality score from 1-5. Unused because of the central tendency bias and the threshold being vague.
+│   ├── analyzer_pass_fail.json  # UNUSED: A schema to prompt the analyzer agent to output a pass / fail score based on the code quality, unused for the same reason.
+│   ├── decomposer.json  # The schema used as part of the decomposer's design output
+│   ├── dependency_graph.json  # The schema used as part of the decomposer's dependency graph output
+│   └── test_planner.json  # UNUSED: A schema to generate what needs to be tested prior to implementation.
+├── metrics/
+│   ├── agent_reports/  # UNUSED: Metrics derived from the agent reports, including the agent's activity logs and its running time. Unused because of the randomness.
+│   ├── change_coupling/  # Changed proportion, and list which files are changing together which may indicate coupling
+│   ├── deps_graph/  # Circular dependency, unstable dependency, hub like, propagation cost, impact size, graph average degree, number of modules
+│   ├── design/  # Large public interface
+│   ├── designite_py/  # Number of functions, cyclomatic complexity, fan-in/fan-out, and other static analysis warnings
+│   ├── jscpd/  # Duplicated lines and tokens
+│   ├── pylint/  # UNUSED: Duplicated lines
+│   ├── radon/  # Lines of code, comments percentage, weighted maintainability index (MI)
+│   └── sonar/  # UNUSED: SonarQube metrics mainly for the cognitive complexity. Unused because of the massive effort to setup docker, and now uses cyclomatic complexity and MI instead.
+├── metrics_cache/
+│   ├── references_metrics.json  # Cached code quality metrics for referenced GitHub repos.
+│   ├── references_metrics_cleaned.json  # UNUSED: Code quality metrics for referenced GitHub repos but with multi-line comments removed. Turns out that is difficult as it breaks the code syntax.
+│   ├── scb_metrics.json  # Cached SlopCodeBench chosen problems code quality metrics
+│   ├── scb_report_metrics.json  # Cached SlopCodeBench agent report metrics, including the tokens
+│   └── scb_test_metrics.json  # Cached SlopCodeBench test correctness metrics measured in pass rates
+├── modular_main/
+│   ├── BwrapExecutor.py  # A class for running the agent in a BWrap executor to limit what the agent can see
+│   ├── auth/codex_login.py  # A class for managing codex login using either API key or chatgpt account
+│   ├── entry_files.py  # A list of entry files of the CLI problems given in SlopCodeBench
+│   ├── get_prompt_and_run_agent.py  # A helper function that runs the corresponding agent given its name
+│   ├── settings.py  # Various settings to configure before running main workflow
+│   ├── login.py  # UNUSED: A general login function that supports multiple agents. Since only codex is available, it directly uses the auth/codex_login.py class instead.
+│   ├── main/
+│   │   ├── custom_tests.py  # UNUSED test script to measure agent effort to fix broken tests under direct / multi agent implementations
+│   │   ├── single_prompt.py  # UNUSED test script to test whether calling agent works
+│   │   ├── ui.py  # Textual UI Wrapper for the main workflow
+│   │   ├── ui.tcss  # Textual UI design styles
+│   │   ├── ui_text_formatters.py  # Text formatters to format raw json files to display them better in the UI
+│   │   └── workflow.py  # Main workflow, following the architecture
+│   └── workspace_helpers/run_agent.py  # Helper function to run the agent given the agent name, model name and the raw text prompt
+├── prompts/
+│   ├── agent_prompts/
+│   │   ├── analyzer.py  # ANALYZER prompt for automatic mode
+│   │   ├── analyzer_human.py  # ANALYZER prompt for human-in-the-loop mode
+│   │   ├── black_box_test_writer.py  # The TEST PLANNER AGENT prompt mentioned in the report
+│   │   ├── coders/
+│   │   │   ├── all_at_once_coder.py  # UNUSED prompt following SlopCodeBench's paper
+│   │   │   ├── coding_instructions.py  # Reusable coding instructions to ensure code can easily be analyzed later
+│   │   │   ├── modular_coder.py  # The CODER AGENT prompt mentioned in the report
+│   │   │   ├── no_design_coder.py  # Direct coding agent prompt
+│   │   │   ├── refactor_coder.py  # Also the CODER AGENT prompt mentioned in the report but for refactoring
+│   │   │   └── test_refactor_coder.py  # The TESTER agent prompt mentioned in the report
+│   │   ├── decomposer.py  # DECOMPOSER agent prompt
+│   │   ├── rubrics.md  # UNUSED rubrics for thresholding code quality
+│   │   ├── scb.py  # UNUSED: SlopCodeBench's original prompts for testing purposes
+│   │   ├── test_planner.py  # UNUSED test planner for planning out what to test: For custom / non-CLI problems.
+│   │   └── test_writer.py  # UNUSED test writer for writing tests following the plan by test planner: For custom / non-CLI problems.
+│   ├── code_quality_pass_fail.py  # UNUSED agent prompt for deciding pass / fail of code quality.
+│   ├── criteria.py  # Criteria / guidelines for different agents
+│   ├── get_prompt.py  # Central function to get prompts when given the agent names
+│   └── json_helper.py  # Helper function to get json string from json schemas
+├── reusables/  # Utility helper functions
+├── scripts/
+│   ├── constants.py  # Ignored files, and the src directory mapping for the referenced GitHub repos (See report appendix)
+│   ├── deps_graph.py  # Generate deps graph when given an implementation directory
+│   ├── deps_graph_json_to_svg.py  # Convert a deps graph json (adjacency list) to svg for UI display
+│   ├── gen_deps_graph_entry.py  # Helper function for deps graph
+│   ├── gen_missing_init_files.py  # Helper function for deps graph
+│   ├── gen_visibility_matrix.py  # Generate visibility matrix from deps graph json
+│   ├── metrics.sh  # Write raw DPy and pylint (unused) metrics given an implementation
+│   ├── process_deps_graph.py  # Convert dot file to adjacency list
+│   ├── pytest_custom.sh  # Run pytest for custom problems
+│   ├── pytest_scb.py  # Run pytest for scb problems
+│   └── scb_script.sh  # UNUSED shell script for running the workflow on scb problems using Docker sandbox. If using Claude Code without API, use this
+├── validators/module_name_validator.py  # Design validator to prevent hallucination
+└── write_metrics/
+    ├── write_eval_metrics.py  # Write metrics using the helper functions in metrics/
+    ├── ...
+    ├── write_references_metrics_json.py  # Write json metrics to the cache under metrics_cache/
+    └── ...
 
 ```
-docker build -t scb .
-```
 
-To ensure a fresh environment everytime the agent works on an issue, and to ensure it only has access
-to the current problem description (Not the solutions or the tests), run
+# Run the Multi-agent Workflow
 
-.claude (settings) and .claudeignore is copied, may be removed later if not used.
-Only the checkpoint_N.md file and the config.yaml file under a problem is copied for a specific checkpoint.
+NOTE: Running the full workflow currently requires the SlopCodeBench dataset to be present and also require the DPy executable, which is currently unavailable.
 
-To run the container: Start from the root directory
+1. Create a python venv and install the requirements in `requirements.txt`
+2. Configure the settings inside `modular_main/settings.py`
+3. Run `python -m modular_main.main.workflow <problem> <checkpoint_number>` from the root directory.
 
-1. Make a directory (clear the previous directory first)
+# Reproducing the Results
 
-```
-rm -rf agent_workspace
-mkdir -p agent_workspace
-```
-
-2. Copy what is available for the agent to read, including
-
-- checkpoint_N.md
-- config.yaml
-- checkpoint\_(N-1)/ (previous implementation, if available)
-
-```
-cp "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/config.yaml" agent_workspace/
-cp "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/checkpoint_1.md" agent_workspace/
-```
-
-Only when checkpoint_N N>1
-
-```
-cp -r "$PWD/datasets/slopCodeBench/scb-problems/cfgpipe/implementations/checkpoint_1" agent_workspace/
-```
-
-3. Create volume mounts and run docker container as a non root user, copying only the `agent_workspace` directory
-   (Currently, it will show I have no name! -- to be fixed later. -e is for claude to work. )
-
-```
-docker run --rm -it \
-  --user "$(id -u):$(id -g)" \
-  -e HOME=/home/bernardmoy \
-  -v "$HOME/.claude:/home/bernardmoy/.claude" \
-  -v "$HOME/.claude.json:/home/bernardmoy/.claude.json" \
-  -v "$PWD/agent_workspace:/agent_workspace" \
-  scb bash
-```
-
-this way it creates the container "scb" and is removed on exit.
-
-4. Implement solution in a folder named checkpoint_N/ by calling the agent
-
-5. Exit the container, then move the solution back to the problem implementation:
-   The implementations directory need to be created, otherwise it gets renamed to checkpoint_N
-
-```
-mkdir -p datasets/slopCodeBench/scb-problems/cfgpipe/implementations
-mv agent_workspace/checkpoint_1 datasets/slopCodeBench/scb-problems/cfgpipe/implementations/
-```
-
-6. Run the tests! (In the root dir)
-
-With reference solution (All should pass):
-
-```
-uv run pytest datasets/slopCodeBench/scb-problems-sols-tests/cfgpipe/tests/test_checkpoint_1.py \
-  --entrypoint "python datasets/slopCodeBench/scb-problems-sols-tests/cfgpipe/solutions/checkpoint_1/cfgpipe.py" \
-  --checkpoint checkpoint_1
-```
-
-With implemented solution (Only some tests should pass):
-
-```
-uv run pytest datasets/slopCodeBench/scb-problems-sols-tests/cfgpipe/tests/test_checkpoint_1.py  \
-  --entrypoint "python datasets/slopCodeBench/scb-problems/cfgpipe/implementations/checkpoint_1/cfgpipe.py" \
-  --checkpoint checkpoint_1
-```
+Will be available soon after managing what gets git ignored (26 Sept).

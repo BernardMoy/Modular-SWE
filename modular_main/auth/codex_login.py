@@ -1,5 +1,9 @@
-from openai_codex import Codex
+"""
+A class for managing codex login, using either API key or with a chatgpt account
+Access the auth_url for chatgpt login, and use the wait() method to wait for the login to be completed. 
+"""
 
+from openai_codex import Codex
 
 class CodexLogin:
     def __init__(self, method="chatgpt", api_key=None):
