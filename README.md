@@ -12,15 +12,15 @@ Studies found that they tend to prioritise immediate correctness instead of long
 causing the boost in development velocity to gradually vanish over time as technical debt accumulates.
 
 As a result, this project designed a Python-based, multi-agent framework featuring human-in-the-loop,
-consisting of specialised LLM agents collaborating across two feedback loop, namely between the decomposer and analyser, and the coder and analyser agents.
-The decomposer agent is responsible for high-level and low-level software design, where the analyser would then critic the design and provide suggestions following a set of guidelines and quality metrics.
+consisting of specialised LLM agents collaborating across two feedback loops, namely between the decomposer and analyser, and the coder and analyser agents.
+The decomposer agent is responsible for high-level and low-level software design, where the analyser would then critique the design and provide suggestions following a set of guidelines and quality metrics.
 The correctness and the code quality metrics when the agent extends code written by themselves, are evaluated against the direct-coding and the multi-agent modes, and against human-written popular GitHub repositories.
 
 ## Contributions
 
 This project presents the following main contributions:
 
-- Architecture of the multi-agent framework, that can either run automaticallt or feature human-in-the-loop ([workflow.py](modular_main/main/workflow.py)).
+- Architecture of the multi-agent framework, that can either run automatically or feature human-in-the-loop. This workflow is structured in [workflow.py](modular_main/main/workflow.py).
 - Selected the [SlopCodeBench](https://arxiv.org/pdf/2603.24755) benchmark for evaluation of correctness and the iterative code quality, under the [datasets](datasets/) folder that is excluded from the Git repository.
 - Studied the effects of featuring human-in-the-loop using two specialised problems, with their problem checkpoint structures closely resembling that of SlopCodeBench. The problem descriptions are available under the [datasets](datasets/) folder, with the agent implementations available soon.
 - Evaluated against direct coding, multi agent, multi agent but without implementation-level metrics (ablation study), and a test-driven development framework modification, under [this notebook](cached_evaluation.ipynb).
