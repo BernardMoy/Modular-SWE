@@ -1,3 +1,8 @@
+"""
+A Bwrap executor class for running the agent in a sandbox workspace
+Which limits that it can only read files under the agent workspace directory. 
+"""
+
 from pathlib import Path
 import subprocess
 

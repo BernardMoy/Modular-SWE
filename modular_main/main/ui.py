@@ -486,7 +486,6 @@ class App(App[None]):
         suggestions_panel = self.query_one("#suggestions-panel", Vertical)
         request_view = self.query_one("#human-response-view", Vertical)
 
-        # The runner calls this field "type"; accept "kind" as well.
         kind = request.get("kind", request.get("type", ""))
         if not request or not kind:
             # Once human_request.json is deleted, the human request state change to {}, this part is activated
@@ -499,7 +498,8 @@ class App(App[None]):
             self._set_right_content_focus("right-bottom")
             return
 
-        # Questions use the response panel; approvals leave suggestions visible.
+        # If type == approval, then show the suggestions panel for displaying suggestions, 
+        # if type == question then show the request question box. 
         suggestions_panel.display = kind == "approval"
         request_view.display = kind == "question"
         self._set_right_content_focus("right-bottom")
@@ -853,5 +853,5 @@ def run_ui(
     workflow: Callable[..., None] | None = None,
     on_quit: Callable[[], None] | None = None,
 ):
-    # Run the UI and, when provided, the workflow alongside it.
+    # Run the UI 
     App(workspace=workspace, workflow=workflow, on_quit=on_quit).run()

@@ -1,3 +1,8 @@
+"""
+A list of CLI entry files for slopcodebench problems: 
+Available under the yaml file of each problem. 
+"""
+
 ENTRY_FILES = {
     "cfgpipe": "cfgpipe",
     "circuit_eval": "circopt",

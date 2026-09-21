@@ -1,3 +1,10 @@
+"""
+Perform a BFS of the dependency graph.
+Starting at the node that depends on nothing, 
+BFS layer by layer where modules in one layer only depends on modules in previous layers. 
+This way the implementation can be done layer by layer. 
+"""
+
 import json
 import argparse
 from reusables.get_all_modules import get_all_modules

@@ -1,3 +1,7 @@
+"""
+Metrics related to agent token usages or their behaviours. 
+"""
+
 import argparse
 import json
 from collections import Counter

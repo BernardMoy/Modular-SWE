@@ -1,6 +1,10 @@
+"""
+Run agent in a bind mounted executor
+when given the agent name (decomposer, analyser) etc. 
+"""
+
 from .settings import AGENT, MODEL
 from prompts.get_prompt import get_prompt
-
 
 # Helper function to get prompt and run the agent by passing the prompt inside the bwrap executor
 def get_prompt_and_run_agent(executor, agent_name, *args):

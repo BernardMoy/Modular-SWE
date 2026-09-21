@@ -1,3 +1,8 @@
+"""
+UNUSED login file 
+that supports multiple agents (codex, claude code etc)
+"""
+
 # from .settings import AGENT
 # from .auth.codex_login import codex_login_gpt_subscription
 

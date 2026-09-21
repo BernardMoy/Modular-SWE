@@ -1,3 +1,9 @@
+"""
+Metrics related to change coupling: 
+Whether there are certain files that always changes together. 
+Frequently changing together might indicate tight coupling. 
+"""
+
 import os
 from pathlib import Path
 from collections import defaultdict

@@ -1,7 +1,7 @@
 """
-MAIN IMPROVEMENTS TO THIS FILE:
-1. It is hugely duplicated (see the percentage change dictionary function, it is duplicated everywhere)
-2. When only one impl is available (in the first checkpoint), the data go to the before field and not the after field
+Generates a summary of the implementation compared to the previous implementation. 
+If no previous implementations are available (the first checkpoint), 
+then data go to the before field and not the after field.
 """
 
 import os
