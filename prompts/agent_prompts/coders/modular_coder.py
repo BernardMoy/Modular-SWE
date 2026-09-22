@@ -1,5 +1,9 @@
-from .coding_instructions import get_coding_instructions
+"""
+CODER agent 
+Implement modules when given a checkpoint number and a list of modules to implement. 
+"""
 
+from .coding_instructions import get_coding_instructions
 
 # Follow design and implement a list of modules at once.
 # For the modular coder one module per agent scenario, pass modules with length == 1

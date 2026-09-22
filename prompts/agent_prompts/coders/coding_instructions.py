@@ -1,3 +1,7 @@
+"""
+Shared coding instructions for easier processing of implementation code 
+"""
+
 def get_coding_instructions(checkpoint_number):
     venv_text = (
         """Use a virtual environment and ensure that a 'requirements.txt' is present with any dependencies

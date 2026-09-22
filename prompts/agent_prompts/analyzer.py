@@ -1,7 +1,11 @@
+"""
+ANALYSER AGENT 
+without human (automatic evaluation) 
+"""
+
 from ..json_helper import get_json_string
 from ..criteria import ANALYZER_CRITERIA
 from modular_main.settings import WORKFLOW_MODE
-
 
 # current_metrics.json is not used if workflow mode == auto no metric
 def get_analyzer_prompt(has_implementation):

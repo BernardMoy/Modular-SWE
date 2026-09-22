@@ -1,5 +1,9 @@
-from ...criteria import TEST_WRITER_CRITERIA
+"""
+TESTER agent (as described in the report). 
+Fix code based on broken tests written before implementation in the TDD style modification workflow 
+"""
 
+from ...criteria import TEST_WRITER_CRITERIA
 
 def get_test_refactor_coder_prompt(checkpoint_number):
     return f"""

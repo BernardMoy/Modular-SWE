@@ -1,3 +1,9 @@
+"""
+This is NOT the test planner or tester agent described in the report! 
+
+Write tests based on a test blueprint and implementation, for non-CLI problems. 
+"""
+
 from ..json_helper import get_json_string
 
 # Writer for NON black box tests: custom problems / non CLI problems. 

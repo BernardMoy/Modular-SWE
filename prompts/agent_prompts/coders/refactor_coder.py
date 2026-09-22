@@ -1,5 +1,9 @@
-from ...criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
+"""
+CODER agent. 
+For refactoring when given suggestions by the analyzer. 
+"""
 
+from ...criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
 
 # This assumes the coding instructions already are met - hence they are not provided here again
 # As no major refactoring involving those parts (import styles, venv) should be involved.

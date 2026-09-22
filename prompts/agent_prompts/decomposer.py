@@ -1,3 +1,7 @@
+"""
+DECOMPOSER AGENT 
+"""
+
 from ..json_helper import get_json_string
 from ..criteria import DECOMPOSER_SUGGESTIONS_CRITERIA
 from modular_main.settings import WORKFLOW_MODE

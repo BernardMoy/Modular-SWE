@@ -1,3 +1,9 @@
+"""
+This is NOT the test planner agent described in the report, that one is black_box_test_writer! 
+
+Writes test blueprint, describing what to be tested, for non CLI problems 
+"""
+
 from ..json_helper import get_json_string
 
 # Test planner agent for writing test blueprint json for custom / non CLI implementations 

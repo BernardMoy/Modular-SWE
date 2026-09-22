@@ -1,3 +1,7 @@
+"""
+Criteria / guidelines for various agents 
+"""
+
 # The criteria for giving analyzer suggestions. HERE specifies what the analyzer should FOCUS ON.
 # Used by multiple analyzer agents.
 ANALYZER_CRITERIA = """

@@ -1,5 +1,8 @@
-from .coding_instructions import get_coding_instructions
+"""
+Code directly. 
+"""
 
+from .coding_instructions import get_coding_instructions
 
 # Return the original prompt, single agent, used in the SCB paper (modified).
 def get_no_design_coder_prompt(checkpoint_number):

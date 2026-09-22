@@ -1,3 +1,9 @@
+"""
+UNUSED 
+Code all modules at once following design and deps graph. 
+The modular_coder is used instead. 
+"""
+
 from .coding_instructions import get_coding_instructions
 
 # Follow design, but ask the model to implement everything at once

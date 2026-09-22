@@ -1,3 +1,7 @@
+"""
+Original single agent prompt used in the slopcodebench paper 
+"""
+
 # Return the original prompt, single agent, used in the SCB paper (modified).
 # This assumes agent_workspace already contain the respective files of the respective problem.
 def get_original_scb_prompt(checkpoint_number):

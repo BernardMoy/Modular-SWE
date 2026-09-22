@@ -1,3 +1,8 @@
+"""
+Central prompt getter from agent name: 
+Modify this file for new agents 
+"""
+
 from .agent_prompts.analyzer import get_analyzer_prompt
 from .agent_prompts.decomposer import get_decomposer_prompt
 from .agent_prompts.coders.modular_coder import get_modular_coder_prompt

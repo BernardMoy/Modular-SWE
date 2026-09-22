@@ -1,3 +1,7 @@
+"""
+JSON helper to get JSON string from schema 
+"""
+
 import json
 from pathlib import Path
 

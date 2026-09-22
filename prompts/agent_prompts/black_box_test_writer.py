@@ -1,3 +1,9 @@
+"""
+TEST PLANNER AGENT (as described in the report) 
+Writes black box tests before implementation / design starts. 
+That test suite is removed from the workspace after it is written. 
+"""
+
 from ..criteria import TEST_WRITER_CRITERIA
 
 # This the TDD "Test planner" agent used in the report

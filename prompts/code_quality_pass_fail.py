@@ -1,3 +1,8 @@
+"""
+UNUSED function to generate pass / fail threshold 
+from an analyzer output containing code quality scores in 5 aspects 
+"""
+
 def code_quality_pass_fail(analyzer_output_json):
     """
     Based on the analyzer result (returns 5 software quality aspects in scale of 1-5)
