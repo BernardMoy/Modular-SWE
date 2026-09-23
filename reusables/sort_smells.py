@@ -1,5 +1,8 @@
-d = {"Function level": 0, "Module level": 1, "Design level": 2}
+"""
+Smells sorting for better formatting 
+"""
 
+d = {"Function level": 0, "Module level": 1, "Design level": 2}
 
 def sort_smells(smells):
     """

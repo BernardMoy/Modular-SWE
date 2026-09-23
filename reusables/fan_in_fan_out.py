@@ -1,5 +1,9 @@
-from reusables.get_all_modules import get_all_modules
+"""
+Function to get the fan in, fan out and instability 
+of each node in a dependency adjacency graph in JSON
+"""
 
+from reusables.get_all_modules import get_all_modules
 
 # Given a dependency graph in JSON
 # Output the fan in and fan out for each node

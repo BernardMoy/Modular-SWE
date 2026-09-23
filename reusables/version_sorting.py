@@ -1,8 +1,11 @@
+"""
+Version key comparison for extracting them in referenced GitHub repositories 
+"""
+
 # Sort by version numbers when given references dataset paths containing versions.
 # This assumes the version number is always in the form of /v.../
 # Return a tuple that is sortable
 import re
-
 
 def version_key(path):
     s = str(path)

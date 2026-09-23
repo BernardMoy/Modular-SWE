@@ -1,6 +1,10 @@
+"""
+Linear interpolation functions to allow comparison of evaluation metrics
+Across problems with different numbers of checkpoints 
+"""
+
 import numpy as np
 from collections import defaultdict
-
 
 # Given a varying array length, convert to an array of length N through linear interpolation
 # Plot the array on a graph, for the x axis it spans, divide into N sections
