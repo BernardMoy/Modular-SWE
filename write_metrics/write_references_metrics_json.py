@@ -1,3 +1,9 @@
+"""
+Write eval metrics 
+for each checkpoint 
+for each referenced github repo 
+"""
+
 from pathlib import Path
 import json
 import argparse

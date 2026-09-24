@@ -1,10 +1,14 @@
+"""
+Write evaluation metrics (Those used in notebook) 
+from an implementation dir 
+"""
+
 import json
 import argparse
 from metrics.radon.overall_metrics import get_radon_metrics
 from metrics.deps_graph.overall_metrics import get_deps_graph_metrics
 from metrics.designite_py.overall_metrics import get_dpy_metrics
 from metrics.jscpd.overall_metrics import get_duplicates
-
 
 # Given an impl path (by agent), output eval metrics
 def get_eval_metrics(implementation_path):

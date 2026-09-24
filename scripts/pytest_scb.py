@@ -1,9 +1,12 @@
-import os
+"""
+Run a pytest test suite for slopcodebench problems 
+and output the number of tests passed / failed 
+"""
+
 import subprocess
 import argparse
 from pathlib import Path
 import json
-
 
 # Return in json format the summary:
 # return --> { "passed": 46, "failed": 5, "total": 51, "collected": 51 },

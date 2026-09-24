@@ -1,3 +1,7 @@
+"""
+Given an implementation path, write the deps graph dot / svg / json 
+"""
+
 import argparse
 import os
 from constants import IMPL_DIR_DICT, BASE_REFERENCE_DIR
@@ -5,7 +9,6 @@ import subprocess
 import shutil
 from pathlib import Path
 import time
-
 
 def main():
     parser = argparse.ArgumentParser()

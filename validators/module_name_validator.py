@@ -1,3 +1,7 @@
+"""
+Validate that all modules exist in the design must also exist in the dependency graph 
+(The opposite may not be true - for example temp entrypoint files)"""
+
 from reusables.get_all_modules import get_all_modules
 import argparse
 import json

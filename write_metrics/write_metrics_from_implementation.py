@@ -1,3 +1,8 @@
+"""
+Write implementation level metrics for use in the multi agent loop as guidance
+dpy / radon / pylint / jscpd metrics 
+"""
+
 import argparse
 import json
 import subprocess

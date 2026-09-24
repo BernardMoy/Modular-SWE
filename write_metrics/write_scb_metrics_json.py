@@ -1,3 +1,10 @@
+"""
+Write eval metrics 
+for each mode / agent / model 
+for each checkpoint 
+for each slopcodebench (chosen) problem 
+"""
+
 from pathlib import Path
 import json
 import argparse

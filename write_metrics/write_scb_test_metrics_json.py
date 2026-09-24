@@ -1,3 +1,7 @@
+"""
+Same as write scb metrics but is test pass rate metrics 
+"""
+
 from pathlib import Path
 import json
 import argparse

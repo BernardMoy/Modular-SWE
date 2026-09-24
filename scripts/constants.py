@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import time
 
+# Directories to ignore in generate deps graph etc. 
 # This assumes the convention that dist/ is the distributable (compiled code)
 # and tests/ are pytest library
 # both are safe to ignore otherwise it contains many files
@@ -15,6 +16,7 @@ IGNORED_DIRS = {
     "tests",
 }
 
+# Imports to be ignored if they contain these invalid characters 
 # If these characters are present in the module names, importing them will crash
 # The imports wont resolve in the temp entrypoint
 number_imports = [f".{x}" for x in range(10)]
@@ -22,7 +24,6 @@ INVALID_CHARS = ["-"] + number_imports
 
 # The base directory for all implementations for reference modules
 BASE_REFERENCE_DIR = "datasets/references/"
-
 
 # Version numbers for directory matching.
 # Given a dataset reference source dir, return a list of direct subfolder names
@@ -33,6 +34,7 @@ def _get_reference_versions(problem):
 
 # Mapping from problem name to the src directory. 
 # We only want to evaluate the src directory, not the entire repo 
+# See report appendix 
 SRC_DIR_DICT = {
     "flask": "src", 
     "click": "src", 

@@ -1,3 +1,8 @@
+"""
+Write design level metrics for use in the multi agent loop as guidance
+design and deps graph metrics only 
+"""
+
 import json
 import argparse
 from metrics.deps_graph.metrics import get_metrics_from_deps_graph

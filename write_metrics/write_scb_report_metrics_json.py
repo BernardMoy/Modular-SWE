@@ -1,3 +1,7 @@
+"""
+Same as write scb metrics but is agent report level metrics 
+"""
+
 from pathlib import Path
 import json
 import argparse

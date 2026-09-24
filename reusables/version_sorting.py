@@ -1,5 +1,5 @@
 """
-Version key comparison for extracting them in referenced GitHub repositories 
+Version key comparison for sorting them in referenced GitHub repositories 
 """
 
 # Sort by version numbers when given references dataset paths containing versions.
