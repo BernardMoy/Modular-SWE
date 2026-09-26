@@ -133,6 +133,7 @@ NOTE: Running the full workflow currently requires the SlopCodeBench dataset to 
 2. Leave the settings as it is (Demo mode = True)
 3. Run `python -m modular_main.main.workflow iris_recognition 4` from the root directory.
    This simulates implementing the 4th checkpoint of the iris recognition custom problem when the 3rd checkpoint has already been implemented.
+   (However, running the iris recognition pipeline will not work because the CASIA dataset is not included).
    It will first show the design stage UI where you can inspect the modules and dependency graphs,
    after around 2-3 minutes it will change to the analyser suggestions view where you can accept / reject / provide suggestions.
 
