@@ -20,9 +20,12 @@ DPy
 # agent implementation
 agent_workspace
 agent_test_storage
-agent_workspace copy
 agent_workspace_*
 agent_test_storage_* 
+
+# push the agent workspace demos 
+!agent_workspace_demo_question
+!agent_workspace_demo_analyser
 
 metrics_old_* 
 metrics_new_*

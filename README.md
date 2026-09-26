@@ -127,6 +127,16 @@ NOTE: Running the full workflow currently requires the SlopCodeBench dataset to 
 2. Configure the settings inside `modular_main/settings.py`
 3. Run `python -m modular_main.main.workflow <problem> <checkpoint_number>` from the root directory.
 
-# Reproducing the Results
+# Example of Running a UI Demo
 
-Will be available soon after managing what gets git ignored (26 Sept).
+1. Create a python venv and install the requirements in `requirements.txt`
+2. Leave the settings as it is (Demo mode = True)
+3. Run `python -m modular_main.main.workflow iris_recognition 4` from the root directory.
+   This simulates implementing the 4th checkpoint of the iris recognition custom problem when the 3rd checkpoint has already been implemented.
+   It will first show the design stage UI where you can inspect the modules and dependency graphs,
+   after around 2-3 minutes it will change to the analyser suggestions view where you can accept / reject / provide suggestions.
+
+# Reproducing the Evaluation Results
+
+Reproducing the full results from scratch (which takes about 4 hours to run) is currently unavailable, as the full agent implementations for each mode for each problem for each checkpoint is currently unavailable (too large).
+The metrics are cached under metrics_cache/: The evaluation diagrams can be produced using these values by running `cached_evaluation.ipynb`.

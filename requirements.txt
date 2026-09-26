@@ -71,8 +71,6 @@ mdurl==0.1.2
 mypy_extensions==1.1.0
 nest-asyncio==1.6.0
 networkx==3.6.1
-# Editable install with no version control (nexttube==0.1.0)
--e /home/bernardmoy/modular-SWE/nexttube/implementation
 numpy==2.4.4
 openai-codex==0.147.0
 openai-codex-cli-bin==0.147.0

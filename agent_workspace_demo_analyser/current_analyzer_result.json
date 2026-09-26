@@ -1,0 +1,15 @@
+[
+  {
+    "module_name": "encoding_service",
+    "smell": "The encoding workflow depends on the generic csv_writer and dataset_models even though encoding_models owns the encoding contracts and the service interface does not define dataset CSV serialization.",
+    "improvement_instruction": "Add an encoding-specific CSV contract to encoding_models for encoding results and encoding anomalies, and add an encoding_csv_writer module responsible for serializing that contract in the same format and error-reporting style as the other workflow writers. Remove encoding_service's dependencies on csv_writer and dataset_models; keep encoding_service focused on producing EncodingResult and EncodingBatch values. Update iris to invoke encoding_csv_writer when encoding CSV output is requested, and make the dependency direction explicit as iris -> encoding_service and encoding_csv_writer -> encoding_models. Do not duplicate Gabor processing, dataset traversal, or binary output in the new writer.",
+    "status": "unresolved"
+  },
+  {
+    "module_name": "encoding_service",
+    "smell": "The service combines image loading, Gabor response quantization, mask-bit generation, byte packing, dataset traversal, and batch anomaly reporting.",
+    "improvement_instruction": "Keep these stages in encoding_service as one cohesive workflow; do not split the module into separate pipeline and orchestration modules solely based on the listed stages. Preserve encode_one and encode_dataset as the public entry points and keep the new encoding CSV contract outside this service.",
+    "status": "rejected",
+    "rejection_reason": "The human confirmed that the encoding stages form one cohesive workflow and are acceptable to keep together."
+  }
+]

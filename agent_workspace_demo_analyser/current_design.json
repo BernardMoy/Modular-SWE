@@ -1,0 +1,64 @@
+[
+  {"type":"keep","module_name":"csv_writer","responsibility":"Writes dataset records and anomaly records to the project CSV formats."},
+  {"type":"keep","module_name":"dataset_models","responsibility":"Defines immutable and mutable data contracts for dataset scans and scan anomalies."},
+  {"type":"keep","module_name":"dataset_scanner","responsibility":"Traverses dataset subject and eye directories and converts image files into scan results."},
+  {"type":"keep","module_name":"dataset_schema","responsibility":"Provides shared field definitions for dataset and segmentation CSV files."},
+  {"type":"keep","module_name":"image_metadata","responsibility":"Reads and validates image metadata required by dataset scanning."},
+  {
+    "type":"changed","module_name":"iris","responsibility":"Parses CLI commands and coordinates dataset scanning, segmentation, normalization, and iris encoding workflows.",
+    "non_responsibilities":["Does not implement image processing algorithms.","Does not own filesystem serialization details."],
+    "inputs":[{"name":"CLI arguments","type":"list[str]","fields":[{"name":"command","type":"str","optional":false},{"name":"paths and options","type":"str | int | float | None","optional":true}]}],
+    "outputs":[{"name":"exit status","type":"int","fields":[{"name":"code","type":"int","optional":false}]}],
+    "public_interface":[
+      {"name":"main","description":"Parses arguments, invokes the selected workflow, prints its required summary, and returns a process exit code.","parameters":[{"name":"argv","type":"list[str] | None","optional":true}],"returns":"int","preconditions":["Arguments are either omitted or follow a supported iris command."],"postconditions":["The selected workflow has been invoked and a summary has been printed."]}
+    ]
+  },
+  {"type":"keep","module_name":"iris_normalization","responsibility":"Maps segmented iris boundaries to normalized polar image coordinates and samples image pixels."},
+  {"type":"keep","module_name":"iris_segmentation","responsibility":"Detects pupil and iris boundaries from an input iris image."},
+  {"type":"keep","module_name":"normalization_csv_writer","responsibility":"Writes normalization anomaly records to CSV."},
+  {"type":"keep","module_name":"normalization_mask","responsibility":"Builds a validity mask in normalized coordinates from an image and segmentation record."},
+  {"type":"keep","module_name":"normalization_models","responsibility":"Defines data contracts for normalized images, masks, destinations, results, and batch outcomes."},
+  {"type":"keep","module_name":"normalization_service","responsibility":"Orchestrates single-image and dataset normalization workflows."},
+  {"type":"keep","module_name":"normalization_writer","responsibility":"Persists normalized images and validity masks as PNG files."},
+  {"type":"keep","module_name":"path_identity","responsibility":"Derives subject and eye identity from dataset image paths."},
+  {"type":"keep","module_name":"segmentation_csv_writer","responsibility":"Writes segmentation records and segmentation anomaly records to CSV."},
+  {"type":"keep","module_name":"segmentation_models","responsibility":"Defines data contracts for boundaries, segmentation results, records, anomalies, and batches."},
+  {"type":"keep","module_name":"segmentation_overlay_writer","responsibility":"Renders segmentation boundaries as overlay images and saves them."},
+  {"type":"keep","module_name":"segmentation_service","responsibility":"Orchestrates segmentation for individual images and dataset CSV rows."},
+  {"type":"keep","module_name":"segmentation_validator","responsibility":"Validates detected pupil and iris geometry against image bounds and domain rules."},
+  {
+    "type":"new","module_name":"encoding_models","responsibility":"Defines data contracts for Gabor encoding configuration, packed iris codes, masks, anomalies, and batch outcomes.",
+    "non_responsibilities":["Does not load images or perform convolution.","Does not write binary or CSV files."],
+    "inputs":[{"name":"EncodingConfig","type":"dataclass","fields":[{"name":"wavelength","type":"float","optional":false},{"name":"scales","type":"int","optional":false},{"name":"orientations","type":"int","optional":false},{"name":"sigma","type":"float","optional":false},{"name":"gamma","type":"float","optional":false},{"name":"grid_step","type":"int","optional":false}]}],
+    "outputs":[{"name":"EncodingResult","type":"dataclass","fields":[{"name":"code","type":"bytes","optional":false},{"name":"mask","type":"bytes","optional":false},{"name":"relative_image_path","type":"str","optional":false}]},{"name":"EncodingBatch","type":"dataclass","fields":[{"name":"processed_count","type":"int","optional":false},{"name":"successful_count","type":"int","optional":false},{"name":"failed_count","type":"int","optional":false},{"name":"results","type":"list[EncodingResult]","optional":false},{"name":"anomalies","type":"list[EncodingAnomaly]","optional":false}]}],
+    "public_interface":[]
+  },
+  {
+    "type":"new","module_name":"gabor_filter","responsibility":"Builds the configured 2D complex Gabor filter bank and computes sampled complex responses for grayscale normalized images.",
+    "non_responsibilities":["Does not interpret dataset paths or CLI arguments.","Does not quantize responses into packed output bytes.","Does not persist results."],
+    "inputs":[{"name":"grayscale image","type":"numpy.ndarray","fields":[{"name":"height","type":"int","optional":false},{"name":"width","type":"int","optional":false},{"name":"pixel values","type":"float array","optional":false}]},{"name":"EncodingConfig","type":"encoding_models.EncodingConfig","fields":[{"name":"wavelength","type":"float","optional":false},{"name":"scales","type":"int","optional":false},{"name":"orientations","type":"int","optional":false},{"name":"sigma","type":"float","optional":false},{"name":"gamma","type":"float","optional":false},{"name":"grid_step","type":"int","optional":false}]}],
+    "outputs":[{"name":"sampled responses","type":"numpy.ndarray","fields":[{"name":"scale","type":"int","optional":false},{"name":"orientation","type":"int","optional":false},{"name":"row","type":"int","optional":false},{"name":"column","type":"int","optional":false},{"name":"complex response","type":"complex128","optional":false}]}],
+    "public_interface":[
+      {"name":"encode_responses","description":"Applies the filter bank at configured wavelengths and orientations and returns responses on the coarse sampling grid.","parameters":[{"name":"image","type":"numpy.ndarray","optional":false},{"name":"config","type":"EncodingConfig","optional":false}],"returns":"numpy.ndarray","preconditions":["Image is a two-dimensional numeric array.","Config has positive scales, orientations, and grid_step."],"postconditions":["Responses cover every configured filter and grid location."]}
+    ]
+  },
+  {
+    "type":"new","module_name":"encoding_service","responsibility":"Coordinates image and mask loading, Gabor response quantization, mask-bit generation, byte packing, and batch anomaly reporting.",
+    "non_responsibilities":["Does not define Gabor mathematics beyond calling the filter module.","Does not print CLI summaries.","Does not decide CLI argument parsing."],
+    "inputs":[{"name":"image path","type":"str","fields":[{"name":"path","type":"str","optional":false}]},{"name":"mask path","type":"str","fields":[{"name":"path","type":"str","optional":false}]},{"name":"EncodingConfig","type":"encoding_models.EncodingConfig","fields":[{"name":"wavelength","type":"float","optional":false},{"name":"scales","type":"int","optional":false},{"name":"orientations","type":"int","optional":false},{"name":"sigma","type":"float","optional":false},{"name":"gamma","type":"float","optional":false},{"name":"grid_step","type":"int","optional":false}]}],
+    "outputs":[{"name":"EncodingResult","type":"encoding_models.EncodingResult","fields":[{"name":"code","type":"bytes","optional":false},{"name":"mask","type":"bytes","optional":false},{"name":"relative_image_path","type":"str","optional":false}]},{"name":"EncodingBatch","type":"encoding_models.EncodingBatch","fields":[{"name":"processed_count","type":"int","optional":false},{"name":"successful_count","type":"int","optional":false},{"name":"failed_count","type":"int","optional":false},{"name":"results","type":"list","optional":false},{"name":"anomalies","type":"list","optional":false}]}],
+    "public_interface":[
+      {"name":"encode_one","description":"Loads one normalized image and mask, produces packed iris code and packed validity mask, and returns an anomaly on a defined failure.","parameters":[{"name":"image_path","type":"str","optional":false},{"name":"mask_path","type":"str","optional":false},{"name":"config","type":"EncodingConfig","optional":true}],"returns":"EncodingResult | EncodingAnomaly","preconditions":["Image and mask paths identify readable images with matching dimensions."],"postconditions":["Success returns code and mask bytes with MSB-first packing, or failure returns one issue from the encoding anomaly vocabulary."]},
+      {"name":"encode_dataset","description":"Encodes paired normalized and mask dataset trees while preserving relative image structure and collecting per-image anomalies.","parameters":[{"name":"normalized_dir","type":"str","optional":false},{"name":"masks_dir","type":"str","optional":false},{"name":"config","type":"EncodingConfig","optional":true}],"returns":"EncodingBatch","preconditions":["Both roots are accessible and use the expected subject/eye layout."],"postconditions":["Every discovered image contributes to processed, successful, or failed counts."]}
+    ]
+  },
+  {
+    "type":"new","module_name":"encoding_writer","responsibility":"Persists packed iris codes and packed masks as binary files while preserving dataset-relative paths.",
+    "non_responsibilities":["Does not compute filter responses or quantization.","Does not discover input files or create anomaly records."],
+    "inputs":[{"name":"EncodingResult","type":"encoding_models.EncodingResult","fields":[{"name":"code","type":"bytes","optional":false},{"name":"mask","type":"bytes","optional":false},{"name":"relative_image_path","type":"str","optional":false}]},{"name":"destination","type":"str","fields":[{"name":"directory or file path","type":"str","optional":false}]}],
+    "outputs":[{"name":"saved paths","type":"dataclass","fields":[{"name":"code_path","type":"str","optional":false},{"name":"mask_path","type":"str","optional":true}]}],
+    "public_interface":[
+      {"name":"write_result","description":"Writes the packed code and optional packed mask to a single-image destination or dataset-preserving destination.","parameters":[{"name":"result","type":"EncodingResult","optional":false},{"name":"output_path","type":"str","optional":false},{"name":"mask_output_path","type":"str | None","optional":true}],"returns":"SavedEncodingPaths","preconditions":["Result contains packed bytes and destination directories are writable."],"postconditions":["The code file is written and the mask file is written when requested."]}
+    ]
+  }
+]

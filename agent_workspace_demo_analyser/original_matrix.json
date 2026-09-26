@@ -1,0 +1,108 @@
+{
+  "csv_writer": [
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "dataset_models": [
+    "csv_writer",
+    "dataset_scanner",
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "dataset_scanner": [
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "dataset_schema": [
+    "csv_writer",
+    "iris",
+    "normalization_service",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "image_metadata": [
+    "dataset_scanner",
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "iris": [
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "iris_normalization": [
+    "iris",
+    "normalization_mask",
+    "normalization_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "iris_segmentation": [
+    "iris",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "normalization_csv_writer": [
+    "iris",
+    "normalization_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "normalization_mask": [
+    "iris",
+    "normalization_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "normalization_models": [
+    "iris",
+    "iris_normalization",
+    "normalization_csv_writer",
+    "normalization_mask",
+    "normalization_service",
+    "normalization_writer",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "normalization_service": [
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "normalization_writer": [
+    "iris",
+    "normalization_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "path_identity": [
+    "iris",
+    "normalization_service",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "segmentation_csv_writer": [
+    "iris",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "segmentation_models": [
+    "iris",
+    "iris_normalization",
+    "iris_segmentation",
+    "normalization_mask",
+    "normalization_service",
+    "segmentation_csv_writer",
+    "segmentation_overlay_writer",
+    "segmentation_service",
+    "segmentation_validator",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "segmentation_overlay_writer": [
+    "iris",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "segmentation_service": [
+    "iris",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "segmentation_validator": [
+    "iris",
+    "segmentation_service",
+    "temp_entrypoint_1789041485_6761246.py"
+  ],
+  "temp_entrypoint_1789041485_6761246.py": []
+}

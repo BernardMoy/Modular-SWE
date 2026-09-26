@@ -1,0 +1,91 @@
+{
+  "csv_writer": [
+    "dataset_models",
+    "dataset_schema"
+  ],
+  "dataset_models": [],
+  "dataset_scanner": [
+    "dataset_models",
+    "image_metadata"
+  ],
+  "dataset_schema": [],
+  "image_metadata": [],
+  "iris": [
+    "csv_writer",
+    "dataset_scanner",
+    "normalization_models",
+    "normalization_service",
+    "segmentation_models",
+    "segmentation_service"
+  ],
+  "iris_normalization": [
+    "normalization_models",
+    "segmentation_models"
+  ],
+  "iris_segmentation": [
+    "segmentation_models"
+  ],
+  "normalization_csv_writer": [
+    "normalization_models"
+  ],
+  "normalization_mask": [
+    "iris_normalization",
+    "normalization_models",
+    "segmentation_models"
+  ],
+  "normalization_models": [],
+  "normalization_service": [
+    "dataset_schema",
+    "iris_normalization",
+    "normalization_csv_writer",
+    "normalization_mask",
+    "normalization_models",
+    "normalization_writer",
+    "path_identity",
+    "segmentation_models"
+  ],
+  "normalization_writer": [
+    "normalization_models"
+  ],
+  "path_identity": [],
+  "segmentation_csv_writer": [
+    "segmentation_models"
+  ],
+  "segmentation_models": [],
+  "segmentation_overlay_writer": [
+    "segmentation_models"
+  ],
+  "segmentation_service": [
+    "dataset_schema",
+    "iris_segmentation",
+    "path_identity",
+    "segmentation_csv_writer",
+    "segmentation_models",
+    "segmentation_overlay_writer",
+    "segmentation_validator"
+  ],
+  "segmentation_validator": [
+    "segmentation_models"
+  ],
+  "temp_entrypoint_1789039548_59655.py": [
+    "csv_writer",
+    "dataset_models",
+    "dataset_scanner",
+    "dataset_schema",
+    "image_metadata",
+    "iris",
+    "iris_normalization",
+    "iris_segmentation",
+    "normalization_csv_writer",
+    "normalization_mask",
+    "normalization_models",
+    "normalization_service",
+    "normalization_writer",
+    "path_identity",
+    "segmentation_csv_writer",
+    "segmentation_models",
+    "segmentation_overlay_writer",
+    "segmentation_service",
+    "segmentation_validator"
+  ]
+}
