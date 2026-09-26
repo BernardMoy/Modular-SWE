@@ -2,7 +2,13 @@
 
 > The project report (pdf) is available [here](Bernard_Moy_Final_Report.pdf).
 
-![Teaser Diagram](modular-swe.png)
+## Project user interface
+
+![Teaser Diagram](ui_demo.png)
+
+## Multi-agent Architecture Diagram
+
+![Teaser Diagram](architecture_full.png)
 
 ## Description
 
@@ -14,7 +20,7 @@ causing the boost in development velocity to gradually vanish over time as techn
 As a result, this project designed a Python-based, multi-agent framework featuring human-in-the-loop,
 consisting of specialised LLM agents collaborating across two feedback loops, namely between the decomposer and analyser, and the coder and analyser agents.
 The decomposer agent is responsible for high-level and low-level software design, where the analyser would then critique the design and provide suggestions following a set of guidelines and quality metrics.
-The correctness and the code quality metrics when the agent extends code written by themselves, are evaluated against the direct-coding and the multi-agent modes, and against human-written popular GitHub repositories.
+The correctness and the code quality metrics when the agent extends their own code, are evaluated against the direct-coding and the multi-agent modes, and against human-written popular GitHub repositories.
 
 ## Contributions
 
@@ -23,12 +29,13 @@ This project presents the following main contributions:
 - Architecture of the multi-agent framework, that can either run automatically or feature human-in-the-loop. This workflow is structured in [workflow.py](modular_main/main/workflow.py).
 - Selected the [SlopCodeBench](https://arxiv.org/pdf/2603.24755) benchmark for evaluation of correctness and the iterative code quality, under the [datasets](datasets/) folder that is excluded from the Git repository.
 - Studied the effects of featuring human-in-the-loop using two specialised problems, with their problem checkpoint structures closely resembling that of SlopCodeBench. The problem descriptions are available under the [datasets](datasets/) folder, with the agent implementations available soon.
-- Evaluated against direct coding, multi agent, multi agent but without implementation-level metrics (ablation study), and a test-driven development framework modification, under [this notebook](cached_evaluation.ipynb).
+- Evaluated against direct coding, multi-agent, multi-agent but without implementation-level metrics (ablation study), and a test-driven development framework modification, under [this notebook](cached_evaluation.ipynb).
 
 # Repo Structure
 
 ```text
 modular-SWE
+├── agent_workspace_*/  # Agent's sandbox workspace, not part of the main repo content.
 ├── datasets/  # Custom problems, SlopCodeBench problems (gitignored) and reference GitHub implementations (gitignored)
 ├── Bernard_Moy_Final_Report.pdf  # Project report pdf
 ├── Bernard_Moy_Project_Presentation.pdf  # Project presentation pdf
@@ -69,7 +76,7 @@ modular-SWE
 │   ├── settings.py  # Various settings to configure before running main workflow
 │   ├── login.py  # UNUSED: A general login function that supports multiple agents. Since only codex is available, it directly uses the auth/codex_login.py class instead.
 │   ├── main/
-│   │   ├── custom_tests.py  # UNUSED test script to measure agent effort to fix broken tests under direct / multi agent implementations
+│   │   ├── custom_tests.py  # UNUSED test script to measure agent effort to fix broken tests under direct / multi-agent implementations
 │   │   ├── single_prompt.py  # UNUSED test script to test whether calling agent works
 │   │   ├── ui.py  # Textual UI Wrapper for the main workflow
 │   │   ├── ui.tcss  # Textual UI design styles
@@ -123,13 +130,19 @@ modular-SWE
 
 NOTE: Running the full workflow currently requires the SlopCodeBench dataset to be present and also require the DPy executable, which is currently unavailable.
 
-1. Create a python venv and install the requirements in `requirements.txt`
+1. Create a python virtual environment and install the requirements in `requirements.txt`
+
+```bash
+python -m venv .venv
+pip install -r requirements.txt
+```
+
 2. Configure the settings inside `modular_main/settings.py`
 3. Run `python -m modular_main.main.workflow <problem> <checkpoint_number>` from the root directory.
 
 # Example of Running a UI Demo
 
-1. Create a python venv and install the requirements in `requirements.txt`
+1. Create a python virtual environment and install the requirements in `requirements.txt`
 2. Leave the settings as it is (Demo mode = True)
 3. Run `python -m modular_main.main.workflow iris_recognition 4` from the root directory.
    This simulates implementing the 4th checkpoint of the iris recognition custom problem when the 3rd checkpoint has already been implemented.
@@ -139,5 +152,6 @@ NOTE: Running the full workflow currently requires the SlopCodeBench dataset to 
 
 # Reproducing the Evaluation Results
 
-Reproducing the full results from scratch (which takes about 4 hours to run) is currently unavailable, as the full agent implementations for each mode for each problem for each checkpoint is currently unavailable (too large).
-The metrics are cached under metrics_cache/: The evaluation diagrams can be produced using these values by running `cached_evaluation.ipynb`.
+Reproducing the full results from scratch (which takes about 4 hours to run) are currently unavailable, as the full agent implementations for each mode for each problem for each checkpoint is currently unavailable (too large).
+
+Therefore, the metrics are cached under metrics_cache/, and the evaluation diagrams can be produced using these cached values by running `cached_evaluation.ipynb`.
